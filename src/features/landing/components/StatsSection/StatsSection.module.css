@@ -1,0 +1,57 @@
+.stats {
+  width: 100%;
+  padding: 80px;
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1275 / 972;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.svg {
+  object-fit: contain;
+}
+
+.statItem {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.value {
+  font-family: 'Gabarito', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.label {
+  font-family: 'Gabarito', sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  color: var(--color-text-primary);
+  margin-top: 8px;
+}
+
+.collaborators {
+  left: 13.6%;
+  top: 32.2%;
+}
+
+.exhibitors {
+  left: 62.2%;
+  top: 20%;
+}
+
+.visitors {
+  left: 83%;
+  top: 77.8%;
+}
