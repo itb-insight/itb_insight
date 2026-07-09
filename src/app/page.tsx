@@ -1,7 +1,10 @@
-export default function HomePage() {
+import EventMap from "@/features/event-map/EventMap";
+
+export default function Home() {
   return (
-    <main>
-      <h1>Hello World</h1>
+    <main className="w-full h-screen overflow-hidden">
+      {/* Panggil komponen peta di sini */}
+      <EventMap />
     </main>
-  )
+  );
 }
