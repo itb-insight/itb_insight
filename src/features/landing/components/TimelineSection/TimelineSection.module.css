@@ -1,0 +1,45 @@
+.timeline {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 0 0 0;
+  overflow: hidden;
+}
+
+.title {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--color-text-primary);
+  z-index: 2;
+}
+
+.badge {
+  position: absolute;
+  top: 80px;
+  right: 80px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-bg-primary);
+  background-color: var(--color-text-primary);
+  padding: 12px 20px;
+  z-index: 2;
+}
+
+.imageWrapper {
+  position: center;
+  width: 100%;
+  flex: 1;
+  min-height: 700px;
+  margin-top: 24px;
+}
+
+.image {
+  object-fit: cover;
+  object-position: top;
+}

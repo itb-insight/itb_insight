@@ -1,0 +1,75 @@
+.gallery {
+  padding: 80px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  overflow: hidden;
+}
+
+.title {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--color-text-primary);
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+}
+
+.carousel:active {
+  cursor: grabbing;
+}
+
+.slide {
+  position: absolute;
+  width: 580px;
+  height: 339px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transform-origin: center;
+}
+
+.active   { cursor: default; }
+.left     { cursor: pointer; }
+.right    { cursor: pointer; }
+.farLeft  { cursor: pointer; }
+.farRight { cursor: pointer; }
+
+.img {
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-border);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.dotActive {
+  background-color: var(--color-text-primary);
+  width: 24px;
+  border-radius: var(--radius-full);
+}

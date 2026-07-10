@@ -1,0 +1,69 @@
+.about {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 80px 48px;
+  min-height: 100vh;
+  gap: 48px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.title {
+  font-family: 'Bitcount', monospace;
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1;
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.titleRegular {
+  font-weight: 400;
+}
+
+.titleLight {
+  font-weight: 300;  /* ← light weight via variable font */
+}
+
+.description {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  text-align: center;
+}
+
+.readMore {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-end;
+  transition: opacity 0.2s ease;
+}
+
+.readMore:hover {
+  opacity: 0.6;
+}
+
+.imageWrapper {
+  width: 480px;
+  height: 480px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.image {
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}

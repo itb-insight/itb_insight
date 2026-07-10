@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap');
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: transparent;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navLink {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  transition: opacity 0.2s ease;
+}
+
+.navLink:hover {
+  opacity: 0.6;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.searchBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: opacity 0.2s ease;
+}
+
+.searchBtn:hover {
+  opacity: 0.6;
+}
+
+.logInBtn {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  transition: opacity 0.2s ease;
+}
+
+.logInBtn:hover {
+  opacity: 0.6;
+}
+
+.signUpBtn {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  border: 1.5px solid var(--color-text-primary);
+  border-radius: var(--radius-sm);
+  padding: 10px 24px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.signUpBtn:hover {
+  background-color: var(--color-text-primary);
+  color: var(--color-bg-primary);
+}

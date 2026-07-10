@@ -1,0 +1,71 @@
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.title {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--color-text-primary);
+}
+
+.countdown {
+  display: flex;
+  align-items: baseline;
+  gap: 48px;
+}
+
+.countdownUnit {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.countdownNumber {
+  font-family: 'Bitcount', monospace;
+  font-size: clamp(5rem, 12vw, 9rem);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.countdownLabel {
+  font-family: 'Bitcount', monospace;
+  font-size: clamp(1rem, 3vw, 2rem);
+  color: var(--color-text-primary);
+  font-weight: 400;
+}
+
+.description {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.registerBtn {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-elevated);
+  border: none;
+  padding: 24px 80px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s ease;
+  margin-top: 16px;
+}
+
+.registerBtn:hover {
+  background-color: var(--color-border);
+}

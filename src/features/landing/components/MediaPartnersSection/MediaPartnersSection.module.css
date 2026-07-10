@@ -1,0 +1,53 @@
+.mediaPartners {
+  padding: 80px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  background-color: var(--color-bg-secondary);
+}
+
+.title {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--color-text-primary);
+}
+
+.mainRow {
+  display: flex;
+  gap: 48px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mainCard {
+  position: relative;
+  width: 340px;
+  height: 200px;
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.secondaryRow {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.secondaryCard {
+  position: relative;
+  width: 180px;
+  height: 100px;
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.logo {
+  object-fit: contain;
+  padding: 16px;
+}
