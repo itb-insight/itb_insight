@@ -1,7 +1,5 @@
+import CompePage2 from "@/features/compe-page2/CompePage2";
+
 export default function HomePage() {
-  return (
-    <main>
-      <h1>Hello World</h1>
-    </main>
-  )
+  return <CompePage2 />;
 }
