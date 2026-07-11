@@ -1,27 +1,29 @@
 'use client';
 
 import { useState } from 'react';
-import ExhibitionPage from '@/features/exhibition/ExhibitionPage'; 
-import ContentPage from '@/features/exhibition/ContentPage';
+import SeminarLandingPage from '@/features/seminar/SeminarLandingPage'; 
+import SeminarLearnMorePage from '@/features/seminar/SeminarLearnMore';
+import { COLORS } from '@/features/seminar/data';
 
 export default function Home() {
-  const [showContent, setShowContent] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
 
   return (
     <div 
       style={{ 
         width: '100%', 
         minHeight: '100vh', 
-        backgroundColor: '#ffffff', 
+        backgroundColor: COLORS.bg, 
         margin: 0, 
         padding: 0, 
-        position: 'relative'
+        position: 'relative',
+        overflowX: 'hidden'
       }}
     >
-      {!showContent ? (
-        <ExhibitionPage onExplore={() => setShowContent(true)} />
+      {!showDetail ? (
+        <SeminarLandingPage onLearnMore={() => setShowDetail(true)} />
       ) : (
-        <ContentPage onBack={() => setShowContent(false)} />
+        <SeminarLearnMorePage onBack={() => setShowDetail(false)} />
       )}
     </div>
   );
