@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-// Pastikan path import ini sesuai dengan letak asli file ExhibitionPage & ContentPage kamu!
 import ExhibitionPage from '@/features/exhibition/ExhibitionPage'; 
 import ContentPage from '@/features/exhibition/ContentPage';
 
