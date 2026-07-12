@@ -18,9 +18,9 @@ export default function Navbar() {
         </Link>
 
         <div className={styles.navLinks}>
-          <Link href="/map" className={styles.navLink}>Map</Link>
+          <Link href="/event-map" className={styles.navLink}>Map</Link>
           <Link href="/event" className={styles.navLink}>Event</Link>
-          <Link href="/competition" className={styles.navLink}>Competition</Link>
+          <Link href="/competition1" className={styles.navLink}>Competition</Link>
         </div>
       </div>
 
