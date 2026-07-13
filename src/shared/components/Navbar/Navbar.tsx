@@ -3,9 +3,15 @@ import Link from "next/link"
 import { Search } from "lucide-react"
 import styles from "./Navbar.module.css"
 
-export default function Navbar() {
+interface NavbarProps {
+  isSolid?: boolean;
+}
+
+export default function Navbar({ isSolid = false }: NavbarProps) {
+  const navbarClassName = `${styles.navbar} ${isSolid ? styles.isSolid : ""}`;
+
   return (
-    <nav className={styles.navbar}>
+    <nav className={navbarClassName}>
       <div className={styles.left}>
         <Link href="/" className={styles.logo}>
           <Image

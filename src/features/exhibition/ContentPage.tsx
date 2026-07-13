@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Object3DSection from './Object3DSection';
+import Navbar from "@/shared/components/Navbar/Navbar"
 
 interface ContentPageProps {
   onBack: () => void;
@@ -132,11 +133,14 @@ export default function ContentPage({ onBack }: ContentPageProps) {
         boxSizing: 'border-box'
       }}
     >
+
+      <Navbar isSolid={true} />
+
       <div
         style={{
           width: '100vw',
           marginLeft: 'calc(50% - 50vw)',
-          height: '149px',
+          height: '80px',
           backgroundColor: 'rgba(217, 217, 217, 1)',
           flexShrink: 0
         }}

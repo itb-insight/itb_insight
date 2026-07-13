@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect } from 'react';
+import Navbar from "@/shared/components/Navbar/Navbar"
 
 interface ExhibitionPageProps {
   onExplore: () => void;
@@ -47,12 +48,14 @@ export default function ExhibitionPage({ onExplore }: ExhibitionPageProps) {
         left: 0
       }}
     >
-      
+
+      <Navbar isSolid={true} />
+
       {/* 1. Shape Kotak Abu-abu di Atas (Full lebar layar tanpa sela) */}
       <div 
         style={{ 
           width: '100%', 
-          height: '149px', 
+          height: '80px',
           backgroundColor: '#D9D9D9',
           flexShrink: 0,
           margin: 0
