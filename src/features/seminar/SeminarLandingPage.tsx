@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { SEMINAR_CARDS, DETAIL_CONTENT } from './data';
+import Navbar from "@/shared/components/Navbar/Navbar"
 
 const POINTY_HEX_CLIP = 'polygon(50% 0%, 93.301% 25%, 93.301% 75%, 50% 100%, 6.699% 75%, 6.699% 25%)';
 const SVG_POINTS = "50,0 93.301,25 93.301,75 50,100 6.699,75 6.699,25";
@@ -114,7 +115,8 @@ export default function SeminarLandingPage({ onLearnMore }: { onLearnMore: () =>
           
           {/* HERO */}
           <div style={{ position: 'relative', width: '100%', height: `${HERO_HEIGHT}px` }}>
-            <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '4000px', height: '149.6px', background: 'rgba(217, 217, 217, 1)', zIndex: 10 }} />
+            <Navbar isSolid={true} />
+            <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '4000px', height: '80px', background: 'rgba(217, 217, 217, 1)', zIndex: 10 }} />
             
             <h1 style={{ position: 'absolute', top: '375.85px', left: '38.63px', fontFamily: 'Roboto Mono', fontWeight: 700, fontSize: '110px', lineHeight: '120%', color: '#FFF', margin: 0, zIndex: 10 }}>Tech Seminar</h1>
             <p style={{ position: 'absolute', top: '524.22px', left: '41.88px', fontFamily: 'Roboto Mono', fontWeight: 600, fontSize: '64px', lineHeight: '80px', color: '#FFF', margin: 0, zIndex: 10 }}>Lorem ipsum</p>
