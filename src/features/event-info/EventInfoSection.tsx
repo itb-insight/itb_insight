@@ -1,15 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import styles from "./EventInfoSection.module.css"
+import Navbar from "@/shared/components/Navbar/Navbar"
 
 const RING_RADIUS = 160
 const CARD_COUNT = 8
 
 const events = [
-  { title: "Exhibition", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
-  { title: "Seminar", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
+  { title: "Exhibition", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", href: "/exhibition" },
+  { title: "Seminar", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", href: "/seminar" },
 ]
 
 type Phase = "ring" | "zoom"
@@ -70,11 +72,13 @@ useEffect(() => {
    }
  }
 
+ const router = useRouter()
+ const isHighlighted = (pos: { x: number; y: number }) =>
+   phase === "zoom" && Math.abs(pos.x - RING_RADIUS) < 15 && Math.abs(pos.y) < 15
+
   return (
     <div className={styles.wrapper}>
-      <div className={styles.header}>
-        <span className={styles.headerText}>Event Info</span>
-      </div>
+      <Navbar />
 
       <div className={styles.content}>
         {/* Ring — tidak berubah apapun saat scroll */}
@@ -88,15 +92,15 @@ useEffect(() => {
         >
           {Array.from({ length: CARD_COUNT }, (_, i) => {
             const pos = getCardPosition(i)
+            const highlighted = isHighlighted(pos)
+
             return (
               <motion.div
                 key={i}
-                className={styles.ringCard}
+                className={`${styles.ringCard} ${highlighted ? styles.ringCardClickable : ""}`}
                 animate={{ x: pos.x, y: pos.y }}
-                transition={phase === "zoom"
-                  ? { duration: 0.6, ease: "easeInOut" } // ← smooth saat scroll
-                  : { duration: 0 }
-                }
+                transition={phase === "zoom" ? { duration: 0.6, ease: "easeInOut" } : { duration: 0 }}
+                onClick={highlighted ? () => router.push(events[activeIndex].href) : undefined}
               />
             )
           })}

@@ -183,6 +183,7 @@ export default function ContentPage({ onBack }: ContentPageProps) {
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'stretch',
+              justifyContent: 'center',
               width: '100%',
               boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.05)'
             }}
