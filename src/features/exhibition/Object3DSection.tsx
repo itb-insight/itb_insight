@@ -1,337 +1,13 @@
 'use client';
 
-interface Box {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
-}
+import { useEffect, useRef, useState } from 'react';
 
-interface TextEl extends Box {
-  text: string;
-  fontFamily: string;
-  fontWeight: number;
-  fontSize: number;
-  lineHeight: number;
-  letterSpacing?: string;
-  textAlign?: 'left' | 'right';
-}
-
-interface FrameSpec {
-  shapes: Box[];
-  texts: TextEl[];
-}
-
-const REF_WIDTH = 1440;
-const REF_HEIGHT = 1024;
-
-const LOREM =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
-
+const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
 const ROBOTO = "'Roboto Mono', monospace";
 const ORBITRON = "'Orbitron', sans-serif";
 
-// Frame 1
-const frame1: FrameSpec = {
-  shapes: [
-    { left: -99.62, top: 154.8, width: 357.2, height: 357.2 },
-    { left: 1181, top: 619.17, width: 357.2, height: 357.2 },
-  ],
-  texts: [
-    {
-      text: 'OBJECT 3D A',
-      left: -121.21,
-      top: 294.23,
-      width: 346,
-      height: 160,
-      fontFamily: ROBOTO,
-      fontWeight: 600,
-      fontSize: 64,
-      lineHeight: 80,
-      letterSpacing: '0em',
-    },
-    {
-      text: 'OBJECT 3D B',
-      left: 1226,
-      top: 752.77,
-      width: 346,
-      height: 160,
-      fontFamily: ROBOTO,
-      fontWeight: 600,
-      fontSize: 64,
-      lineHeight: 80,
-      letterSpacing: '0em',
-    },
-  ],
-};
-
-// Frame 2
-const frame2: FrameSpec = {
-  shapes: [
-    { left: 73.06, top: 154.8, width: 357.2, height: 357.2 },
-    { left: 986.28, top: 604.48, width: 357.2, height: 357.2 },
-  ],
-  texts: [
-    {
-      text: 'OBJECT 3D A',
-      left: 75.86,
-      top: 297.7,
-      width: 351.6,
-      height: 71.39,
-      fontFamily: ROBOTO,
-      fontWeight: 600,
-      fontSize: 64,
-      lineHeight: 80,
-      letterSpacing: '0em',
-    },
-    {
-      text: 'OBJECT 3D B',
-      left: 991.88,
-      top: 718.08,
-      width: 346,
-      height: 160,
-      fontFamily: ROBOTO,
-      fontWeight: 600,
-      fontSize: 64,
-      lineHeight: 80,
-      letterSpacing: '0em',
-    },
-  ],
-};
-
-// Frame 3
-const frame3: FrameSpec = {
-  shapes: [
-    { left: 31.17, top: 48.17, width: 522.59, height: 583.28 },
-    { left: 986.28, top: 604.48, width: 357.2, height: 357.2 },
-  ],
-  texts: [
-    {
-      text: 'OBJECT 3D A',
-      left: 97.15,
-      top: 266.32,
-      width: 432.66,
-      height: 195.95,
-      fontFamily: ORBITRON,
-      fontWeight: 700,
-      fontSize: 40,
-      lineHeight: 60,
-      letterSpacing: '-0.011em',
-    },
-    {
-      text: 'lorem ipsum',
-      left: 571.33,
-      top: 57.96,
-      width: 265,
-      height: 48,
-      fontFamily: ROBOTO,
-      fontWeight: 600,
-      fontSize: 40,
-      lineHeight: 48,
-      textAlign: 'left',
-    },
-    {
-      text: LOREM,
-      left: 580.46,
-      top: 167.32,
-      width: 576.97,
-      height: 272,
-      fontFamily: ROBOTO,
-      fontWeight: 400,
-      fontSize: 28,
-      lineHeight: 34,
-      textAlign: 'left',
-    },
-    {
-      text: 'OBJECT 3D B',
-      left: 991.88,
-      top: 718.08,
-      width: 346,
-      height: 160,
-      fontFamily: ROBOTO,
-      fontWeight: 600,
-      fontSize: 64,
-      lineHeight: 80,
-      letterSpacing: '0em',
-    },
-    {
-      text: 'lorem ipsum',
-      left: 652.37,
-      top: 735.08,
-      width: 265,
-      height: 48,
-      fontFamily: ROBOTO,
-      fontWeight: 600,
-      fontSize: 40,
-      lineHeight: 48,
-      textAlign: 'left',
-    },
-    {
-      text: LOREM,
-      left: 313.48,
-      top: 826,
-      width: 603.14,
-      height: 238,
-      fontFamily: ROBOTO,
-      fontWeight: 400,
-      fontSize: 28,
-      lineHeight: 34,
-      textAlign: 'right',
-    },
-  ],
-};
-
-// Frame 4
-const frame4: FrameSpec = {
-  shapes: [
-    { left: -176.95, top: 72.86, width: 522.59, height: 583.28 },
-    { left: 1286, top: 607.24, width: 357.2, height: 357.2 },
-  ],
-  texts: [
-    {
-      text: 'OBJECT 3D A',
-      left: -110.97,
-      top: 287.49,
-      width: 390.62,
-      height: 195.95,
-      fontFamily: ORBITRON,
-      fontWeight: 700,
-      fontSize: 40,
-      lineHeight: 60,
-      letterSpacing: '-0.011em',
-    },
-    {
-      text: 'OBJECT 3D B',
-      left: 1331,
-      top: 740.84,
-      width: 267,
-      height: 120,
-      fontFamily: ORBITRON,
-      fontWeight: 700,
-      fontSize: 40,
-      lineHeight: 60,
-      letterSpacing: '-0.011em',
-    },
-  ],
-};
-
-// Frame 5
-const frame5: FrameSpec = {
-  shapes: [
-    { left: 1232.14, top: 82.45, width: 357.2, height: 357.2 },
-    { left: -201.05, top: 616.36, width: 357.2, height: 357.2 },
-  ],
-  texts: [
-    {
-      text: 'OBJECT 3D C',
-      left: 1277.24,
-      top: 216.05,
-      width: 267,
-      height: 120,
-      fontFamily: ORBITRON,
-      fontWeight: 700,
-      fontSize: 40,
-      lineHeight: 60,
-      letterSpacing: '-0.011em',
-    },
-    {
-      text: 'OBJECT 3D D',
-      left: -155.95,
-      top: 749.96,
-      width: 267,
-      height: 120,
-      fontFamily: ORBITRON,
-      fontWeight: 700,
-      fontSize: 40,
-      lineHeight: 60,
-      letterSpacing: '-0.011em',
-    },
-  ],
-};
-
-// Frame 6
-const frame6: FrameSpec = {
-  shapes: [
-    { left: 805.6, top: 42.71, width: 603.55, height: 517.25 },
-    { left: 42.73, top: 632.26, width: 357.2, height: 357.2 },
-  ],
-  texts: [
-    {
-      text: 'OBJECT 3D C',
-      left: 881.81,
-      top: 285.2,
-      width: 451.14,
-      height: 217.8,
-      fontFamily: ORBITRON,
-      fontWeight: 700,
-      fontSize: 40,
-      lineHeight: 60,
-      letterSpacing: '-0.011em',
-    },
-    {
-      text: 'lorem ipsum',
-      left: 513.7,
-      top: 83.27,
-      width: 265,
-      height: 48,
-      fontFamily: ROBOTO,
-      fontWeight: 600,
-      fontSize: 40,
-      lineHeight: 48,
-      textAlign: 'left',
-    },
-    {
-      text: LOREM,
-      left: 194.88,
-      top: 159.26,
-      width: 583.83,
-      height: 272,
-      fontFamily: ROBOTO,
-      fontWeight: 400,
-      fontSize: 28,
-      lineHeight: 34,
-      textAlign: 'right',
-    },
-    {
-      text: 'OBJECT 3D D',
-      left: 87.83,
-      top: 765.86,
-      width: 267,
-      height: 120,
-      fontFamily: ORBITRON,
-      fontWeight: 700,
-      fontSize: 40,
-      lineHeight: 60,
-      letterSpacing: '-0.011em',
-    },
-    {
-      text: 'lorem ipsum',
-      left: 435.7,
-      top: 777.86,
-      width: 265,
-      height: 48,
-      fontFamily: ROBOTO,
-      fontWeight: 600,
-      fontSize: 40,
-      lineHeight: 48,
-      textAlign: 'left',
-    },
-    {
-      text: LOREM,
-      left: 435.7,
-      top: 845.46,
-      width: 640.55,
-      height: 238,
-      fontFamily: ROBOTO,
-      fontWeight: 400,
-      fontSize: 28,
-      lineHeight: 34,
-      textAlign: 'left',
-    },
-  ],
-};
-
-const frames: FrameSpec[] = [frame1, frame2, frame3, frame4, frame5, frame6];
+const REF_WIDTH = 1440;
+const REF_HEIGHT = 1024;
 
 function pct(value: number, base: number): string {
   return `${(value / base) * 100}%`;
@@ -343,99 +19,169 @@ function responsiveFontSize(px: number): string {
   return `clamp(${min}px, ${vw.toFixed(3)}vw, ${px}px)`;
 }
 
-function FrameShape({ box }: { box: Box }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: pct(box.top, REF_HEIGHT),
-        left: pct(box.left, REF_WIDTH),
-        width: pct(box.width, REF_WIDTH),
-        height: pct(box.height, REF_HEIGHT),
-        background: 'linear-gradient(180deg, #D9D9D9 0%, #737373 100%)',
-      }}
-    />
-  );
+function easeOut(t: number): number {
+  return 1 - Math.pow(1 - t, 3)
 }
 
-function FrameText({ t }: { t: TextEl }) {
+// Setiap item punya posisi, arah masuk, dan text sendiri
+const items = [
+  // Section 1 - Object A (kiri, besar)
+  {
+    sectionIndex: 0,
+    shape: { left: 31.17, top: 48.17, width: 522.59, height: 583.28 },
+    label: { text: 'OBJECT 3D\nA', left: 60, top: 266.32 },
+    text: { title: 'lorem ipsum', desc: LOREM, left: 571.33, top: 57.96, width: 576.97, align: 'left' as const },
+    direction: 'left',
+  },
+  // Section 1 - Object B (kanan, kecil) — independent observer
+  {
+    sectionIndex: 0,
+    shape: { left: 986.28, top: 604.48, width: 357.2, height: 357.2 },
+    label: { text: 'OBJECT 3D\nB', left: 1000, top: 718.08 },
+    text: { title: 'lorem ipsum', desc: LOREM, left: 313.48, top: 620, width: 603.14, align: 'right' as const },
+    direction: 'right',
+  },
+  // Section 2 - Object C (kanan, besar)
+  {
+    sectionIndex: 1,
+    shape: { left: 805.6, top: 42.71, width: 603.55, height: 517.25 },
+    label: { text: 'OBJECT 3D\nC', left: 881.81, top: 285.2 },
+    text: { title: 'lorem ipsum', desc: LOREM, left: 160, top: 160, width: 583.83, align: 'right' as const },
+    direction: 'right',
+  },
+  // Section 2 - Object D (kiri, kecil) — independent observer
+  {
+    sectionIndex: 1,
+    shape: { left: 42.73, top: 632.26, width: 357.2, height: 357.2 },
+    label: { text: 'OBJECT 3D\nD', left: 87.83, top: 765.86 },
+    text: { title: 'lorem ipsum', desc: LOREM, left: 435.7, top: 660, width: 640.55, align: 'left' as const },
+    direction: 'left',
+  },
+]
+
+// Section wrapper — hanya sebagai container layout
+// A+B share section 0, C+D share section 1
+function SectionWrapper({ children, sectionIndex }: { children: React.ReactNode, sectionIndex: number }) {
   return (
-    <div
-      style={{
+    <div style={{
+      position: 'relative',
+      width: '100%',
+      aspectRatio: `${REF_WIDTH} / ${REF_HEIGHT}`,
+      backgroundColor: '#ffffff',
+      overflow: 'hidden',
+    }}>
+      {children}
+    </div>
+  )
+}
+
+function ObjectItem({ item }: { item: typeof items[0] }) {
+  const shapeRef = useRef<HTMLDivElement>(null)
+  const [progress, setProgress] = useState(0)
+  const textOpacity = Math.max(0, Math.min(1, (progress - 0.7) / 0.3))
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!shapeRef.current) return
+      const rect = shapeRef.current.getBoundingClientRect()
+      const windowHeight = window.innerHeight
+
+      const raw = (windowHeight - rect.top) / (windowHeight * 0.6)
+      const clamped = Math.min(Math.max(raw, 0), 1)
+      const eased = easeOut(clamped)
+
+      setProgress(eased)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const translateX = `${(item.direction === 'left' ? -120 : 120) * (1 - progress)}%`
+
+  return (
+    <>
+      {/* Shape */}
+      <div
+        ref={shapeRef}
+        style={{
+          position: 'absolute',
+          top: pct(item.shape.top, REF_HEIGHT),
+          left: pct(item.shape.left, REF_WIDTH),
+          width: pct(item.shape.width, REF_WIDTH),
+          height: pct(item.shape.height, REF_HEIGHT),
+          background: 'linear-gradient(180deg, #D9D9D9 0%, #737373 100%)',
+          borderRadius: 0,
+          transform: `translateX(${translateX})`,
+        }}
+      />
+
+      {/* Label */}
+      <div style={{
         position: 'absolute',
-        top: pct(t.top, REF_HEIGHT),
-        left: pct(t.left, REF_WIDTH),
-        width: pct(t.width, REF_WIDTH),
-        fontFamily: t.fontFamily,
-        fontWeight: t.fontWeight,
-        fontSize: responsiveFontSize(t.fontSize),
-        lineHeight: `${(t.lineHeight / t.fontSize) * 100}%`,
-        letterSpacing: t.letterSpacing,
-        textAlign: t.textAlign ?? 'left',
+        top: pct(item.label.top, REF_HEIGHT),
+        left: pct(item.label.left, REF_WIDTH),
+        fontFamily: ORBITRON,
+        fontWeight: 700,
+        fontSize: responsiveFontSize(40),
         color: '#000',
         whiteSpace: 'pre-line',
-      }}
-    >
-      {t.text}
-    </div>
-  );
-}
+        lineHeight: 1.4,
+        transform: `translateX(${translateX})`,
+      }}>
+        {item.label.text}
+      </div>
 
-function ObjectFrame({ spec }: { spec: FrameSpec }) {
-  return (
-    <div
-      style={{
-        position: 'relative',
-        flexShrink: 0,
-        width: '100%',
-        aspectRatio: `${REF_WIDTH} / ${REF_HEIGHT}`,
-        scrollSnapAlign: 'start',
-        overflow: 'hidden',
-        backgroundColor: '#ffffff',
-      }}
-    >
-      {spec.shapes.map((box, i) => (
-        <FrameShape key={`shape-${i}`} box={box} />
-      ))}
-      {spec.texts.map((t, i) => (
-        <FrameText key={`text-${i}`} t={t} />
-      ))}
-    </div>
-  );
+      {/* Text */}
+      <div style={{
+        position: 'absolute',
+        top: pct(item.text.top, REF_HEIGHT),
+        left: pct(item.text.left, REF_WIDTH),
+        width: pct(item.text.width, REF_WIDTH),
+        opacity: textOpacity,
+        transition: 'opacity 0.5s ease',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px',
+      }}>
+        <div style={{
+          fontFamily: ROBOTO,
+          fontWeight: 600,
+          fontSize: responsiveFontSize(40),
+          color: '#000',
+          textAlign: item.text.align,
+        }}>
+          {item.text.title}
+        </div>
+        <div style={{
+          fontFamily: ROBOTO,
+          fontWeight: 400,
+          fontSize: responsiveFontSize(28),
+          color: '#000',
+          lineHeight: '130%',
+          textAlign: item.text.align,
+        }}>
+          {item.text.desc}
+        </div>
+      </div>
+    </>
+  )
 }
 
 export default function Object3DSection() {
-  return (
-    <div
-      style={{
-        width: '100%',
-        backgroundColor: '#ffffff',
-        boxSizing: 'border-box',
-      }}
-    >
-      <div
-        className="object3d-track"
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          overflowY: 'auto',
-          scrollSnapType: 'y mandatory',
-          WebkitOverflowScrolling: 'touch',
-        }}
-      >
-        {frames.map((spec, i) => (
-          <ObjectFrame key={i} spec={spec} />
-        ))}
-      </div>
+  // Group items by sectionIndex
+  const section0 = items.filter(i => i.sectionIndex === 0)
+  const section1 = items.filter(i => i.sectionIndex === 1)
 
-      <style jsx>{`
-        .object3d-track {
-          scrollbar-width: none;
-        }
-        .object3d-track::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
+  return (
+    <div style={{ width: '100%', backgroundColor: '#ffffff' }}>
+      <div style={{ position: 'relative', width: '100%', aspectRatio: `${REF_WIDTH} / ${REF_HEIGHT}`, backgroundColor: '#ffffff', overflow: 'hidden' }}>
+        {section0.map((item, i) => <ObjectItem key={i} item={item} />)}
+      </div>
+      <div style={{ position: 'relative', width: '100%', aspectRatio: `${REF_WIDTH} / ${REF_HEIGHT}`, backgroundColor: '#ffffff', overflow: 'hidden' }}>
+        {section1.map((item, i) => <ObjectItem key={i} item={item} />)}
+      </div>
     </div>
-  );
+  )
 }
