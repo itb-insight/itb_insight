@@ -36,10 +36,13 @@
   width: 100%;
   flex: 1;
   min-height: 700px;
+  aspect-ratio: 174 / 80;
   margin-top: 24px;
 }
 
 .image {
   object-fit: cover;
   object-position: top;
+  width: 100% !important;
+  height: 100% !important;
 }

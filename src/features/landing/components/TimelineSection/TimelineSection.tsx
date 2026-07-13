@@ -13,7 +13,7 @@ export default function TimelineSection() {
           src="/images/timeline-bg.png"
           alt="Timeline"
           fill
-          sizes="(max-width: 768px) 100vw, 50vw"
+          sizes="(max-width: 1200px) 100vw, 1140px"
           className={styles.image}
         />
       </div>
