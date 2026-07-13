@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Map, { Marker, NavigationControl, Source, Layer } from 'react-map-gl/maplibre';
 import { Search, ChevronRight, ChevronDown, MapPin } from 'lucide-react';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -150,7 +151,9 @@ export default function EventMap() {
           <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
             
             <div className="sidebar-logo-container" style={{ width: '48px', height: '48px', alignItems: 'center', justifyItems: 'center', border: '1px solid #e5e5e5', borderRadius: '8px', padding: '8px' }}>
-               <Image src="/logoitbinsight.png" alt="ITB Insight Logo" width={32} height={32} style={{ objectFit: 'contain' }} />
+              <Link href="/" style={{ display: 'flex', width: '100%', height: '100%' }}>
+                <Image src="/images/logoinsight.png" alt="ITB Insight Logo" width={48} height={48} style={{ objectFit: 'contain' }} />
+              </Link>
             </div>
 
             <div style={{ position: 'relative', width: '100%' }}>
@@ -221,9 +224,10 @@ export default function EventMap() {
 
         {/* KOLOM KANAN / ATAS: KANVAS PETA */}
         <div className="map-container">
-          
           <div className="floating-logo">
-            <Image src="/logoitbinsight.png" alt="ITB Insight Logo" width={32} height={32} style={{ objectFit: 'contain' }} />
+            <Link href="/" style={{ display: 'flex' }}>
+              <Image src="/images/logoinsight.png" alt="ITB Insight Logo" width={32} height={32} style={{ objectFit: 'contain' }} />
+            </Link>
           </div>
 
           <Map
