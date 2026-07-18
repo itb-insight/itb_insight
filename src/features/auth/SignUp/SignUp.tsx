@@ -1,7 +1,20 @@
+"use client"
+
 import Link from "next/link"
+import useFunnelStep from "@/lib/analytics/hooks/useFunnelStep"
 import styles from "./SignUp.module.css"
 
 export default function SignUp() {
+  // Entering the form is step 1 of the registration funnel. If the visitor
+  // leaves without calling complete(), AnalyticsRoot derives the drop-off on
+  // page hide — no extra instrumentation needed here.
+  const { complete } = useFunnelStep({
+    funnelId: "signup",
+    step: "reg_started",
+    stepIndex: 1,
+    division: "CPT",
+  })
+
   return (
     <div className={styles.page}>
       <div className={styles.left}>
@@ -45,7 +58,11 @@ export default function SignUp() {
               />
             </div>
 
-            <button className={styles.loginBtn}>Sign Up</button>
+            {/* No form values are ever passed to complete() — the funnel
+                records that the step happened, never who did it. */}
+            <button className={styles.loginBtn} onClick={() => complete()}>
+              Sign Up
+            </button>
 
             <p className={styles.signupText}>
               Already have an account?{" "}

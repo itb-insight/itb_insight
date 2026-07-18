@@ -1,13 +1,17 @@
 import Image from "next/image"
+import DroneMount from "@/features/drone/DroneMount"
 import styles from "./TimelineSection.module.css"
 
 export default function TimelineSection() {
   return (
     <section className={styles.timeline}>
-      <h2 className={styles.title}>TIMELINE</h2>
+
 
       <div className={styles.badge}>drone</div>
 
+      <DroneMount componentId="drone-timeline" label="drone" />
+
+      <h2 className={styles.title}>TIMELINE</h2>
       <div className={styles.imageWrapper}>
         <Image
           src="/images/timeline-bg.png"
