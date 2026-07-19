@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import * as THREE from "three"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 import useDronePerf from "@/lib/analytics/hooks/useDronePerf"
 import useImpression from "@/lib/analytics/hooks/useImpression"
 import styles from "./DroneCube.module.css"
@@ -12,12 +13,35 @@ interface DroneCubeProps {
   label?: string
 }
 
+// --- Tweakable params -------------------------------------------------
+// Path to the .glb under /public.
+const MODEL_URL = "/models/drone.glb"
+// World-unit size the model is normalized to (its longest dimension becomes
+// this many units), so the fixed camera framing works regardless of the
+// scale the model was authored at.
+const TARGET_SIZE = 0.8
+// Fixed pitch, in degrees, applied once so the whole body is visible instead
+// of a flat top-down silhouette. Not touched by drag.
+const TILT_DEGREES = 6
+// How much a drag pixel turns into yaw (radians per px of horizontal drag).
+const DRAG_SPEED = 0.01
+// Per-frame multiplier applied to yaw velocity after release (momentum decay).
+const DAMPING = 0.94
+// Idle auto-spin speed (radians/frame) once no drag momentum remains.
+const IDLE_SPIN_SPEED = 0.006
+// Camera framing.
+const CAMERA_FOV = 13
+const CAMERA_POSITION: [number, number, number] = [2.2, 1.2, 2.8]
+// -----------------------------------------------------------------------
+
 /**
- * Minimal WebGL cube standing in for the 'drone' component.
+ * WebGL drone model standing in for the 'drone' component.
  *
- * Kept deliberately small: the point is to have a real GPU-bound thing to
- * instrument, so the Engagement dashboard's load-time numbers reflect actual
- * WebGL behaviour on low-end devices rather than a guess.
+ * Loaded async (the .glb is multiple MB), so `onFirstFrame` intentionally
+ * waits for the model's first rendered frame rather than the first empty
+ * scene frame — that's the number the Engagement dashboard cares about, per
+ * useDronePerf's docstring on distinguishing "not interested" from "never
+ * finished loading".
  */
 export default function DroneCube({ componentId = "drone-cube", label = "drone" }: DroneCubeProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -47,25 +71,19 @@ export default function DroneCube({ componentId = "drone-cube", label = "drone" 
     renderer.setSize(width, height, false)
 
     const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100)
-    camera.position.set(2.6, 2.0, 3.2)
+    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, width / height, 0.1, 100)
+    camera.position.set(...CAMERA_POSITION)
     camera.lookAt(0, 0, 0)
 
-    const geometry = new THREE.BoxGeometry(1.6, 1.6, 1.6)
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xd8d8d8,
-      metalness: 0.1,
-      roughness: 0.55,
-    })
-    const cube = new THREE.Mesh(geometry, material)
-    scene.add(cube)
-
-    // Edge lines keep the shape legible against the dark greyscale background,
-    // where a flat-lit cube face can otherwise vanish.
-    const edges = new THREE.EdgesGeometry(geometry)
-    const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x0f0f0f })
-    const outline = new THREE.LineSegments(edges, edgeMaterial)
-    cube.add(outline)
+    // yawGroup rotates purely around the world vertical axis (horizontal
+    // plane only) — that's what drag/momentum drive. tiltGroup carries the
+    // fixed pitch so the drone's body is visible, nested *inside* yawGroup so
+    // the tilt doesn't tip the yaw axis into a cone.
+    const yawGroup = new THREE.Group()
+    const tiltGroup = new THREE.Group()
+    tiltGroup.rotation.x = THREE.MathUtils.degToRad(TILT_DEGREES)
+    yawGroup.add(tiltGroup)
+    scene.add(yawGroup)
 
     const key = new THREE.DirectionalLight(0xffffff, 2.2)
     key.position.set(3, 4, 5)
@@ -76,22 +94,64 @@ export default function DroneCube({ componentId = "drone-cube", label = "drone" 
 
     let frameId = 0
     let reportedFirstFrame = false
+    let modelReady = false
+    let disposed = false
+    let loadedModel: THREE.Object3D | null = null
+
+    // Drag state: while the pointer is down, user input drives yaw instead
+    // of the idle auto-spin. Velocity carries over on release so a flick
+    // keeps spinning and gently decays back to nothing.
+    let dragging = false
+    let pointerId: number | null = null
+    let lastX = 0
+    let velocity = 0
 
     function renderFrame() {
-      if (!reduceMotion) {
-        cube.rotation.x += 0.004
-        cube.rotation.y += 0.007
+      if (dragging) {
+        // No auto-rotate while the user is actively steering the model.
+      } else if (!reduceMotion || velocity !== 0) {
+        yawGroup.rotation.y += velocity || IDLE_SPIN_SPEED
+        velocity *= DAMPING
+        if (Math.abs(velocity) < 0.0001) velocity = 0
       }
 
       renderer.render(scene, camera)
 
-      if (!reportedFirstFrame) {
+      if (!reportedFirstFrame && modelReady) {
         reportedFirstFrame = true
         onFirstFrame()
       }
 
-      // A static cube needs exactly one frame; only animate when we should.
-      if (!reduceMotion) frameId = requestAnimationFrame(renderFrame)
+      // Keep animating whenever the model hasn't arrived yet (so it shows up
+      // the instant it does), while dragging, spinning from momentum, or
+      // idle-spinning.
+      if (!modelReady || dragging || !reduceMotion || velocity !== 0) {
+        frameId = requestAnimationFrame(renderFrame)
+      }
+    }
+
+    function handlePointerDown(event: PointerEvent) {
+      dragging = true
+      pointerId = event.pointerId
+      lastX = event.clientX
+      velocity = 0
+      canvas?.setPointerCapture(event.pointerId)
+      if (frameId === 0) renderFrame()
+    }
+
+    function handlePointerMove(event: PointerEvent) {
+      if (!dragging || event.pointerId !== pointerId) return
+      const dx = event.clientX - lastX
+      lastX = event.clientX
+      velocity = dx * DRAG_SPEED
+      yawGroup.rotation.y += velocity
+    }
+
+    function handlePointerUp(event: PointerEvent) {
+      if (event.pointerId !== pointerId) return
+      dragging = false
+      pointerId = null
+      if (frameId === 0) renderFrame()
     }
 
     function handleResize() {
@@ -109,21 +169,80 @@ export default function DroneCube({ componentId = "drone-cube", label = "drone" 
       onContextLost()
     }
 
+    function disposeObject3D(root: THREE.Object3D) {
+      root.traverse((child) => {
+        if (!(child instanceof THREE.Mesh)) return
+        child.geometry.dispose()
+        const materials = Array.isArray(child.material) ? child.material : [child.material]
+        for (const mat of materials) {
+          for (const key of Object.keys(mat)) {
+            const value = (mat as unknown as Record<string, unknown>)[key]
+            if (value instanceof THREE.Texture) value.dispose()
+          }
+          mat.dispose()
+        }
+      })
+    }
+
     canvas.addEventListener("webglcontextlost", handleContextLost)
+    canvas.addEventListener("pointerdown", handlePointerDown)
+    canvas.addEventListener("pointermove", handlePointerMove)
+    canvas.addEventListener("pointerup", handlePointerUp)
+    canvas.addEventListener("pointercancel", handlePointerUp)
     window.addEventListener("resize", handleResize)
     renderFrame()
 
+    const loader = new GLTFLoader()
+    loader.load(
+      MODEL_URL,
+      (gltf) => {
+        if (disposed) {
+          disposeObject3D(gltf.scene)
+          return
+        }
+
+        const model = gltf.scene
+
+        // Normalize scale first, then recenter — Box3 accounts for the
+        // model's current world matrix, so computing it twice (before/after
+        // scaling) keeps the centering math simple regardless of how the
+        // source file was authored.
+        const rawSize = new THREE.Vector3()
+        new THREE.Box3().setFromObject(model).getSize(rawSize)
+        const maxDimension = Math.max(rawSize.x, rawSize.y, rawSize.z) || 1
+        model.scale.setScalar(TARGET_SIZE / maxDimension)
+
+        const center = new THREE.Vector3()
+        new THREE.Box3().setFromObject(model).getCenter(center)
+        model.position.sub(center)
+
+        tiltGroup.add(model)
+        loadedModel = model
+        modelReady = true
+      },
+      undefined,
+      () => {
+        // Missing/broken model file: stop waiting and surface it the same
+        // way a lost WebGL context is surfaced, since there's no dedicated
+        // asset-load-failure metric.
+        modelReady = true
+        onContextLost()
+      },
+    )
+
     return () => {
+      disposed = true
       cancelAnimationFrame(frameId)
       canvas.removeEventListener("webglcontextlost", handleContextLost)
+      canvas.removeEventListener("pointerdown", handlePointerDown)
+      canvas.removeEventListener("pointermove", handlePointerMove)
+      canvas.removeEventListener("pointerup", handlePointerUp)
+      canvas.removeEventListener("pointercancel", handlePointerUp)
       window.removeEventListener("resize", handleResize)
 
-      // Dispose everything: geometry, materials AND the renderer. Skipping the
+      // Dispose everything: model resources AND the renderer. Skipping the
       // renderer leaks GPU memory across route changes.
-      geometry.dispose()
-      material.dispose()
-      edges.dispose()
-      edgeMaterial.dispose()
+      if (loadedModel) disposeObject3D(loadedModel)
       renderer.dispose()
     }
   }, [onFirstFrame, onContextLost])

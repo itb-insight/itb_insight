@@ -7,9 +7,9 @@ export default function TimelineSection() {
     <section className={styles.timeline}>
 
 
-      <div className={styles.badge}>drone</div>
-
-      <DroneMount componentId="drone-timeline" label="drone" />
+      <div className={styles.droneBadge}>
+        <DroneMount componentId="drone-timeline" label="drone" />
+      </div>
 
       <h2 className={styles.title}>TIMELINE</h2>
       <div className={styles.imageWrapper}>

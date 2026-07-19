@@ -18,9 +18,6 @@ const DroneCube = dynamic(() => import("./DroneCube"), {
         width: "100%",
         maxWidth: 360,
         aspectRatio: "4 / 3",
-        backgroundColor: "var(--color-bg-card)",
-        border: "1px solid var(--color-border-subtle)",
-        borderRadius: "var(--radius-lg)",
       }}
     />
   ),
