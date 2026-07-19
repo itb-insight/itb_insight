@@ -18,16 +18,11 @@
   z-index: 2;
 }
 
-.badge {
+.droneBadge {
   position: absolute;
-  top: 80px;
-  right: 80px;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--color-bg-primary);
-  background-color: var(--color-text-primary);
-  padding: 12px 20px;
+  top: 20px;
+  right: 400px;
+  width: 300px;
   z-index: 2;
 }
 
