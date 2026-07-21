@@ -148,7 +148,6 @@
 .signupLink:hover {
   text-decoration: underline;
 }
-
 .googleBtn {
   font-family: 'Roboto Mono', monospace;
   font-size: 0.875rem;
@@ -161,11 +160,9 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-
 .googleBtn:hover {
   background-color: #f5f5f5;
 }
-
 .messageOk {
   font-family: 'Roboto Mono', monospace;
   font-size: 0.8125rem;
@@ -174,7 +171,6 @@
   margin: 0;
   line-height: 1.5;
 }
-
 .messageError {
   font-family: 'Roboto Mono', monospace;
   font-size: 0.8125rem;
@@ -183,7 +179,6 @@
   margin: 0;
   line-height: 1.5;
 }
-
 .loginBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;

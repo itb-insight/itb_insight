@@ -17,6 +17,24 @@
   --color-accent: #ffffff;
   --color-accent-hover: #e0e0e0;
 
+  /* Chart ramp — ORDINAL, not categorical.
+     Six neutral steps on the #242424 card surface measure at chroma 0 with a
+     worst adjacent deltaE of 9.0 (below the 15 floor for categorical use), so
+     shade alone cannot tell two divisions apart. Series identity is carried by
+     the division code in the legend and by the table view; the ramp is only a
+     hint. Monotone lightness, adjacent deltaL >= 0.06. Assignment to divisions
+     lives in src/lib/analytics/divisions.ts and must never be reordered by
+     value — filtering must not repaint the surviving series.
+     Pure #ffffff is avoided: it is --color-text-primary and reads as a label. */
+  --chart-1: #f2f2f2;
+  --chart-2: #cfcfcf;
+  --chart-3: #ababab;
+  --chart-4: #8a8a8a;
+  --chart-5: #6e6e6e;
+  --chart-6: #565656;
+  --chart-track: #2e2e2e;
+  --chart-grid: #333333;
+
   /* Typography */
   --font-primary: 'Gabarito', sans-serif;
 

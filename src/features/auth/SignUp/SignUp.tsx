@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useState } from "react"
 
 import { createClient } from "@/lib/supabase/client"
+import useFunnelStep from "@/lib/analytics/hooks/useFunnelStep"
 import styles from "./SignUp.module.css"
 
 export default function SignUp() {
@@ -12,6 +13,16 @@ export default function SignUp() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle")
   const [message, setMessage] = useState("")
   const [isError, setIsError] = useState(false)
+
+  // Entering the form is step 1 of the registration funnel. If the visitor
+  // leaves without calling complete(), AnalyticsRoot derives the drop-off on
+  // page hide — no extra instrumentation needed here.
+  const { complete } = useFunnelStep({
+    funnelId: "signup",
+    step: "reg_started",
+    stepIndex: 1,
+    division: "CPT",
+  })
 
   const redirectTo =
     typeof window !== "undefined" ? `${window.location.origin}/auth/callback?next=/dashboard` : undefined
@@ -42,90 +53,12 @@ export default function SignUp() {
       return
     }
 
+    // Link sent successfully — mark the funnel step complete. No form values are
+    // ever passed to complete(); the funnel records that the step happened, never who did it.
+    complete()
+
     setStatus("sent")
     setMessage(`Tautan konfirmasi telah dikirim ke ${email.trim()}. Cek inbox untuk menyelesaikan pendaftaran.`)
   }
 
   const handleGoogle = async () => {
-    setIsError(false)
-    setMessage("")
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo },
-    })
-    if (error) {
-      setIsError(true)
-      setMessage("Gagal mendaftar dengan Google. Coba lagi.")
-    }
-  }
-
-  return (
-    <div className={styles.page}>
-      <div className={styles.left}>
-        <Link href="/">
-          <button className={styles.back}>Back</button>
-        </Link>
-      </div>
-
-      <div className={styles.right}>
-        <div className={styles.card}>
-          <div className={styles.header}>
-            <h2 className={styles.title}>Sign Up</h2>
-            <p className={styles.subtitle}>join the experience</p>
-          </div>
-
-          <form className={styles.form} onSubmit={handleSignUp}>
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor="signup-name">
-                Name
-              </label>
-              <input
-                id="signup-name"
-                type="text"
-                className={styles.input}
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                placeholder="Nama lengkap"
-              />
-            </div>
-
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor="signup-email">
-                Email
-              </label>
-              <input
-                id="signup-email"
-                type="email"
-                required
-                className={styles.input}
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@student.itb.ac.id"
-              />
-            </div>
-
-            <button className={styles.loginBtn} type="submit" disabled={status === "sending"}>
-              {status === "sending" ? "Mengirim..." : "Sign up with email"}
-            </button>
-
-            <p className={styles.orText}>or continue with</p>
-
-            <button className={styles.googleBtn} type="button" onClick={handleGoogle}>
-              Google
-            </button>
-
-            {message ? <p className={isError ? styles.messageError : styles.messageOk}>{message}</p> : null}
-
-            <p className={styles.signupText}>
-              Already have an account?{" "}
-              <Link href="/login" className={styles.signupLink}>
-                Log in
-              </Link>
-            </p>
-          </form>
-        </div>
-      </div>
-    </div>
-  )
-}

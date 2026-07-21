@@ -1,0 +1,60 @@
+/* Shared bar/meter primitives. One series per chart wherever possible — the
+   greyscale ramp is ordinal and cannot carry categorical meaning on its own. */
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-2) var(--space-4);
+  align-items: baseline;
+}
+
+.label {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.value {
+  font-size: 0.8125rem;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.track {
+  grid-column: 1 / -1;
+  height: 8px;
+  background-color: var(--chart-track);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background-color: var(--chart-1);
+  /* Rounded only at the data end, so the bar's start stays flush with the axis. */
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* Inline bar used beside a table value */
+.inlineTrack {
+  display: inline-block;
+  vertical-align: middle;
+  width: 56px;
+  height: 5px;
+  margin-left: var(--space-2);
+  background-color: var(--chart-track);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.inlineFill {
+  display: block;
+  height: 100%;
+  background-color: var(--chart-1);
+}
