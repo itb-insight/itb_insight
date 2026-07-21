@@ -1,7 +1,11 @@
+/* Height of the shared fixed navbar (16px pad × 2 + 48px logo). The shell and
+   its sticky sidebar are offset by this so nothing hides behind the header. */
 .shell {
+  --nav-height: 80px;
   display: grid;
   grid-template-columns: 232px 1fr;
   min-height: 100vh;
+  padding-top: var(--nav-height);
   background-color: var(--color-bg-primary);
 }
 
@@ -9,28 +13,9 @@
   border-right: 1px solid var(--color-border-subtle);
   background-color: var(--color-bg-secondary);
   position: sticky;
-  top: 0;
-  height: 100vh;
+  top: var(--nav-height);
+  height: calc(100vh - var(--nav-height));
   overflow-y: auto;
-}
-
-.brand {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  padding: var(--space-6) var(--space-6) var(--space-4);
-}
-
-.brandMark {
-  font-weight: 900;
-  font-size: 1rem;
-  letter-spacing: 0.04em;
-  color: var(--color-text-primary);
-}
-
-.brandName {
-  font-size: 0.875rem;
-  color: var(--color-text-secondary);
 }
 
 .main {
