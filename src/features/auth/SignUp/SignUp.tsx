@@ -1,10 +1,19 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
+
+import { createClient } from "@/lib/supabase/client"
 import useFunnelStep from "@/lib/analytics/hooks/useFunnelStep"
 import styles from "./SignUp.module.css"
 
 export default function SignUp() {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle")
+  const [message, setMessage] = useState("")
+  const [isError, setIsError] = useState(false)
+
   // Entering the form is step 1 of the registration funnel. If the visitor
   // leaves without calling complete(), AnalyticsRoot derives the drop-off on
   // page hide — no extra instrumentation needed here.
@@ -15,64 +24,41 @@ export default function SignUp() {
     division: "CPT",
   })
 
-  return (
-    <div className={styles.page}>
-      <div className={styles.left}>
-        <Link href = "/">
-            <button className={styles.back}>Back</button>
-        </Link>
-      </div>
+  const redirectTo =
+    typeof window !== "undefined" ? `${window.location.origin}/auth/callback?next=/dashboard` : undefined
 
-      <div className={styles.right}>
-        <div className={styles.card}>
-          <div className={styles.header}>
-            <h2 className={styles.title}>Sign Up</h2>
-            <p className={styles.subtitle}>join the experience</p>
-          </div>
+  const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!email.trim()) return
 
-          <div className={styles.form}>
-            <div className={styles.field}>
-              <label className={styles.label}>Name</label>
-              <input
-                type="text"
-                className={styles.input}
-                placeholder=""
-              />
-            </div>
+    setStatus("sending")
+    setMessage("")
+    setIsError(false)
 
-            <div className={styles.field}>
-              <label className={styles.label}>Email</label>
-              <input
-                type="email"
-                className={styles.input}
-                placeholder=""
-              />
-            </div>
+    const supabase = createClient()
+    // Magic-link sign-up: creates the auth user on first verification. The name is stored in
+    // user metadata and picked up by the `handle_new_user` DB trigger to seed the profile.
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email.trim(),
+      options: {
+        emailRedirectTo: redirectTo,
+        data: name.trim() ? { full_name: name.trim() } : undefined,
+      },
+    })
 
-            <div className={styles.field}>
-              <label className={styles.label}>Password</label>
-              <input
-                type="password"
-                className={styles.input}
-                placeholder=""
-              />
-            </div>
+    if (error) {
+      setStatus("idle")
+      setIsError(true)
+      setMessage("Gagal mengirim tautan. Periksa email lalu coba lagi.")
+      return
+    }
 
-            {/* No form values are ever passed to complete() — the funnel
-                records that the step happened, never who did it. */}
-            <button className={styles.loginBtn} onClick={() => complete()}>
-              Sign Up
-            </button>
+    // Link sent successfully — mark the funnel step complete. No form values are
+    // ever passed to complete(); the funnel records that the step happened, never who did it.
+    complete()
 
-            <p className={styles.signupText}>
-              Already have an account?{" "}
-              <Link href="/login" className={styles.signupLink}>
-                Log in
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+    setStatus("sent")
+    setMessage(`Tautan konfirmasi telah dikirim ke ${email.trim()}. Cek inbox untuk menyelesaikan pendaftaran.`)
+  }
+
+  const handleGoogle = async () => {

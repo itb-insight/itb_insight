@@ -1,0 +1,18 @@
+# Supabase CLI config. `project_id` is a local label; the live project you push to is
+# selected via `supabase link --project-ref <ref>`. Docs: https://supabase.com/docs/guides/cli/config
+project_id = "itb-insight"
+
+[db]
+# Port used by the local Postgres shadow DB (only relevant for `supabase start`).
+port = 54322
+# Postgres major version — match your live project (Supabase currently provisions 15).
+major_version = 15
+
+[db.migrations]
+# Apply migrations in filename order.
+schema_paths = []
+
+[auth]
+# The site URL used when building magic-link / OAuth redirects during local dev.
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000/auth/callback"]
