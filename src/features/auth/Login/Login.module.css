@@ -183,28 +183,4 @@
 .loginBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}<<<<<<< mvp/temp
-}
-
-.messageOk {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 0.8125rem;
-  color: #1a7f37;
-  text-align: center;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.messageError {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 0.8125rem;
-  color: #c1121f;
-  text-align: center;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.loginBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
