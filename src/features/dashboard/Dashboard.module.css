@@ -244,6 +244,61 @@
   letter-spacing: 0.1em;
 }
 
+/* Account ID QR card */
+.qrCard {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.qrHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.qrTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.qrHint {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  max-width: 42ch;
+}
+
+.qrCode {
+  background-color: #ffffff;
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  line-height: 0;
+}
+
+.qrMeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.qrEmail {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.qrUid {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  word-break: break-all;
+}
+
 /* Empty state */
 .empty {
   border: 1px dashed var(--color-border);

@@ -1,8 +1,11 @@
 import Link from "next/link"
 
 import type { RegistrationRow } from "@/lib/registrations"
+import AccountQrCard from "./AccountQrCard"
 import TeamSubmitButton from "./TeamSubmitButton"
 import styles from "./Dashboard.module.css"
+
+type Account = { id: string; email: string | null }
 
 const statusBadge: Record<string, { className: string; label: string }> = {
   draft: { className: styles.badgeDraft, label: "Draft" },
@@ -11,7 +14,13 @@ const statusBadge: Record<string, { className: string; label: string }> = {
   rejected: { className: styles.badgeRejected, label: "Ditolak" },
 }
 
-export default function DashboardHome({ registrations }: { registrations: RegistrationRow[] }) {
+export default function DashboardHome({
+  registrations,
+  account,
+}: {
+  registrations: RegistrationRow[]
+  account: Account | null
+}) {
   const submittedCount = registrations.filter((reg) => reg.status === "submitted").length
   const verifiedCount = registrations.filter((reg) => reg.status === "verified").length
 
@@ -45,6 +54,8 @@ export default function DashboardHome({ registrations }: { registrations: Regist
             <p className={styles.statLabel}>Terverifikasi</p>
           </div>
         </section>
+
+        {account ? <AccountQrCard accountId={account.id} email={account.email} /> : null}
 
         <section className={styles.section}>
           <h2 className={styles.sectionHeading}>Registrasi Terbaru</h2>
