@@ -3,16 +3,16 @@ import PartnerCard from "./PartnerCard"
 import styles from "./MediaPartnersSection.module.css"
 
 const bigPartners = [
-  { id: "partner-alpha", tier: "platinum", src: "/images/partners/partner-1.png", alt: "Big Partner 1" },
-  { id: "partner-beta", tier: "platinum", src: "/images/partners/partner-1.png", alt: "Big Partner 2" },
+  { id: "partner-alpha", tier: "platinum", src: "/images/partners/partner-1.png", alt: "Nusantara Teknologi" },
+  { id: "partner-beta", tier: "platinum", src: "/images/partners/partner-1.png", alt: "Bank Cendekia" },
 ]
 
 const partners = [
-  { id: "partner-1", tier: "gold", src: "/images/partners/partner-2.png", alt: "Partner 1" },
-  { id: "partner-2", tier: "gold", src: "/images/partners/partner-2.png", alt: "Partner 2" },
-  { id: "partner-3", tier: "silver", src: "/images/partners/partner-2.png", alt: "Partner 3" },
-  { id: "partner-4", tier: "silver", src: "/images/partners/partner-2.png", alt: "Partner 4" },
-  { id: "partner-5", tier: "silver", src: "/images/partners/partner-2.png", alt: "Partner 5" },
+  { id: "partner-1", tier: "gold", src: "/images/partners/partner-2.png", alt: "Media Kabar Digital" },
+  { id: "partner-2", tier: "gold", src: "/images/partners/partner-2.png", alt: "Radio Antariksa FM" },
+  { id: "partner-3", tier: "silver", src: "/images/partners/partner-2.png", alt: "ITB Student Magazine" },
+  { id: "partner-4", tier: "silver", src: "/images/partners/partner-2.png", alt: "Bandung Tech Community" },
+  { id: "partner-5", tier: "silver", src: "/images/partners/partner-2.png", alt: "Kampus Kreatif Podcast" },
 ]
 
 export default function MediaPartnersSection() {

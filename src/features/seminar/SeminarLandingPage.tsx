@@ -119,8 +119,8 @@ export default function SeminarLandingPage({ onLearnMore }: { onLearnMore: () =>
             <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '4000px', height: '80px', background: 'rgba(217, 217, 217, 1)', zIndex: 10 }} />
             
             <h1 style={{ position: 'absolute', top: '375.85px', left: '38.63px', fontFamily: 'Roboto Mono', fontWeight: 700, fontSize: '110px', lineHeight: '120%', color: '#FFF', margin: 0, zIndex: 10 }}>Tech Seminar</h1>
-            <p style={{ position: 'absolute', top: '524.22px', left: '41.88px', fontFamily: 'Roboto Mono', fontWeight: 600, fontSize: '64px', lineHeight: '80px', color: '#FFF', margin: 0, zIndex: 10 }}>Lorem ipsum</p>
-            <p style={{ position: 'absolute', top: '598.46px', left: '42.13px', fontFamily: 'Roboto Mono', fontWeight: 600, fontSize: '64px', lineHeight: '80px', color: '#FFF', margin: 0, zIndex: 10 }}>Lorem ipsum</p>
+            <p style={{ position: 'absolute', top: '524.22px', left: '41.88px', fontFamily: 'Roboto Mono', fontWeight: 600, fontSize: '64px', lineHeight: '80px', color: '#FFF', margin: 0, zIndex: 10 }}>Talks worth</p>
+            <p style={{ position: 'absolute', top: '598.46px', left: '42.13px', fontFamily: 'Roboto Mono', fontWeight: 600, fontSize: '64px', lineHeight: '80px', color: '#FFF', margin: 0, zIndex: 10 }}>showing up for</p>
 
             {HERO_BG_HEXES.map((hex, i) => (
               <div key={`hero-bg-${i}`} style={{ position: 'absolute', width: hex.w, height: hex.h, top: hex.y, left: hex.x, background: GRADIENT_BG, backdropFilter: hex.blur, clipPath: POINTY_HEX_CLIP, zIndex: 0 }} />
@@ -177,7 +177,7 @@ export default function SeminarLandingPage({ onLearnMore }: { onLearnMore: () =>
             {CONTENT_OUTLINE_HEXES.map((out, i) => renderMirrorOutline(out, i, false))}
             
             <div style={{ position: 'absolute', top: '455.61px', left: '618.8px', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(217, 217, 217, 1)', zIndex: 10 }} />
-            <img src="/kincir angin.png" alt="Kincir Angin Placeholder" style={{ position: 'absolute', top: '452.7px', left: '742.04px', width: '100.09px', height: '102.9px', zIndex: 10, objectFit: 'contain' }} />
+            <img src="/kincir angin.png" alt="Decorative windmill illustration" style={{ position: 'absolute', top: '452.7px', left: '742.04px', width: '100.09px', height: '102.9px', zIndex: 10, objectFit: 'contain' }} />
             <div style={{ position: 'absolute', top: '608.82px', left: '484.64px', width: '477.47px', height: '97.35px', borderRadius: '40px', background: 'rgba(217, 217, 217, 1)', zIndex: 10 }} />
             <p style={{ position: 'absolute', top: '729.32px', left: '455.15px', width: '573.78px', height: '96px', fontFamily: 'Roboto Mono', fontWeight: 500, fontSize: '16px', lineHeight: '24px', textAlign: 'center', color: '#FFF', margin: 0, zIndex: 10 }}>
               {DETAIL_CONTENT.endDescription}

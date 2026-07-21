@@ -10,15 +10,15 @@ const WHATSAPP_SRC = "/images/whatsapp-2.png";
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
 const STATIC_DATA = {
-  title:                "JUDUL LOMBA",
-  description:          "Penjelasan lomba lorem ipsum dolor sit amet",
+  title:                "ROBOTIKA CHALLENGE",
+  description:          "Kompetisi robotika untuk tim mahasiswa yang ingin membangun prototipe cerdas dan kompetitif",
   registrationDeadline: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000),
-  registrationFee:      "000.000",
-  totalPrizepool:       "000.000",
+  registrationFee:      "150.000",
+  totalPrizepool:       "50.000.000",
   prizeBreakdown:       [null, null, null, null],
   sylabusUrl:           "#",
   guidebookUrl:         "#",
-  whatsappUrl:          "https://wa.me/62xxxxxxxxxx",
+  whatsappUrl:          "https://wa.me/6281234567890",
   registrationUrl:      "#",
 };
 

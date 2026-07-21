@@ -13,10 +13,11 @@ export default function AboutSection() {
         </h2>
 
         <p className={styles.description}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-          ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
+          INSIGHT ITB is Bandung Institute of Technology&apos;s annual innovation
+          expo — a stage where student teams turn coursework into working
+          prototypes. Over one week, exhibitors, competitors, and speakers
+          come together across robotics, software, and design to show what
+          the next generation of engineers is building.
         </p>
 
         <Link href="/about" className={styles.readMore}>

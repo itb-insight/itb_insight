@@ -113,10 +113,10 @@ export default function ContentPage({ onBack }: ContentPageProps) {
   }, []);
 
   const columnsData = [
-    { number: 1, isDark: false, title: 'lorem ipsum', description: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum' },
-    { number: 2, isDark: true, title: 'lorem ipsum', description: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum' },
-    { number: 3, isDark: false, title: 'lorem ipsum', description: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum' },
-    { number: 4, isDark: true, title: 'lorem ipsum', description: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum' }
+    { number: 1, isDark: false, title: 'Robotics', description: 'Autonomous rovers and IoT builds from student engineering teams' },
+    { number: 2, isDark: true, title: 'Software', description: 'Web, mobile, and AI projects built and shipped by student developers' },
+    { number: 3, isDark: false, title: 'Hardware', description: 'Custom PCBs, embedded systems, and physical computing prototypes' },
+    { number: 4, isDark: true, title: 'Design', description: 'Product and interaction design concepts from this year’s cohort' }
   ];
 
   return (

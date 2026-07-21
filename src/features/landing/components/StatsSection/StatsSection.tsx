@@ -2,7 +2,7 @@ import Image from "next/image"
 import styles from "./StatsSection.module.css"
 
 const stats = [
-  { value: "670", label: "collaborators" },
+  { value: "120", label: "collaborators" },
   { value: "670", label: "exhibitors" },
   { value: "67.000", label: "visitors" },
 ]

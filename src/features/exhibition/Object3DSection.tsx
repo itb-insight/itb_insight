@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
 const ROBOTO = "'Roboto Mono', monospace";
 const ORBITRON = "'Orbitron', sans-serif";
 
@@ -30,7 +29,7 @@ const items = [
     sectionIndex: 0,
     shape: { left: 31.17, top: 48.17, width: 522.59, height: 583.28 },
     label: { text: 'OBJECT 3D\nA', left: 60, top: 266.32 },
-    text: { title: 'lorem ipsum', desc: LOREM, left: 571.33, top: 57.96, width: 576.97, align: 'left' as const },
+    text: { title: 'Autonomous Rover', desc: 'A self-navigating rover built for the disaster-response track, using LiDAR and onboard vision to map unknown terrain in real time.', left: 571.33, top: 57.96, width: 576.97, align: 'left' as const },
     direction: 'left',
   },
   // Section 1 - Object B (kanan, kecil) — independent observer
@@ -38,7 +37,7 @@ const items = [
     sectionIndex: 0,
     shape: { left: 986.28, top: 604.48, width: 357.2, height: 357.2 },
     label: { text: 'OBJECT 3D\nB', left: 1000, top: 718.08 },
-    text: { title: 'lorem ipsum', desc: LOREM, left: 313.48, top: 620, width: 603.14, align: 'right' as const },
+    text: { title: 'Modular Drone Frame', desc: '3D-printed quadcopter chassis designed for rapid field repair, swapping arms and motor mounts without any tools.', left: 313.48, top: 620, width: 603.14, align: 'right' as const },
     direction: 'right',
   },
   // Section 2 - Object C (kanan, besar)
@@ -46,7 +45,7 @@ const items = [
     sectionIndex: 1,
     shape: { left: 805.6, top: 42.71, width: 603.55, height: 517.25 },
     label: { text: 'OBJECT 3D\nC', left: 881.81, top: 285.2 },
-    text: { title: 'lorem ipsum', desc: LOREM, left: 160, top: 160, width: 583.83, align: 'right' as const },
+    text: { title: 'Humanoid Arm Prototype', desc: 'A five-fingered robotic hand with tendon-driven actuation, developed to grip and manipulate everyday objects with human-like dexterity.', left: 160, top: 160, width: 583.83, align: 'right' as const },
     direction: 'right',
   },
   // Section 2 - Object D (kiri, kecil) — independent observer
@@ -54,7 +53,7 @@ const items = [
     sectionIndex: 1,
     shape: { left: 42.73, top: 632.26, width: 357.2, height: 357.2 },
     label: { text: 'OBJECT 3D\nD', left: 87.83, top: 765.86 },
-    text: { title: 'lorem ipsum', desc: LOREM, left: 435.7, top: 660, width: 640.55, align: 'left' as const },
+    text: { title: 'Electric Vehicle Concept', desc: 'A scaled concept model of a lightweight campus EV, exploring aerodynamic body panels printed and assembled entirely by the team.', left: 435.7, top: 660, width: 640.55, align: 'left' as const },
     direction: 'left',
   },
 ]

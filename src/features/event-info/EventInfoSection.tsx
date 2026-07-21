@@ -10,8 +10,8 @@ const RING_RADIUS = 160
 const CARD_COUNT = 8
 
 const events = [
-  { title: "Exhibition", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", href: "/exhibition" },
-  { title: "Seminar", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", href: "/seminar" },
+  { title: "Exhibition", description: "Walk the floor and see what student teams have been building all year — robotics, software, and hardware prototypes on display and ready to demo.", href: "/exhibition" },
+  { title: "Seminar", description: "Hear from industry practitioners and researchers in a series of short talks on where technology and engineering are headed next.", href: "/seminar" },
 ]
 
 type Phase = "ring" | "zoom"

@@ -91,18 +91,44 @@ export type SeminarCard = {
   description: string;
 };
 
-export const SEMINAR_CARDS: SeminarCard[] = Array.from({ length: 6 }, (_, i) => ({
-  id: `tech-seminar-${i + 1}`,
-  title: "Tech Seminar",
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt",
-}));
+export const SEMINAR_CARDS: SeminarCard[] = [
+  {
+    id: "tech-seminar-1",
+    title: "AI in Industry",
+    description: "How machine learning models move from research notebooks into production systems.",
+  },
+  {
+    id: "tech-seminar-2",
+    title: "Sustainable Engineering",
+    description: "Designing hardware and infrastructure with a smaller environmental footprint.",
+  },
+  {
+    id: "tech-seminar-3",
+    title: "From Campus to Startup",
+    description: "Lessons from ITB alumni who turned a class project into a funded company.",
+  },
+  {
+    id: "tech-seminar-4",
+    title: "Cybersecurity Fundamentals",
+    description: "A practical look at the threats every student developer should know about.",
+  },
+  {
+    id: "tech-seminar-5",
+    title: "Careers in Robotics",
+    description: "What hiring managers at robotics companies actually look for in new graduates.",
+  },
+  {
+    id: "tech-seminar-6",
+    title: "Human-Robot Interaction",
+    description: "Designing interfaces that make autonomous machines easier to trust and work with.",
+  },
+];
 
 export const DETAIL_CONTENT = {
   title: "Tech Seminar",
-  subtitle: "Lorem ipsum",
+  subtitle: "Talks worth showing up for",
   description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    "A series of short, focused sessions led by industry practitioners and researchers, covering the tools and ideas shaping the next few years of engineering.",
   endDescription:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    "Seats are limited and fill up fast — reserve your spot early and bring your questions for the Q&A after each talk.",
 };

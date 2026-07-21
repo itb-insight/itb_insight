@@ -70,7 +70,8 @@ export default function HeroSection() {
       </div>
 
       <p className={styles.description}>
-        lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.
+        A week of exhibitions, competitions, and talks where ITB&apos;s brightest
+        builders show what they&apos;ve made. Save your seat before the doors open.
       </p>
 
       <Link href="/register" className={styles.registerBtn}>

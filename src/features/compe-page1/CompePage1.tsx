@@ -7,10 +7,10 @@ import Navbar from "@/shared/components/Navbar/Navbar";
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
 const COMPETITIONS = [
-  { id: 1, title: "Judul Lomba",   description: "Penjelasan lomba lorem ipsum dolor sit amet" },
-  { id: 2, title: "Judul Lomba 2", description: "Penjelasan lomba lorem ipsum dolor sit amet" },
-  { id: 3, title: "Judul Lomba 3", description: "Penjelasan lomba lorem ipsum dolor sit amet" },
-  { id: 4, title: "Judul Lomba 4", description: "Penjelasan lomba lorem ipsum dolor sit amet" },
+  { id: 1, title: "Robotika Challenge", description: "Kompetisi robotika untuk tim mahasiswa yang ingin membangun prototipe cerdas dan kompetitif" },
+  { id: 2, title: "Hackathon Innovation Sprint", description: "Sprint pengembangan produk digital dengan fokus pada solusi nyata untuk kampus dan industri" },
+  { id: 3, title: "Paper Competition", description: "Kompetisi penulisan karya ilmiah individual untuk ide teknologi dan inovasi digital" },
+  { id: 4, title: "UI/UX Design Sprint", description: "Kompetisi merancang antarmuka digital yang intuitif untuk studi kasus produk nyata" },
 ];
 
 const FAQS = [
@@ -289,7 +289,7 @@ export default function CompetitionPage() {
           letterSpacing: "0.02em",
           whiteSpace: "nowrap",
         }}>
-          IDR 00.000.000
+          IDR 150.000.000
         </span>
       </div>
 

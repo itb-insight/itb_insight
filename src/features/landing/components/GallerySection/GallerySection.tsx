@@ -6,11 +6,11 @@ import { motion, AnimatePresence } from "framer-motion"
 import styles from "./GallerySection.module.css"
 
 const images = [
-  { src: "/images/gallery-1.png", alt: "Gallery 1" },
-  { src: "/images/gallery-2.png", alt: "Gallery 2" },
-  { src: "/images/gallery-1.png", alt: "Gallery 3" },
-  { src: "/images/gallery-2.png", alt: "Gallery 4" },
-  { src: "/images/gallery-1.png", alt: "Gallery 5" },
+  { src: "/images/gallery-1.png", alt: "Visitors exploring the robotics exhibition floor" },
+  { src: "/images/gallery-2.png", alt: "A student team pitching their prototype to judges" },
+  { src: "/images/gallery-1.png", alt: "Crowd gathered around the main stage during a talk" },
+  { src: "/images/gallery-2.png", alt: "Close-up of a competition entry on display" },
+  { src: "/images/gallery-1.png", alt: "Attendees networking at the INSIGHT ITB booths" },
 ]
 
 const slideVariants = {

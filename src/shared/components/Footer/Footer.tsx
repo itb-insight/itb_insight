@@ -3,9 +3,9 @@ import Link from "next/link"
 import styles from "./Footer.module.css"
 
 const socials = [
-  { href: "https://instagram.com", label: "Instagram" },
-  { href: "https://twitter.com", label: "Twitter" },
-  { href: "https://youtube.com", label: "Youtube" },
+  { href: "https://instagram.com/insightitb", label: "Instagram" },
+  { href: "https://twitter.com/insightitb", label: "Twitter" },
+  { href: "https://youtube.com/@insightitb", label: "Youtube" },
 ]
 
 export default function Footer() {

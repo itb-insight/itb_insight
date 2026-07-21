@@ -59,7 +59,7 @@ export default function SeminarLearnMorePage({ onBack }: { onBack?: () => void }
             textAlign: 'center',
           }}
         >
-          Lorem ipsum
+          Session details
         </h2>
 
         <div
@@ -89,7 +89,7 @@ export default function SeminarLearnMorePage({ onBack }: { onBack?: () => void }
             margin: 0,
           }}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          Each Tech Seminar session runs for about an hour, including a live Q&amp;A with the speaker. Slides and a short recap will be shared with registered attendees afterward, so you can revisit the material or catch up on a session you missed. Seating is first-come, first-served — arrive a few minutes early to grab a spot near the front.
         </p>
 
       </div>
