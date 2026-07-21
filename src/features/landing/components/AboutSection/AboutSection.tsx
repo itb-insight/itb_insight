@@ -8,12 +8,12 @@ export default function AboutSection() {
     <section className={styles.about}>
       <div className={styles.content}>
         <h2 className={styles.title}>
-          <span className={styles.titleRegular}>INSIGHT</span>
-          <span className={styles.titleLight}>ITB</span>
+          <span className={styles.titleRegular}>ITB</span>
+          <span className={styles.titleLight}>INSIGHT</span>
         </h2>
 
         <p className={styles.description}>
-          INSIGHT ITB is Bandung Institute of Technology&apos;s annual innovation
+          ITB INSIGHT is Bandung Institute of Technology&apos;s annual innovation
           expo — a stage where student teams turn coursework into working
           prototypes. Over one week, exhibitors, competitors, and speakers
           come together across robotics, software, and design to show what
@@ -28,7 +28,7 @@ export default function AboutSection() {
       <div className={styles.imageWrapper}>
         <Image
           src="/images/about-visual.png"
-          alt="Insight ITB Visual"
+          alt="ITB Insight Visual"
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
           className={styles.image}

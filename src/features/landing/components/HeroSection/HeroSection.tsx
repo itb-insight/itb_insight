@@ -48,7 +48,7 @@ export default function HeroSection() {
 
   return (
     <section className={styles.hero}>
-      <h2 className={styles.title}>INSIGHT ITB</h2>
+      <h2 className={styles.title}>ITB INSIGHT</h2>
 
       <div className={styles.countdown}>
         <div className={styles.countdownUnit}>

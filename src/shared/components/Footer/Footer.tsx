@@ -14,11 +14,11 @@ export default function Footer() {
       <div className={styles.inner}>
         <Image
           src="/images/logo.png"
-          alt="Insight ITB Logo"
+          alt="ITB Insight Logo"
           width={48}
           height={48}
         />
-        <p className={styles.name}>INSIGHT ITB</p>
+        <p className={styles.name}>ITB Insight</p>
         <div className={styles.socials}>
           {socials.map(({ href, label }) => (
             <Link

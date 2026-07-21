@@ -17,7 +17,7 @@ export default function Navbar({ isSolid = false }: NavbarProps) {
         <Link href="/" className={styles.logo}>
           <Image
             src="/images/logo.png"
-            alt="Insight ITB Logo"
+            alt="ITB Insight Logo"
             width={48}
             height={48}
             priority
