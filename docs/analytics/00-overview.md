@@ -1,66 +1,16 @@
-# Analytics Tooling — Overview
+# Analytics overview
 
-Web analytics for ITB Insight: one event pipeline, tagged by division, feeding an admin dashboard.
+**Current limited capability:** the client tracking library posts batches to `POST /api/track`; the route validates them and appends them to a 500-event, per-process in-memory ring buffer. This buffer is volatile and feeds only the demo recent-events feed.
 
-**This is an MVP.** All dashboard figures are mock data. There is no database and no authentication.
-Read [99-known-gaps.md](99-known-gaps.md) before deploying anything here.
-
-## The shape of it
-
-```
-  any page/component
-        │  logEvent() / trackClick() / useImpression() / useFunnelStep()
-        ▼
-  src/lib/analytics/queue.ts        batches in memory, flushes every 5s or on page hide
-        │  POST /api/track  (one request, many events)
-        ▼
-  src/app/api/track/route.ts        rate limit → validate (strips PII) → store
-        │
-        ▼
-  in-memory ring buffer             500 events, per process, volatile
-        │
-        ▼
-  /admin  "Recent Events" panel     ← the ONLY panel reading real data
+```text
+client tracking helpers -> POST /api/track -> validation/rate limit -> in-memory event store
+                                                                  -> GET /api/admin/events
 ```
 
-Everything else on `/admin` — KPIs, funnel, sponsor CTR, engagement, traffic — comes from
-`src/features/admin/data/mockData.ts` via the adapter seam.
+- `/admin` is public demo/mock state, not a protected analytics console.
+- Dashboard KPIs, funnels, traffic, sponsor, and engagement figures are mock/non-authoritative.
+- Migration `0006_analytics_events.sql` creates a persistent `analytics_events` table, but active ingest does **not** write to it.
+- [schema.sql](schema.sql) is reference/proposed SQL only; it is not an executed migration.
+- PostHog is a final PRD Should integration target, not installed or configured today. Durable analytics is a target design and requires privacy, retention, authorization, and reliable persistence decisions.
 
-## Divisions
-
-Defined once in `src/lib/analytics/divisions.ts`, which is the source of truth:
-
-| Code | Division |
-|---|---|
-| `CPT` | Competition |
-| `EV` | Event |
-| `SP` | Sponsorship |
-| `MKT` | Marketing |
-| `CB` | Creative Branding |
-| `MISC` | Misc — the fallback bucket |
-
-Any event whose type isn't in the `EVENT_DIVISION` map lands in `MISC` rather than being rejected.
-That's deliberate: new pages can start emitting events before anyone updates the registry, and the
-data still arrives. Tag it properly later; nothing breaks in the meantime.
-
-## Files
-
-| Path | What it is |
-|---|---|
-| `src/lib/analytics/` | The tracking runtime. Import root for everything reusable. |
-| `src/lib/analytics/hooks/` | The drop-in mechanisms — impression, scroll depth, funnel. |
-| `src/lib/analytics/server/` | Validation, rate limiting, event store. Server-only. |
-| `src/app/api/track/route.ts` | The single ingest endpoint. |
-| `src/features/admin/` | Dashboard UI and the mock/real data seam. |
-| `src/layouts/AdminShell/` | Sidebar shell. |
-| `src/features/drone/` | The Three.js cube and its perf instrumentation. |
-
-## Read next
-
-- [01-tracking-library.md](01-tracking-library.md) — how to log an event
-- [03-hooks-cookbook.md](03-hooks-cookbook.md) — copy-paste recipes for the reusable mechanisms
-- [02-endpoint-and-limits.md](02-endpoint-and-limits.md) — the endpoint, batching, sampling, PII
-- [04-dashboards-and-data-seam.md](04-dashboards-and-data-seam.md) — swapping mocks for a database
-- [05-drone.md](05-drone.md) — the 3D cube
-- [99-known-gaps.md](99-known-gaps.md) — **what is not done**
-- [schema.sql](schema.sql) — reference DDL, not executed by anything
+Read [02-endpoint-and-limits.md](02-endpoint-and-limits.md) for the live endpoint, [04-dashboards-and-data-seam.md](04-dashboards-and-data-seam.md) for mock metrics, and [99-known-gaps.md](99-known-gaps.md) before operational use.

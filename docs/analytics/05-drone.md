@@ -1,13 +1,16 @@
 # The Drone Cube
 
+> Its telemetry currently enters the volatile analytics pipeline and must not be treated as a
+> durable operational metric; see [00-overview.md](00-overview.md).
+
 `src/features/drone/` — a minimal Three.js cube standing in for the 'drone' component.
 
 ## Why it exists
 
-Not for the visual. The point is to have a **real GPU-bound thing to instrument**, so the Engagement
-dashboard's load-time numbers reflect actual WebGL behaviour on low-end phones rather than a guess.
-WebGL performance varies wildly across devices, and that variance is precisely what distinguishes
-"visitors weren't interested" from "it never finished loading".
+Not for the visual. The point is to have a **real GPU-bound thing to instrument**. The component
+emits actual WebGL timing telemetry, but the current Engagement dashboard still displays mock,
+non-authoritative values and does not aggregate this telemetry. Once durable ingestion and real-data
+adapters exist, device variance can help distinguish low interest from a component that never loaded.
 
 ## Usage
 
@@ -34,12 +37,13 @@ Emits `drone_ready` with `readyMs` — **mount to first rendered frame**.
 
 ### This is not time-to-interactive
 
-Real TTI is not measurable from userland. Calling this number TTI would misrepresent it on the
-dashboard, so it's named `drone_ready_ms` everywhere, and the Engagement panel says so on screen
-("Measured mount → first rendered frame, not time-to-interactive").
+Real TTI is not measurable from userland. Calling this number TTI would misrepresent it, so the
+event field is named `drone_ready_ms`. The current Engagement panel is mock-backed; any future
+real-data adapter must label this value as mount-to-first-frame rather than time-to-interactive.
 
 Genuine LCP / INP / TTFB come from `useReportWebVitals` in `AnalyticsRoot` and land as `web_vital`
-events. Use those for page performance; use `drone_ready_ms` for this component specifically.
+events. They and `drone_ready_ms` currently enter only the volatile event pipeline; neither is a
+durable dashboard metric yet.
 
 `drone_context_lost` fires if the WebGL context is lost or never obtainable — on a device with no
 WebGL the component degrades quietly rather than throwing.

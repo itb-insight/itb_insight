@@ -1,6 +1,6 @@
--- ITB Insight analytics schema — REFERENCE ONLY.
+-- ITB Insight analytics schema — REFERENCE / PROPOSED ONLY.
 --
--- Nothing in the MVP executes this file. It is kept as .sql (rather than a TS
+-- No migration or runtime path executes this file. It is kept as .sql (rather than a TS
 -- constant) so it stays copy-pasteable into psql and can never accidentally
 -- become a runtime import. The DTOs in src/features/admin/data/types.ts mirror
 -- these column names one-to-one so the adapters become near-literal SELECTs.
@@ -12,7 +12,7 @@
 CREATE TABLE events (
     id BIGSERIAL PRIMARY KEY,
     session_id UUID NOT NULL,
-    user_id UUID,                       -- nullable, only set if logged in (e.g. admin previewing)
+    user_id UUID,                       -- nullable; current ingest always stores null
     event_type TEXT NOT NULL,           -- 'sponsor_click', 'reg_started', 'reg_completed',
                                         -- 'qr_checkin', 'scroll_depth', 'page_view'
     division TEXT NOT NULL,             -- 'CPT', 'EV', 'SP', 'MKT', 'CB', 'MISC'

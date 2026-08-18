@@ -1,5 +1,9 @@
 # Tracking Library
 
+> Current endpoint delivery is volatile: events accepted by `POST /api/track` go to an in-memory
+> store, not to the `analytics_events` table. Dashboard metrics are mock/non-authoritative. See
+> [00-overview.md](00-overview.md).
+
 One primitive, two convenience wrappers. Import root is `@/lib/analytics/*`. No barrel files —
 import the module you need directly.
 

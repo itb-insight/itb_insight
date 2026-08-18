@@ -1,4 +1,16 @@
-# Naming & Structure Conventions
+# Naming conventions
+
+## Markdown filenames
+
+- Root canonical docs use uppercase hyphenated names, for example `MVP-STATUS.md` and `API-CONTRACTS.md`.
+- Runbooks use uppercase hyphenated names under `docs/runbooks/`.
+- Analytics documentation uses two-digit lowercase-kebab names, for example `00-overview.md`.
+- `PRD(v1.0).md` is the required explicit versioned exception.
+- `README.md` remains the conventional index name.
+
+Existing retained names comply; do not rename them merely for churn.
+
+## Historical repository conventions
 
 Canonical conventions for the integrated **itb_insight** app. These follow the patterns already
 present in `itb_insight` (the main repo) — when the merged-in code from `web`/`itb-insight`

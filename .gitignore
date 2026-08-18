@@ -43,3 +43,9 @@ next-env.d.ts
 
 # Jetbrains
 .idea/
+
+# Local agent system (intentionally kept outside Git).
+/.opencode/
+/.agents/
+/.claude/
+/tools/codebase-memory-mcp.cmd

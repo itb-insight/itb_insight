@@ -1,5 +1,8 @@
 # Hooks Cookbook
 
+> These hooks feed the current volatile analytics ingest only. They do not make dashboard values
+> persistent or authoritative; see [00-overview.md](00-overview.md).
+
 The reusable mechanisms. These are the "template-ish" pieces — designed to be dropped into any
 page that doesn't exist yet, without touching the endpoint, the schema, or the dashboard.
 
