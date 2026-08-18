@@ -9,6 +9,6 @@ schema_version: 3
 3. Redirect return is informational only. A verified Midtrans webhook updates payment state idempotently.
 4. Handle duplicate/delayed notifications, retryable expired/failed attempts, scheduled/API reconciliation, and authorized manual correction with audit logs.
 5. Expose order ID, registration/team, amount, method, status, and settlement time for treasury export.
-6. Do not auto-change `competition_registrations` verification after payment. Refund/cancellation rules remain D-11.
+6. Do not auto-change `competition_registrations` verification after payment. D-11 makes successful payments non-refundable at the participant's request, permits verified transaction corrections, and requires a registration-fee refund when the organizer fully cancels a competition that does not proceed. Operational timing, authorization, audit, and provider procedure must be documented before live payments.
 
 Server keys are server-only; card/bank data never enters this application. Midtrans merchant ownership (D-09) and MDR (D-10) are unresolved.

@@ -5,7 +5,6 @@ import StatsSection from "@/features/landing/components/StatsSection/StatsSectio
 import GallerySection from "@/features/landing/components/GallerySection/GallerySection"
 import TimelineSection from "@/features/landing/components/TimelineSection/TimelineSection"
 import MediaPartnersSection from "@/features/landing/components/MediaPartnersSection/MediaPartnersSection"
-import Footer from "@/shared/components/Footer/Footer"
 
 export default function HomePage() {
   return (
@@ -17,8 +16,6 @@ export default function HomePage() {
       <GallerySection />
       <TimelineSection />
       <MediaPartnersSection />
-      <Footer />
-
     </main>
   )
 }

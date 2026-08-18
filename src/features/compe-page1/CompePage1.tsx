@@ -343,8 +343,6 @@ export default function CompetitionPage() {
         </button>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer style={{ height: 162, background: "#D9D9D9" }} />
     </div>
   );
 }

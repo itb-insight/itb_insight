@@ -767,7 +767,7 @@
 | `D-08` | `Tanggal pasti main event & deadline registrasi` | `Tidak tercantum di dokumen mana pun. Diperlukan segera — LND-01 dan CMP-03 adalah must-have yang tidak bisa dibangun tanpa tanggal target.` | `Event + Competition` | `🔲 Terbuka — memblokir` |
 | `D-09` | `Siapa pemegang akun merchant Midtrans, dan atas nama entitas legal apa?` | `Baru muncul akibat D-03. Onboarding merchant butuh dokumen organisasi dan waktu verifikasi di luar kendali WebDev — mulai paralel dengan development (R-08).` | `Bendahara + Ring 0/1` | `🆕 Terbuka` |
 | `D-10` | `Biaya transaksi (MDR) ditanggung peserta atau panitia?` | `Baru muncul akibat D-03. Harus diputuskan sebelum nominal biaya lomba diumumkan, karena mengubah angka yang dipublikasikan di CMP-03.` | `Bendahara + Competition` | `🆕 Terbuka` |
-| `D-11` | `Kebijakan refund & pembatalan pendaftaran lomba` | `Baru muncul akibat D-03. Gateway membuat refund menjadi operasi nyata yang perlu aturan tertulis; bukti transfer manual dulu menyembunyikan kebutuhan ini. Perlu dicantumkan di INF-01/INF-05 sebelum registrasi dibuka.` | `Competition + Bendahara` | `🆕 Terbuka` |
+| `D-11` | `Kebijakan refund & pembatalan pendaftaran lomba` | `Pembayaran berhasil tidak dapat direfund atas permintaan peserta. Pembayaran ganda/kesalahan sistem yang terverifikasi diselesaikan sebagai koreksi transaksi. Jika Panitia membatalkan penuh lomba dan lomba tidak diselenggarakan, biaya pendaftaran dikembalikan; perubahan jadwal, venue, teknis, atau penundaan tidak otomatis dianggap pembatalan. Detail kontrak publik tercantum pada Syarat dan Ketentuan ITB Insight 2026.` | `Competition + Bendahara` | `✅ Ditetapkan 19 Agu 2026` |
 
 ---
 

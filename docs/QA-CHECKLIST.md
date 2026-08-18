@@ -20,6 +20,9 @@ schema_version: 2
 - Verify a submitted team cannot be joined afterward.
 - Post a valid analytics batch to `/api/track`; confirm only the current process’s recent-event feed changes. Do not treat dashboard KPIs as results.
 - Confirm `/admin` is not exposed as a secure/admin-verified workflow; it is current public demo/mock state.
+- As a guest, visit `/checkout`; select each competition and pricing period, complete the local-only required inputs, and confirm the dialog states that payment is unavailable. Verify that submitting creates no checkout/form/file/payment request, upload, payment token, or transaction. Existing page analytics (`/api/track`) and configured navbar auth checks may still run, but must not contain checkout form values or file data.
+- Verify the `/checkout` guardian-consent acknowledgement is required for Microdrone, Business Plan Competition, and Engineering Olympiad, while the Terms & Conditions checkbox is always required.
+- Verify `/terms-and-conditions` contains the August 2026 ITB Insight terms, including HMFT-ITB, and the public footer links to the terms, `mailto:support@itbinsight.com`, and `https://instagram.com/itbinsight`. Confirm the footer is absent on `/dashboard*` and `/admin*` and occurs only once on public pages.
 
 ## Planned-feature test gates
 

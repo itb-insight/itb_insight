@@ -267,8 +267,6 @@ export default function CompetitionDetailPage({ competition = STATIC_DATA }) {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer style={{ height: 162, background: "#D9D9D9" }} />
     </div>
   );
 }

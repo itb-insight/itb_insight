@@ -1,5 +1,6 @@
 import { Gabarito } from "next/font/google"
 import AnalyticsRoot from "@/lib/analytics/components/AnalyticsRoot"
+import PublicFooter from "@/shared/components/Footer/PublicFooter"
 import "./globals.css"
 
 const gabarito = Gabarito({
@@ -10,10 +11,11 @@ const gabarito = Gabarito({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={gabarito.variable}>
+    <html lang="id" className={gabarito.variable}>
       <body>
         <AnalyticsRoot />
         {children}
+        <PublicFooter />
       </body>
     </html>
   )

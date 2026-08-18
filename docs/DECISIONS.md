@@ -15,13 +15,19 @@ schema_version: 3
 - Final [PRD(v1.0).md](PRD(v1.0).md) supersedes “narrow MVP + broad future” as product authority.
 - The earlier secure-admin-only milestone is one staged delivery area in the full PRD.
 - Payments, full RBAC/audit/retention, analytics outcomes, and wider modules are final requirements; current runtime is unchanged until implemented.
-- D-01 through D-03 are decided; D-04 through D-11 below remain unresolved.
+- D-01 through D-03 and D-11 are decided; D-04 through D-10 below remain unresolved.
 
 ## Standing implementation decisions
 
 - `src/lib/competitions.ts` is current competition content; Google OAuth is current auth capability.
 - Use `visitor_tickets`, not legacy `rsvp`; keep service-role access server-only.
 - Payment state is separate from registration verification; team membership locks after final submit.
+
+## Product decisions — 2026-08-19
+
+| ID | Decision |
+| --- | --- |
+| D-11 | Successful registration payments are non-refundable at the participant's request, including withdrawal, absence, ineligibility, late submission, or disqualification. Verified duplicate/system-error payments are transaction corrections, not participant cancellations. A full organizer cancellation that does not proceed entitles affected participants to a registration-fee refund; schedule, venue, technical, or postponement changes are not automatically a cancellation. The public contract is `src/app/terms-and-conditions/page.tsx`; operational refund timing and procedure must be documented before live payments. |
 
 ## Open PRD decisions
 
@@ -34,4 +40,3 @@ schema_version: 3
 | D-08 | Main-event and registration deadline dates. |
 | D-09 | Midtrans merchant account/legal entity owner. |
 | D-10 | Midtrans MDR bearer. |
-| D-11 | Registration cancellation/refund policy. |

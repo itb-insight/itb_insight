@@ -13,6 +13,8 @@ Only **Current** rows are implemented.
 | `POST /api/track`, `GET /api/admin/events` | Current | Public volatile analytics ingest/recent feed; not authoritative. |
 | `/login`, `/auth/callback`, `/dashboard*` | Current | Login/callback and participant dashboard. Only `/dashboard*` is protected. |
 | `/admin*` | Current demo | Public/mock; not a secure admin API or route family. |
+| `/checkout` | Current static preview | Public merchant-verification checkout UI only. It has no API contract: no payment creation, Midtrans SDK/Snap call, upload, persistence, authentication requirement, or webhook. |
+| `/terms-and-conditions` | Current | Public static ITB Insight 2026 Terms & Conditions page. |
 
 ## PRD target mapping (not implemented)
 
