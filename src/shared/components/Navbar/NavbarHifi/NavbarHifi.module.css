@@ -38,7 +38,7 @@
   font-family: 'Gabarito', sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
-  color: rgba(222, 232, 251, 0.5);
+  color: #CCDDFF;
   transition: color 0.2s ease;
 }
 
@@ -77,7 +77,7 @@
   font-family: 'Gabarito', sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
-  color: rgba(222, 232, 251, 0.75);
+  color: #CCDDFF;
   transition: color 0.2s ease;
 }
 
@@ -98,9 +98,9 @@
   border: none;
   cursor: pointer;
   font-family: 'Gabarito', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #1B2A4E;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1B3B7D;
 }
 
 .signUpBtn:hover {
@@ -109,5 +109,5 @@
 
 .signUpBtn:active {
   background-image: url('/images/buttons/signupbutton-click.svg');
-  color: #DEE8FB;
+  color: #E9E9E9;
 }

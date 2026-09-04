@@ -18,7 +18,6 @@
   overflow: hidden;
 }
 
-/* Title + Countdown group */
 .topGroup {
   display: flex;
   flex-direction: column;
@@ -29,7 +28,7 @@
 
 .title {
   font-family: 'Excratch', sans-serif;
-  font-size: clamp(2rem, 6vw, 5rem);
+  font-size: clamp(4rem, 8vw, 7rem);
   font-weight: 700;
   letter-spacing: 0.1em;
   margin: 0;
@@ -60,7 +59,7 @@
 
 .countdownNumber {
   font-family: 'Bitcount', monospace;
-  font-size: clamp(4rem, 10vw, 8rem);
+  font-size: clamp(6rem, 12vw, 10rem);
   color: var(--color-text-primary);
   line-height: 1;
 }
@@ -84,36 +83,38 @@
 
 .description {
   font-family: 'Gabarito', sans-serif;
-  font-size: clamp(0.875rem, 1.5vw, 1.1rem);
+  font-size: clamp(1rem, 1.8vw, 2.4rem);
   color: #E9E9E9;
-  max-width: 520px;
+  max-width: 800px;
   line-height: 1.8;
+  font-weight: 200;
   margin: 0;
 }
 
 .registerBtn {
   font-family: 'Gabarito', sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #5B7EC9;
-  background: rgba(209, 228, 255, 0.4);
-  border: 1.5px solid rgba(209, 228, 255, 0.8);
-  border-radius: 999px;
-  padding: 14px 48px;
-  display: inline-block;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: #3D65B8;
+  background-image: url('/images/buttons/registerbutton-default.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  aspect-ratio: 318 / 136;
+  width: 220px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  backdrop-filter: blur(4px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    0 0 20px rgba(209, 228, 255, 0.3);
-  transition: all 0.2s ease;
 }
 
 .registerBtn:hover {
-  background: rgba(209, 228, 255, 0.6);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 0 30px rgba(209, 228, 255, 0.5);
+  background-image: url('/images/buttons/registerbutton-hover.svg');
+}
+
+.registerBtn:active {
+  background-image: url('/images/buttons/registerbutton-click.svg');
+  color: #DEE8FB;
 }
 
 .patternWrapper {

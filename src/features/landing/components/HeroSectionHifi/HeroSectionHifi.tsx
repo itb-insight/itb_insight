@@ -62,18 +62,18 @@ export default function HeroSectionHifi() {
 
   // Title scale: besar → kecil
   const scaleProgress = Math.min(scrollProgress / 0.5, 1)
-  const titleScale = 1 - scaleProgress * 0.4
+  const titleScale = 1 - scaleProgress * 0.45
 
-  // Title + Countdown naik bareng di phase 2→3
   const groupTopY = scrollProgress > 0.5
-    ? -(scrollProgress - 0.5) * 200
+    ? -(scrollProgress - 0.5) * 100
+    : 0
+  const bottomGroupY = scrollProgress > 0.5
+    ? (scrollProgress - 0.5) * 100
     : 0
 
-  // Countdown fade in di phase 1→2
   const countdownOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.2) / 0.3))
   const countdownY = Math.max(0, 30 * (1 - (scrollProgress - 0.2) / 0.3))
 
-  // Description + button fade in di phase 2→3
   const bottomOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.6) / 0.3))
   const bottomY = Math.max(0, 30 * (1 - (scrollProgress - 0.6) / 0.3))
 
@@ -161,7 +161,7 @@ export default function HeroSectionHifi() {
           className={styles.bottom}
           style={{
             opacity: bottomOpacity,
-            transform: `translateY(${bottomY}px)`,
+            transform: `translateY(${bottomY + bottomGroupY}px)`,
             pointerEvents: bottomOpacity > 0.5 ? "auto" : "none",
           }}
         >

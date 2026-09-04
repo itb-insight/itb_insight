@@ -78,9 +78,6 @@ export default function SignUpHifi() {
   return (
     <div className={styles.page}>
       <div className={styles.left}>
-        <Link href="/">
-          <button className={styles.back}>Back</button>
-        </Link>
       </div>
 
       <div className={styles.right}>
