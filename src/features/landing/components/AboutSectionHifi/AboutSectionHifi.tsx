@@ -70,7 +70,7 @@ export default function AboutSectionHifi() {
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>REGISTRATION DATE</span>
                 <div className={styles.infoValue}>
-                  <span className={styles.calendarIcon}>📅</span>
+                  <img src="/images/icons/calendar-icon.svg" alt="" className={styles.calendarIcon} />
                   <span>1 - 5 Mei 2026</span>
                 </div>
               </div>

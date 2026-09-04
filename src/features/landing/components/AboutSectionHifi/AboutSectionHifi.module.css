@@ -103,9 +103,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 16px;
 }
 
 .calendarIcon {
-  font-size: 1.4rem;
+  width: 1em;
+  height: 1em;
 }
