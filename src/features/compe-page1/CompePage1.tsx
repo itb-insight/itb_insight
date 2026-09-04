@@ -114,7 +114,7 @@ export default function CompePage1() {
           opacity: 0.25; filter: blur(180px); border-radius: 50%; z-index: 0; pointer-events: none;
         }
 
-        /* ASET UNION GLOBAL ATAS (Dikecilkan agar tidak masuk Total Prize) */
+        /* ASET UNION GLOBAL ATAS */
         .bg-union-left {
           position: absolute; top: 5%; left: -5vw; width: 35vw; max-width: 450px; opacity: 0.25; z-index: 1; pointer-events: none;
         }
@@ -143,10 +143,6 @@ export default function CompePage1() {
           padding-right: 40px;
           white-space: nowrap;
         }
-
-        /* ─────────────────────────────────────────────────────────── */
-        /* CSS MASK COMPOSITE: SOLUSI BORDER GRADIENT MURNI & SEMPURNA */
-        /* ─────────────────────────────────────────────────────────── */
 
         .total-prize-box {
           margin: 0 auto 60px;
@@ -213,7 +209,6 @@ export default function CompePage1() {
       </div>
 
       {/* ── HEADER: ITB INSIGHT COMPETITION (SLIDING MARQUEE) ── */}
-      {/* Margin top ditambah dari 40px jadi 100px agar sliding text turun ke bawah */}
       <div style={{ overflow: "hidden", width: "100%", margin: "100px 0 40px", position: "relative", zIndex: 10 }}>
         <div style={{ display: "flex", width: "max-content", animation: "marquee 20s linear infinite" }}>
           {/* Half 1 */}
@@ -222,7 +217,6 @@ export default function CompePage1() {
             <h1 className="marquee-heading">ITB INSIGHT COMPETITION&nbsp;&nbsp;&nbsp;&nbsp;</h1>
             <h1 className="marquee-heading">ITB INSIGHT COMPETITION&nbsp;&nbsp;&nbsp;&nbsp;</h1>
           </div>
-          {/* Half 2 (Duplikat identik agar looping seamless) */}
           <div style={{ display: "flex", flexShrink: 0 }}>
             <h1 className="marquee-heading">ITB INSIGHT COMPETITION&nbsp;&nbsp;&nbsp;&nbsp;</h1>
             <h1 className="marquee-heading">ITB INSIGHT COMPETITION&nbsp;&nbsp;&nbsp;&nbsp;</h1>
@@ -231,7 +225,7 @@ export default function CompePage1() {
         </div>
       </div>
 
-      {/* ── CARD CAROUSEL (4 KARTU NAIK TURUN) ── */}
+      {/* CARD CAROUSEL */}
       <div
         style={{ position: "relative", height: CAROUSEL_H, overflow: "hidden", zIndex: 10, marginBottom: "40px" }}
         onTouchStart={onTouchStart}
@@ -306,7 +300,6 @@ export default function CompePage1() {
 
       {/* ── TOTAL PRIZE ── */}
       <section style={{ padding: "0 24px", textAlign: "center", position: "relative", zIndex: 10 }}>
-        {/* Hologram Bubble Tambahan di Kiri Bawah Area Total Prize */}
         <div style={{
           position: "absolute", bottom: "-20%", left: "-15vw", width: "40vw", height: "40vw", maxWidth: "500px", maxHeight: "500px",
           background: "linear-gradient(266.55deg, rgba(137, 77, 183, 0.6) 0%, #5171B4 100%)", borderRadius: "50%", filter: "blur(140px)", opacity: 0.5, zIndex: 0, pointerEvents: "none"
@@ -346,10 +339,8 @@ export default function CompePage1() {
         </div>
       </section>
 
-      {/* ── TIMELINE ZIG-ZAG ── */}
+      {/* ── TIMELINE ── */}
       <section style={{ padding: "40px 24px 100px", position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center" }}>
-        
-        {/* Union Didorong Masuk (left/right -2vw) Agar Lebih Kelihatan */}
         <img src="/images/Union.png" alt="" style={{ position: "absolute", top: "10%", left: "-2vw", width: "25vw", maxWidth: "300px", opacity: 0.15, zIndex: 0, pointerEvents: "none" }} />
         <img src="/images/Union.png" alt="" style={{ position: "absolute", bottom: "10%", right: "-2vw", width: "25vw", maxWidth: "300px", opacity: 0.15, zIndex: 0, pointerEvents: "none", transform: "scaleX(-1) rotate(15deg)" }} />
 
@@ -360,8 +351,6 @@ export default function CompePage1() {
         }}>
           TIMELINE
         </h2>
-
-        {/* Restore Kode Timeline Zig-zag Asli */}
         <div style={{ position: "relative", width: "100%", maxWidth: "800px", display: "flex", flexDirection: "column", gap: "40px" }}>
           <div style={{ position: "absolute", top: 0, bottom: 0, left: "50%", transform: "translateX(-50%)", width: "2px", background: "linear-gradient(180deg, rgba(222,232,251,0) 0%, rgba(222,232,251,0.5) 10%, rgba(222,232,251,0.5) 90%, rgba(222,232,251,0) 100%)", zIndex: 1 }} />
           
@@ -404,7 +393,6 @@ export default function CompePage1() {
       {/* ── FAQ & CONTACT AREA ── */}
       <section style={{ padding: "0px 24px 120px", position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center" }}>
         
-        {/* Union Hanya Mengapit Judul FAQ */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "20px", marginBottom: "40px" }}>
           <img src="/images/Union.png" alt="" style={{ width: "clamp(60px, 15vw, 120px)", opacity: 0.3 }} />
           <h2 style={{ 
@@ -417,7 +405,7 @@ export default function CompePage1() {
           <img src="/images/Union.png" alt="" style={{ width: "clamp(60px, 15vw, 120px)", opacity: 0.3, transform: "scaleX(-1)" }} />
         </div>
 
-        {/* Dropdown FAQ Transparan Murni Border Gradient */}
+        {/* Dropdown FAQ */}
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "820px", zIndex: 2 }}>
           {FAQS.map((q, i) => (
             <div key={i} className="faq-dropdown">
@@ -429,7 +417,7 @@ export default function CompePage1() {
           ))}
         </div>
 
-        {/* Contact Us Button Transparan Murni Border Gradient */}
+        {/* Contact Us */}
         <button className="contact-btn-small" style={{ marginTop: "60px", zIndex: 2 }}>
           Contact Us
         </button>
