@@ -22,6 +22,8 @@ export default function AboutSectionHifi() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  const illustrationOpacity = Math.min(1, scrollProgress / 0.15)
+
   const illustrationScale = scrollProgress < 0.33
     ? 1.8
     : Math.max(0.8, 1.8 - ((scrollProgress - 0.33) / 0.33) * 1)
@@ -92,6 +94,7 @@ export default function AboutSectionHifi() {
               height={600}
               className={styles.illustration}
               style={{
+                opacity: illustrationOpacity,
                 transform: `scale(${illustrationScale}) rotate(${illustrationRotate}deg)`,
               }}
               priority

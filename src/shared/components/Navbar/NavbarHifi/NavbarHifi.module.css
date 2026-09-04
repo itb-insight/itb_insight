@@ -111,3 +111,31 @@
   background-image: url('/images/buttons/signupbutton-click.svg');
   color: #E9E9E9;
 }
+
+.mobileMenuBtn {
+  display: none;
+  aspect-ratio: 1 / 1;
+  height: 48px;
+  background-image: url('/images/buttons/navbarmobile-default.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.mobileMenuBtn:active {
+  background-image: url('/images/buttons/navbarmobile-click.svg');
+}
+
+/* Mobile — collapse nav links + actions into one menu button */
+@media (max-width: 768px) {
+  .navLinks,
+  .actions {
+    display: none;
+  }
+
+  .mobileMenuBtn {
+    display: block;
+  }
+}

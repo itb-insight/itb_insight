@@ -50,7 +50,7 @@
 
 .title {
   font-family: 'Excratch', sans-serif;
-  font-size: clamp(2rem, 3.5vw, 4rem);
+  font-size: clamp(3rem, 3.5vw, 4rem);
   font-weight: 700;
   letter-spacing: 0.1em;
   margin: 0;
@@ -87,7 +87,7 @@
 
 .infoLabel {
   font-family: 'Gabarito', sans-serif;
-  font-size: clamp(1rem, 1.8vw, 1.8rem);
+  font-size: clamp(1.5rem, 1.8vw, 1.8rem);
   font-weight: 600;
   color: #7EB3FF;
   letter-spacing: 0.12em;
@@ -97,7 +97,7 @@
 
 .infoValue {
   font-family: 'Gabarito', sans-serif;
-  font-size: clamp(1.2rem, 2.8vw, 3.2rem);
+  font-size: clamp(2rem, 2.8vw, 3.2rem);
   font-weight: 700;
   color: #FFFFFF;
   display: flex;
@@ -109,4 +109,31 @@
 .calendarIcon {
   width: 1em;
   height: 1em;
+}
+
+/* Mobile — hide illustration, center the text column */
+@media (max-width: 768px) {
+  .sticky {
+    padding: 0 24px;
+  }
+
+  .illustrationWrapper {
+    display: none;
+  }
+
+  .textWrapper {
+    flex: none;
+    width: 100%;
+    padding-left: 0;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  .description {
+    text-align: justify;
+  }
 }

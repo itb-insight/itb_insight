@@ -16,9 +16,33 @@ import Footer from "@/shared/components/Footer/Footer"
 import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi"
 import styles from "@/features/landing/LandingPage.module.css"
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+
+// Mirrors the Timeline section's own dates (registration open -> final).
+const eventJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: "ITB Insight 2026",
+  description:
+    "Insight ITB merupakan event teknologi terbesar di ITB, terdiri dari beberapa rangkaian acara seperti pameran, seminar, dan kompetisi.",
+  startDate: "2026-01-05",
+  endDate: "2026-03-01",
+  eventStatus: "https://schema.org/EventScheduled",
+  image: [`${siteUrl}/images/logoinsight-hifi.png`],
+  organizer: {
+    "@type": "Organization",
+    name: "ITB Insight",
+    url: siteUrl,
+  },
+}
+
 export default function HomePage() {
   return (
     <main className={styles.landingContainer}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
+      />
       <NavbarHifi />
       <HeroSectionHifi />
       <AboutSectionHifi />

@@ -36,6 +36,8 @@ export default function NavbarHifi({ isSolid = false }: NavbarHifiProps) {
         </button>
         <NavAuthActionsHifi />
       </div>
+
+      <button className={styles.mobileMenuBtn} type="button" aria-label="Menu" />
     </nav>
   )
 }

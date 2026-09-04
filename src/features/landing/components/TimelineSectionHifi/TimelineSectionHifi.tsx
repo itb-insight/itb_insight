@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react"
 import Image from "next/image"
 import styles from "./TimelineSectionHifi.module.css"
+import { useIsMobile } from "@/features/landing/hooks/useIsMobile"
 
 const items = [
   { name: "Pendaftaran", date: "5-23 Januari 2026" },
@@ -19,6 +20,7 @@ export default function TimelineSectionHifi() {
   const sectionRef = useRef<HTMLElement>(null)
   const hasStarted = useRef(false)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const isMobile = useIsMobile(768)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -74,7 +76,7 @@ export default function TimelineSectionHifi() {
             }}
           >
             <Image
-              src={`/images/timeline/conn-${i}-${i + 1}.svg`}
+              src={isMobile ? "/images/conn-mobile.svg" : `/images/timeline/conn-${i}-${i + 1}.svg`}
               alt={`Connector ${i}`}
               fill
               className={styles.connectorImage}
