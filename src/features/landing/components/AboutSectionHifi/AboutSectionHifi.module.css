@@ -1,0 +1,111 @@
+.about {
+  min-height: 150vh;
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 80px;
+  overflow: hidden;
+  gap: 48px;
+}
+
+.illustrationWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.illustration {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  object-fit: contain;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.textWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  z-index: 2;
+  padding-left: 40px;
+}
+
+.phase2Text {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  will-change: opacity, transform;
+}
+
+.title {
+  font-family: 'Excratch', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 4rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin: 0;
+  line-height: 1;
+  background: linear-gradient(to bottom, #ACC7FF, #DEE8FB);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px rgba(209, 228, 255, 1));
+}
+
+.description {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  color: #E9E9E9;
+  line-height: 1.2;
+  margin: 0;
+  max-width: 600px;
+  text-align: justify;
+}
+
+.phase3Text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  will-change: opacity, transform;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.infoLabel {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(1rem, 1.8vw, 1.8rem);
+  font-weight: 600;
+  color: #7EB3FF;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.infoValue {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(1.2rem, 2.8vw, 3.2rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.calendarIcon {
+  font-size: 1.4rem;
+}

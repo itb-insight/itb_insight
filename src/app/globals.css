@@ -148,3 +148,11 @@ input:focus, textarea:focus, select:focus {
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: 'Excratch';
+  src: url('/fonts/EXCRATCH-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

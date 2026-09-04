@@ -1,6 +1,6 @@
 // src/app/signup/page.tsx
-import SignUp from "@/features/auth/SignUp/SignUp"
+import SignUpHifi from "@/features/auth/SignUpHifi/SignUpHifi"
 
 export default function SignUpPage() {
-  return <SignUp />
+  return <SignUpHifi />
 }

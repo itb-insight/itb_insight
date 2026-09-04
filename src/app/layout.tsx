@@ -1,5 +1,5 @@
+import type { Metadata } from "next"
 import { Gabarito } from "next/font/google"
-import AnalyticsRoot from "@/lib/analytics/components/AnalyticsRoot"
 import "./globals.css"
 
 const gabarito = Gabarito({
@@ -8,12 +8,17 @@ const gabarito = Gabarito({
   variable: "--font-primary",
 })
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en" className={gabarito.variable}>
       <body>
-        <AnalyticsRoot />
-        {children}
+        <div style={{ position: "relative", minHeight: "100vh" }}>
+          {children}
+        </div>
       </body>
     </html>
   )

@@ -1,0 +1,113 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.navbar.isSolid {
+  background-color: var(--color-bg-primary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navLink {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(222, 232, 251, 0.5);
+  transition: color 0.2s ease;
+}
+
+.navLink:hover {
+  color: rgba(222, 232, 251, 0.9);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.searchBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.searchBtn:hover {
+  opacity: 1;
+}
+
+.searchIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.logInBtn {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(222, 232, 251, 0.75);
+  transition: color 0.2s ease;
+}
+
+.logInBtn:hover {
+  color: #DEE8FB;
+}
+
+.signUpBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 152 / 67;
+  height: 52px;
+  background-image: url('/images/buttons/signupbutton-default.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1B2A4E;
+}
+
+.signUpBtn:hover {
+  background-image: url('/images/buttons/signupbutton-hover.svg');
+}
+
+.signUpBtn:active {
+  background-image: url('/images/buttons/signupbutton-click.svg');
+  color: #DEE8FB;
+}

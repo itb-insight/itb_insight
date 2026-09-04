@@ -1,13 +1,13 @@
 // src/app/login/page.tsx
 import { Suspense } from "react"
 
-import Login from "@/features/auth/Login/Login"
+import LoginHifi from "@/features/auth/LoginHifi/LoginHifi"
 
 export default function LoginPage() {
-  // Login reads `useSearchParams()`, which must sit under a Suspense boundary.
+  // LoginHifi reads `useSearchParams()`, which must sit under a Suspense boundary.
   return (
     <Suspense>
-      <Login />
+      <LoginHifi />
     </Suspense>
   )
 }

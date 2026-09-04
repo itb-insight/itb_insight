@@ -1,0 +1,121 @@
+.footer {
+  width: 100%;
+  background: linear-gradient(135deg, #0A1024 0%, #1B2A56 50%, #3A5697 100%);
+  padding: 56px 80px;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoWrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+.logoImg {
+  object-fit: cover;
+  object-position: left center;
+}
+
+.brandText {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.itb {
+  font-family: 'Excratch', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #DEE8FB;
+}
+
+.insight {
+  font-family: 'Excratch', sans-serif;
+  font-size: 2.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #DEE8FB;
+}
+
+.year {
+  position: absolute;
+  right: 0px;
+  bottom: -12px;
+  font-family: 'Gabarito', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #DEE8FB;
+}
+
+.columns {
+  display: flex;
+  gap: 64px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.columnHeader {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #DEE8FB;
+  margin: 0 0 4px;
+}
+
+.columnLink {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(222, 232, 251, 0.55);
+  transition: color 0.2s ease;
+}
+
+.columnLink:hover {
+  color: #DEE8FB;
+}
+
+/* Socials */
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.socialLink:hover {
+  background-color: rgba(222, 232, 251, 0.08);
+}
+
+.socialIcon {
+  width: 28px;
+  height: 28px;
+}

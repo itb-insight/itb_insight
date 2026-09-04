@@ -1,0 +1,12 @@
+.landingContainer {
+  position: relative;
+  display: flow-root;
+  background-image: url("/images/bg-main.png");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+}
+
+
+
+

@@ -1,0 +1,193 @@
+.hero {
+  min-height: 300vh;
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+  margin-top: 10vh;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  padding: 0 24px;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Title + Countdown group */
+.topGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+  will-change: transform;
+}
+
+.title {
+  font-family: 'Excratch', sans-serif;
+  font-size: clamp(2rem, 6vw, 5rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin: 0;
+  line-height: 1;
+  transform-origin: top center;
+  will-change: transform;
+  background: linear-gradient(to bottom, #FFFFFF, #D1E4FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px rgba(209, 228, 255, 1));
+}
+
+/* Countdown */
+.countdown {
+  display: flex;
+  align-items: baseline;
+  margin-top: -20px;
+  gap: 48px;
+  will-change: opacity, transform;
+}
+
+.countdownUnit {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.countdownNumber {
+  font-family: 'Bitcount', monospace;
+  font-size: clamp(4rem, 10vw, 8rem);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.countdownLabel {
+  font-family: 'Bitcount', monospace;
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: var(--color-text-primary);
+  font-weight: 400;
+}
+
+/* Description + Button */
+.bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -100px;
+  gap: 24px;
+  will-change: opacity, transform;
+}
+
+.description {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(0.875rem, 1.5vw, 1.1rem);
+  color: #E9E9E9;
+  max-width: 520px;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.registerBtn {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #5B7EC9;
+  background: rgba(209, 228, 255, 0.4);
+  border: 1.5px solid rgba(209, 228, 255, 0.8);
+  border-radius: 999px;
+  padding: 14px 48px;
+  display: inline-block;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 0 20px rgba(209, 228, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.registerBtn:hover {
+  background: rgba(209, 228, 255, 0.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 0 30px rgba(209, 228, 255, 0.5);
+}
+
+.patternWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.patternLeft {
+  position: absolute;
+  width: 50vw;
+  max-width: 600px;
+  transform-origin: right center;
+  will-change: transform, opacity;
+}
+
+.patternRight {
+  position: absolute;
+  width: 50vw;
+  max-width: 600px;
+  transform-origin: left center;
+  will-change: transform, opacity;
+}
+
+/* Mobile — text/layout only for now, pattern objects untouched */
+@media (max-width: 768px) {
+  .sticky {
+    padding: 0 20px;
+  }
+
+  .title {
+    font-size: clamp(2rem, 10vw, 3rem);
+    letter-spacing: 0.06em;
+  }
+
+  .topGroup {
+    position: relative;
+  }
+
+  .countdown {
+    position: absolute;
+    top: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -10px;
+    gap: 4px;
+  }
+
+  .countdownUnit {
+    justify-content: center;
+  }
+
+  .countdownNumber {
+    font-size: clamp(2.25rem, 13vw, 3rem);
+  }
+
+  .countdownLabel {
+    font-size: clamp(1.1rem, 6vw, 1.5rem);
+  }
+
+  .bottom {
+    margin-top: 110px;
+  }
+
+  .description {
+    font-size: 0.9rem;
+    max-width: 320px;
+  }
+}
