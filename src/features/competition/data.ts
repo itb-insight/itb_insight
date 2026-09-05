@@ -49,6 +49,15 @@ const DATA: Competition[] = [
       { id: "final", title: "Final", dateLabel: "28 November 2026", date: "2026-11-28" },
       { id: "awarding", title: "Awarding", dateLabel: "28 November 2026", date: "2026-11-28" },
     ],
+    desktop: {
+      logoSrc: "/images/sar_logo.png",
+      logoWidth: 256,
+      heroMaxWidth: 1100,
+      titleFrom: "#DEE8FB",
+      titleTo: "#FFAAAA",
+      timelineFrom: "#FFE4EC",
+      timelineTo: "#FFAAAA",
+    },
     seo: {
       metaTitle: "Safety and Rescue Robot Competition",
       metaDescription:
@@ -91,6 +100,20 @@ const DATA: Competition[] = [
       { id: "final", title: "Final", dateLabel: "28 November 2026", date: "2026-11-28" },
       { id: "awarding", title: "Awarding", dateLabel: "2026", date: "2026-11-28" },
     ],
+    desktop: {
+      logoSrc: "/images/mor.png",
+      logoWidth: 350,
+      heroMaxWidth: 1400,
+      titleFrom: "#ACC7FF",
+      titleTo: "#C08CFF",
+      timelineFrom: "#C08CFF",
+      timelineTo: "#E9DBF9",
+      descriptionLines: [
+        "Lomba Drone Obstacle adalah ajang kompetisi nasional bagi mahasiswa/i Indonesia yang bertujuan mengembangkan kreativitas",
+        "dalam menjawab permasalahan dunia nyata yang membutuhkan solusi berbasis teknologi. Kompetisi ini dilaksanakan selama dua",
+        "hari, hari pertama merupakan babak penyisihan, hari kedua merupakan babak eliminasi hingga terdapat juara 1, 2, dan 3.",
+      ],
+    },
     seo: {
       metaTitle: "Microdrone Obstacle Race",
       metaDescription:
@@ -133,6 +156,21 @@ const DATA: Competition[] = [
       { id: "pitching", title: "Pitching", dateLabel: "26 November 2026", date: "2026-11-26" },
       { id: "awarding", title: "Awarding", dateLabel: "26 November 2026", date: "2026-11-26" },
     ],
+    desktop: {
+      logoSrc: "/images/bpc.png",
+      logoWidth: 350,
+      heroMaxWidth: 1400,
+      titleFrom: "#DEE8FB",
+      titleTo: "#6CCB59",
+      timelineFrom: "#DEE8FB",
+      timelineTo: "#6CCB59",
+      descriptionLines: [
+        "Business Plan Competition (BPC) ITB INSIGHT 2026 merupakan kompetisi nasional di bidang inovasi bisnis yang mengangkat",
+        "tema pengaplikasian Artificial Intelligence (AI) yang ditujukan bagi mahasiswa (D3/D4/S1) dan siswa SMA/SMK/MA sederajat.",
+        "Kompetisi ini dirancang sebagai wadah pengembangan generasi muda dalam menciptakan solusi bisnis yang inovatif, adaptif, dan",
+        "berdaya saing melalui pemanfaatan teknologi AI, melalui tahapan BMC, proposal dan MVP, hingga final pitching",
+      ],
+    },
     seo: {
       metaTitle: "Business Plan Competition",
       metaDescription:
@@ -175,6 +213,19 @@ const DATA: Competition[] = [
       { id: "final", title: "Final", dateLabel: "28 November 2026", date: "2026-11-28" },
       { id: "awarding", title: "Awarding", dateLabel: "28 November 2026", date: "2026-11-28" },
     ],
+    desktop: {
+      logoSrc: "/images/oe.png",
+      logoWidth: 350,
+      heroMaxWidth: 1400,
+      titleFrom: "#DEE8FB",
+      titleTo: "#ACC7FF",
+      timelineFrom: "#DEE8FB",
+      timelineTo: "#ACC7FF",
+      descriptionLines: [
+        "Kompetisi berbasis olimpiade untuk siswa SMA/SMK/MA/sederajat di seluruh Indonesia dengan tujuan mengenal dunia",
+        "engineering di perguruan tinggi.",
+      ],
+    },
     seo: {
       metaTitle: "Olimpiade Engineering",
       metaDescription:

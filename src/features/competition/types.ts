@@ -10,6 +10,34 @@ export interface TimelineItem {
   status?: TimelineStatus;
 }
 
+/**
+ * Nilai yang hanya dipakai layout desktop.
+ *
+ * Desktop dan mobile memakai konten yang sama (judul, deskripsi, timeline,
+ * biaya) tapi warna dan ukuran gambarnya memang beda — bukan hasil salah
+ * salin. Karena itu bagian visual desktop dipisah di sini, bukan menumpang
+ * titleFrom/accentFrom milik mobile.
+ */
+export interface CompetitionDesktopDesign {
+  /** Logo versi desktop — file dan ukurannya beda dari ikon mobile */
+  logoSrc: string;
+  logoWidth: number;
+  /** Lebar maksimum kolom hero (SAR lebih sempit dari yang lain) */
+  heroMaxWidth: number;
+  /** Gradient judul hero */
+  titleFrom: string;
+  titleTo: string;
+  /** Gradient garis, titik, dan glow timeline */
+  timelineFrom: string;
+  timelineTo: string;
+  /**
+   * Deskripsi yang sudah dipecah per baris, untuk <br /> manual di desktop.
+   * Kalau digabung dengan spasi hasilnya sama persis dengan `description`.
+   * Boleh dikosongkan — nanti pakai `description` dan membungkus sendiri.
+   */
+  descriptionLines?: string[];
+}
+
 export interface Competition {
   slug: string;
   title: string;
@@ -49,6 +77,7 @@ export interface Competition {
   contactUrl: string;
   registerUrl: string;
   timeline: TimelineItem[];
+  desktop: CompetitionDesktopDesign;
   seo: {
     metaTitle: string;
     metaDescription: string;

@@ -8,7 +8,7 @@ import RegistrationFee from "@/features/competition/RegistrationFee";
 import PrizePool from "@/features/competition/PrizePool";
 import Timeline from "@/features/competition/Timeline";
 import ContactRegister from "@/features/competition/ContactRegister";
-import CompetitionDesktop from "@/features/compe-desktop/CompetitionDesktop";
+import CompetitionDesktopLayout from "@/features/compe-desktop/CompetitionDesktopLayout";
 import { getCompetition, getCompetitionSlugs } from "@/features/competition/data";
 import { competitionJsonLd, competitionMetadata } from "@/features/competition/seo";
 
@@ -98,7 +98,7 @@ export default async function CompetitionPage({
       </div>
 
       <div className="hidden md:block">
-        <CompetitionDesktop slug={competition.slug} />
+        <CompetitionDesktopLayout competition={competition} />
       </div>
     </>
   );
