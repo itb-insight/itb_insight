@@ -4,7 +4,7 @@ import styles from "./FooterHifi.module.css"
 
 const columns = [
   { header: "Event", href: "/event" },
-  { header: "Competition", href: "/competition1" },
+  { header: "Competition", href: "/competition" },
   { header: "Map", href: "/event-map" },
 ]
 

@@ -27,7 +27,7 @@ export default function Navbar({ isSolid = false }: NavbarProps) {
         <div className={styles.navLinks}>
           <Link href="/event-map" className={styles.navLink}>Map</Link>
           <Link href="/event" className={styles.navLink}>Event</Link>
-          <Link href="/competition1" className={styles.navLink}>Competition</Link>
+          <Link href="/competition" className={styles.navLink}>Competition</Link>
         </div>
       </div>
 

@@ -3,34 +3,40 @@
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Navbar from "@/shared/components/Navbar/Navbar";
 import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
+import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi";
 
 // ── DATA KOMPETISI ────────────────────────────────────────────────────────────
+// slug harus sama dengan yang ada di features/competition/data.ts — itu yang
+// menentukan halaman detail mana yang dibuka saat kartunya diklik.
 const COMPETITIONS = [
-  { 
-    id: 1, 
-    title: "SAR", 
+  {
+    id: 1,
+    slug: "safety-and-rescue-robot-competition",
+    title: "SAR",
     gradient: "linear-gradient(135deg, #FFE4EC 0%, #FFAAAA 100%)",
-    icon: "/images/icon-sar.png" 
+    icon: "/images/icon-sar.png"
   },
-  { 
-    id: 2, 
-    title: "Microdrone Obstacle", 
+  {
+    id: 2,
+    slug: "microdrone-obstacle-race",
+    title: "Microdrone Obstacle",
     gradient: "linear-gradient(135deg, #C08CFF 0%, #E9DBF9 100%)",
-    icon: "/images/icon-microdrone.png" 
+    icon: "/images/icon-microdrone.png"
   },
-  { 
-    id: 3, 
-    title: "BPC", 
+  {
+    id: 3,
+    slug: "business-plan-competition",
+    title: "BPC",
     gradient: "linear-gradient(135deg, #D0FFC7 0%, #76DF62 100%)",
-    icon: "/images/icon-bpc.png" 
+    icon: "/images/icon-bpc.png"
   },
-  { 
-    id: 4, 
-    title: "Olimpiade Engineering", 
+  {
+    id: 4,
+    slug: "olimpiade-engineering",
+    title: "Olimpiade Engineering",
     gradient: "linear-gradient(135deg, #ACC7FF 0%, #DEEBFB 100%)",
-    icon: "/images/icon-olimpiade.png" 
+    icon: "/images/icon-olimpiade.png"
   },
 ];
 
@@ -273,7 +279,7 @@ export default function CompePage1() {
               animate={{ x: animateX, top: animateTop, scale: scale, opacity: opacity, zIndex: zIndex, filter: blurEffect }}
               transition={{ type: "spring", stiffness: 260, damping: 25 }}
               onClick={() => {
-                  if (isActive) router.push("/competition2"); 
+                  if (isActive) router.push(`/competition/${comp.slug}`);
                   else goto(idx);
               }}
             >
@@ -426,7 +432,7 @@ export default function CompePage1() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer style={{ height: 100, borderTop: "1px solid rgba(255,255,255,0.2)", background: "transparent", position: "relative", zIndex: 10 }} />
+      <FooterHifi />
     </div>
   );
 }

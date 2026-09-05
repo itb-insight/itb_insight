@@ -9,6 +9,8 @@ import PrizePool from "@/features/competition/PrizePool";
 import Timeline from "@/features/competition/Timeline";
 import ContactRegister from "@/features/competition/ContactRegister";
 import CompetitionDesktopLayout from "@/features/compe-desktop/CompetitionDesktopLayout";
+import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
+import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi";
 import { getCompetition, getCompetitionSlugs } from "@/features/competition/data";
 import { competitionJsonLd, competitionMetadata } from "@/features/competition/seo";
 
@@ -97,8 +99,14 @@ export default async function CompetitionPage({
         </div>
       </div>
 
+      {/* Navbar dan footer hanya di desktop. Versi mobile punya MobileHeader
+          sendiri yang memang dibuat untuk kanvas 393px, sedangkan NavbarHifi
+          position-nya fixed selebar viewport — kalau dipakai di sini, isinya
+          tidak akan lurus dengan kanvas yang lebih sempit itu. */}
       <div className="hidden md:block">
+        <NavbarHifi />
         <CompetitionDesktopLayout competition={competition} />
+        <FooterHifi />
       </div>
     </>
   );
