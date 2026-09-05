@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Navbar from "@/shared/components/Navbar/Navbar";
+import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
 
 // ── DATA KOMPETISI ────────────────────────────────────────────────────────────
 const COMPETITIONS = [
@@ -205,7 +206,7 @@ export default function CompePage1() {
 
       {/* ── NAVBAR ── */}
       <div style={{ position: "relative", zIndex: 50 }}>
-        <Navbar isSolid={false} />
+        <NavbarHifi isSolid={false} />
       </div>
 
       {/* ── HEADER: ITB INSIGHT COMPETITION (SLIDING MARQUEE) ── */}
