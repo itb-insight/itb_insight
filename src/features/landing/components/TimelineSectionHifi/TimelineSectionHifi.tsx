@@ -15,12 +15,29 @@ const items = [
 
 const INTERVAL_MS = 1500
 
+// Reference design size the zigzag (circle1-5 / conn1-4) positions were built for.
+// Desktop scales this whole canvas down to fit narrower-than-1100px viewports.
+const CANVAS_WIDTH = 1100
+const CANVAS_HEIGHT = 700
+
 export default function TimelineSectionHifi() {
   const [visibleCount, setVisibleCount] = useState(0)
+  const [scale, setScale] = useState(1)
   const sectionRef = useRef<HTMLElement>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
   const hasStarted = useRef(false)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const isMobile = useIsMobile(768)
+
+  useEffect(() => {
+    const updateScale = () => {
+      if (!wrapperRef.current) return
+      setScale(Math.min(1, wrapperRef.current.offsetWidth / CANVAS_WIDTH))
+    }
+    updateScale()
+    window.addEventListener("resize", updateScale)
+    return () => window.removeEventListener("resize", updateScale)
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -63,7 +80,15 @@ export default function TimelineSectionHifi() {
     <section ref={sectionRef} className={styles.timeline}>
       <h2 className={styles.title}>TIMELINE</h2>
 
-      <div className={styles.wrapper}>
+      <div
+        ref={wrapperRef}
+        className={styles.wrapper}
+        style={!isMobile ? { height: CANVAS_HEIGHT * scale } : undefined}
+      >
+        <div
+          className={styles.canvas}
+          style={!isMobile ? { transform: `scale(${scale})` } : undefined}
+        >
 
         {/* Connectors */}
         {[1, 2, 3, 4].map((i) => (
@@ -103,6 +128,7 @@ export default function TimelineSectionHifi() {
           </div>
         ))}
 
+        </div>
       </div>
     </section>
   )

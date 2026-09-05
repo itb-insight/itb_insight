@@ -1,10 +1,15 @@
 .landingContainer {
   position: relative;
   display: flow-root;
+  overflow-x: clip;
+  background: linear-gradient(to bottom, #091B3F 0%, #294D97 100%);
+  /* Backup — the old full-page raster background. Revert to this (and remove
+     the `background` line above) if the per-section SVG objects don't pan out:
   background-image: url("/images/bg-main.png");
   background-size: cover;
   background-position: top center;
   background-repeat: no-repeat;
+  */
 }
 
 

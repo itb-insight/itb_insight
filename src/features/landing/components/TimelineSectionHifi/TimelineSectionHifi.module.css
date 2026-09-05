@@ -26,6 +26,15 @@
   height: 700px;
 }
 
+/* Fixed reference canvas the zigzag (circle1-5 / conn1-4) was designed at.
+   Desktop scales this whole thing down via JS to fit narrower wrappers. */
+.canvas {
+  position: relative;
+  width: 1100px;
+  height: 700px;
+  transform-origin: top left;
+}
+
 /* Circles — semua sama ukurannya */
 .circle {
   position: absolute;
@@ -70,6 +79,10 @@
     align-items: center;
     height: auto;
     max-width: 320px;
+  }
+
+  .canvas {
+    display: contents;
   }
 
   .circle {

@@ -15,12 +15,41 @@
   gap: 48px;
 }
 
+/* Blurred blob backdrop — lives inside .sticky (not .about) so it stays
+   anchored to the pinned viewport window instead of scrolling past it. */
+.blobLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.greenBlob {
+  position: absolute;
+  top: -220px;
+  left: -280px;
+  width: 700px;
+  height: auto;
+}
+
+.purpleBlob {
+  position: absolute;
+  bottom: -350px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1400px;
+  max-width: none;
+  height: auto;
+}
+
 .illustrationWrapper {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
+  z-index: 2;
 }
 
 .illustration {

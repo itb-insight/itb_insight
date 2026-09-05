@@ -1,6 +1,6 @@
 .footer {
   width: 100%;
-  background: linear-gradient(135deg, #0A1024 0%, #1B2A56 50%, #3A5697 100%);
+  background: linear-gradient(to bottom, #091B3F 0%, #294D97 100%);
   padding: 56px 80px;
 }
 
@@ -118,4 +118,32 @@
 .socialIcon {
   width: 28px;
   height: 28px;
+}
+
+/* Mobile — stack brand, socials, then columns vertically */
+@media (max-width: 768px) {
+  .footer {
+    padding: 48px 24px;
+  }
+
+  .inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .brand {
+    order: 1;
+  }
+
+  .socials {
+    order: 2;
+  }
+
+  .columns {
+    order: 3;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+  }
 }
