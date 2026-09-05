@@ -149,10 +149,159 @@ input:focus, textarea:focus, select:focus {
   font-display: swap;
 }
 
+/* ============================================================
+   HALAMAN DETAIL KOMPETISI (MOBILE)
+   Nilai di bawah diambil langsung dari Figma via REST API.
+   File: UI/UX Website ITB INSIGHT - page Hi-Fi - Section 4
+   Frame: 393 x 3284 (iPhone 14 & 15 Pro)
+
+   Semua aturan di sini SENGAJA dikunci ke dalam .mobile-shell atau
+   ke class tersendiri, supaya tidak mengubah halaman lain.
+   ============================================================ */
+
+@theme {
+  --color-navy-950: #091b3f;
+  --color-navy-800: #1b3b7d;
+  --color-navy-600: #294d97;
+  --color-blue-500: #3d65b8;
+  --color-blue-400: #517eda;
+  --color-blue-300: #7fa9f6;
+  --color-blue-200: #acc7ff;
+  --color-blue-100: #ccddff;
+  --color-blue-50: #dee8fb;
+
+  /* EXCRATCH lebih dulu; kalau woff2-nya gagal dimuat, jatuh ke Orbitron
+     (squarish-techno, paling mendekati), baru ke Gabarito milik repo. */
+  --font-display: "EXCRATCH", var(--font-orbitron), var(--font-primary), sans-serif;
+}
+
 @font-face {
-  font-family: 'Excratch';
-  src: url('/fonts/EXCRATCH-Bold.otf') format('opentype');
+  font-family: "EXCRATCH";
+  src: url("/fonts/excratch.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
+}
+
+/* Kanvas 393px persis seperti frame Figma. Warna dan font dikunci di sini,
+   bukan di html/body, agar halaman lain tidak ikut berubah. */
+.mobile-shell {
+  width: 393px;
+  margin-inline: auto;
+  position: relative;
+  overflow: hidden;
+  background: #091b3f;
+  color: #ffffff;
+  font-family: var(--font-primary);
+  line-height: normal;
+}
+
+/* Teks bergradient. Di Figma hampir semua teks memakai fill gradient
+   #dee8fb -> #acc7ff, bukan putih polos. Ini yang membuatnya terlihat metalik. */
+.text-grad {
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Kartu glassmorphism (countdown, registration fee, kotak prizepool).
+   Figma: fill gradient #dee8fb -> #acc7ff pada OPACITY 10%,
+   stroke gradient sama, tebal 4, radius 20.
+
+   Border bergradient memakai pseudo-element + mask, BUKAN trik
+   "padding-box / border-box" — trik itu membuat layer border-box ikut
+   mengecat bagian tengah kartu sehingga isinya jadi solid terang.
+
+   CATATAN: position:relative di sini dibutuhkan oleh ::before, tapi aturan CSS
+   tanpa @layer MENGALAHKAN utility Tailwind seperti .absolute. Karena itu
+   komponen yang memposisikan kartu ini secara absolut menuliskan
+   position: "absolute" di inline style-nya. */
+.glass-card {
+  position: relative;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgb(222 232 251 / 0.1) 0%, rgb(172 199 255 / 0.1) 100%);
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 4px;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Kotak digit prizepool. Figma: radius 9.1, stroke 0.91. */
+.glass-chip {
+  position: relative;
+  border-radius: 9.1px;
+  background: linear-gradient(180deg, rgb(222 232 251 / 0.1) 0%, rgb(172 199 255 / 0.1) 100%);
+}
+
+.glass-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 0.91px;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Tombol. Dari Figma:
+     Silabus, Guidebook, Register Now -> fill gradient #dee8fb -> #acc7ff,
+       radius 8, teks #1b3b7d
+     Contact Us -> tanpa fill, hanya stroke gradient 2, teks #dee8fb
+   Tinggi semuanya 32. */
+.btn-solid {
+  position: relative;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  color: #1b3b7d;
+}
+
+/* JANGAN gabungkan .btn-outline dengan .text-grad pada elemen yang sama —
+   .text-grad memakai background untuk bg-clip:text, keduanya saling menimpa
+   dan teksnya jadi tidak terlihat. Warna teks di-set langsung di sini. */
+.btn-outline {
+  position: relative;
+  border-radius: 8px;
+  background: transparent;
+  color: #dee8fb;
+}
+
+.btn-outline::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
 }
