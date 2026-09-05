@@ -1,16 +1,36 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Navbar from "@/shared/components/Navbar/Navbar";
 
-// ── DATA ──────────────────────────────────────────────────────────────────────
+// ── DATA KOMPETISI ────────────────────────────────────────────────────────────
 const COMPETITIONS = [
-  { id: 1, title: "Robotika Challenge", description: "Kompetisi robotika untuk tim mahasiswa yang ingin membangun prototipe cerdas dan kompetitif" },
-  { id: 2, title: "Hackathon Innovation Sprint", description: "Sprint pengembangan produk digital dengan fokus pada solusi nyata untuk kampus dan industri" },
-  { id: 3, title: "Paper Competition", description: "Kompetisi penulisan karya ilmiah individual untuk ide teknologi dan inovasi digital" },
-  { id: 4, title: "UI/UX Design Sprint", description: "Kompetisi merancang antarmuka digital yang intuitif untuk studi kasus produk nyata" },
+  { 
+    id: 1, 
+    title: "SAR", 
+    gradient: "linear-gradient(135deg, #FFE4EC 0%, #FFAAAA 100%)",
+    icon: "/images/icon-sar.png" 
+  },
+  { 
+    id: 2, 
+    title: "Microdrone Obstacle", 
+    gradient: "linear-gradient(135deg, #C08CFF 0%, #E9DBF9 100%)",
+    icon: "/images/icon-microdrone.png" 
+  },
+  { 
+    id: 3, 
+    title: "BPC", 
+    gradient: "linear-gradient(135deg, #D0FFC7 0%, #76DF62 100%)",
+    icon: "/images/icon-bpc.png" 
+  },
+  { 
+    id: 4, 
+    title: "Olimpiade Engineering", 
+    gradient: "linear-gradient(135deg, #ACC7FF 0%, #DEEBFB 100%)",
+    icon: "/images/icon-olimpiade.png" 
+  },
 ];
 
 const FAQS = [
@@ -20,21 +40,25 @@ const FAQS = [
   "Kapan deadline pendaftaran?",
 ];
 
-// ── ICONS ─────────────────────────────────────────────────────────────────────
-const ARMS_UP_SRC = "/images/arms-up.png";
-const WHATSAPP_SRC = "/images/whatsapp.png";
+// ── DATA TIMELINE ─────────────────────────────────────────────────────────────
+const TIMELINE_STEPS = [
+  { id: 1, title: "Pendaftaran", year: "2026", align: "right" },
+  { id: 2, title: "Warm Up &\nTechnical Meeting", year: "2026", align: "left" },
+  { id: 3, title: "Penyisihan", year: "2026", align: "right" },
+  { id: 4, title: "Pengumuman Finalis", year: "2026", align: "left" },
+  { id: 5, title: "Final", year: "2026", align: "right" },
+];
 
-// ── CAROUSEL CONSTANTS ────────────────────────────────────────────────────────
-const CW = 268;
-const CH = 268;
-const ACTIVE_TOP  = 56;
-const DARK_TOP    = 0;
-const SIDE_TOP    = 11;
-const SIDE_OFFSET = 160;
-const CAROUSEL_H  = ACTIVE_TOP + CH + 14;
-const ARMS_SIZE = Math.round(CW * (220 / 520));
+const CW = 320; 
+const CH = 320; 
+const ACTIVE_TOP  = 120;
+const SIDE_TOP    = 60;
+const BACK_TOP    = 0;   
+const SIDE_OFFSET = 180; 
+const CAROUSEL_H  = ACTIVE_TOP + CH + 40;
+const ICON_SIZE   = 140;
 
-export default function CompetitionPage() {
+export default function CompePage1() {
   const router = useRouter();
   const [active, setActive] = useState(0);
   const n = COMPETITIONS.length;
@@ -52,74 +76,160 @@ export default function CompetitionPage() {
 
   return (
     <div style={{
-      backgroundColor: "#FFFFFF",
+      background: "linear-gradient(180deg, #294D97 0%, #091B3F 100%)",
       minHeight: "100svh",
       width: "100%",
       margin: "0 auto",
-      overflow: "hidden",
-      containerType: "inline-size",
+      overflowX: "hidden", 
+      position: "relative",
       fontFamily: "'Roboto Mono', 'Courier New', monospace",
+      color: "#FFFFFF",
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bitcount:wght@300&family=Gabarito:wght@500;700&family=Roboto+Mono:ital,wght@0,400;0,500;1,300&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;700;900&family=Inter:wght@400&family=Roboto+Mono:wght@400;500;700&display=swap');
+
+        @font-face {
+          font-family: 'EXCRATCH';
+          src: url('/fonts/EXCRATCH.otf') format('opentype');
+          font-weight: 700;
+          font-style: normal;
+        }
 
         *, *::before, *::after { box-sizing: border-box; }
 
-        .dot {
-          width: 16px; height: 16px;
-          border-radius: 50%;
-          background: #D9D9D9;
-          border: none; cursor: pointer; padding: 0;
-          transition: transform .2s;
+        /* FOG BUBBLE (ATAS) */
+        .fog-green-left {
+          position: absolute; top: -5%; left: -25vw; width: 60vw; height: 60vw; max-width: 800px; max-height: 800px;
+          background: #76DF62; border-radius: 50%; filter: blur(180px); opacity: 0.25; z-index: 0; pointer-events: none;
         }
-        .dot.active { transform: scale(1.25); background: #888; }
-
-        .faq-row { overflow-x: auto; scrollbar-width: none; }
-        .faq-row::-webkit-scrollbar { display: none; }
-
-        .contact-btn {
-          border: none;
-          background: #D9D9D9;
-          cursor: pointer;
-          font-family: 'Roboto Mono', monospace;
-          font-weight: 500;
-          font-size: clamp(1.8rem, 3vw, 3rem);
-          letter-spacing: .05em;
-          height: 144px;
-          padding: 0 28px;
-          display: flex; align-items: center; justify-content: center;
-          gap: 14px;
-          color: #000;
-          transition: background .2s;
+        .fog-purple-right {
+          position: absolute; top: 0%; right: -25vw; width: 60vw; height: 60vw; max-width: 800px; max-height: 800px;
+          background: #C08CFF; border-radius: 50%; filter: blur(180px); opacity: 0.25; z-index: 0; pointer-events: none;
         }
-        .contact-btn:hover { background: #C5C5C5; }
+        
+        /* BUBBLE HOLOGRAM KUNING-OREN (TIMELINE KE FAQ) */
+        .fog-orange-bottom {
+          position: absolute; bottom: -5%; right: -15vw; width: 70vw; height: 1000px; max-width: 1200px;
+          background: linear-gradient(197.58deg, #FF3A3A 5.26%, rgba(246, 220, 71, 0.7) 52.44%, #FFAAAA 99.62%);
+          opacity: 0.25; filter: blur(180px); border-radius: 50%; z-index: 0; pointer-events: none;
+        }
+
+        /* ASET UNION GLOBAL ATAS */
+        .bg-union-left {
+          position: absolute; top: 5%; left: -5vw; width: 35vw; max-width: 450px; opacity: 0.25; z-index: 1; pointer-events: none;
+        }
+        .bg-union-right {
+          position: absolute; top: 0%; right: -5vw; width: 35vw; max-width: 450px; opacity: 0.25; z-index: 1; pointer-events: none; transform: scaleX(-1);
+        }
+
+        /* ANIMASI MARQUEE SLIDING TEXT */
+        @keyframes marquee {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-50%); }
+        }
+        .marquee-heading {
+          font-family: 'EXCRATCH', 'Impact', sans-serif;
+          font-weight: 700;
+          font-size: clamp(4rem, 10vw, 110px);
+          letter-spacing: 0.08em;
+          line-height: 1.2;
+          background: linear-gradient(180deg, #D0FFC7 0%, #76DF62 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          color: transparent;
+          filter: drop-shadow(0px 0px 10px rgba(222, 235, 251, 0.5));
+          margin: 0;
+          padding-right: 40px;
+          white-space: nowrap;
+        }
+
+        .total-prize-box {
+          margin: 0 auto 60px;
+          width: 100%;
+          max-width: 880px;
+          padding: 40px 24px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: linear-gradient(180deg, rgba(222, 232, 251, 0.1) 0%, rgba(172, 199, 255, 0.1) 100%);
+          border-radius: 40px;
+          position: relative;
+        }
+        .total-prize-box::before {
+          content: ""; position: absolute; inset: 0; border-radius: 40px; 
+          padding: 4px; 
+          background: linear-gradient(180deg, #DEE8FB 0%, #ACC7FF 100%); 
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+        }
+
+        .faq-dropdown {
+          display: flex; flex-direction: row; align-items: center; justify-content: space-between;
+          padding: 12px 24px; width: 100%; max-width: 820px; height: 48px; margin: 0 auto;
+          border-radius: 12px; background: rgba(255,255,255,0.02);
+          cursor: pointer; transition: all 0.3s ease; z-index: 10; position: relative;
+        }
+        .faq-dropdown::before {
+          content: ""; position: absolute; inset: 0; border-radius: 12px; 
+          padding: 2px; 
+          background: linear-gradient(180deg, #517EDA 0%, #ACC7FF 100%); 
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+        }
+        .faq-dropdown:hover { background: rgba(255,255,255,0.1); }
+        .faq-text { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 16px; color: #DEE8FB; }
+
+        .contact-btn-small {
+          width: 143px; height: 52px; border-radius: 12px; background: transparent;
+          font-family: 'Gabarito', sans-serif; font-size: 16px; color: #DEE8FB; cursor: pointer; transition: all 0.3s ease;
+          display: flex; align-items: center; justify-content: center; margin: 0 auto; z-index: 10; position: relative;
+        }
+        .contact-btn-small::before {
+          content: ""; position: absolute; inset: 0; border-radius: 12px; 
+          padding: 2px; 
+          background: linear-gradient(180deg, #DEE8FB 0%, #ACC7FF 100%); 
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+        }
+        .contact-btn-small:hover { background: rgba(255,255,255,0.1); }
       `}</style>
 
+      {/* ── BACKGROUND DECORATIONS FOG & UNION ── */}
+      <div className="fog-green-left" />
+      <div className="fog-purple-right" />
+      <div className="fog-orange-bottom" />
+      
+      <img src="/images/Union.png" alt="" className="bg-union-left" />
+      <img src="/images/Union.png" alt="" className="bg-union-right" />
+
       {/* ── NAVBAR ── */}
-      <Navbar isSolid={true} />
+      <div style={{ position: "relative", zIndex: 50 }}>
+        <Navbar isSolid={false} />
+      </div>
 
-      {/* ── INSIGHT COMPETITION ── */}
-      <h1 style={{
-        fontFamily: "'Gabarito', sans-serif",
-        fontWeight: 700,
-        fontSize: "clamp(1.5rem, 4vw, 3.5rem)",
-        letterSpacing: "0.05em",
-        textAlign: "center",
-        color: "#000",
-        margin: "17px 20px 16px",
-        lineHeight: 1.2,
-        whiteSpace: "nowrap",
-      }}>
-        INSIGHT COMPETITION
-      </h1>
+      {/* ── HEADER: ITB INSIGHT COMPETITION (SLIDING MARQUEE) ── */}
+      <div style={{ overflow: "hidden", width: "100%", margin: "100px 0 40px", position: "relative", zIndex: 10 }}>
+        <div style={{ display: "flex", width: "max-content", animation: "marquee 20s linear infinite" }}>
+          {/* Half 1 */}
+          <div style={{ display: "flex", flexShrink: 0 }}>
+            <h1 className="marquee-heading">ITB INSIGHT COMPETITION&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+            <h1 className="marquee-heading">ITB INSIGHT COMPETITION&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+            <h1 className="marquee-heading">ITB INSIGHT COMPETITION&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+          </div>
+          <div style={{ display: "flex", flexShrink: 0 }}>
+            <h1 className="marquee-heading">ITB INSIGHT COMPETITION&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+            <h1 className="marquee-heading">ITB INSIGHT COMPETITION&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+            <h1 className="marquee-heading">ITB INSIGHT COMPETITION&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+          </div>
+        </div>
+      </div>
 
-      {/* ── CARD CAROUSEL (MUTER DENGAN FRAMER MOTION) ── */}
+      {/* CARD CAROUSEL */}
       <div
-        style={{ position: "relative", height: CAROUSEL_H, overflow: "hidden" }}
+        style={{ position: "relative", height: CAROUSEL_H, overflow: "hidden", zIndex: 10, marginBottom: "40px" }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
-        role="region"
-        aria-label="Competition slider"
       >
         {COMPETITIONS.map((comp, idx) => {
           let diff = idx - active;
@@ -129,222 +239,193 @@ export default function CompetitionPage() {
           const isActive = diff === 0;
           const isLeft   = diff === -1;
           const isRight  = diff === 1;
-          const isBackground = !isActive && !isLeft && !isRight;
+          const isBack   = diff === 2 || diff === -2; 
 
           let animateX = "-50%";
-          let animateTop = DARK_TOP;
+          let animateTop = BACK_TOP;
           let scale = 1;
           let opacity = 0;
-          let zIndex = 2;
-          let background = "#7C7C7C";
-          let shadow = "none";
+          let zIndex = 1;
+          let blurEffect = "blur(8px)"; 
 
           if (isActive) {
-            animateX = "-50%";
-            animateTop = ACTIVE_TOP;
-            scale = 1;
-            opacity = 1;
-            zIndex = 10;
-            background = "#D9D9D9";
-            shadow = "0px -4px 4px rgba(0, 0, 0, 0.25)";
+            animateX = "-50%"; animateTop = ACTIVE_TOP; scale = 1.1; opacity = 1; zIndex = 10; blurEffect = "blur(0px)";
           } else if (isLeft) {
-            animateX = `calc(-50% - ${SIDE_OFFSET}px)`;
-            animateTop = SIDE_TOP;
-            scale = 1;
-            opacity = 1;
-            zIndex = 4;
-            background = "#B0B0B0";
+            animateX = `calc(-50% - ${SIDE_OFFSET}px)`; animateTop = SIDE_TOP; scale = 0.85; opacity = 0.8; zIndex = 4; blurEffect = "blur(4px)";
           } else if (isRight) {
-            animateX = `calc(-50% + ${SIDE_OFFSET}px)`;
-            animateTop = SIDE_TOP;
-            scale = 1;
-            opacity = 1;
-            zIndex = 4;
-            background = "#B0B0B0";
-          } else if (isBackground) {
-            animateX = "-50%";
-            animateTop = DARK_TOP;
-            scale = 0.95;
-            opacity = 0.3;
-            zIndex = 1;
-            background = "#7C7C7C";
+            animateX = `calc(-50% + ${SIDE_OFFSET}px)`; animateTop = SIDE_TOP; scale = 0.85; opacity = 0.8; zIndex = 4; blurEffect = "blur(4px)";
+          } else if (isBack) {
+            animateX = "-50%"; animateTop = BACK_TOP; scale = 0.7; opacity = 0.6; zIndex = 1; blurEffect = "blur(8px)";
           }
 
           return (
             <motion.div
               key={comp.id}
               style={{
-                position: "absolute",
-                width: CW,
-                height: CH,
-                borderRadius: 22,
-                left: "50%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: 24,
-                boxSizing: "border-box",
-                cursor: "pointer"
+                position: "absolute", width: CW, height: CH, borderRadius: "30px", left: "50%",
+                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                padding: 24, boxSizing: "border-box", cursor: "pointer",
+                background: comp.gradient, 
+                border: "4px solid rgba(255, 255, 255, 0.6)", 
+                boxShadow: isActive ? "0px 20px 40px rgba(0,0,0,0.4)" : "0px 10px 20px rgba(0,0,0,0.2)",
               }}
-              animate={{
-                x: animateX,
-                top: animateTop,
-                scale: scale,
-                opacity: opacity,
-                zIndex: zIndex,
-                backgroundColor: background,
-                boxShadow: shadow,
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 260,
-                damping: 25
-              }}
+              animate={{ x: animateX, top: animateTop, scale: scale, opacity: opacity, zIndex: zIndex, filter: blurEffect }}
+              transition={{ type: "spring", stiffness: 260, damping: 25 }}
               onClick={() => {
-                  if (isActive) {
-                    router.push("/competition2");
-                  } else {
-                    goto(idx);
-                  }
-                }}
+                  if (isActive) router.push("/competition2"); 
+                  else goto(idx);
+              }}
             >
-              {isActive ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}
-                >
-                  <img
-                    src={ARMS_UP_SRC}
-                    alt=""
-                    width={ARMS_SIZE}
-                    height={ARMS_SIZE}
-                    style={{ objectFit: "contain" }}
-                  />
-                  <h2 style={{
-                    fontFamily: "'Roboto Mono', monospace",
-                    fontWeight: 500,
-                    fontSize: "clamp(1rem, 1.8vw, 1.5rem)",
-                    letterSpacing: "0.05em",
-                    marginTop: 19, marginBottom: 19,
-                    textAlign: "center", color: "#000",
-                  }}>
-                    {comp.title}
-                  </h2>
-                  <p style={{
-                    fontFamily: "'Roboto Mono', monospace",
-                    fontWeight: 500,
-                    fontSize: "clamp(.85rem, 1.2vw, 1rem)",
-                    letterSpacing: "0.05em",
-                    textAlign: "center", color: "#000",
-                    lineHeight: 1.6, margin: 0,
-                  }}>
-                    {comp.description}
-                  </p>
-                </motion.div>
-              ) : (
-                // Sisi kartu kiri/kanan/belakang yang kosong polos tanpa teks sesuai Figma asli kamu
-                <div style={{ width: "100%", height: "100%" }} />
-              )}
+              <motion.div
+                initial={false}
+                animate={{ opacity: isActive ? 1 : 0.8 }}
+                style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}
+              >
+                <img
+                  src={comp.icon}
+                  alt={comp.title}
+                  style={{ width: ICON_SIZE, height: ICON_SIZE, objectFit: "contain", filter: "drop-shadow(0px 8px 8px rgba(0,0,0,0.15))" }}
+                />
+                <h2 style={{
+                  fontFamily: "'Gabarito', sans-serif", fontWeight: 800, fontSize: "clamp(1.2rem, 2vw, 1.8rem)",
+                  marginTop: 20, textAlign: "center", color: "#111827", 
+                }}>
+                  {comp.title}
+                </h2>
+              </motion.div>
             </motion.div>
           );
         })}
       </div>
 
-      {/* ── PAGINATION DOTS ── */}
-      <div style={{ display:"flex", justifyContent:"center", alignItems:"center", gap:8, padding:"12px 0 56px" }}>
-        {COMPETITIONS.map((_, i) => (
-          <button
-            key={i}
-            className={`dot${i === active ? " active" : ""}`}
-            onClick={() => setActive(i)}
-            aria-label={`Competition ${i + 1}`}
-            aria-pressed={i === active}
-          />
-        ))}
-      </div>
-
       {/* ── TOTAL PRIZE ── */}
-      <section style={{ padding: "0 50px 12px", textAlign: "center" }}>
-        <h2 style={{
-          fontFamily: "'Gabarito', sans-serif",
-          fontWeight: 500,
-          fontSize: "clamp(1.8rem, 3vw, 3rem)",
-          letterSpacing: "0.05em",
-          color: "#000",
+      <section style={{ padding: "0 24px", textAlign: "center", position: "relative", zIndex: 10 }}>
+        <div style={{
+          position: "absolute", bottom: "-20%", left: "-15vw", width: "40vw", height: "40vw", maxWidth: "500px", maxHeight: "500px",
+          background: "linear-gradient(266.55deg, rgba(137, 77, 183, 0.6) 0%, #5171B4 100%)", borderRadius: "50%", filter: "blur(140px)", opacity: 0.5, zIndex: 0, pointerEvents: "none"
+        }} />
+
+        <h2 style={{ 
+          fontFamily: "'EXCRATCH', 'Impact', sans-serif", 
+          fontWeight: 700, 
+          fontSize: "clamp(2rem, 5vw, 64px)", 
+          letterSpacing: "0px", 
+          marginBottom: 24,
+          background: "linear-gradient(180deg, #DEE8FB 0%, #ACC7FF 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+          color: "transparent",
+          filter: "drop-shadow(0px 0px 10px rgba(222, 232, 251, 0.6))",
+          position: "relative", zIndex: 2
         }}>
           TOTAL PRIZE
         </h2>
-      </section>
 
-      {/* Prize box */}
-      <div style={{ margin: "0 auto 54px", width: "calc(100% - 300px)", height: "400px", background: "#D9D9D9", borderRadius: 10, padding: "28px 20px", textAlign: "center", maxWidth: "1440px", justifyContent: "center", alignItems: "center", display: "flex" }}>
-        <span style={{
-          fontFamily: "'Bitcount', 'Roboto Mono', monospace",
-          fontStyle: "italic",
-          fontWeight: 300,
-          fontSize: "clamp(1.5rem, 3vw, 3rem)",
-          color: "#000",
-          letterSpacing: "0.02em",
-          whiteSpace: "nowrap",
-        }}>
-          IDR 150.000.000
-        </span>
-      </div>
-
-      {/* ── FAQ ── */}
-      <section style={{ padding: "0 150px 8px" }}>
-        <h2 style={{
-          fontFamily: "'Gabarito', sans-serif",
-          fontWeight: 500,
-          fontSize: "clamp(1.8rem, 3vw, 3rem)",
-          letterSpacing: "0.05em",
-          color: "#000",
-        }}>
-          FAQ
-        </h2>
-      </section>
-
-      {/* FAQ cards */}
-      <div className="faq-row" style={{ display:"flex", gap:11, padding:"4px 150px 72px" }}>
-        {FAQS.map((q, i) => (
-          <div key={i} style={{
-            flexShrink: 0,
-            width: 359, height: 304,
-            background: "#D9D9D9",
-            borderRadius: 10,
-            padding: 10,
-            display: "flex", alignItems: "center",
+        <div className="total-prize-box">
+          <span style={{
+            fontFamily: "'Gabarito', sans-serif", 
+            fontWeight: 700,
+            fontSize: "clamp(2.5rem, 6vw, 110px)", 
+            lineHeight: "1.2",
+            background: "linear-gradient(191deg, #DEE8FB 20%, #ACC7FF 75%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            color: "transparent",
           }}>
-            <p style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontWeight: 500,
-              fontSize: ".55rem",
-              letterSpacing: "0.03em",
-              lineHeight: 1.5,
-              color: "#333", margin: 0,
-            }}>
-              {q}
-            </p>
-          </div>
-        ))}
-      </div>
+            IDR 150.000.000
+          </span>
+        </div>
+      </section>
 
-      {/* ── CONTACT US ── */}
-      <section style={{ display:"flex", justifyContent:"center", padding:"0 50px 67px" }}>
-        <button className="contact-btn" style={{ width:"100%", maxWidth: "600px"}}>
-          CONTACT US
-          <img
-            src={WHATSAPP_SRC}
-            alt="WhatsApp"
-            style={{ width: "1.27em", height: "1.27em", objectFit: "contain" }}
-          />
+      {/* ── TIMELINE ── */}
+      <section style={{ padding: "40px 24px 100px", position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <img src="/images/Union.png" alt="" style={{ position: "absolute", top: "10%", left: "-2vw", width: "25vw", maxWidth: "300px", opacity: 0.15, zIndex: 0, pointerEvents: "none" }} />
+        <img src="/images/Union.png" alt="" style={{ position: "absolute", bottom: "10%", right: "-2vw", width: "25vw", maxWidth: "300px", opacity: 0.15, zIndex: 0, pointerEvents: "none", transform: "scaleX(-1) rotate(15deg)" }} />
+
+        <h2 style={{ 
+          fontFamily: "'EXCRATCH', 'Impact', sans-serif", fontWeight: 700, fontSize: "clamp(2rem, 5vw, 64px)", letterSpacing: "0px", marginBottom: "60px",
+          background: "linear-gradient(180deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", color: "transparent",
+          filter: "drop-shadow(0px 0px 10px rgba(222, 232, 251, 0.6))", position: "relative", zIndex: 2
+        }}>
+          TIMELINE
+        </h2>
+        <div style={{ position: "relative", width: "100%", maxWidth: "800px", display: "flex", flexDirection: "column", gap: "40px" }}>
+          <div style={{ position: "absolute", top: 0, bottom: 0, left: "50%", transform: "translateX(-50%)", width: "2px", background: "linear-gradient(180deg, rgba(222,232,251,0) 0%, rgba(222,232,251,0.5) 10%, rgba(222,232,251,0.5) 90%, rgba(222,232,251,0) 100%)", zIndex: 1 }} />
+          
+          {TIMELINE_STEPS.map((step) => (
+            <div key={step.id} style={{ display: "flex", width: "100%", alignItems: "center", justifyContent: "center", position: "relative", zIndex: 2 }}>
+              
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-end", textAlign: "right", paddingRight: "clamp(15px, 4vw, 40px)" }}>
+                {step.align === "left" && (
+                  <>
+                    <span style={{ fontFamily: "'Gabarito', sans-serif", fontWeight: 400, fontSize: "clamp(1.1rem, 2.5vw, 36px)", lineHeight: "1.2", whiteSpace: "pre-line", background: "linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                      {step.title}
+                    </span>
+                    <span style={{ fontFamily: "'Gabarito', sans-serif", fontWeight: 400, fontSize: "clamp(0.9rem, 2vw, 28px)", lineHeight: "1.2", marginTop: "4px", background: "linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                      {step.year}
+                    </span>
+                  </>
+                )}
+              </div>
+
+              <div style={{ width: "32px", height: "32px", flexShrink: 0, borderRadius: "50%", background: "linear-gradient(0deg, #FFE4EC 0%, #FFAAAA 100%)", boxShadow: "0px 0px 15px rgba(255, 170, 170, 0.6)", zIndex: 3 }} />
+
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "left", paddingLeft: "clamp(15px, 4vw, 40px)" }}>
+                {step.align === "right" && (
+                  <>
+                    <span style={{ fontFamily: "'Gabarito', sans-serif", fontWeight: 400, fontSize: "clamp(1.1rem, 2.5vw, 36px)", lineHeight: "1.2", whiteSpace: "pre-line", background: "linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                      {step.title}
+                    </span>
+                    <span style={{ fontFamily: "'Gabarito', sans-serif", fontWeight: 400, fontSize: "clamp(0.9rem, 2vw, 28px)", lineHeight: "1.2", marginTop: "4px", background: "linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                      {step.year}
+                    </span>
+                  </>
+                )}
+              </div>
+
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── FAQ & CONTACT AREA ── */}
+      <section style={{ padding: "0px 24px 120px", position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center" }}>
+        
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "20px", marginBottom: "40px" }}>
+          <img src="/images/Union.png" alt="" style={{ width: "clamp(60px, 15vw, 120px)", opacity: 0.3 }} />
+          <h2 style={{ 
+            fontFamily: "'EXCRATCH', 'Impact', sans-serif", fontWeight: 700, fontSize: "clamp(2rem, 5vw, 64px)", letterSpacing: "0px", margin: 0,
+            background: "linear-gradient(180deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", color: "transparent",
+            filter: "drop-shadow(0px 0px 10px rgba(222, 232, 251, 0.6))" // Menambahkan Glow pada FAQ
+          }}>
+            FAQ
+          </h2>
+          <img src="/images/Union.png" alt="" style={{ width: "clamp(60px, 15vw, 120px)", opacity: 0.3, transform: "scaleX(-1)" }} />
+        </div>
+
+        {/* Dropdown FAQ */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "820px", zIndex: 2 }}>
+          {FAQS.map((q, i) => (
+            <div key={i} className="faq-dropdown">
+              <span className="faq-text">{q}</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9L12 15L18 9" stroke="#DEE8FB" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          ))}
+        </div>
+
+        {/* Contact Us */}
+        <button className="contact-btn-small" style={{ marginTop: "60px", zIndex: 2 }}>
+          Contact Us
         </button>
+
       </section>
 
       {/* ── FOOTER ── */}
-      <footer style={{ height: 162, background: "#D9D9D9" }} />
+      <footer style={{ height: 100, borderTop: "1px solid rgba(255,255,255,0.2)", background: "transparent", position: "relative", zIndex: 10 }} />
     </div>
   );
 }
