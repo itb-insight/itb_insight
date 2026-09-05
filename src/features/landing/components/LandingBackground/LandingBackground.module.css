@@ -1,0 +1,121 @@
+.background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1600px;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  container-type: inline-size;
+}
+
+/* Bleeds up from the About section into the tail end of Hero (Hero = 300vh) */
+.greenBlob {
+  position: absolute;
+  top: calc(300vh - 100px);
+  left: clamp(0px, 0cqw, -200px);
+  width: clamp(600px, 55cqw, 900px);
+  max-width: none;
+  height: auto;
+}
+
+/* Sits within About's visible span (About runs roughly 300vh -> 450vh) */
+.purpleBlob {
+  position: absolute;
+  top: calc(300vh + 45vh);
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(1400px, 150cqw, 2400px);
+  max-width: none;
+  height: auto;
+}
+
+/* Stats section sits right after Hero + About (300vh + 150vh = 450vh) in
+   normal flow — not sticky, so these are plain page-Y offsets from there. */
+.statsObject1 {
+  position: absolute;
+  top: calc(300vh + 165vh + 60px);
+  left: -5%;
+  width: clamp(280px, 24cqw, 600px);
+  max-width: none;
+  height: auto;
+}
+
+.statsObject2 {
+  position: absolute;
+  top: calc(300vh + 200vh + 40px);
+  left: 40%;
+  transform: translateX(-50%);
+  width: clamp(400px, 34cqw, 950px);
+  max-width: none;
+  height: auto;
+}
+
+.statsObject3 {
+  position: absolute;
+  top: calc(300vh + 160vh + 10px);
+  right: 4%;
+  width: clamp(320px, 32cqw, 550px);
+  max-width: none;
+  height: auto;
+}
+
+/* Stretches from Stats down through Timeline — placeholder placement, to be fine-tuned */
+.yellowBlob {
+  position: absolute;
+  top: calc(300vh + 150vh);
+  left: 72%;
+  transform: translateX(-50%);
+  width: clamp(900px, 120cqw, 1600px);
+  max-width: none;
+  height: auto;
+}
+
+/* Gallery section — top uses a fixed px estimate of Stats' real height (it's
+   width-capped via max-width:1000px + aspect-ratio, not vh-driven, so a vh
+   guess here drifts as zoom/viewport change) instead of a vh guess. */
+.galleryBg {
+  position: absolute;
+  top: calc(300vh + 150vh + 922px);
+  left: 53%;
+  transform: translateX(-50%);
+  width: clamp(1200px, 110cqw, 1849px);
+  max-width: none;
+  height: auto;
+}
+
+/* Timeline section — placeholder placement, to be fine-tuned */
+.timelineBg {
+  position: absolute;
+  top: calc(300vh + 150vh + 2000px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(500px, 62cqw, 1135px);
+  max-width: none;
+  height: auto;
+}
+
+/* Stretches from Timeline into Media Partners — placeholder placement, to be fine-tuned */
+.gradientBlob {
+  position: absolute;
+  top: calc(300vh + 150vh + 2200px);
+  left: 20%;
+  transform: translateX(-50%);
+  width: clamp(900px, 90cqw, 1619px);
+  max-width: none;
+  height: auto;
+}
+
+/* Media Partners section — placeholder placement, to be fine-tuned */
+.yellowishBlob {
+  position: absolute;
+  top: calc(300vh + 150vh + 2600px);
+  left: 75%;
+  transform: translateX(-50%);
+  width: clamp(700px, 75cqw, 1230px);
+  max-width: none;
+  height: auto;
+}

@@ -14,6 +14,7 @@ import MediaPartnersSection from "@/features/landing/components/MediaPartnersSec
 import MediaPartnersSectionHifi from "@/features/landing/components/MediaPartnersSectionHifi/MediaPartnersSectionHifi"
 import Footer from "@/shared/components/Footer/Footer"
 import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi"
+import LandingBackground from "@/features/landing/components/LandingBackground/LandingBackground"
 import styles from "@/features/landing/LandingPage.module.css"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
@@ -43,6 +44,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
       />
+      <LandingBackground />
       <NavbarHifi />
       <HeroSectionHifi />
       <AboutSectionHifi />

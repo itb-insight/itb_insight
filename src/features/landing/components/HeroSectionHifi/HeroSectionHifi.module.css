@@ -5,7 +5,7 @@
 
 .sticky {
   position: sticky;
-  margin-top: 10vh;
+  margin-top: clamp(0px, 10vh, 80px);
   top: 0;
   height: 100vh;
   display: flex;
@@ -16,6 +16,10 @@
   padding: 0 24px;
   text-align: center;
   overflow: hidden;
+  container-type: inline-size;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .topGroup {
@@ -28,7 +32,7 @@
 
 .title {
   font-family: 'Excratch', sans-serif;
-  font-size: clamp(4rem, 8vw, 7rem);
+  font-size: clamp(4rem, 8cqw, 7rem);
   font-weight: 700;
   letter-spacing: 0.1em;
   margin: 0;
@@ -59,14 +63,14 @@
 
 .countdownNumber {
   font-family: 'Bitcount', monospace;
-  font-size: clamp(6rem, 12vw, 10rem);
+  font-size: clamp(6rem, 12cqw, 10rem);
   color: var(--color-text-primary);
   line-height: 1;
 }
 
 .countdownLabel {
   font-family: 'Bitcount', monospace;
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(2rem, 5cqw, 4rem);
   color: var(--color-text-primary);
   font-weight: 400;
 }
@@ -83,7 +87,7 @@
 
 .description {
   font-family: 'Gabarito', sans-serif;
-  font-size: clamp(1rem, 1.8vw, 2.4rem);
+  font-size: clamp(1rem, 1.8cqw, 2.4rem);
   color: #E9E9E9;
   max-width: 800px;
   line-height: 1.8;
@@ -154,7 +158,7 @@
   }
 
   .title {
-    font-size: clamp(2rem, 10vw, 3rem);
+    font-size: clamp(2rem, 10cqw, 3rem);
     letter-spacing: 0.06em;
   }
 
@@ -176,11 +180,11 @@
   }
 
   .countdownNumber {
-    font-size: clamp(2.25rem, 13vw, 3rem);
+    font-size: clamp(2.25rem, 13cqw, 3rem);
   }
 
   .countdownLabel {
-    font-size: clamp(1.1rem, 6vw, 1.5rem);
+    font-size: clamp(1.1rem, 6cqw, 1.5rem);
   }
 
   .bottom {

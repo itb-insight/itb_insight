@@ -1,4 +1,6 @@
 .footer {
+  position: relative;
+  z-index: 1;
   width: 100%;
   background: linear-gradient(to bottom, #091B3F 0%, #294D97 100%);
   padding: 56px 80px;

@@ -13,34 +13,10 @@
   padding: 0 80px;
   overflow: hidden;
   gap: 48px;
-}
-
-/* Blurred blob backdrop — lives inside .sticky (not .about) so it stays
-   anchored to the pinned viewport window instead of scrolling past it. */
-.blobLayer {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.greenBlob {
-  position: absolute;
-  top: -220px;
-  left: -280px;
-  width: 700px;
-  height: auto;
-}
-
-.purpleBlob {
-  position: absolute;
-  bottom: -350px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 1400px;
-  max-width: none;
-  height: auto;
+  container-type: inline-size;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .illustrationWrapper {
@@ -65,25 +41,29 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 40px;
   z-index: 2;
   padding-left: 40px;
+  text-align: center;
 }
 
 .phase2Text {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 20px;
   will-change: opacity, transform;
 }
 
 .title {
   font-family: 'Excratch', sans-serif;
-  font-size: clamp(3rem, 3.5vw, 4rem);
+  font-size: clamp(3rem, 3.5cqw, 4rem);
   font-weight: 700;
   letter-spacing: 0.1em;
   margin: 0;
   line-height: 1;
+  text-align: center;
   background: linear-gradient(to bottom, #ACC7FF, #DEE8FB);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -93,17 +73,18 @@
 
 .description {
   font-family: 'Gabarito', sans-serif;
-  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  font-size: clamp(0.8rem, 1.2cqw, 1rem);
   color: #E9E9E9;
-  line-height: 1.2;
+  line-height: 1.5;
   margin: 0;
-  max-width: 600px;
+  max-width: 780px;
   text-align: justify;
 }
 
 .phase3Text {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 24px;
   will-change: opacity, transform;
 }
@@ -116,8 +97,8 @@
 
 .infoLabel {
   font-family: 'Gabarito', sans-serif;
-  font-size: clamp(1.5rem, 1.8vw, 1.8rem);
-  font-weight: 600;
+  font-size: clamp(1.5rem, 1.8cqw, 1.8rem);
+  font-weight: 400;
   color: #7EB3FF;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -126,7 +107,7 @@
 
 .infoValue {
   font-family: 'Gabarito', sans-serif;
-  font-size: clamp(2rem, 2.8vw, 3.2rem);
+  font-size: clamp(2rem, 2.8cqw, 3.2rem);
   font-weight: 700;
   color: #FFFFFF;
   display: flex;

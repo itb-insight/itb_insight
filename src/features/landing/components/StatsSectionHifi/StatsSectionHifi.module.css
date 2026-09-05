@@ -13,6 +13,7 @@
   aspect-ratio: 1275 / 972;
   max-width: 1000px;
   margin: 0 auto;
+  container-type: inline-size;
 }
 
 .illustrationContainer {
@@ -41,7 +42,7 @@
 .value {
   font-family: 'Excratch', sans-serif;
   font-weight: 700;
-  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-size: clamp(1.5rem, 4cqw, 3rem);
   line-height: 1;
   background: linear-gradient(to bottom, #091B3F, #294D97);
   -webkit-background-clip: text;
@@ -52,7 +53,7 @@
 .label {
   font-family: 'Gabarito', sans-serif;
   font-weight: 400;
-  font-size: clamp(1rem, 2.5vw, 1.6rem);;
+  font-size: clamp(1rem, 2.5cqw, 1.6rem);
   margin-top: 4px;
   background: linear-gradient(to bottom, #091B3F, #294D97);
   -webkit-background-clip: text;
@@ -73,5 +74,5 @@
 
 .visitors {
   left: 83%;
-  top: 77.8%;
+  top: 80%;
 }

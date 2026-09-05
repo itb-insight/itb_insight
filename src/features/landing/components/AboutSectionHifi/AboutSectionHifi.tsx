@@ -44,11 +44,6 @@ export default function AboutSectionHifi() {
       <section ref={sectionRef} className={styles.about}>
         <div className={styles.sticky}>
 
-          <div className={styles.blobLayer}>
-            <img src="/images/bg-landing/green-blob-about.svg" alt="" className={styles.greenBlob} />
-            <img src="/images/bg-landing/purple-blob-about.svg" alt="" className={styles.purpleBlob} />
-          </div>
-
           <div className={styles.textWrapper}>
             <div
               className={styles.phase2Text}

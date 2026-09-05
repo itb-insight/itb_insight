@@ -7,11 +7,15 @@
   justify-content: center;
   gap: 48px;
   overflow: hidden;
+  container-type: inline-size;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .title {
   font-family: 'Excratch', sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: clamp(1.5rem, 3cqw, 2.5rem);
   font-weight: 700;
   letter-spacing: 0.15em;
   background: linear-gradient(to bottom, #FFFFFF, #D1E4FF);
