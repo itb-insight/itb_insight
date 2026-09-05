@@ -7,8 +7,6 @@ import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
 import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi";
 
 // ── DATA KOMPETISI ────────────────────────────────────────────────────────────
-// slug harus sama dengan yang ada di features/competition/data.ts — itu yang
-// menentukan halaman detail mana yang dibuka saat kartunya diklik.
 const COMPETITIONS = [
   {
     id: 1,

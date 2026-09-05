@@ -2,24 +2,6 @@ import React from "react";
 import { formatRupiah } from "@/features/competition/format";
 import type { Competition } from "@/features/competition/types";
 
-/**
- * Layout desktop halaman kompetisi — satu komponen untuk keempat lomba.
- *
- * Menggantikan CompeDetail1..4 yang isinya sama persis kecuali warna, logo,
- * dan teks. File-file itu sengaja masih disimpan sebagai pembanding dan
- * dilayani lewat /compe_hi-fi/compe_detail1..4.
- *
- * Yang dulu beda antar file tapi ternyata bisa dihitung, tidak jadi data:
- *   - timeline kiri/kanan  -> selang-seling menurut urutan
- *   - tinggi garis timeline -> ikut jumlah item
- *   - lebar maksimum deskripsi -> selalu selebar kolom hero
- *
- * Tiga hal yang dulu beda tanpa alasan sudah diseragamkan: setiap lomba kini
- * punya glow titik berwarna aksennya sendiri (dulu Microdrone memakai merah
- * muda milik SAR dan Olimpiade tidak punya glow) dan garis timeline yang sama
- * (dulu SAR saja yang tanpa border).
- */
-
 const vw = (px: number) => `${(px / 1728) * 100}vw`;
 const fluid = (px: number, minFactor = 0.62, maxFactor = 1.15) =>
   `clamp(${(px * minFactor).toFixed(2)}px, ${vw(px)}, ${(px * maxFactor).toFixed(2)}px)`;
@@ -98,8 +80,6 @@ const buttonOutline: React.CSSProperties = {
   color: colors.bodyText,
 };
 
-/** Ornamen hero — sama untuk keempat lomba, hanya posisinya yang berbeda.
-    shape1..3 memang bernama ganda (.png.png) di public/images. */
 const HERO_SHAPES = [
   { src: "/images/shape1.png.png", top: 10, left: 323.9, w: 320.73, h: 320.73, blur: 8 },
   { src: "/images/shape2.png.png", top: 14, left: 900.9, w: 543.73, h: 320.73, blur: 8 },
@@ -110,7 +90,6 @@ const HERO_SHAPES = [
   { src: "/images/shape7.png", top: 200, left: 323, w: 543, h: 543, blur: 5 },
 ];
 
-/** Jarak antar titik timeline, dari desain asli. */
 const TIMELINE_STEP = 115;
 
 export default function CompetitionDesktopLayout({
@@ -122,7 +101,6 @@ export default function CompetitionDesktopLayout({
   const timelineGradient = `linear-gradient(180deg, ${d.timelineFrom} 0%, ${d.timelineTo} 100%)`;
   const descriptionLines = d.descriptionLines ?? [competition.description];
 
-  // Nilai asli: 6 item -> garis 580 / kotak 650, 7 item -> 700 / 770.
   const lineHeight = 580 + (competition.timeline.length - 6) * 120;
   const timelineHeight = lineHeight + 70;
 
@@ -331,8 +309,6 @@ export default function CompetitionDesktopLayout({
             REGISTRATION COUNTDOWN
           </h2>
 
-          {/* Masih 00 : 00 seperti desain — registrationDeadline keempat lomba
-              belum ada. Sambungkan ke deadline begitu tanggalnya final. */}
           <div
             style={{
               ...cardBase,
@@ -441,8 +417,6 @@ export default function CompetitionDesktopLayout({
             TOTAL PRIZEPOOL
           </h2>
 
-          {/* Enam kotak kosong seperti desain — nominalnya belum ada.
-              Kalau prizePool sudah terisi, isi kotaknya pakai toDigitBoxes(). */}
           <div
             style={{
               display: "flex",

@@ -57,18 +57,6 @@ export default async function CompetitionPage({
       />
 
       {/*
-        SATU ROUTE, DUA LAYOUT.
-        Keduanya ikut dikirim di HTML, lalu media query yang memilih mana yang
-        tampil: < 768px mobile, >= 768px desktop. Cara ini dipilih supaya
-        halaman tetap server component — pre-render, metadata, dan JSON-LD di
-        atas tetap jalan, dan tidak ada kedip layout yang salah saat load.
-
-        Gambar di layout yang tersembunyi diberi loading="lazy": elemen di
-        dalam display:none tidak pernah masuk viewport, jadi browser tidak
-        mengunduhnya sama sekali.
-      */}
-
-      {/*
         Desain ini kanvas tetap 393 x 3284 dengan tiap elemen diposisikan
         absolut pada koordinat Y yang sama persis dengan Figma. Karena itu
         posisinya cocok tanpa perlu tebak-tebakan margin.
@@ -99,10 +87,6 @@ export default async function CompetitionPage({
         </div>
       </div>
 
-      {/* Navbar dan footer hanya di desktop. Versi mobile punya MobileHeader
-          sendiri yang memang dibuat untuk kanvas 393px, sedangkan NavbarHifi
-          position-nya fixed selebar viewport — kalau dipakai di sini, isinya
-          tidak akan lurus dengan kanvas yang lebih sempit itu. */}
       <div className="hidden md:block">
         <NavbarHifi />
         <CompetitionDesktopLayout competition={competition} />
