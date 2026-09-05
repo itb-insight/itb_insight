@@ -128,6 +128,7 @@ export default function SARLandingPage() {
         <img
           src="/images/shape1.png"
           alt="Background Shape 1"
+          loading="lazy"
           style={{
             position: "absolute",
             top: fluid(10),
@@ -147,6 +148,7 @@ export default function SARLandingPage() {
         <img
           src="/images/shape2.png"
           alt="Background Shape 2"
+          loading="lazy"
           style={{
             position: "absolute",
             top: fluid(14),
@@ -166,6 +168,7 @@ export default function SARLandingPage() {
         <img
           src="/images/shape3.png"
           alt="Background Shape 3"
+          loading="lazy"
           style={{
             position: "absolute",
             top: fluid(2),
@@ -185,6 +188,7 @@ export default function SARLandingPage() {
         <img
           src="/images/shape4.png"
           alt="Background Shape 4"
+          loading="lazy"
           style={{
             position: "absolute",
             top: fluid(2),
@@ -204,6 +208,7 @@ export default function SARLandingPage() {
         <img
           src="/images/shape5.png"
           alt="Background Shape 5"
+          loading="lazy"
           style={{
             position: "absolute",
             top: fluid(360),
@@ -223,6 +228,7 @@ export default function SARLandingPage() {
         <img
           src="/images/shape6.png"
           alt="Background Shape 6"
+          loading="lazy"
           style={{
             position: "absolute",
             top: fluid(450),
@@ -242,6 +248,7 @@ export default function SARLandingPage() {
         <img
           src="/images/shape7.png"
           alt="Background Shape 7"
+          loading="lazy"
           style={{
             position: "absolute",
             top: fluid(200),
@@ -273,6 +280,7 @@ export default function SARLandingPage() {
           <img
             src="/images/oe.png"
             alt="OE Logo"
+            loading="lazy"
             style={{
               width: fluid(350),
               height: fluid(300),
@@ -323,6 +331,7 @@ export default function SARLandingPage() {
         <img
           src="/images/shape9.png"
           alt="Background Shape 9"
+          loading="lazy"
           style={{
             position: "absolute",
             top: "50%",
@@ -339,6 +348,7 @@ export default function SARLandingPage() {
         <img
           src="/images/neuron.png"
           alt="Background Neuron"
+          loading="lazy"
           style={{
             position: "absolute",
             top: "30%",
@@ -366,6 +376,7 @@ export default function SARLandingPage() {
           <img
             src="/images/shape8.png"
             alt="Background Shape 8"
+            loading="lazy"
             style={{
               position: "absolute",
               top: "50%",
@@ -477,6 +488,7 @@ export default function SARLandingPage() {
         <img
           src="/images/shape10.png"
           alt="Background Shape 10"
+          loading="lazy"
           style={{
             position: "absolute",
             top: "65%",
@@ -531,6 +543,7 @@ export default function SARLandingPage() {
           <img
             src="/images/shape11.png"
             alt="Background Shape 11"
+            loading="lazy"
             style={{
               position: "absolute",
               top: fluid(100),
@@ -547,6 +560,7 @@ export default function SARLandingPage() {
           <img
             src="/images/shape12.png"
             alt="Background Shape 12"
+            loading="lazy"
             style={{
               position: "absolute",
               top: fluid(100),

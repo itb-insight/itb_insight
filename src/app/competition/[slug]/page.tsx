@@ -8,6 +8,7 @@ import RegistrationFee from "@/features/competition/RegistrationFee";
 import PrizePool from "@/features/competition/PrizePool";
 import Timeline from "@/features/competition/Timeline";
 import ContactRegister from "@/features/competition/ContactRegister";
+import CompetitionDesktop from "@/features/compe-desktop/CompetitionDesktop";
 import { getCompetition, getCompetitionSlugs } from "@/features/competition/data";
 import { competitionJsonLd, competitionMetadata } from "@/features/competition/seo";
 
@@ -54,32 +55,50 @@ export default async function CompetitionPage({
       />
 
       {/*
+        SATU ROUTE, DUA LAYOUT.
+        Keduanya ikut dikirim di HTML, lalu media query yang memilih mana yang
+        tampil: < 768px mobile, >= 768px desktop. Cara ini dipilih supaya
+        halaman tetap server component — pre-render, metadata, dan JSON-LD di
+        atas tetap jalan, dan tidak ada kedip layout yang salah saat load.
+
+        Gambar di layout yang tersembunyi diberi loading="lazy": elemen di
+        dalam display:none tidak pernah masuk viewport, jadi browser tidak
+        mengunduhnya sama sekali.
+      */}
+
+      {/*
         Desain ini kanvas tetap 393 x 3284 dengan tiap elemen diposisikan
         absolut pada koordinat Y yang sama persis dengan Figma. Karena itu
         posisinya cocok tanpa perlu tebak-tebakan margin.
       */}
-      <div className="mobile-shell">
-        <div className="relative" style={{ height: CANVAS_HEIGHT }}>
-        <PageBackground slug={competition.slug} height={CANVAS_HEIGHT} />
+      <div className="md:hidden">
+        <div className="mobile-shell">
+          <div className="relative" style={{ height: CANVAS_HEIGHT }}>
+            <PageBackground slug={competition.slug} height={CANVAS_HEIGHT} />
 
-        <MobileHeader />
+            <MobileHeader />
 
-        <main>
-          <CompetitionHero competition={competition} />
-          <CountdownSection deadline={competition.registrationDeadline} />
-          <RegistrationFee fee={competition.registrationFee} />
-          <PrizePool amount={competition.prizePool} />
-          <Timeline
-            items={competition.timeline}
-            accentFrom={competition.accentFrom}
-            accentTo={competition.accentTo}
-            titleY={competition.timelineTitleY}
-            textY={competition.timelineTextY}
-            dotX={competition.timelineDotX}
-          />
-          <ContactRegister competition={competition} />
-          </main>
+            <main>
+              <CompetitionHero competition={competition} />
+              <CountdownSection deadline={competition.registrationDeadline} />
+              <RegistrationFee fee={competition.registrationFee} />
+              <PrizePool amount={competition.prizePool} />
+              <Timeline
+                items={competition.timeline}
+                accentFrom={competition.accentFrom}
+                accentTo={competition.accentTo}
+                titleY={competition.timelineTitleY}
+                textY={competition.timelineTextY}
+                dotX={competition.timelineDotX}
+              />
+              <ContactRegister competition={competition} />
+            </main>
+          </div>
         </div>
+      </div>
+
+      <div className="hidden md:block">
+        <CompetitionDesktop slug={competition.slug} />
       </div>
     </>
   );
