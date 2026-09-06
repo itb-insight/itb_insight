@@ -9,9 +9,18 @@ import styles from "./NavbarHifi.module.css"
 
 // Client-side auth affordance for the navbar: shows Log In / Sign up when signed out,
 // and Dashboard / Sign out once a Supabase session exists.
-export default function NavAuthActionsHifi() {
+export default function NavAuthActionsHifi({
+  variant = "desktop",
+  onAction,
+}: {
+  variant?: "desktop" | "mobile"
+  onAction?: () => void
+}) {
   const router = useRouter()
   const [signedIn, setSignedIn] = useState<boolean | null>(null)
+
+  const primaryClass = variant === "mobile" ? styles.mobilePrimaryBtn : styles.logInBtn
+  const secondaryClass = variant === "mobile" ? styles.mobileSecondaryBtn : styles.signUpBtn
 
   useEffect(() => {
     // Supabase not configured yet (e.g. env not filled) — stay in the signed-out layout.
@@ -32,6 +41,7 @@ export default function NavAuthActionsHifi() {
   }, [])
 
   const handleSignOut = async () => {
+    onAction?.()
     const supabase = createClient()
     await supabase.auth.signOut()
     setSignedIn(false)
@@ -43,10 +53,10 @@ export default function NavAuthActionsHifi() {
   if (signedIn) {
     return (
       <>
-        <Link href="/dashboard" className={styles.logInBtn}>
+        <Link href="/dashboard" className={primaryClass} onClick={onAction}>
           Dashboard
         </Link>
-        <button type="button" onClick={handleSignOut} className={styles.signUpBtn}>
+        <button type="button" onClick={handleSignOut} className={secondaryClass}>
           Sign out
         </button>
       </>
@@ -55,10 +65,10 @@ export default function NavAuthActionsHifi() {
 
   return (
     <>
-      <Link href="/login" className={styles.logInBtn}>
+      <Link href="/login" className={primaryClass} onClick={onAction}>
         Log In
       </Link>
-      <Link href="/register" className={styles.signUpBtn}>
+      <Link href="/register" className={secondaryClass} onClick={onAction}>
         Sign Up
       </Link>
     </>

@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import styles from "./NavbarHifi.module.css"
 import NavAuthActionsHifi from "./NavAuthActionsHifi"
+import MobileMenuHifi from "./MobileMenuHifi"
 
 interface NavbarHifiProps {
   isSolid?: boolean;
@@ -37,7 +38,7 @@ export default function NavbarHifi({ isSolid = false }: NavbarHifiProps) {
         <NavAuthActionsHifi />
       </div>
 
-      <button className={styles.mobileMenuBtn} type="button" aria-label="Menu" />
+      <MobileMenuHifi />
     </nav>
   )
 }
