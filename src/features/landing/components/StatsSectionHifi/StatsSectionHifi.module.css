@@ -20,7 +20,7 @@
   position: absolute;
   inset: 0;
   transform-origin: center center;
-  will-change: transform;
+  will-change: transform, opacity;
 }
 
 .illustration {

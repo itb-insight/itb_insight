@@ -90,8 +90,9 @@ export default function AboutSectionHifi() {
             <Image
               src="/images/about-illustration.webp"
               alt="ITB Insight Illustration"
-              width={600}
-              height={600}
+              width={2080}
+              height={2948}
+              sizes="560px"
               className={styles.illustration}
               style={{
                 opacity: illustrationOpacity,

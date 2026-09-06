@@ -54,10 +54,10 @@ export default function StatsSectionHifi() {
   // Scale: 3 → 1
   const scale = 3 - animProgress * 2
 
-  // Rotate: -22.41 → 0
   const rotate = -22.41 + animProgress * 22.41
 
-  // Text fade in setelah animasi hampir selesai
+  const illustrationOpacity = Math.min(1, animProgress / 1)
+
   const textOpacity = Math.min(1, Math.max(0, (animProgress - 0.85) / 0.15))
 
   return (
@@ -67,6 +67,7 @@ export default function StatsSectionHifi() {
           className={styles.illustrationContainer}
           style={{
             transform: `scale(${scale}) rotate(${rotate}deg)`,
+            opacity: illustrationOpacity,
           }}
         >
           <Image
