@@ -71,6 +71,13 @@ export async function updateSession(request: NextRequest) {
     clearSupabaseAuthCookies(request, supabaseResponse)
   }
 
+  // TEMP DEV-ONLY BYPASS: skip the /dashboard auth redirect under `npm run dev` so the
+  // dashboard is reachable without logging in. Never true in production builds/deploys.
+  // Remove this block once real auth is wired up for local dev.
+  if (process.env.NODE_ENV === 'development') {
+    return supabaseResponse
+  }
+
   // Protect the participant dashboard. Everything else (landing, competitions, auth) is public.
   if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
     const url = request.nextUrl.clone()
