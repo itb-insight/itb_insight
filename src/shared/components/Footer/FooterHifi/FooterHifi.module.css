@@ -122,7 +122,11 @@
   height: 28px;
 }
 
-/* Mobile — stack brand, socials, then columns vertically */
+/* 
+-------------------MOBILE-------------------
+Stack brand, socials, columns stretch to 
+fit the screen. 
+*/
 @media (max-width: 768px) {
   .footer {
     padding: 48px 24px;
@@ -143,8 +147,12 @@
   }
 
   .columns {
+    display: flex;
+    width: 100%;
     order: 3;
-    flex-direction: column;
+    justify-content: space-around;
+    flex-direction: row;
+    flex: 1;
     align-items: flex-start;
     gap: 32px;
   }

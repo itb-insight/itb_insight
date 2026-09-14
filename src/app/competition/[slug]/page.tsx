@@ -62,27 +62,32 @@ export default async function CompetitionPage({
         posisinya cocok tanpa perlu tebak-tebakan margin.
       */}
       <div className="md:hidden">
-        <div className="mobile-shell">
-          <div className="relative" style={{ height: CANVAS_HEIGHT }}>
-            <PageBackground slug={competition.slug} height={CANVAS_HEIGHT} />
+        <div
+          className="mobile-shell-wrapper"
+          style={{ "--mobile-shell-height": `${CANVAS_HEIGHT}px` } as React.CSSProperties}
+        >
+          <div className="mobile-shell">
+            <div className="relative" style={{ height: CANVAS_HEIGHT }}>
+              <PageBackground slug={competition.slug} height={CANVAS_HEIGHT} />
 
-            <MobileHeader />
+              <MobileHeader />
 
-            <main>
-              <CompetitionHero competition={competition} />
-              <CountdownSection deadline={competition.registrationDeadline} />
-              <RegistrationFee fee={competition.registrationFee} />
-              <PrizePool amount={competition.prizePool} />
-              <Timeline
-                items={competition.timeline}
-                accentFrom={competition.accentFrom}
-                accentTo={competition.accentTo}
-                titleY={competition.timelineTitleY}
-                textY={competition.timelineTextY}
-                dotX={competition.timelineDotX}
-              />
-              <ContactRegister competition={competition} />
-            </main>
+              <main>
+                <CompetitionHero competition={competition} />
+                <CountdownSection deadline={competition.registrationDeadline} />
+                <RegistrationFee fee={competition.registrationFee} />
+                <PrizePool amount={competition.prizePool} />
+                <Timeline
+                  items={competition.timeline}
+                  accentFrom={competition.accentFrom}
+                  accentTo={competition.accentTo}
+                  titleY={competition.timelineTitleY}
+                  textY={competition.timelineTextY}
+                  dotX={competition.timelineDotX}
+                />
+                <ContactRegister competition={competition} />
+              </main>
+            </div>
           </div>
         </div>
       </div>

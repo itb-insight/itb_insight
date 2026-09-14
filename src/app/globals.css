@@ -184,7 +184,23 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* Kanvas 393px persis seperti frame Figma. Warna dan font dikunci di sini,
-   bukan di html/body, agar halaman lain tidak ikut berubah. */
+   bukan di html/body, agar halaman lain tidak ikut berubah.
+
+   .mobile-shell di-scale-down utuh (transform: scale) begitu breakpoint
+   mobile (md, 768px) aktif, supaya ornamen, teks, dan ikon ikut mengecil
+   proporsional alih-alih terpotong di layar sempit. Pembagi dipakai 768,
+   BUKAN 393 (lebar asli kanvas), supaya penyusutan sudah mulai terlihat
+   sejak .md:hidden menyalakan kanvas mobile — 393 baru mulai membatasi di
+   bawah lebar window minimum Chrome desktop (~500px), jadi efeknya tidak
+   pernah kelihatan saat resize manual dari desktop.
+   .mobile-shell-wrapper membungkusnya dan mengecilkan TINGGI LAYOUT-nya ke
+   ukuran setelah scale, karena transform tidak mengubah ukuran box asli. */
+.mobile-shell-wrapper {
+  width: 100%;
+  height: calc(var(--mobile-shell-height, 0px) * min(1, 100vw / 768));
+  overflow: hidden;
+}
+
 .mobile-shell {
   width: 393px;
   margin-inline: auto;
@@ -194,6 +210,8 @@ input:focus, textarea:focus, select:focus {
   color: #ffffff;
   font-family: var(--font-primary);
   line-height: normal;
+  transform: scale(min(1, 100vw / 768));
+  transform-origin: top center;
 }
 
 /* Teks bergradient. Di Figma hampir semua teks memakai fill gradient

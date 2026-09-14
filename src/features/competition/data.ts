@@ -66,6 +66,7 @@ const DATA: Competition[] = [
       keywords: ["lomba robot", "search and rescue", "SAR robot", "ITB Insight 2026", "kompetisi mahasiswa"],
     },
   },
+  
   {
     slug: "microdrone-obstacle-race",
     title: "Microdrone Obstacle Race",

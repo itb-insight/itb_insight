@@ -1,0 +1,5 @@
+- [ ] Competition squares are too big for mobile view. I think the sizes are fixed cuz Figma copaste. I've tried (with claude) to make it dynamic, but failed :( - Fathir
+- [x] Reorganize footer for mobile view - Fathir
+- [ ] Enlarge countdown for mobile view
+- [ ] Timeline animations supposed to follow the scroll down, add "Skip" button
+- [ ] Full-screen are only at 125%, change to fit-to-screen
