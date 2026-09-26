@@ -15,7 +15,7 @@
 /* Bleeds up from the About section into the tail end of Hero (Hero = 300vh) */
 .greenBlob {
   position: absolute;
-  top: calc(300vh - 100px);
+  top: calc(300vh / var(--page-scale, 1) - 100px);
   left: clamp(0px, 0cqw, -200px);
   width: clamp(600px, 55cqw, 900px);
   max-width: none;
@@ -25,7 +25,7 @@
 /* Sits within About's visible span (About runs roughly 300vh -> 450vh) */
 .purpleBlob {
   position: absolute;
-  top: calc(300vh + 45vh);
+  top: calc((300vh + 45vh) / var(--page-scale, 1));
   left: 50%;
   transform: translateX(-50%);
   width: clamp(1400px, 150cqw, 2400px);
@@ -37,7 +37,7 @@
    normal flow — not sticky, so these are plain page-Y offsets from there. */
 .statsObject1 {
   position: absolute;
-  top: calc(300vh + 165vh + 60px);
+  top: calc((300vh + 165vh) / var(--page-scale, 1) + 60px);
   left: -5%;
   width: clamp(280px, 24cqw, 600px);
   max-width: none;
@@ -46,7 +46,7 @@
 
 .statsObject2 {
   position: absolute;
-  top: calc(300vh + 200vh + 40px);
+  top: calc((300vh + 200vh) / var(--page-scale, 1) + 40px);
   left: 40%;
   transform: translateX(-50%);
   width: clamp(400px, 34cqw, 950px);
@@ -56,7 +56,7 @@
 
 .statsObject3 {
   position: absolute;
-  top: calc(300vh + 160vh + 10px);
+  top: calc((300vh + 160vh) / var(--page-scale, 1) + 10px);
   right: 4%;
   width: clamp(320px, 32cqw, 550px);
   max-width: none;
@@ -66,7 +66,7 @@
 /* Stretches from Stats down through Timeline — placeholder placement, to be fine-tuned */
 .yellowBlob {
   position: absolute;
-  top: calc(300vh + 150vh);
+  top: calc((300vh + 150vh) / var(--page-scale, 1));
   left: 72%;
   transform: translateX(-50%);
   width: clamp(900px, 120cqw, 1600px);
@@ -79,7 +79,7 @@
    guess here drifts as zoom/viewport change) instead of a vh guess. */
 .galleryBg {
   position: absolute;
-  top: calc(300vh + 150vh + 922px);
+  top: calc((300vh + 150vh) / var(--page-scale, 1) + 922px);
   left: 53%;
   transform: translateX(-50%);
   width: clamp(1200px, 110cqw, 1849px);
@@ -90,7 +90,7 @@
 /* Timeline section — placeholder placement, to be fine-tuned */
 .timelineBg {
   position: absolute;
-  top: calc(300vh + 150vh + 2000px);
+  top: calc((300vh + 210vh) / var(--page-scale, 1) + 2000px);
   left: 50%;
   transform: translateX(-50%);
   width: clamp(500px, 62cqw, 1135px);
@@ -101,7 +101,7 @@
 /* Stretches from Timeline into Media Partners — placeholder placement, to be fine-tuned */
 .gradientBlob {
   position: absolute;
-  top: calc(300vh + 150vh + 2200px);
+  top: calc((300vh + 150vh) / var(--page-scale, 1) + 2200px);
   left: 20%;
   transform: translateX(-50%);
   width: clamp(900px, 90cqw, 1619px);
@@ -112,10 +112,80 @@
 /* Media Partners section — placeholder placement, to be fine-tuned */
 .yellowishBlob {
   position: absolute;
-  top: calc(300vh + 150vh + 2600px);
-  left: 75%;
+  top: calc((300vh + 150vh) / var(--page-scale, 1) + 2600px);
+  left: 85%;
   transform: translateX(-50%);
   width: clamp(700px, 75cqw, 1230px);
   max-width: none;
   height: auto;
+}
+
+/* Mobile — posisi khusus HP. Nilainya masih sama dengan desktop. */
+@media (max-width: 768px) {
+  .greenBlob {
+    top: calc(300vh - 100px);
+    left: clamp(0px, 0cqw, -200px);
+    width: clamp(600px, 55cqw, 900px);
+  }
+
+  .purpleBlob {
+    top: calc(300vh + 45vh);
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(1400px, 150cqw, 2400px);
+  }
+
+  .statsObject1 {
+    top: calc(300vh + 165vh + 60px);
+    left: -5%;
+    width: clamp(280px, 24cqw, 600px);
+  }
+
+  .statsObject2 {
+    top: calc(300vh + 200vh + 40px);
+    left: 40%;
+    transform: translateX(-50%);
+    width: clamp(400px, 34cqw, 950px);
+  }
+
+  .statsObject3 {
+    top: calc(300vh + 160vh + 10px);
+    right: 4%;
+    width: clamp(320px, 32cqw, 550px);
+  }
+
+  .yellowBlob {
+    top: calc(300vh + 130vh);
+    left: 72%;
+    transform: translateX(-50%);
+    width: clamp(900px, 120cqw, 1600px);
+  }
+
+  .galleryBg {
+    top: calc(300vh + 150vh + 922px);
+    left: 53%;
+    transform: translateX(-50%);
+    width: clamp(1200px, 110cqw, 1849px);
+  }
+
+  .timelineBg {
+    top: calc(300vh + 50vh + 2000px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(500px, 62cqw, 1135px);
+  }
+
+  .gradientBlob {
+    top: calc(300vh + 40vh + 2200px);
+    left: 20%;
+    transform: translateX(-50%);
+    width: clamp(900px, 90cqw, 1619px);
+  }
+
+  .yellowishBlob {
+    top: calc(300vh + 60vh + 2600px);
+    left: 85%;
+    transform: translateX(-50%);
+    width: clamp(700px, 75cqw, 1230px);
+  }
 }

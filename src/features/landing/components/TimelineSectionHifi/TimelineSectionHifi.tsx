@@ -13,7 +13,9 @@ const items = [
   { name: "Final", date: "1 Maret 2026" },
 ]
 
-const INTERVAL_MS = 1500
+const STEP_PX = 100
+const STEPS = items.length + 1
+const RUNWAY_PX = STEP_PX * STEPS
 
 // Reference design size the zigzag (circle1-5 / conn1-4) positions were built for.
 // Desktop scales this whole canvas down to fit narrower-than-1100px viewports.
@@ -24,9 +26,9 @@ export default function TimelineSectionHifi() {
   const [visibleCount, setVisibleCount] = useState(0)
   const [scale, setScale] = useState(1)
   const sectionRef = useRef<HTMLElement>(null)
+  const pinnedRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const hasStarted = useRef(false)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const circleRefs = useRef<(HTMLDivElement | null)[]>([])
   const isMobile = useIsMobile(768)
 
   useEffect(() => {
@@ -40,28 +42,49 @@ export default function TimelineSectionHifi() {
   }, [])
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasStarted.current) {
-          hasStarted.current = true
-          let count = 0
-          const show = () => {
-            count++
-            setVisibleCount(count)
-            // Lanjut sampai items.length + 1 untuk trigger a5
-            if (count <= items.length) {
-              intervalRef.current = setTimeout(show, INTERVAL_MS)
-            }
-          }
-          intervalRef.current = setTimeout(show, 500)
-        }
-      },
-      { threshold: 0.2 }
-    )
-    if (sectionRef.current) observer.observe(sectionRef.current)
+    let frame = 0
+
+    const update = () => {
+      frame = 0
+      const section = sectionRef.current
+      const pinned = pinnedRef.current
+      const wrapper = wrapperRef.current
+      if (!section || !pinned || !wrapper) return
+
+      const pinnedStyle = getComputedStyle(pinned)
+
+      if (pinnedStyle.position !== "sticky") {
+        const line = window.innerHeight * 0.6
+        const crossed = circleRefs.current.filter(
+          (el) => el && el.getBoundingClientRect().top < line
+        ).length
+        const finished =
+          crossed === items.length && wrapper.getBoundingClientRect().bottom < line
+        setVisibleCount(finished ? STEPS : crossed)
+        return
+      }
+
+      const rect = section.getBoundingClientRect()
+      const zoom = section.offsetWidth ? rect.width / section.offsetWidth : 1
+      const paddingTop = parseFloat(getComputedStyle(section).paddingTop)
+      const stickyTop = parseFloat(pinnedStyle.top)
+      const progress = stickyTop - (rect.top / zoom + paddingTop)
+      setVisibleCount(
+        progress < 0 ? 0 : Math.min(STEPS, Math.floor(progress / STEP_PX) + 1)
+      )
+    }
+
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener("scroll", schedule, { passive: true })
+    window.addEventListener("resize", schedule)
     return () => {
-      observer.disconnect()
-      if (intervalRef.current) clearTimeout(intervalRef.current)
+      window.removeEventListener("scroll", schedule)
+      window.removeEventListener("resize", schedule)
+      cancelAnimationFrame(frame)
     }
   }, [])
 
@@ -78,58 +101,65 @@ export default function TimelineSectionHifi() {
 
   return (
     <section ref={sectionRef} className={styles.timeline}>
-      <h2 className={styles.title}>TIMELINE</h2>
+      <div ref={pinnedRef} className={styles.pinned}>
+        <h2 className={styles.title}>TIMELINE</h2>
 
-      <div
-        ref={wrapperRef}
-        className={styles.wrapper}
-        style={!isMobile ? { height: CANVAS_HEIGHT * scale } : undefined}
-      >
         <div
-          className={styles.canvas}
-          style={!isMobile ? { transform: `scale(${scale})` } : undefined}
+          ref={wrapperRef}
+          className={styles.wrapper}
+          style={!isMobile ? { height: CANVAS_HEIGHT * scale } : undefined}
         >
-
-        {/* Connectors */}
-        {[1, 2, 3, 4].map((i) => (
           <div
-            key={`conn-${i}`}
-            className={`${styles.connector} ${styles[`conn${i}`]}`}
-            style={{
-              opacity: i < visibleCount ? 1 : 0,
-              transition: "opacity 0.6s ease",
-            }}
+            className={styles.canvas}
+            style={!isMobile ? { transform: `scale(${scale})` } : undefined}
           >
-            <Image
-              src={isMobile ? "/images/conn-mobile.svg" : `/images/timeline/conn-${i}-${i + 1}.svg`}
-              alt={`Connector ${i}`}
-              fill
-              className={styles.connectorImage}
-            />
-          </div>
-        ))}
 
-        {/* Circles */}
-        {items.map((item, i) => (
-          <div
-            key={i}
-            className={`${styles.circle} ${styles[`circle${i + 1}`]}`}
-            style={{
-              opacity: i < visibleCount ? 1 : 0,
-              transition: "opacity 0.6s ease",
-            }}
-          >
-            <Image
-              src={getCircleSrc(i)}
-              alt={item.name}
-              fill
-              className={styles.circleImage}
-            />
-          </div>
-        ))}
+          {/* Connectors */}
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={`conn-${i}`}
+              className={`${styles.connector} ${styles[`conn${i}`]}`}
+              style={{
+                opacity: i < visibleCount ? 1 : 0,
+                transition: "opacity 0.6s ease",
+              }}
+            >
+              <Image
+                src={isMobile ? "/images/conn-mobile.svg" : `/images/timeline/conn-${i}-${i + 1}.svg`}
+                alt={`Connector ${i}`}
+                fill
+                className={styles.connectorImage}
+              />
+            </div>
+          ))}
 
+          {/* Circles */}
+          {items.map((item, i) => (
+            <div
+              key={i}
+              ref={(el) => {
+                circleRefs.current[i] = el
+              }}
+              className={`${styles.circle} ${styles[`circle${i + 1}`]}`}
+              style={{
+                opacity: i < visibleCount ? 1 : 0,
+                transition: "opacity 0.6s ease",
+              }}
+            >
+              <Image
+                src={getCircleSrc(i)}
+                alt={item.name}
+                fill
+                className={styles.circleImage}
+              />
+            </div>
+          ))}
+
+          </div>
         </div>
       </div>
+
+      <div className={styles.runway} style={{ height: RUNWAY_PX }} aria-hidden="true" />
     </section>
   )
 }

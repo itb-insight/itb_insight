@@ -12,8 +12,9 @@ export default function AboutSectionHifi() {
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current) return
-      const scrollY = window.scrollY - sectionRef.current.offsetTop
-      const sectionHeight = sectionRef.current.offsetHeight
+      const rect = sectionRef.current.getBoundingClientRect()
+      const scrollY = -rect.top
+      const sectionHeight = rect.height
       const progress = Math.min(Math.max(scrollY / (sectionHeight * 0.3), 0), 1)
       setScrollProgress(progress)
     }
@@ -92,7 +93,7 @@ export default function AboutSectionHifi() {
               alt="ITB Insight Illustration"
               width={2080}
               height={2948}
-              sizes="560px"
+              sizes="700px"
               className={styles.illustration}
               style={{
                 opacity: illustrationOpacity,

@@ -52,7 +52,7 @@ export default function HeroSectionHifi() {
     const handleScroll = () => {
       if (!sectionRef.current) return
       const scrollY = window.scrollY
-      const sectionHeight = sectionRef.current.offsetHeight
+      const sectionHeight = sectionRef.current.getBoundingClientRect().height
       const progress = Math.min(Math.max(scrollY / (sectionHeight * 0.6), 0), 1)
       setScrollProgress(progress)
     }
@@ -104,7 +104,7 @@ export default function HeroSectionHifi() {
             alt=""
             className={styles.patternLeft}
             style={{
-              transform: `translateX(calc(-50% - ${patternSeparation}vw)) scale(${patternScale})`,
+              transform: `translateX(calc(-50% - ${patternSeparation}vw / var(--page-scale, 1))) scale(${patternScale})`,
               opacity: patternOpacity,
             }}
           />
@@ -113,7 +113,7 @@ export default function HeroSectionHifi() {
             alt=""
             className={styles.patternRight}
             style={{
-              transform: `translateX(calc(50% + ${patternSeparation}vw)) scale(${patternScale})`,
+              transform: `translateX(calc(50% + ${patternSeparation}vw / var(--page-scale, 1))) scale(${patternScale})`,
               opacity: patternOpacity,
             }}
           />

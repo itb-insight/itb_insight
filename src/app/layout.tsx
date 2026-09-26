@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Gabarito, Orbitron } from "next/font/google"
+import Script from "next/script"
 import AnalyticsRoot from "@/lib/analytics/components/AnalyticsRoot"
 import "./globals.css"
 
@@ -48,10 +49,26 @@ export const metadata: Metadata = {
   },
 }
 
+const pageScaleScript = `(function () {
+  function update() {
+    var scale = Math.min(1.25, Math.max(1, window.innerWidth / 1536));
+    document.documentElement.style.setProperty("--page-scale", String(scale));
+  }
+  update();
+  window.addEventListener("resize", update);
+})();`
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${gabarito.variable} ${orbitron.variable}`}>
+    <html
+      lang="en"
+      className={`${gabarito.variable} ${orbitron.variable}`}
+      suppressHydrationWarning
+    >
       <body>
+        <Script id="page-scale" strategy="beforeInteractive">
+          {pageScaleScript}
+        </Script>
         <div style={{ position: "relative", minHeight: "100vh" }}>
           {children}
         </div>

@@ -1,12 +1,12 @@
 .about {
-  min-height: 150vh;
+  min-height: calc(150vh / var(--page-scale, 1));
   position: relative;
 }
 
 .sticky {
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: calc(100vh / var(--page-scale, 1));
   display: flex;
   align-items: center;
   justify-content: space-between;

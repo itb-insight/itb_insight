@@ -1,13 +1,13 @@
 .hero {
-  min-height: 300vh;
+  min-height: calc(300vh / var(--page-scale, 1));
   position: relative;
 }
 
 .sticky {
   position: sticky;
-  margin-top: clamp(0px, 10vh, 80px);
+  margin-top: clamp(0px, calc(10vh / var(--page-scale, 1)), 80px);
   top: 0;
-  height: 100vh;
+  height: calc(100vh / var(--page-scale, 1));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -137,7 +137,7 @@
 
 .patternLeft {
   position: absolute;
-  width: 50vw;
+  width: calc(50vw / var(--page-scale, 1));
   max-width: 600px;
   transform-origin: right center;
   will-change: transform, opacity;
@@ -145,7 +145,7 @@
 
 .patternRight {
   position: absolute;
-  width: 50vw;
+  width: calc(50vw / var(--page-scale, 1));
   max-width: 600px;
   transform-origin: left center;
   will-change: transform, opacity;

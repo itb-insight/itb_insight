@@ -1,13 +1,18 @@
 .timeline {
   padding: 80px 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 48px;
   container-type: inline-size;
   max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.pinned {
+  position: sticky;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
 }
 
 .title {
@@ -26,7 +31,7 @@
 .wrapper {
   position: relative;
   width: 100%;
-  max-width: 1100px;
+  max-width: 880px;
   height: 700px;
 }
 
@@ -74,7 +79,15 @@
 @media (max-width: 768px) {
   .timeline {
     padding: 60px 20px;
+  }
+
+  .pinned {
+    position: static;
     gap: 32px;
+  }
+
+  .runway {
+    display: none;
   }
 
   .wrapper {
