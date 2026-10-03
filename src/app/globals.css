@@ -37,6 +37,7 @@
 
   /* Typography */
   --font-primary: 'Gabarito', sans-serif;
+  --font-mono: var(--font-roboto-mono), 'Courier New', monospace;
 
   --space-1: 4px;
   --space-2: 8px;

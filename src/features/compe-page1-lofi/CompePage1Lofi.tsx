@@ -58,7 +58,7 @@ export default function CompetitionPage() {
       margin: "0 auto",
       overflow: "hidden",
       containerType: "inline-size",
-      fontFamily: "'Roboto Mono', 'Courier New', monospace",
+      fontFamily: "var(--font-mono)",
     }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bitcount:wght@300&family=Gabarito:wght@500;700&family=Roboto+Mono:ital,wght@0,400;0,500;1,300&display=swap');
@@ -81,7 +81,7 @@ export default function CompetitionPage() {
           border: none;
           background: #D9D9D9;
           cursor: pointer;
-          font-family: 'Roboto Mono', monospace;
+          font-family: var(--font-mono);
           font-weight: 500;
           font-size: clamp(1.8rem, 3vw, 3rem);
           letter-spacing: .05em;
@@ -223,7 +223,7 @@ export default function CompetitionPage() {
                     style={{ objectFit: "contain" }}
                   />
                   <h2 style={{
-                    fontFamily: "'Roboto Mono', monospace",
+                    fontFamily: "var(--font-mono)",
                     fontWeight: 500,
                     fontSize: "clamp(1rem, 1.8vw, 1.5rem)",
                     letterSpacing: "0.05em",
@@ -233,7 +233,7 @@ export default function CompetitionPage() {
                     {comp.title}
                   </h2>
                   <p style={{
-                    fontFamily: "'Roboto Mono', monospace",
+                    fontFamily: "var(--font-mono)",
                     fontWeight: 500,
                     fontSize: "clamp(.85rem, 1.2vw, 1rem)",
                     letterSpacing: "0.05em",
@@ -281,7 +281,7 @@ export default function CompetitionPage() {
       {/* Prize box */}
       <div style={{ margin: "0 auto 54px", width: "calc(100% - 300px)", height: "400px", background: "#D9D9D9", borderRadius: 10, padding: "28px 20px", textAlign: "center", maxWidth: "1440px", justifyContent: "center", alignItems: "center", display: "flex" }}>
         <span style={{
-          fontFamily: "'Bitcount', 'Roboto Mono', monospace",
+          fontFamily: "'Bitcount', var(--font-mono)",
           fontStyle: "italic",
           fontWeight: 300,
           fontSize: "clamp(1.5rem, 3vw, 3rem)",
@@ -318,7 +318,7 @@ export default function CompetitionPage() {
             display: "flex", alignItems: "center",
           }}>
             <p style={{
-              fontFamily: "'Roboto Mono', monospace",
+              fontFamily: "var(--font-mono)",
               fontWeight: 500,
               fontSize: ".55rem",
               letterSpacing: "0.03em",

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-const ROBOTO = "'Roboto Mono', monospace";
+const ROBOTO = "var(--font-mono)";
 const ORBITRON = "'Orbitron', sans-serif";
 
 const REF_WIDTH = 1440;

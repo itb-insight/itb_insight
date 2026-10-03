@@ -88,7 +88,7 @@ export default function CompePage1() {
       display: "flow-root",
       overflow: "clip",
       position: "relative",
-      fontFamily: "'Roboto Mono', 'Courier New', monospace",
+      fontFamily: "var(--font-mono)",
       color: "#FFFFFF",
     }}>
       <style>{`

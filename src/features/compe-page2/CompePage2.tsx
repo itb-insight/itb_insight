@@ -45,7 +45,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 // ── FONT STACKS & TOKENS (Disamakan dengan Halaman Utama) ───────────────────
 const G  = "'Gabarito', sans-serif";
-const RM = "'Roboto Mono', monospace";
+const RM = "var(--font-mono)";
 
 // Headings (INSIGHT COMPETITION / TOTAL PRIZE / FAQ skala)
 const HEADING = {

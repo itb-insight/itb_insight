@@ -1,0 +1,49 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  min-height: 132dvh;
+  background: linear-gradient(to bottom, #091b3f 0%, #294d97 100%);
+  overflow: hidden;
+  isolation: isolate; /* keeps the z-index: -1 images above the gradient */
+}
+
+.body {
+    position: relative;
+    display: flex;
+    flex-direction:  column;
+    flex: 1;
+    min-height: 780px;
+}
+
+.side {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.left {
+  left: 0;
+}
+
+.right {
+  right: 0;
+}
+
+.content {
+  flex: 1;
+  color: #dee8fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Desktop only: same breakpoint as the Navbar/Footer modules */
+@media (max-width: 768px) {
+  .side {
+    display: none;
+  }
+}

@@ -72,7 +72,7 @@ export default function EventMap() {
           height: 100vh;
           background-color: #ffffff;
           overflow: hidden;
-          font-family: "Roboto Mono", monospace;
+          font-family: var(--font-mono);
         }
         .sidebar {
           width: 320px;

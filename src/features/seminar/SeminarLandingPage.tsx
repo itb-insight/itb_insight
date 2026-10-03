@@ -118,9 +118,9 @@ export default function SeminarLandingPage({ onLearnMore }: { onLearnMore: () =>
             <Navbar isSolid={true} />
             <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '4000px', height: '80px', background: 'rgba(217, 217, 217, 1)', zIndex: 10 }} />
             
-            <h1 style={{ position: 'absolute', top: '375.85px', left: '38.63px', fontFamily: 'Roboto Mono', fontWeight: 700, fontSize: '110px', lineHeight: '120%', color: '#FFF', margin: 0, zIndex: 10 }}>Tech Seminar</h1>
-            <p style={{ position: 'absolute', top: '524.22px', left: '41.88px', fontFamily: 'Roboto Mono', fontWeight: 600, fontSize: '64px', lineHeight: '80px', color: '#FFF', margin: 0, zIndex: 10 }}>Talks worth</p>
-            <p style={{ position: 'absolute', top: '598.46px', left: '42.13px', fontFamily: 'Roboto Mono', fontWeight: 600, fontSize: '64px', lineHeight: '80px', color: '#FFF', margin: 0, zIndex: 10 }}>showing up for</p>
+            <h1 style={{ position: 'absolute', top: '375.85px', left: '38.63px', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '110px', lineHeight: '120%', color: '#FFF', margin: 0, zIndex: 10 }}>Tech Seminar</h1>
+            <p style={{ position: 'absolute', top: '524.22px', left: '41.88px', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: '64px', lineHeight: '80px', color: '#FFF', margin: 0, zIndex: 10 }}>Talks worth</p>
+            <p style={{ position: 'absolute', top: '598.46px', left: '42.13px', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: '64px', lineHeight: '80px', color: '#FFF', margin: 0, zIndex: 10 }}>showing up for</p>
 
             {HERO_BG_HEXES.map((hex, i) => (
               <div key={`hero-bg-${i}`} style={{ position: 'absolute', width: hex.w, height: hex.h, top: hex.y, left: hex.x, background: GRADIENT_BG, backdropFilter: hex.blur, clipPath: POINTY_HEX_CLIP, zIndex: 0 }} />
@@ -149,17 +149,17 @@ export default function SeminarLandingPage({ onLearnMore }: { onLearnMore: () =>
                 return (
                   <div key={card.id} style={{ position: 'relative', width: '100%', height: '435.99px', marginBottom: isLast ? '0' : '140px' }}>
                     <div style={{ position: 'absolute', top: '0', left: '189.25px', width: '361.5px', height: '435.99px', borderRadius: '19px', background: 'rgba(217, 217, 217, 1)' }} />
-                    <h2 style={{ position: 'absolute', top: '-23.69px', left: '605.22px', width: '462px', height: '80px', fontFamily: 'Roboto Mono', fontWeight: 600, fontSize: '64px', lineHeight: '80px', color: '#FFF', margin: 0 }}>
+                    <h2 style={{ position: 'absolute', top: '-23.69px', left: '605.22px', width: '462px', height: '80px', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: '64px', lineHeight: '80px', color: '#FFF', margin: 0 }}>
                       {card.title}
                     </h2>
-                    <p style={{ position: 'absolute', top: '82px', left: '605.22px', width: '623.03px', fontFamily: 'Roboto Mono', fontWeight: 600, fontSize: '40px', lineHeight: '48px', color: '#FFF', margin: 0 }}>
+                    <p style={{ position: 'absolute', top: '82px', left: '605.22px', width: '623.03px', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: '40px', lineHeight: '48px', color: '#FFF', margin: 0 }}>
                       {card.description}
                     </p>
                     <div
                       onClick={onLearnMore}
                       style={{ position: 'absolute', top: '331.36px', left: '627.71px', width: '328.86px', height: '64.66px', borderRadius: '18px', background: 'rgba(217, 217, 217, 1)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                     >
-                      <span style={{ fontFamily: 'Roboto Mono', fontWeight: 500, fontSize: '16px', lineHeight: '20px', color: '#000000' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: '16px', lineHeight: '20px', color: '#000000' }}>
                         Learn more
                       </span>
                     </div>
@@ -179,7 +179,7 @@ export default function SeminarLandingPage({ onLearnMore }: { onLearnMore: () =>
             <div style={{ position: 'absolute', top: '455.61px', left: '618.8px', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(217, 217, 217, 1)', zIndex: 10 }} />
             <img src="/kincir angin.png" alt="Decorative windmill illustration" style={{ position: 'absolute', top: '452.7px', left: '742.04px', width: '100.09px', height: '102.9px', zIndex: 10, objectFit: 'contain' }} />
             <div style={{ position: 'absolute', top: '608.82px', left: '484.64px', width: '477.47px', height: '97.35px', borderRadius: '40px', background: 'rgba(217, 217, 217, 1)', zIndex: 10 }} />
-            <p style={{ position: 'absolute', top: '729.32px', left: '455.15px', width: '573.78px', height: '96px', fontFamily: 'Roboto Mono', fontWeight: 500, fontSize: '16px', lineHeight: '24px', textAlign: 'center', color: '#FFF', margin: 0, zIndex: 10 }}>
+            <p style={{ position: 'absolute', top: '729.32px', left: '455.15px', width: '573.78px', height: '96px', fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: '16px', lineHeight: '24px', textAlign: 'center', color: '#FFF', margin: 0, zIndex: 10 }}>
               {DETAIL_CONTENT.endDescription}
             </p>
           </div>

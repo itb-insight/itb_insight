@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Gabarito, Orbitron } from "next/font/google"
+import { Gabarito, Orbitron, Roboto_Mono } from "next/font/google"
 import Script from "next/script"
 import AnalyticsRoot from "@/lib/analytics/components/AnalyticsRoot"
 import "./globals.css"
@@ -18,6 +18,14 @@ const orbitron = Orbitron({
   weight: ["700"],
   display: "swap",
   variable: "--font-orbitron",
+})
+
+/* Font mono utama (Navbar, Footer, hero, seminar, dll). Di-self-host oleh
+   next/font, dipakai lewat --font-mono di globals.css. */
+const robotoMono = Roboto_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-roboto-mono",
 })
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
@@ -62,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${gabarito.variable} ${orbitron.variable}`}
+      className={`${gabarito.variable} ${orbitron.variable} ${robotoMono.variable}`}
       suppressHydrationWarning
     >
       <body>
