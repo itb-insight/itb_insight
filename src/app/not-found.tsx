@@ -6,6 +6,7 @@
  ===========================================================*/
 
 import ErrorLayout from "@/shared/components/ErrorLayout/ErrorLayout"
+import ReturnHomeButton from "@/shared/components/ErrorLayout/ReturnHomeButton"
 
 export default function NotFound() {
   return (
@@ -29,6 +30,7 @@ export default function NotFound() {
         </div>
         <h1 style={{ fontFamily: 'var(--font-mono)', fontSize: '10rem' }}> 404 </h1>
         <p style={{ fontSize: '2rem' }}>Not Found</p>
+        <ReturnHomeButton />
       </div>
     </ErrorLayout>
   )

@@ -1,0 +1,28 @@
+/* Same look as the navbar "Sign Up" button (NavbarHifi.module.css .signUpBtn) */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 152 / 67;
+  height: 67px;
+  margin-top: 1.5rem;
+  background-image: url('/images/buttons/signupbutton-default.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  font-family: 'Gabarito', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #1B3B7D;
+}
+
+.btn:hover {
+  background-image: url('/images/buttons/signupbutton-hover.svg');
+}
+
+.btn:active {
+  background-image: url('/images/buttons/signupbutton-click.svg');
+  color: #E9E9E9;
+}
