@@ -41,9 +41,25 @@
   justify-content: center;
 }
 
-/* Desktop only: same breakpoint as the Navbar/Footer modules */
+/* Desktop and Mobile view */
 @media (max-width: 768px) {
-  .side {
-    display: none;
+  .body {
+    min-height: 1000px;
+    padding-bottom: 200px;
   }
+
+  .side {
+    width: 100%;
+    height: auto;
+    left: 0;
+    right: 0;
+  }
+  .left { top: -120px;   bottom: auto; } /* Top image */
+  .right {top: auto;   bottom: -420px; } /* Bottom image */
+
+
+/* 
+  .root > footer {
+    background: transparent;  
+  }*/
 }
