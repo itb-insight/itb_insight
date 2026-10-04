@@ -1,29 +1,27 @@
-import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
-import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi";
-import DashboardSidebar from "@/features/dashboard/DashboardSidebar";
+import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi"
+import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi"
+import DashboardSidebar from "@/shared/components/DashboardSidebar/DashboardSidebar"
+import styles from "./layout.module.css"
 
-const BG_IMAGE = "/images/dashboard-bg.png"
+const SIDEBAR_TOP = 124
+const MOBILE_NAVBAR_HEIGHT = 95
 
-// Shared side-bar, and custom header element on mobile
+// Every dashboard route shares the hifi navbar, the floating sidebar and the footer.
+// Pages only render their own content: `.content` reserves the sidebar column on
+// desktop (exposed as --sidebar-offset so a page can pull its decor back under the
+// sidebar). On mobile the sidebar collapses into an in-flow dropdown whose height is
+// exposed as --mobile-nav-space for the same reason.
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative flex min-h-screen flex-col">
+    <div className={styles.shell}>
       <NavbarHifi />
-
-      <div className="max-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-6 pb-16 pt-24 md:flex-row">
-        <DashboardSidebar />
-              <main className="flex-1">{children}</main>
-      </div>
-
-
-
-      <img 
-        src={BG_IMAGE}
-        alt= ""
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover"
+      <DashboardSidebar
+        topOffset={SIDEBAR_TOP}
+        mobileMode="dropdown"
+        mobileTopOffset={MOBILE_NAVBAR_HEIGHT}
+        translucent
       />
-
+      <div className={styles.content}>{children}</div>
       <FooterHifi />
     </div>
   )

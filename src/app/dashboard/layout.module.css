@@ -1,0 +1,28 @@
+.shell {
+  --sidebar-width: 263px;
+  --sidebar-offset: var(--sidebar-width);
+  --mobile-nav-space: 0px;
+
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(0deg, #091B3F, #091B3F),
+    linear-gradient(180deg, #091B3F 0%, #294D97 100%);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-left: var(--sidebar-offset);
+}
+
+@media (max-width: 899px) {
+  .shell {
+    --sidebar-offset: 0px;
+    --mobile-nav-space: 95px;
+  }
+}
