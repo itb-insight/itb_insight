@@ -25,13 +25,13 @@ const menuItems: MenuItemConfig[] = [
     icon: '/images/icons/trophy.png',
     iconAlt: 'Daftar Lomba',
     label: 'Daftar Lomba',
-    href: '/compe-list',
+    href: '/dashboard/compe-list',
   },
   {
     icon: '/images/icons/calendar.png',
     iconAlt: 'Daftar Event',
     label: 'Daftar Event',
-    href: '/event-list',
+    href: '/dashboard/event-list',
   },
   {
     icon: '/images/icons/user.png',

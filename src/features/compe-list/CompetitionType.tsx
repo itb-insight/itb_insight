@@ -1,16 +1,9 @@
 'use client';
 
-import { type CSSProperties } from 'react';
 import Image from 'next/image';
 import styles from './CompetitionType.module.css';
 import CompetitionCard from './CompetitionCard';
-import Navbar from '@/shared/components/Navbar/NavbarHifi/NavbarHifi';
-import Footer from '@/shared/components/Footer/FooterHifi/FooterHifi';
-import DashboardSidebar from '@/shared/components/DashboardSidebar/DashboardSidebar';
 
-const NAVBAR_HEIGHT = 92;
-const SIDEBAR_TOP = 124;
-const MOBILE_NAVBAR_HEIGHT = 95;
 const DECOR_1 = '/deco/decor1.png';
 const DECOR_2 = '/deco/decor2.png';
 const DECOR_3 = '/deco/decor3.png';
@@ -83,12 +76,7 @@ const competitions: Competition[] = [
 
 export default function CompetitionType() {
   return (
-    <div
-      className={styles.container}
-      style={
-        { '--mobile-navbar-height': `${MOBILE_NAVBAR_HEIGHT}px` } as CSSProperties
-      }
-    >
+    <div className={styles.container}>
       <div className={styles.decorLayer} aria-hidden="true">
         <div className={`${styles.decor1} ${styles.desktopOnly}`}>
           <Image src={DECOR_1} alt="" fill sizes="50vw" style={{ objectFit: 'contain' }} />
@@ -110,14 +98,6 @@ export default function CompetitionType() {
         </div>
       </div>
 
-      <Navbar isSolid={false} />
-      <DashboardSidebar
-        topOffset={SIDEBAR_TOP}
-        mobileMode="dropdown"
-        mobileTopOffset={MOBILE_NAVBAR_HEIGHT}
-        translucent
-      />
-
       <div className={styles.body}>
         <main className={styles.main}>
           <div className={styles.content}>
@@ -134,8 +114,6 @@ export default function CompetitionType() {
           </div>
         </main>
       </div>
-
-      <Footer />
     </div>
   );
 }

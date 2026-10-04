@@ -3,7 +3,8 @@
 .page {
   min-height: 100vh;
   background-color: var(--color-bg-primary);
-  padding: var(--space-20) var(--space-6) var(--space-16);
+  /* Clears the fixed hifi navbar (92px); sidebar column is reserved by dashboard/layout */
+  padding: calc(92px + var(--space-8)) var(--space-6) var(--space-16);
 }
 
 .container {
@@ -308,10 +309,14 @@
   color: var(--color-text-secondary);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 899px) {
+  /* Mobile sidebar dropdown is in flow above the page and already clears the navbar */
   .page {
-    padding-top: var(--space-16);
+    padding-top: var(--space-6);
   }
+}
+
+@media (max-width: 640px) {
   .form {
     padding: var(--space-6);
   }
