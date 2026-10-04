@@ -23,7 +23,7 @@ export default function PageMaintenance() {
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                fontSize: '32rem',
+                fontSize: 'clamp(14rem, 50vw, 32rem)',
                 fontFamily: 'Roboto Mono',
                 color: 'rgba(255, 255, 255, 0.1)',
                 zIndex: -1,

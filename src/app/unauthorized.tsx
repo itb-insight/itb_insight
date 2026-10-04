@@ -20,7 +20,7 @@ export default function NotFound() {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            fontSize: '48rem',
+            fontSize: 'clamp(22rem, 50vw, 48rem)',
             fontFamily: 'Roboto Mono',
             color: 'rgba(255, 255, 255, 0.1)',
             zIndex: -1,
