@@ -8,6 +8,8 @@ import { updateSession } from '@/lib/supabase/middleware'
   2. Refreshes the Supabase auth session on every matched request and guard `/dashboard`.
 */
 
+const BYPASS_COOKIE = 'maintenance-bypass'
+
 export async function proxy(request: NextRequest) {
   const maintenance = handleMaintenance(request);
   if (maintenance) return maintenance;
