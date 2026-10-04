@@ -1,6 +1,12 @@
-// Competition catalog. In the `web` repo this was Sanity-backed with a hardcoded fallback;
-// for the MVP we dropped Sanity and keep only the hardcoded list. These three must stay in
-// sync with the seed rows in supabase/migrations/0002_mvp_schema.sql (matched by slug).
+// Registration catalog. SLUGS MUST MATCH the public pages in
+// src/features/competition/data.ts (the 4 real competitions) and are matched to DB rows by slug
+// (rows are auto-created by findOrCreateCompetitionRow in src/lib/registrations.ts).
+//
+// TODO(competition team): the values marked TODO are PLACEHOLDERS and must be confirmed by the
+// Competition division before registration opens:
+//   - registrationType / teamMin / teamMax
+//   - registrationFee (IDR). `null` = not finalized -> payment creation is BLOCKED (FEE_NOT_CONFIGURED)
+//   - regOpen / regClose (left undefined = always open)
 
 export type CompetitionSummary = {
   _id: string
@@ -16,43 +22,60 @@ export type CompetitionSummary = {
   regClose?: string
   requirements?: string[]
   guideBookUrl?: string
+  registrationFee?: number | null
 }
 
 const competitions: CompetitionSummary[] = [
   {
-    _id: 'robotics-challenge',
-    title: 'Robotika Challenge',
-    slug: { current: 'robotika-challenge' },
-    description: 'Kompetisi robotika untuk tim mahasiswa yang ingin membangun prototipe cerdas dan kompetitif.',
+    _id: 'safety-and-rescue-robot-competition',
+    title: 'Safety and Rescue Robot Competition',
+    slug: { current: 'safety-and-rescue-robot-competition' },
+    description: 'Lomba robot Search and Rescue (SAR) nasional bagi mahasiswa/i di Indonesia.',
     category: 'robotika',
-    registrationType: 'team',
-    teamUidPrefix: 'RBT',
-    teamMin: 2,
-    teamMax: 4,
-    requirements: ['Kartu mahasiswa', 'Proposal tim', 'Berkas identitas anggota'],
+    registrationType: 'team', // TODO confirm
+    teamUidPrefix: 'SAR',
+    teamMin: 2, // TODO confirm
+    teamMax: 4, // TODO confirm
+    requirements: ['Kartu mahasiswa', 'Sketsa robot', 'Bukti follow Instagram', 'Bukti share broadcast'],
+    registrationFee: null, // TODO confirm (IDR)
   },
   {
-    _id: 'hackathon-innovation-sprint',
-    title: 'Hackathon Innovation Sprint',
-    slug: { current: 'hackathon-innovation-sprint' },
-    description: 'Sprint pengembangan produk digital dengan fokus pada solusi nyata untuk kampus dan industri.',
-    category: 'hackathon',
-    registrationType: 'team',
-    teamUidPrefix: 'HCK',
-    teamMin: 3,
-    teamMax: 5,
-    requirements: ['Laptop pribadi', 'GitHub account', 'Pitch deck awal'],
+    _id: 'microdrone-obstacle-race',
+    title: 'Microdrone Obstacle Race',
+    slug: { current: 'microdrone-obstacle-race' },
+    description: 'Balap drone obstacle nasional bagi mahasiswa/i di Indonesia.',
+    category: 'drone',
+    registrationType: 'team', // TODO confirm
+    teamUidPrefix: 'MOR',
+    teamMin: 1, // TODO confirm
+    teamMax: 3, // TODO confirm
+    requirements: ['Kartu mahasiswa', 'Bukti follow Instagram', 'Bukti share broadcast'],
+    registrationFee: null, // TODO confirm (IDR)
   },
   {
-    _id: 'paper-competition',
-    title: 'Paper Competition',
-    slug: { current: 'paper-competition' },
-    description: 'Kompetisi penulisan karya ilmiah individual untuk ide teknologi dan inovasi digital.',
-    category: 'paper',
-    registrationType: 'individual',
+    _id: 'business-plan-competition',
+    title: 'Business Plan Competition',
+    slug: { current: 'business-plan-competition' },
+    description: 'Kompetisi inovasi bisnis nasional bertema Artificial Intelligence.',
+    category: 'bisnis',
+    registrationType: 'team', // TODO confirm
+    teamUidPrefix: 'BPC',
+    teamMin: 2, // TODO confirm
+    teamMax: 3, // TODO confirm
+    requirements: ['Kartu identitas (mahasiswa/siswa)', 'Bukti follow Instagram', 'Bukti share broadcast'],
+    registrationFee: null, // TODO confirm (IDR)
+  },
+  {
+    _id: 'olimpiade-engineering',
+    title: 'Olimpiade Engineering',
+    slug: { current: 'olimpiade-engineering' },
+    description: 'Olimpiade engineering nasional untuk siswa SMA/SMK/MA sederajat.',
+    category: 'olimpiade',
+    registrationType: 'individual', // TODO confirm
     teamMin: 1,
     teamMax: 1,
-    requirements: ['Kartu mahasiswa', 'Abstrak karya', 'Berkas identitas peserta'],
+    requirements: ['Kartu pelajar', 'Bukti follow Instagram', 'Bukti share broadcast'],
+    registrationFee: null, // TODO confirm (IDR)
   },
 ]
 
@@ -62,6 +85,7 @@ function normalizeCompetition(competition: CompetitionSummary): CompetitionSumma
   return {
     ...competition,
     registrationType,
+    registrationFee: competition.registrationFee ?? null,
     teamMin: registrationType === 'individual' ? 1 : competition.teamMin || 1,
     teamMax: registrationType === 'individual' ? 1 : competition.teamMax || 5,
   }
@@ -74,4 +98,11 @@ export async function getCompetitions() {
 export async function getCompetitionBySlug(slug: string) {
   const match = competitions.find((competition) => competition.slug.current === slug) || null
   return match ? normalizeCompetition(match) : null
+}
+
+// Server-side fee in IDR, or null when the competition's fee has not been finalized (CMP-14).
+export async function getCompetitionFee(slug: string): Promise<number | null> {
+  const competition = await getCompetitionBySlug(slug)
+  const fee = competition?.registrationFee
+  return typeof fee === 'number' && Number.isInteger(fee) && fee > 0 ? fee : null
 }
