@@ -34,7 +34,7 @@ export default function IndividualRegisterButton({ slug }: { slug: string }) {
       }
 
       setMessage("Registrasi individu berhasil dikirim.")
-      router.refresh()
+      router.push("/dashboard")
     } catch {
       setIsError(true)
       setMessage("Terjadi kesalahan. Silakan coba lagi.")
