@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, type CSSProperties } from 'react';
+import { type CSSProperties } from 'react';
 import Image from 'next/image';
 import styles from './CompetitionType.module.css';
 import CompetitionCard from './CompetitionCard';
@@ -9,7 +9,8 @@ import Footer from '@/shared/components/Footer/FooterHifi/FooterHifi';
 import DashboardSidebar from '@/shared/components/DashboardSidebar/DashboardSidebar';
 
 const NAVBAR_HEIGHT = 92;
-const MOBILE_NAVBAR_HEIGHT = 60;
+const SIDEBAR_TOP = 124;
+const MOBILE_NAVBAR_HEIGHT = 95;
 const DECOR_1 = '/deco/decor1.png';
 const DECOR_2 = '/deco/decor2.png';
 const DECOR_3 = '/deco/decor3.png';
@@ -81,17 +82,6 @@ const competitions: Competition[] = [
 ];
 
 export default function CompetitionType() {
-  const [isSolid, setIsSolid] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsSolid(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <div
       className={styles.container}
@@ -120,9 +110,9 @@ export default function CompetitionType() {
         </div>
       </div>
 
-      <Navbar isSolid={isSolid} />
+      <Navbar isSolid={false} />
       <DashboardSidebar
-        topOffset={NAVBAR_HEIGHT}
+        topOffset={SIDEBAR_TOP}
         mobileMode="dropdown"
         mobileTopOffset={MOBILE_NAVBAR_HEIGHT}
         translucent
@@ -143,9 +133,9 @@ export default function CompetitionType() {
             </div>
           </div>
         </main>
-
-        <Footer />
       </div>
+
+      <Footer />
     </div>
   );
 }

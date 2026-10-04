@@ -46,6 +46,8 @@ interface DashboardSidebarProps {
   mobileMode?: 'drawer' | 'dropdown';
   mobileTopOffset?: number;
   translucent?: boolean;
+  /** Ikut aliran halaman (mis. sebagai kolom grid) alih-alih dipaku ke layar */
+  inline?: boolean;
 }
 
 export default function DashboardSidebar({
@@ -53,6 +55,7 @@ export default function DashboardSidebar({
   mobileMode = 'drawer',
   mobileTopOffset = 60,
   translucent = false,
+  inline = false,
 }: DashboardSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -155,7 +158,9 @@ export default function DashboardSidebar({
       <aside
         className={`${styles.sidebar} ${isOpen && !isDropdown ? styles.sidebarOpen : ''} ${
           isDropdown ? styles.sidebarDesktopOnly : ''
-        } ${translucent ? styles.sidebarTranslucent : ''}`}
+        } ${translucent ? styles.sidebarTranslucent : ''} ${
+          inline ? styles.sidebarInline : ''
+        }`}
         style={cssVars}
       >
         <div className={styles.header}>
