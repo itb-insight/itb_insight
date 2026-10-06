@@ -1,0 +1,42 @@
+.layer {
+  position: absolute;
+  inset: calc(-1 * var(--mobile-nav-space, 0px)) 0 0 calc(-1 * var(--sidebar-offset, 0px));
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  height: auto;
+}
+
+.deco1 {
+  left: 58.03%;
+  top: -106px;
+  width: 50.46%;
+}
+
+.deco2 {
+  left: -9.99%;
+  top: 518px;
+  width: 40.51%;
+}
+
+.greenBlob {
+  left: 10%;
+  top: -114px;
+  width: 57.29%;
+}
+
+.yellowBlob {
+  left: -23.25%;
+  top: 526px;
+  width: 71.7%;
+}
+
+.redBlob {
+  left: 44.18%;
+  top: 801px;
+  width: 64.35%;
+}
