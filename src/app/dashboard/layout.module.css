@@ -4,6 +4,7 @@
   --mobile-nav-space: 0px;
 
   position: relative;
+  isolation: isolate;
   width: 100%;
   min-height: 100vh;
   display: flex;

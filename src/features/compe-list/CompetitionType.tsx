@@ -1,13 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import styles from './CompetitionType.module.css';
 import CompetitionCard from './CompetitionCard';
-
-const DECOR_1 = '/deco/decor1.png';
-const DECOR_2 = '/deco/decor2.png';
-const DECOR_3 = '/deco/decor3.png';
-const DECOR_4 = '/deco/decor4.png';
 
 interface Competition {
   id: string;
@@ -31,7 +25,7 @@ const competitions: Competition[] = [
     title: 'Safety and Rescue Robot Competition',
     description: 'Penjelasan singkat lomba Lorem ipsum dolor sit amet yadayada',
     registrationDeadline: 'XX Bulan 2026',
-    iconPath: '/images/icon-sar.png',
+    iconPath: '/assets/icon-sar.png',
     iconAlt: 'Safety and Rescue',
     buttonText: 'Registrasi',
     gradientBackground: OPEN_CARD_BG,
@@ -42,7 +36,7 @@ const competitions: Competition[] = [
     title: 'Microdrone Obstacle Race',
     description: 'Penjelasan singkat lomba Lorem ipsum dolor sit amet yadayada',
     registrationDeadline: 'XX Bulan 2026',
-    iconPath: '/images/mor.png',
+    iconPath: '/assets/icon-mo.png',
     iconAlt: 'Microdrone',
     buttonText: 'Registrasi',
     gradientBackground: OPEN_CARD_BG,
@@ -53,7 +47,7 @@ const competitions: Competition[] = [
     title: 'Business Plan Competition',
     description: 'Penjelasan singkat lomba Lorem ipsum dolor sit amet yadayada',
     registrationDeadline: 'XX Bulan 2026',
-    iconPath: '/images/icon-bpc.png',
+    iconPath: '/assets/icon-bpc.png',
     iconAlt: 'Business Plan',
     buttonText: 'Registrasi',
     gradientBackground: OPEN_CARD_BG,
@@ -64,7 +58,7 @@ const competitions: Competition[] = [
     title: 'Olimpiade Engineering',
     description: 'Penjelasan singkat lomba Lorem ipsum dolor sit amet yadayada',
     registrationDeadline: 'CLOSED',
-    iconPath: '/images/icon-olimpiade.png',
+    iconPath: '/assets/icon-oe.png',
     iconAlt: 'Olimpiade',
     buttonText: 'CLOSED',
     buttonDisabled: true,
@@ -77,27 +71,6 @@ const competitions: Competition[] = [
 export default function CompetitionType() {
   return (
     <div className={styles.container}>
-      <div className={styles.decorLayer} aria-hidden="true">
-        <div className={`${styles.decor1} ${styles.desktopOnly}`}>
-          <Image src={DECOR_1} alt="" fill sizes="50vw" style={{ objectFit: 'contain' }} />
-        </div>
-        <div className={`${styles.decor2} ${styles.desktopOnly}`}>
-          <Image src={DECOR_2} alt="" fill sizes="100vw" style={{ objectFit: 'contain' }} />
-        </div>
-        <div className={`${styles.mDecor3} ${styles.mobileOnly}`}>
-          <Image src={DECOR_3} alt="" fill sizes="260px" style={{ objectFit: 'contain' }} />
-        </div>
-        <div className={`${styles.mDecor1a} ${styles.mobileOnly}`}>
-          <Image src={DECOR_1} alt="" fill sizes="640px" style={{ objectFit: 'contain' }} />
-        </div>
-        <div className={`${styles.mDecor4} ${styles.mobileOnly}`}>
-          <Image src={DECOR_4} alt="" fill sizes="360px" style={{ objectFit: 'contain' }} />
-        </div>
-        <div className={`${styles.mDecor1b} ${styles.mobileOnly}`}>
-          <Image src={DECOR_1} alt="" fill sizes="640px" style={{ objectFit: 'contain' }} />
-        </div>
-      </div>
-
       <div className={styles.body}>
         <main className={styles.main}>
           <div className={styles.content}>
