@@ -139,8 +139,10 @@
   
 }
 .input::placeholder { color: rgba(222, 232, 251, 0.45); }
-.input:focus { border-color: #ACC7FF; background: rgba(222, 232, 251, 0.12); }
-.input[readonly] { opacity: 0.6; cursor: not-allowed; }
+.input:read-only { cursor: default; }
+.input:not(:read-only):focus { border-color: #ACC7FF; background: rgba(222, 232, 251, 0.12); }
+
+.inputLocked { opacity: 0.6; cursor: not-allowed; }   /* email, in both modes */
 
 .footer {
   display: flex;
@@ -153,11 +155,9 @@
   box-sizing: border-box;
   width: 160px;
   height: 56px;
-  border: 4px solid transparent;
-  border-radius: 8px;
-  background:
-    linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%) padding-box,
-    linear-gradient(180deg, #DEE8FB 0%, #ACC7FF 100%) border-box;
+  border-radius: var(--Spacing-System-radius-sm, 12px);
+  border: 4px solid var(--stroke-gradient-1, #DEE8FB);
+  background: var(--gradient-1, linear-gradient(0deg, #DEE8FB 0%, var(--Primary-200, #ACC7FF) 100%));
   font-family: 'Gabarito', sans-serif;
   font-size: 16px;
   font-weight: 500;
@@ -168,6 +168,33 @@
 .button:hover:not(:disabled) { filter: brightness(0.96); transform: scale(1.02); }
 .button:active:not(:disabled) { transform: scale(0.98); }
 .button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.buttonWithIcon {                 /* Edit profile = .button + icon on the left */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.buttonCancel {                   /* Batal */
+  box-sizing: border-box;
+  width: 160px;
+  height: 56px;
+
+  border-radius: var(--Spacing-System-radius-sm, 12px);
+  border: 4px solid var(--stroke-gradient-1, #DEE8FB);
+
+  background: transparent;
+  color: #DEE8FB;
+  font-family: 'Gabarito', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.buttonCancel:hover:not(:disabled) { filter: brightness(0.96); transform: scale(1.02); }
+.buttonCancel:active:not(:disabled) { transform: scale(0.98); }
+.buttonCancel:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .messageOk    { margin: 0; font-family: 'Gabarito', sans-serif; color: #9be7b0; }
 .messageError { margin: 0; font-family: 'Gabarito', sans-serif; color: #ffb4b4; }
@@ -219,6 +246,17 @@
   text-align: center;
 }
 
+.qrFallback {                     /* same box as .qrImage so the card height doesn't change */
+  width: 304px;
+  height: 304px;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
 .qrImage {
   width: 304px;
   height: 304px;
@@ -229,17 +267,24 @@
 }
 
 
-@media (max-width: 899px) {       /* breakpoint used by the layout and EventType */
-  .main { min-height: auto; padding-top: 24px; }
-  .content { gap: 24px; padding: 0 20px; }
+/* Profile "mobile mode": stack the cards and use the compact form layout */
+@media (max-width: 1216px) {
+  .content { gap: 24px; padding: 0 20px 0 48px; }   /* sidebar is fixed at left 26px + 263px wide = 289px */
   .pageTitle { font-size: clamp(28px, 9cqw, 48px); }
   .card { border-radius: 24px; }
   .inner { padding: 28px 20px; gap: 28px; }
   .row { grid-template-columns: 1fr; gap: 8px; }
   .footer { flex-direction: column-reverse; align-items: stretch; }
   .button { width: 100%; }
+  .buttonCancel { width: 100%; }
   .grid { grid-template-columns: 1fr; gap: 24px; margin-top: 0; }
   .qrTitle { position: static; margin-bottom: 12px; }
   .qrCard { border-radius: 24px; padding: 24px 20px; min-height: 0; }
 }
 
+/* Layout breakpoint (sidebar collapses to a top dropdown): the navbar and sidebar offsets change here.
+   Kept after the 1216px block so it overrides the sidebar-clearing left padding. */
+@media (max-width: 899px) {
+  .main { min-height: auto; padding-top: 24px; }
+  .content { padding: 0 20px; }
+}
