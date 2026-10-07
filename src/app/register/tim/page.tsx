@@ -1,14 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Navbar from "@/shared/components/Navbar/Navbar";
 
-export default function RegistrationPage() {
-  const [isTeam, setIsTeam] = useState(false);
-
+export default function RegisterTimPage() {
   return (
     <div style={{
-      /* Background Utama Diperbaiki: Gelap di atas (#091B3F) ke terang di bawah (#294D97) */
       background: "linear-gradient(180deg, #091B3F 0%, #294D97 100%)",
       minHeight: "100svh",
       width: "100%",
@@ -102,8 +99,8 @@ export default function RegistrationPage() {
 
         .bg-wave-2 {
           position: absolute;
-          top: 500px; 
-          left: -5vw; 
+          top: 510px; 
+          left: -18vw; 
           width: 400px; 
           height: 632px;
           z-index: 5; 
@@ -115,7 +112,7 @@ export default function RegistrationPage() {
         .bg-wave-3 {
           position: absolute;
           top: 350px; 
-          right: -20vw; 
+          right: -25vw; 
           width: 301px; 
           height: 301px;
           z-index: 5; 
@@ -124,11 +121,10 @@ export default function RegistrationPage() {
           filter: blur(5px); 
         }
 
-        /* Wave 4 (Baru - Bawah Kanan di Form) */
         .bg-wave-4 {
           position: absolute;
-          top: 880px; 
-          right: -25vw; 
+          top: 870px; 
+          right: -32vw; 
           width: 200px; 
           height: 200px;
           z-index: 5; 
@@ -212,11 +208,6 @@ export default function RegistrationPage() {
         .search-icon {
           position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; z-index: 3;
         }
-
-        .toggle-btn {
-          padding: 8px 16px; border-radius: 20px; border: 1px solid #DEE8FB; background: transparent; color: #DEE8FB; cursor: pointer; transition: 0.3s; font-family: 'Gabarito', sans-serif;
-        }
-        .toggle-btn.active { background: #DEE8FB; color: #091B3F; font-weight: 600; }
       `}</style>
 
       {/* ── BACKGROUND BLUSHES (DESKTOP) ── */}
@@ -266,77 +257,19 @@ export default function RegistrationPage() {
         </h1>
       </div>
 
-      {/* ── TOGGLE INDIVIDU / TIM ── */}
-      <div style={{ display: "flex", justifyContent: "center", gap: "12px", marginBottom: "40px", position: "relative", zIndex: 10 }}>
-        <button className={`toggle-btn ${!isTeam ? "active" : ""}`} onClick={() => setIsTeam(false)}>Registrasi Individu</button>
-        <button className={`toggle-btn ${isTeam ? "active" : ""}`} onClick={() => setIsTeam(true)}>Registrasi Tim</button>
-      </div>
-
-      {/* ── AREA FORM ── */}
+      {/* ── AREA FORM TIM ── */}
       <div style={{ padding: "0 20px" }}>
-        
-        {isTeam ? (
-          /* =========================================
-             FORM REGISTRASI TIM
-             ========================================= */
-          <div style={{ display: "flex", flexDirection: "column", gap: "24px", maxWidth: "868px", margin: "0 auto" }}>
-            
-            <div className="form-container" style={{ padding: "32px" }}>
-              <div className="input-group" style={{ marginBottom: 0 }}>
-                <label className="input-label">Nama Tim<span>*</span></label>
-                <div className="custom-input-wrapper">
-                   <input type="text" className="custom-input" placeholder="Placeholder" />
-                </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "24px", maxWidth: "868px", margin: "0 auto" }}>
+          
+          <div className="form-container" style={{ padding: "32px" }}>
+            <div className="input-group" style={{ marginBottom: 0 }}>
+              <label className="input-label">Nama Tim<span>*</span></label>
+              <div className="custom-input-wrapper">
+                 <input type="text" className="custom-input" placeholder="Placeholder" />
               </div>
             </div>
-
-            <div className="form-container">
-              <div className="input-group">
-                <label className="input-label">Nama Lengkap<span>*</span></label>
-                <div className="custom-input-wrapper">
-                   <input type="text" className="custom-input" placeholder="Placeholder" />
-                </div>
-              </div>
-
-              <div className="input-group">
-                <label className="input-label">Email<span>*</span></label>
-                <div className="custom-input-wrapper">
-                   <input type="email" className="custom-input" placeholder="Placeholder" />
-                </div>
-              </div>
-
-              <div className="input-group">
-                <label className="input-label">Nomor Telepon<span>*</span></label>
-                <div className="custom-input-wrapper">
-                   <input type="tel" className="custom-input" placeholder="Placeholder" />
-                </div>
-              </div>
-
-              <div className="input-group">
-                <label className="input-label">Student ID<span>*</span></label>
-                <div className="custom-input-wrapper">
-                   <input type="text" className="custom-input" placeholder="Placeholder" />
-                </div>
-              </div>
-
-              {/* Ditambahkan kembali baris Instansi untuk Tim */}
-              <div className="input-group" style={{ marginBottom: 0 }}>
-                <label className="input-label">Instansi (Universitas)<span>*</span></label>
-                <div className="search-wrapper">
-                  <input type="text" className="custom-input" placeholder="Search..." />
-                  <svg className="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.33333 12.6667C10.2789 12.6667 12.6667 10.2789 12.6667 7.33333C12.6667 4.38781 10.2789 2 7.33333 2C4.38781 2 2 4.38781 2 7.33333C2 10.2789 4.38781 12.6667 7.33333 12.6667Z" stroke="#ACC7FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M14 14L11.1 11.1" stroke="#ACC7FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-
           </div>
-        ) : (
-          /* =========================================
-             FORM REGISTRASI INDIVIDU
-             ========================================= */
+
           <div className="form-container">
             <div className="input-group">
               <label className="input-label">Nama Lengkap<span>*</span></label>
@@ -377,8 +310,8 @@ export default function RegistrationPage() {
               </div>
             </div>
           </div>
-        )}
 
+        </div>
       </div>
     </div>
   );
