@@ -1,0 +1,245 @@
+.container {
+  --navbar-height: 92px;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: calc(var(--navbar-height) + 64px);
+  padding-bottom: 48px;
+}
+
+.content {
+  container-type: inline-size;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  padding: 0 32px 0 32px;
+}
+
+.pageTitle {                      /* identical to EventType */
+  color: transparent;
+
+  background: var(--gradient-1, linear-gradient(0deg, #DEE8FB 0%, var(--Primary-200, #ACC7FF) 100%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* H2 */
+  font-family: Gabarito;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 56px; /* 116.667% */
+}
+
+/* Wrapper that holds both cards */
+.grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 381.914px);
+  gap: 32px;
+  align-items: start;                      /* each column keeps its own height */
+  margin-top: 46px;                        /* room for the "Personal QR" title above the QR card (34px + 12px) */
+}
+
+
+/* ---- the large gradient rounded square ---- */
+.card {
+  display: flex;
+  width: 100%;
+  padding: 32px;
+  flex-direction: column;
+  align-items: flex-begin;
+  gap: 29px;
+
+  border-radius: 30px;
+  border: 4px solid var(--stroke-gradient-2, #517EDA);
+  background: var(--50-gradient-3, linear-gradient(0deg, rgba(172, 199, 255, 0.50) 0%, rgba(27, 59, 125, 0.50) 100%));
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 4px;
+  border-radius: inherit;
+  background: var(--border-gradient);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.inner {
+  box-sizing: border-box;
+  padding: 48px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+.label {                          /* Label1 */
+  flex: 1 0 0;
+  color: var(--blue-50, #DEE8FB);
+  font-family: 'Gabarito', sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;              /* 125% */
+}
+
+.required {                       /* the "*" after a required label */
+  color: var(--red-400, #FF6767);
+  font-family: 'Gabarito', sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.input {
+  border-radius: var(--Spacing-System-radius-sm, 12px);
+  border: 2px solid var(--stroke-gradient-2, #517EDA);
+  background: var(--20-grey-50, rgba(255, 255, 255, 0.20));
+  display: flex;
+  padding: 12px;
+  align-items: center;
+  gap: 12px;
+  align-self: stretch;
+  
+}
+.input::placeholder { color: rgba(222, 232, 251, 0.45); }
+.input:focus { border-color: #ACC7FF; background: rgba(222, 232, 251, 0.12); }
+.input[readonly] { opacity: 0.6; cursor: not-allowed; }
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
+}
+
+.button {                         /* same pill as EventCard .button, fixed px */
+  box-sizing: border-box;
+  width: 160px;
+  height: 56px;
+  border: 4px solid transparent;
+  border-radius: 8px;
+  background:
+    linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%) padding-box,
+    linear-gradient(180deg, #DEE8FB 0%, #ACC7FF 100%) border-box;
+  font-family: 'Gabarito', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #000;
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.button:hover:not(:disabled) { filter: brightness(0.96); transform: scale(1.02); }
+.button:active:not(:disabled) { transform: scale(0.98); }
+.button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.messageOk    { margin: 0; font-family: 'Gabarito', sans-serif; color: #9be7b0; }
+.messageError { margin: 0; font-family: 'Gabarito', sans-serif; color: #ffb4b4; }
+
+.qrColumn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.qrTitle {                        /* SH2 */
+  position: absolute;             /* sits above the card so the card top stays level with the form */
+  bottom: 100%;
+  left: 0;
+  width: 164px;
+  margin: 0 0 12px;
+  color: #FFF;
+  font-family: 'Gabarito', sans-serif;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 34px;              /* 121.429% */
+}
+
+.qrCard {
+  box-sizing: border-box;
+  min-height: 0;              /* Figma height; grows if the form card is taller */
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  border-radius: 30px;
+  border: 5px solid var(--stroke-gradient-2, #517EDA);
+  background: var(--50-gradient-2, linear-gradient(0deg, rgba(172, 199, 255, 0.50) 0%, rgba(81, 126, 218, 0.50) 99.04%));
+  box-shadow: 0px 4px 20.5px 0px rgba(0, 0, 0, 0.25);
+}
+
+.qrHint {                         /* SH2 */
+  margin: 0;
+  color: #FFF;
+  font-family: 'Gabarito', sans-serif;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 34px;              /* 121.429% */
+  text-align: center;
+}
+
+.qrImage {
+  width: 304px;
+  height: 304px;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  background: lightgray;
+}
+
+
+@media (max-width: 899px) {       /* breakpoint used by the layout and EventType */
+  .main { min-height: auto; padding-top: 24px; }
+  .content { gap: 24px; padding: 0 20px; }
+  .pageTitle { font-size: clamp(28px, 9cqw, 48px); }
+  .card { border-radius: 24px; }
+  .inner { padding: 28px 20px; gap: 28px; }
+  .row { grid-template-columns: 1fr; gap: 8px; }
+  .footer { flex-direction: column-reverse; align-items: stretch; }
+  .button { width: 100%; }
+  .grid { grid-template-columns: 1fr; gap: 24px; margin-top: 0; }
+  .qrTitle { position: static; margin-bottom: 12px; }
+  .qrCard { border-radius: 24px; padding: 24px 20px; min-height: 0; }
+}
+
