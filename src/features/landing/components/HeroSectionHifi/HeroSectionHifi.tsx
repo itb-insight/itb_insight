@@ -168,7 +168,7 @@ export default function HeroSectionHifi() {
           <p className={styles.description}>
             Are you ready for the biggest technological event in ITB?
           </p>
-          <Link href="/register" className={styles.registerBtn}>
+          <Link href="/signup" className={styles.registerBtn}>
             Register Now
           </Link>
         </div>

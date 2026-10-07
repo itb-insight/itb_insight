@@ -113,7 +113,7 @@ export default function LoginHifi() {
 
             <p className={styles.signupText}>
               Don&apos;t have an account?{" "}
-              <Link href="/register" className={styles.signupLink}>
+              <Link href="/signup" className={styles.signupLink}>
                 Sign up
               </Link>
             </p>

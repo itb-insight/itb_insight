@@ -679,7 +679,7 @@ export default function SARLandingPage() {
           }}
         >
           <button style={buttonOutline}>Contact Us</button>
-          <button style={buttonFilled}>Register Now</button>
+          <a href="/signup" style={buttonFilled}>Register Now</a>
         </div>
       </div>
     </main>

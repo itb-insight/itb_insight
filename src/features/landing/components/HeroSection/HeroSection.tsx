@@ -74,7 +74,7 @@ export default function HeroSection() {
         builders show what they&apos;ve made. Save your seat before the doors open.
       </p>
 
-      <Link href="/register" className={styles.registerBtn}>
+      <Link href="/signup" className={styles.registerBtn}>
         REGISTER
       </Link>
     </section>

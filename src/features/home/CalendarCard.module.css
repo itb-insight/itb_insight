@@ -1,0 +1,150 @@
+.card {
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 34px;
+}
+
+.month {
+  margin: 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 34px;
+  color: #ffffff;
+}
+
+.nav {
+  display: flex;
+  gap: 8px;
+}
+
+.navButton {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  color: #1b3b7d;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background:
+    linear-gradient(0deg, #acc7ff 0%, #517eda 99%) padding-box,
+    linear-gradient(0deg, #517eda 1%, #acc7ff 100%) border-box;
+  transition: opacity 0.2s ease;
+}
+
+.navButton:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.navButton:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.grid {
+  margin-top: 38px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 21.71px;
+  grid-auto-rows: 37.66px;
+}
+
+.weekday,
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weekday,
+.day {
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 14.9px;
+  line-height: 22.35px;
+  color: #ffffff;
+}
+
+.today {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29.61px;
+  height: 30px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background:
+    linear-gradient(0deg, #517eda 0%, #294d97 100%) padding-box,
+    linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%) border-box;
+}
+
+.week {
+  margin-top: 38px;
+}
+
+.weekTitle {
+  margin: 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: #ffffff;
+}
+
+.agendaRow {
+  margin-top: 14px;
+  height: 71px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+  border-radius: 8px;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+}
+
+.agendaIcon {
+  flex-shrink: 0;
+  color: #1b3b7d;
+}
+
+.agendaText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.agendaTitle,
+.agendaMeta {
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.agendaTitle {
+  font-size: 20px;
+  color: #003f6b;
+}
+
+.agendaMeta {
+  font-size: 16px;
+  color: #0088e8;
+}
+
+.agendaEmpty {
+  margin: 14px 0 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: rgba(255, 255, 255, 0.6);
+}
