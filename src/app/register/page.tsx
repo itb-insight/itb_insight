@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Navbar from "@/shared/components/Navbar/Navbar";
+import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
 
 export default function RegistrationPage() {
   const [isTeam, setIsTeam] = useState(false);
@@ -235,7 +235,7 @@ export default function RegistrationPage() {
 
       {/* ── NAVBAR ── */}
       <div style={{ position: "relative", zIndex: 50 }}>
-        <Navbar isSolid={false} />
+        <NavbarHifi isSolid={false} />
       </div>
 
       {/* ── HEADER REGISTRASI ── */}

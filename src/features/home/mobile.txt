@@ -1,0 +1,1884 @@
+UI/UX Website ITB INSIGHT (Copy) - node 3298:4587 - depth 6
+
+Dashboard Mobile  [FRAME]  3298:4587
+  size 402 x 1726
+  offset in frame  left 0px  top 0px   (0% / 0%)
+  fill #091B3F
+  fill linear-gradient(180deg, #091B3F 0%, #294D97 100%)
+
+  Vector 84  [VECTOR]  3298:4588
+    size 256.6 x 254.54
+    offset in frame  left 129.67px  top 80.46px   (32.26% / 4.66%)
+    render bounds 402 x 537.8  -> export padding  left 129.67  top 80.46  right 15.73  bottom 202.8
+    opacity: 0.43
+    fill linear-gradient(180deg, #FFE133 0%, #C08CFF 100%)
+    filter: blur(202.8px)
+
+  Vector 85  [VECTOR]  3298:4589
+    size 355.03 x 279.28
+    offset in frame  left -33.09px  top 1164px   (-8.23% / 67.44%)
+    render bounds 402 x 679.28  -> export padding  left -33.09  top 200  right 80.06  bottom 200
+    opacity: 0.4
+    fill linear-gradient(212.9deg, #4AB136 40.4%, #8A38F5 53.8%, #FF7373 68.3%)
+    filter: blur(200px)
+
+  p  [GROUP]  3298:4590
+    size 686.72 x 830.61
+    offset in frame  left -167.13px  top 326.08px   (-41.57% / 18.89%)
+    render bounds 402 x 847.19  -> export padding  left -167.13  top 2.83  right -117.59  bottom 13.75
+    opacity: 0.2
+    filter: blur(0px)
+
+    Ellipse 36  [VECTOR]  3298:4591
+      size 144.99 x 144.99
+      offset in frame  left 373.92px  top 359.01px   (93.02% / 20.8%)
+      render bounds 23.73 x 136.29  -> export padding  left -4.35  top -4.35  right -116.91  bottom -4.35
+      fill linear-gradient(0deg, #ACC7FF 0%, #517EDA 99%)
+      stroke #D9D9D9  weight 1px  align INSIDE
+
+    Ellipse 37  [VECTOR]  3298:4592
+      size 144.99 x 144.99
+      offset in frame  left 341.52px  top 848.83px   (84.95% / 49.18%)
+      render bounds 56.14 x 136.29  -> export padding  left -4.35  top -4.35  right -84.5  bottom -4.35
+      fill linear-gradient(0deg, #ACC7FF 0%, #517EDA 99%)
+      stroke #D9D9D9  weight 1px  align INSIDE
+
+    Ellipse 38  [VECTOR]  3298:4593
+      size 144.99 x 144.99
+      offset in frame  left 331.43px  top 1011.69px   (82.45% / 58.61%)
+      render bounds 66.22 x 136.29  -> export padding  left -4.35  top -4.35  right -74.42  bottom -4.35
+      fill linear-gradient(0deg, #ACC7FF 0%, #517EDA 99%)
+      stroke #D9D9D9  weight 1px  align INSIDE
+
+    Ellipse 40  [VECTOR]  3298:4594
+      size 673.16 x 673.16
+      offset in frame  left -156.73px  top 326.08px   (-38.99% / 18.89%)
+      render bounds 402 x 642.62  -> export padding  left -156.73  top -15.27  right -114.43  bottom -15.27
+      fill linear-gradient(0deg, #ACC7FF 0%, #517EDA 99%)
+
+    Ellipse 41  [VECTOR]  3298:4595
+      size 342.89 x 651.31
+      offset in frame  left -2px  top 494.24px   (-0.5% / 28.63%)
+      render bounds 312.35 x 642.62  -> export padding  left -15.27  top -4.35  right -15.27  bottom -4.35
+      fill linear-gradient(0deg, #ACC7FF 0%, #517EDA 99%)
+
+    Ellipse 33  [VECTOR]  3298:4596
+      size 321.04 x 321.04
+      offset in frame  left 197.04px  top 348.03px   (49.01% / 20.16%)
+      render bounds 189.69 x 312.35  -> export padding  left -15.27  top -4.35  right -116.08  bottom -4.35
+      fill linear-gradient(0deg, #ACC7FF 0%, #517EDA 99%)
+
+  Welcome User!  [TEXT]  3298:4597
+    size 134 x 24
+    offset in frame  left 26.84px  top 99.05px   (6.68% / 5.74%)
+    render bounds 132.11 x 14.38  -> export padding  left -0.4  top -4.82  right -1.49  bottom -4.8
+    fill linear-gradient(180deg, #DEE8FB 0%, #ACC7FF 100%)
+    text "Welcome User!"
+    font Gabarito 400  20px / 24px  align LEFT
+
+  Frame 48096464  [FRAME]  3298:4598
+    size 359.13 x 1183.05
+    offset in frame  left 19px  top 148px   (4.73% / 8.57%)
+    auto-layout VERTICAL  gap 16  padding 0 0 0 0
+
+    Frame 48096423  [FRAME]  3298:4599
+      size 353 x 497
+      offset in frame  left 25.13px  top 148px   (6.25% / 8.57%)
+      render bounds 353 x 541.35  -> export padding  left 0  top 0  right 0  bottom 44.35
+      fill linear-gradient(0deg, rgba(172, 199, 255, 0.5) 0%, rgba(27, 59, 125, 0.5) 100%)
+      stroke linear-gradient(0deg, #517EDA 1%, #ACC7FF 100%)  weight 4px  align INSIDE
+      border-radius: 16px
+      auto-layout VERTICAL  gap 32  padding 16 16 16 16
+
+      Group 48096280  [GROUP]  3298:4600
+        size 312.37 x 521.35
+        offset in frame  left 45.45px  top 168px   (11.31% / 9.73%)
+        border-radius: 0px
+
+        Union  [BOOLEAN_OPERATION]  3298:4601
+          size 312 x 416
+          offset in frame  left 45.82px  top 199px   (11.4% / 11.53%)
+          fill linear-gradient(360deg, #DEE8FB 0%, #ACC7FF 100%)
+          stroke linear-gradient(180deg, #DEE8FB 0%, #ACC7FF 100%)  weight 2px  align INSIDE
+
+          Rectangle 42583  [RECTANGLE]  3298:4602
+            size 82 x 33
+            offset in frame  left 46.35px  top 199px   (11.53% / 11.53%)
+            fill linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)
+            border-radius: 8px 8px 0px 0px
+
+          Rectangle 42569  [RECTANGLE]  3298:4603
+            size 312 x 385
+            offset in frame  left 45.82px  top 230px   (11.4% / 13.33%)
+            fill linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)
+            border-radius: 0px 8px 8px 8px
+
+        Button  [INSTANCE]  3298:4604
+          size 82 x 28
+          offset in frame  left 133.47px  top 199px   (33.2% / 11.53%)
+          fill linear-gradient(0deg, #ACC7FF 0%, #517EDA 99%)
+          stroke linear-gradient(0deg, #517EDA 1%, #ACC7FF 100%)  weight 2px  align INSIDE
+          border-radius: 8px
+          auto-layout HORIZONTAL  gap 0  padding 6 8 6 8
+
+          trophy  [INSTANCE]  I3298:4604;620:351
+            size 16 x 16
+            offset in frame  left 143.97px  top 205px   (35.81% / 11.88%)
+
+            Vector  [VECTOR]  I3298:4604;620:351;620:3781
+              size 7.05 x 8.84
+              offset in frame  left 148.47px  top 207.67px   (36.93% / 12.03%)
+              render bounds 8.55 x 10.34  -> export padding  left 0.75  top 0.75  right 0.75  bottom 0.75
+              fill #1B3B7D
+              stroke #1B3B7D  weight 1.5px  align CENTER
+
+            Vector  [VECTOR]  I3298:4604;620:351;620:3782
+              size 3.15 x 5.24
+              offset in frame  left 154.82px  top 207px   (38.51% / 11.99%)
+              render bounds 4.65 x 6.74  -> export padding  left 0.75  top 0.75  right 0.75  bottom 0.75
+              fill #1B3B7D
+              stroke #1B3B7D  weight 1.5px  align CENTER
+
+            Vector  [VECTOR]  I3298:4604;620:351;620:3783
+              size 3.19 x 5.24
+              offset in frame  left 145.97px  top 207px   (36.31% / 11.99%)
+              render bounds 4.69 x 6.74  -> export padding  left 0.75  top 0.75  right 0.75  bottom 0.75
+              fill #1B3B7D
+              stroke #1B3B7D  weight 1.5px  align CENTER
+
+            Vector  [VECTOR]  I3298:4604;620:351;620:3784
+              size 4.7 x 1.83
+              offset in frame  left 149.64px  top 216.5px   (37.22% / 12.54%)
+              render bounds 6.2 x 3.33  -> export padding  left 0.75  top 0.75  right 0.75  bottom 0.75
+              fill #1B3B7D
+              stroke #1B3B7D  weight 1.5px  align CENTER
+
+          Text  [FRAME]  I3298:4604;620:352
+            size 45 x 14
+            offset in frame  left 159.97px  top 206px   (39.79% / 11.94%)
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4604;620:353
+              size 45 x 14
+              offset in frame  left 159.97px  top 206px   (39.79% / 11.94%)
+              render bounds 42.98 x 8.45  -> export padding  left -1.29  top -2.72  right -0.73  bottom -2.83
+              fill #1B3B7D
+              text "Lomba 2"
+              font Gabarito 400  12px / 14px  align CENTER
+
+        Button  [INSTANCE]  3298:4605
+          size 28 x 29
+          offset in frame  left 220.47px  top 198px   (54.84% / 11.47%)
+          fill linear-gradient(0deg, #ACC7FF 0%, #517EDA 99%)
+          stroke linear-gradient(0deg, #517EDA 1%, #ACC7FF 100%)  weight 2px  align INSIDE
+          border-radius: 8px
+          auto-layout HORIZONTAL  gap 0  padding 4 4 4 4
+
+          plus  [INSTANCE]  I3298:4605;620:364
+            size 16 x 16
+            offset in frame  left 226.47px  top 204.5px   (56.34% / 11.85%)
+
+            Vector  [VECTOR]  I3298:4605;620:364;620:3131
+              size 8 x 8
+              offset in frame  left 230.47px  top 208.5px   (57.33% / 12.08%)
+              render bounds 9.5 x 9.5  -> export padding  left 0.75  top 0.75  right 0.75  bottom 0.75
+              stroke #1B3B7D  weight 1.5px  align CENTER
+
+        Lomba 1  [TEXT]  3298:4606
+          size 46 x 14
+          offset in frame  left 75.47px  top 207px   (18.77% / 11.99%)
+          render bounds 40.63 x 8.34  -> export padding  left -1.02  top -2.83  right -4.35  bottom -2.83
+          fill #091B3F
+          fill linear-gradient(180deg, #091B3F 0%, #294D97 100%)
+          text "Lomba 1"
+          font Gabarito 400  12px / 14px  align LEFT
+
+        trophy  [INSTANCE]  3298:4607
+          size 16 x 16
+          offset in frame  left 55.35px  top 206px   (13.77% / 11.94%)
+
+          Vector  [VECTOR]  I3298:4607;620:3781
+            size 7.05 x 8.84
+            offset in frame  left 59.84px  top 208.67px   (14.89% / 12.09%)
+            render bounds 7.95 x 9.74  -> export padding  left 0.45  top 0.45  right 0.45  bottom 0.45
+            stroke #1B3B7D  weight 0.9px  align CENTER
+
+          Vector  [VECTOR]  I3298:4607;620:3782
+            size 3.15 x 5.24
+            offset in frame  left 66.19px  top 208px   (16.47% / 12.05%)
+            render bounds 4.06 x 6.14  -> export padding  left 0.45  top 0.45  right 0.45  bottom 0.45
+            stroke #1B3B7D  weight 0.9px  align CENTER
+
+          Vector  [VECTOR]  I3298:4607;620:3783
+            size 3.19 x 5.24
+            offset in frame  left 57.35px  top 208px   (14.27% / 12.05%)
+            render bounds 4.09 x 6.14  -> export padding  left 0.45  top 0.45  right 0.45  bottom 0.45
+            stroke #1B3B7D  weight 0.9px  align CENTER
+
+          Vector  [VECTOR]  I3298:4607;620:3784
+            size 4.7 x 1.83
+            offset in frame  left 61.02px  top 217.5px   (15.18% / 12.6%)
+            render bounds 5.6 x 2.73  -> export padding  left 0.45  top 0.45  right 0.45  bottom 0.45
+            stroke #1B3B7D  weight 0.9px  align CENTER
+
+        Frame 48096461  [FRAME]  3298:4608
+          size 275 x 455.35
+          offset in frame  left 68.86px  top 234px   (17.13% / 13.56%)
+          auto-layout VERTICAL  gap 16  padding 0 0 0 0
+
+          Frame 48096459  [FRAME]  3298:4609
+            size 275 x 64
+            offset in frame  left 68.86px  top 234px   (17.13% / 13.56%)
+            auto-layout VERTICAL  gap 4  padding 0 0 0 0
+
+            Group 48096281  [GROUP]  3298:4610
+              size 100.64 x 24
+              offset in frame  left 68.86px  top 234px   (17.13% / 13.56%)
+              border-radius: 0px
+
+            Frame 48096458  [FRAME]  3298:4613
+              size 275 x 36
+              offset in frame  left 68.86px  top 262px   (17.13% / 15.18%)
+              auto-layout VERTICAL  gap 0  padding 0 0 0 0
+
+          Frame 48096460  [FRAME]  3298:4616
+            size 275 x 108.91
+            offset in frame  left 68.86px  top 314px   (17.13% / 18.19%)
+            auto-layout VERTICAL  gap 8  padding 0 0 0 0
+
+            Frame 48096282  [FRAME]  3298:4617
+              size 275 x 30.46
+              offset in frame  left 68.86px  top 314px   (17.13% / 18.19%)
+              fill #091B3F
+              fill linear-gradient(180deg, #091B3F 0%, #294D97 100%)
+              stroke linear-gradient(0deg, #517EDA 1%, #ACC7FF 100%)  weight 1px  align INSIDE
+              border-radius: 4px
+              auto-layout HORIZONTAL  gap 3.27  padding 5.23 6.54 5.23 6.54
+
+            Frame 48096283  [FRAME]  3298:4625
+              size 275 x 30.46
+              offset in frame  left 68.86px  top 352.46px   (17.13% / 20.42%)
+              fill #CCDDFF
+              stroke linear-gradient(0deg, #517EDA 1%, #ACC7FF 100%)  weight 1px  align INSIDE
+              border-radius: 4px
+              auto-layout HORIZONTAL  gap 3.27  padding 5.23 6.54 5.23 6.54
+
+            Group 48096290  [GROUP]  3298:4630
+              size 274.42 x 32
+              offset in frame  left 68.86px  top 390.91px   (17.13% / 22.65%)
+              border-radius: 0px
+
+          Frame 48096462  [FRAME]  3298:4635
+            size 275 x 250.44
+            offset in frame  left 68.86px  top 438.91px   (17.13% / 25.43%)
+            auto-layout VERTICAL  gap 12  padding 0 0 0 0
+
+            Frame 48096457  [FRAME]  3298:4636
+              size 275 x 158.44
+              offset in frame  left 68.86px  top 438.91px   (17.13% / 25.43%)
+              auto-layout VERTICAL  gap 8  padding 0 0 0 0
+
+            Frame 48096455  [FRAME]  3298:4645
+              size 275 x 80
+              offset in frame  left 68.86px  top 609.35px   (17.13% / 35.3%)
+              auto-layout VERTICAL  gap 4  padding 0 0 0 0
+
+        My Activity  [TEXT]  3298:4646
+          size 80 x 20
+          offset in frame  left 45.45px  top 168px   (11.31% / 9.73%)
+          render bounds 78.67 x 14.3  -> export padding  left -0.58  top -3.74  right -0.75  bottom -1.96
+          fill #FFFFFF
+          text "My Activity"
+          font Gabarito 400  16px / 20px  align LEFT
+
+        Edit Data  [GROUP]  3298:4647
+          size 62 x 18
+          offset in frame  left 278.35px  top 237px   (69.24% / 13.73%)
+
+          Edit Data  [TEXT]  3298:4648
+            size 48 x 18
+            offset in frame  left 278.35px  top 237px   (69.24% / 13.73%)
+            render bounds 45.88 x 8.62  -> export padding  left -1.02  top -4.55  right -1.1  bottom -4.83
+            fill #003F6B
+            text "Edit Data"
+            font Gabarito 400  12px / 18px  align LEFT
+
+          edit-pencil  [INSTANCE]  3298:4649
+            size 12 x 12
+            offset in frame  left 328.35px  top 240px   (81.68% / 13.9%)
+
+            Vector  [VECTOR]  I3298:4649;620:5804
+              size 9.9 x 9.9
+              offset in frame  left 329.2px  top 241.38px   (81.89% / 13.98%)
+              render bounds 9.64 x 9.64  -> export padding  left -0.58  top 0.32  right 0.32  bottom -0.58
+              stroke #003F6B  weight 1px  align CENTER
+              border-radius: 0px
+
+    Frame 48096451  [FRAME]  3298:4650
+      size 353 x 158
+      offset in frame  left 25.13px  top 661px   (6.25% / 38.3%)
+      fill linear-gradient(0deg, rgba(172, 199, 255, 0.5) 0%, rgba(27, 59, 125, 0.5) 100%)
+      stroke linear-gradient(0deg, #517EDA 1%, #ACC7FF 100%)  weight 3.67px  align INSIDE
+      border-radius: 16px
+      auto-layout VERTICAL  gap 9.18  padding 26.64 69.81 22.96 70.72
+
+      Frame 48096437  [FRAME]  3298:4651
+        size 173.6 x 109.72
+        offset in frame  left 115.29px  top 686.98px   (28.68% / 39.8%)
+        auto-layout VERTICAL  gap 25.72  padding 0 0 0 0
+
+        Countdown  [TEXT]  3298:4652
+          size 173.6 x 32
+          offset in frame  left 115.29px  top 686.98px   (28.68% / 39.8%)
+          render bounds 128.87 x 18  -> export padding  left -21.98  top -6.25  right -22.75  bottom -7.74
+          fill #FFFFFF
+          text "Countdown"
+          font Gabarito 400  25.72px / 31.23px  align CENTER
+
+        00:00:00  [TEXT]  3298:4653
+          size 173.6 x 52
+          offset in frame  left 115.29px  top 744.7px   (28.68% / 43.15%)
+          render bounds 170.54 x 31.08  -> export padding  left -1.41  top -10.45  right -1.65  bottom -10.47
+          fill linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)
+          text "00:00:00"
+          font Gabarito 700  44.09px / 51.44px  align LEFT
+
+    Frame 48096451  [FRAME]  3298:4654
+      size 353 x 496.05
+      offset in frame  left 25.13px  top 835px   (6.25% / 48.38%)
+      fill linear-gradient(0deg, rgba(172, 199, 255, 0.5) 0%, rgba(27, 59, 125, 0.5) 100%)
+      stroke linear-gradient(0deg, #517EDA 1%, #ACC7FF 100%)  weight 3.48px  align INSIDE
+      border-radius: 16px
+      auto-layout HORIZONTAL  gap 8.69  padding 20.86 17.38 20.86 17.38
+
+      Frame 48096443  [FRAME]  3298:4655
+        size 311.28 x 447.37
+        offset in frame  left 45.99px  top 859.34px   (11.44% / 49.79%)
+        auto-layout VERTICAL  gap 33.03  padding 0 0 0 0
+
+        Frame 48096442  [FRAME]  3298:4656
+          size 311.28 x 30
+          offset in frame  left 45.99px  top 859.34px   (11.44% / 49.79%)
+          auto-layout HORIZONTAL  gap 99.96  padding 0 0 0 0
+
+          September  [TEXT]  3298:4657
+            size 118 x 30
+            offset in frame  left 45.99px  top 859.34px   (11.44% / 49.79%)
+            render bounds 115.7 x 21.42  -> export padding  left -0.8  top -6.21  right -1.49  bottom -2.38
+            fill #FFFFFF
+            text "September"
+            font Gabarito 400  24.34px / 29.55px  align LEFT
+
+          Frame 48096446  [FRAME]  3298:4658
+            size 62.58 x 27.82
+            offset in frame  left 294.69px  top 860.43px   (73.31% / 49.85%)
+            auto-layout HORIZONTAL  gap 6.95  padding 0 0 0 0
+
+            Button  [INSTANCE]  3298:4659
+              size 27.82 x 27.82
+              offset in frame  left 294.69px  top 860.43px   (73.31% / 49.85%)
+              fill linear-gradient(0deg, #ACC7FF 0%, #517EDA 99%)
+              stroke linear-gradient(0deg, #517EDA 1%, #ACC7FF 100%)  weight 1.74px  align INSIDE
+              border-radius: 6.95px
+              auto-layout HORIZONTAL  gap 0  padding 3.48 3.48 3.48 3.48
+
+            Button  [INSTANCE]  3298:4660
+              size 27.82 x 27.82
+              offset in frame  left 329.46px  top 860.43px   (81.95% / 49.85%)
+              fill linear-gradient(0deg, #ACC7FF 0%, #517EDA 99%)
+              stroke linear-gradient(0deg, #517EDA 1%, #ACC7FF 100%)  weight 1.74px  align INSIDE
+              border-radius: 6.95px
+              auto-layout HORIZONTAL  gap 0  padding 3.48 3.48 3.48 3.48
+
+        Group 48096258  [GROUP]  3298:4661
+          size 311.28 x 182.54
+          offset in frame  left 45.99px  top 922.37px   (11.44% / 53.44%)
+          border-radius: 0px
+
+          Ellipse 303  [ELLIPSE]  3298:4662
+            size 26.95 x 26.08
+            offset in frame  left 234.64px  top 945.19px   (58.37% / 54.76%)
+            fill linear-gradient(0deg, #517EDA 0%, #294D97 100%)
+            stroke linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)  weight 1.74px  align INSIDE
+
+          Rectangle 42638  [RECTANGLE]  3298:4663
+            size 44.47 x 32.73
+            offset in frame  left 45.99px  top 941.24px   (11.44% / 54.53%)
+
+          Rectangle 42639  [RECTANGLE]  3298:4664
+            size 44.47 x 32.73
+            offset in frame  left 90.46px  top 941.24px   (22.5% / 54.53%)
+
+          Rectangle 42640  [RECTANGLE]  3298:4665
+            size 44.47 x 32.73
+            offset in frame  left 134.89px  top 941.24px   (33.56% / 54.53%)
+
+          Rectangle 42641  [RECTANGLE]  3298:4666
+            size 44.47 x 32.73
+            offset in frame  left 179.4px  top 941.24px   (44.63% / 54.53%)
+
+          Rectangle 42642  [RECTANGLE]  3298:4667
+            size 44.47 x 32.73
+            offset in frame  left 223.85px  top 941.24px   (55.69% / 54.53%)
+
+          Rectangle 42643  [RECTANGLE]  3298:4668
+            size 44.47 x 32.73
+            offset in frame  left 268.37px  top 941.24px   (66.76% / 54.53%)
+
+          Rectangle 42644  [RECTANGLE]  3298:4669
+            size 44.47 x 32.73
+            offset in frame  left 312.8px  top 941.24px   (77.81% / 54.53%)
+
+          Rectangle 42645  [RECTANGLE]  3298:4670
+            size 44.47 x 32.73
+            offset in frame  left 45.99px  top 973.98px   (11.44% / 56.43%)
+
+          Rectangle 42646  [RECTANGLE]  3298:4671
+            size 44.47 x 32.73
+            offset in frame  left 90.46px  top 973.98px   (22.5% / 56.43%)
+
+          Rectangle 42647  [RECTANGLE]  3298:4672
+            size 44.47 x 32.73
+            offset in frame  left 134.89px  top 973.98px   (33.56% / 56.43%)
+
+          Rectangle 42648  [RECTANGLE]  3298:4673
+            size 44.47 x 32.73
+            offset in frame  left 179.38px  top 973.98px   (44.62% / 56.43%)
+
+          Rectangle 42649  [RECTANGLE]  3298:4674
+            size 44.47 x 32.73
+            offset in frame  left 223.85px  top 973.98px   (55.69% / 56.43%)
+
+          Rectangle 42650  [RECTANGLE]  3298:4675
+            size 44.47 x 32.73
+            offset in frame  left 268.37px  top 973.98px   (66.76% / 56.43%)
+
+          Rectangle 42651  [RECTANGLE]  3298:4676
+            size 44.47 x 32.73
+            offset in frame  left 312.8px  top 973.98px   (77.81% / 56.43%)
+
+          Rectangle 42652  [RECTANGLE]  3298:4677
+            size 44.47 x 32.73
+            offset in frame  left 45.99px  top 1006.71px   (11.44% / 58.33%)
+
+          Rectangle 42653  [RECTANGLE]  3298:4678
+            size 44.47 x 32.73
+            offset in frame  left 90.46px  top 1006.71px   (22.5% / 58.33%)
+
+          Rectangle 42654  [RECTANGLE]  3298:4679
+            size 44.47 x 32.73
+            offset in frame  left 134.89px  top 1006.71px   (33.56% / 58.33%)
+
+          Rectangle 42655  [RECTANGLE]  3298:4680
+            size 44.47 x 32.73
+            offset in frame  left 179.4px  top 1006.71px   (44.63% / 58.33%)
+
+          Rectangle 42656  [RECTANGLE]  3298:4681
+            size 44.47 x 32.73
+            offset in frame  left 223.88px  top 1006.71px   (55.69% / 58.33%)
+
+          Rectangle 42657  [RECTANGLE]  3298:4682
+            size 44.47 x 32.73
+            offset in frame  left 268.37px  top 1006.71px   (66.76% / 58.33%)
+
+          Rectangle 42658  [RECTANGLE]  3298:4683
+            size 44.47 x 32.73
+            offset in frame  left 312.8px  top 1006.71px   (77.81% / 58.33%)
+
+          Rectangle 42659  [RECTANGLE]  3298:4684
+            size 44.47 x 32.73
+            offset in frame  left 45.99px  top 1039.44px   (11.44% / 60.22%)
+
+          Rectangle 42660  [RECTANGLE]  3298:4685
+            size 44.47 x 32.73
+            offset in frame  left 90.46px  top 1039.44px   (22.5% / 60.22%)
+
+          Rectangle 42661  [RECTANGLE]  3298:4686
+            size 44.47 x 32.73
+            offset in frame  left 134.89px  top 1039.44px   (33.56% / 60.22%)
+
+          Rectangle 42662  [RECTANGLE]  3298:4687
+            size 44.47 x 32.73
+            offset in frame  left 179.4px  top 1039.44px   (44.63% / 60.22%)
+
+          Rectangle 42663  [RECTANGLE]  3298:4688
+            size 44.47 x 32.73
+            offset in frame  left 223.88px  top 1039.44px   (55.69% / 60.22%)
+
+          Rectangle 42664  [RECTANGLE]  3298:4689
+            size 44.47 x 32.73
+            offset in frame  left 268.37px  top 1039.44px   (66.76% / 60.22%)
+
+          Rectangle 42665  [RECTANGLE]  3298:4690
+            size 44.47 x 32.73
+            offset in frame  left 312.8px  top 1039.44px   (77.81% / 60.22%)
+
+          Rectangle 42666  [RECTANGLE]  3298:4691
+            size 44.47 x 32.73
+            offset in frame  left 45.99px  top 1072.18px   (11.44% / 62.12%)
+            border-radius: 0px 0px 0px 8.64px
+
+          Rectangle 42667  [RECTANGLE]  3298:4692
+            size 44.47 x 32.73
+            offset in frame  left 90.46px  top 1072.18px   (22.5% / 62.12%)
+
+          Rectangle 42668  [RECTANGLE]  3298:4693
+            size 44.47 x 32.73
+            offset in frame  left 134.89px  top 1072.18px   (33.56% / 62.12%)
+
+          Rectangle 42669  [RECTANGLE]  3298:4694
+            size 44.47 x 32.73
+            offset in frame  left 179.38px  top 1072.18px   (44.62% / 62.12%)
+
+          Rectangle 42670  [RECTANGLE]  3298:4695
+            size 44.47 x 32.73
+            offset in frame  left 223.85px  top 1072.18px   (55.69% / 62.12%)
+
+          Rectangle 42671  [RECTANGLE]  3298:4696
+            size 44.47 x 32.73
+            offset in frame  left 268.37px  top 1072.18px   (66.76% / 62.12%)
+
+          Rectangle 42672  [RECTANGLE]  3298:4697
+            size 44.47 x 32.73
+            offset in frame  left 312.8px  top 1072.18px   (77.81% / 62.12%)
+            border-radius: 0px 0px 9.71px 0px
+
+          Sun  [TEXT]  3298:4698
+            size 22.99 x 13
+            offset in frame  left 56.72px  top 923.42px   (14.11% / 53.5%)
+            render bounds 20.25 x 9.13  -> export padding  left -1.2  top -5.06  right -1.54  bottom 1.19
+            fill #FFFFFF
+            text "Sun"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          Mon  [TEXT]  3298:4699
+            size 27.7 x 13
+            offset in frame  left 98.87px  top 923.42px   (24.59% / 53.5%)
+            render bounds 24.56 x 8.95  -> export padding  left -1.41  top -5.18  right -1.72  bottom 1.13
+            fill #FFFFFF
+            text "Mon"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          Tue  [TEXT]  3298:4700
+            size 22.99 x 13
+            offset in frame  left 145.64px  top 923.42px   (36.23% / 53.5%)
+            render bounds 19.75 x 8.95  -> export padding  left -1.49  top -5.18  right -1.75  bottom 1.13
+            fill #FFFFFF
+            text "Tue"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          Wed  [TEXT]  3298:4701
+            size 31.55 x 13
+            offset in frame  left 185.87px  top 923.42px   (46.24% / 53.5%)
+            render bounds 25.32 x 8.95  -> export padding  left -2.83  top -5.18  right -3.4  bottom 1.13
+            fill #FFFFFF
+            text "Wed"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          Thu  [TEXT]  3298:4702
+            size 22.99 x 13
+            offset in frame  left 234.61px  top 923.42px   (58.36% / 53.5%)
+            render bounds 20.51 x 8.95  -> export padding  left -0.89  top -5.18  right -1.59  bottom 1.13
+            fill #FFFFFF
+            text "Thu"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          Fri  [TEXT]  3298:4703
+            size 22.99 x 13
+            offset in frame  left 279.13px  top 923.42px   (69.43% / 53.5%)
+            render bounds 12.17 x 9.12  -> export padding  left -5.63  top -4.88  right -5.19  bottom 1
+            fill #FFFFFF
+            text "Fri"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          Sat  [TEXT]  3298:4704
+            size 22.99 x 13
+            offset in frame  left 323.57px  top 922.37px   (80.49% / 53.44%)
+            render bounds 16.69 x 9.13  -> export padding  left -3.04  top -5.06  right -3.26  bottom 1.19
+            fill #FFFFFF
+            text "Sat"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          1  [TEXT]  3298:4705
+            size 5.24 x 20
+            offset in frame  left 244.74px  top 948.59px   (60.88% / 54.96%)
+            render bounds 2.9 x 8.82  -> export padding  left -0.86  top -5.18  right -1.47  bottom -6
+            fill #FFFFFF
+            text "1"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          2  [TEXT]  3298:4706
+            size 7.33 x 20
+            offset in frame  left 287.69px  top 948.59px   (71.56% / 54.96%)
+            render bounds 5.49 x 8.94  -> export padding  left -0.89  top -5.06  right -0.95  bottom -6
+            fill #FFFFFF
+            text "2"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          3  [TEXT]  3298:4707
+            size 7.33 x 20
+            offset in frame  left 332.18px  top 948.59px   (82.63% / 54.96%)
+            render bounds 5.66 x 9.07  -> export padding  left -0.83  top -5.06  right -0.84  bottom -5.87
+            fill #FFFFFF
+            text "3"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          4  [TEXT]  3298:4708
+            size 8.38 x 20
+            offset in frame  left 62.67px  top 981.32px   (15.59% / 56.86%)
+            render bounds 6.32 x 8.82  -> export padding  left -1.11  top -5.18  right -0.95  bottom -6
+            fill #FFFFFF
+            text "4"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          5  [TEXT]  3298:4709
+            size 7.33 x 20
+            offset in frame  left 106.74px  top 981.32px   (26.55% / 56.86%)
+            render bounds 5.78 x 8.95  -> export padding  left -0.86  top -5.18  right -0.69  bottom -5.87
+            fill #FFFFFF
+            text "5"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          6  [TEXT]  3298:4710
+            size 7.33 x 20
+            offset in frame  left 151.25px  top 981.32px   (37.62% / 56.86%)
+            render bounds 6.28 x 9.07  -> export padding  left -0.58  top -5.06  right -0.47  bottom -5.87
+            fill #FFFFFF
+            text "6"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          10  [TEXT]  3298:4711
+            size 12.57 x 20
+            offset in frame  left 326.87px  top 981.32px   (81.31% / 56.86%)
+            render bounds 10.5 x 9.07  -> export padding  left -1.03  top -5.06  right -1.03  bottom -5.87
+            fill #FFFFFF
+            text "10"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          7  [TEXT]  3298:4712
+            size 7.33 x 20
+            offset in frame  left 199.06px  top 981.32px   (49.52% / 56.86%)
+            render bounds 5.67 x 8.82  -> export padding  left -0.92  top -5.18  right -0.74  bottom -6
+            fill #FFFFFF
+            text "7"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          8  [TEXT]  3298:4713
+            size 7.33 x 20
+            offset in frame  left 243.15px  top 981.32px   (60.49% / 56.86%)
+            render bounds 5.67 x 9.07  -> export padding  left -0.83  top -5.06  right -0.83  bottom -5.87
+            fill #FFFFFF
+            text "8"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          9  [TEXT]  3298:4714
+            size 7.33 x 20
+            offset in frame  left 287.67px  top 981.32px   (71.56% / 56.86%)
+            render bounds 6.28 x 9.07  -> export padding  left -0.59  top -5.06  right -0.46  bottom -5.87
+            fill #FFFFFF
+            text "9"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          11  [TEXT]  3298:4715
+            size 9.42 x 20
+            offset in frame  left 61.25px  top 1014.05px   (15.24% / 58.75%)
+            render bounds 7.39 x 8.82  -> export padding  left -0.71  top -5.18  right -1.32  bottom -6
+            fill #FFFFFF
+            text "11"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          12  [TEXT]  3298:4716
+            size 11.52 x 20
+            offset in frame  left 104.2px  top 1014.05px   (25.92% / 58.75%)
+            render bounds 9.93 x 8.94  -> export padding  left -0.79  top -5.06  right -0.79  bottom -6
+            fill #FFFFFF
+            text "12"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          13  [TEXT]  3298:4717
+            size 11.52 x 20
+            offset in frame  left 148.69px  top 1014.05px   (36.99% / 58.75%)
+            render bounds 10.05 x 9.07  -> export padding  left -0.79  top -5.06  right -0.68  bottom -5.87
+            fill #FFFFFF
+            text "13"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          17  [TEXT]  3298:4718
+            size 11.52 x 20
+            offset in frame  left 326.59px  top 1014.05px   (81.24% / 58.75%)
+            render bounds 9.76 x 8.82  -> export padding  left -1.05  top -5.18  right -0.72  bottom -6
+            fill #FFFFFF
+            text "17"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          14  [TEXT]  3298:4719
+            size 12.57 x 20
+            offset in frame  left 196.52px  top 1014.05px   (48.89% / 58.75%)
+            render bounds 10.81 x 8.82  -> export padding  left -0.96  top -5.18  right -0.8  bottom -6
+            fill #FFFFFF
+            text "14"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          15  [TEXT]  3298:4720
+            size 12.57 x 20
+            offset in frame  left 240.58px  top 1014.05px   (59.85% / 58.75%)
+            render bounds 10.33 x 8.95  -> export padding  left -1.17  top -5.18  right -1.06  bottom -5.87
+            fill #FFFFFF
+            text "15"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          16  [TEXT]  3298:4721
+            size 12.57 x 20
+            offset in frame  left 285.11px  top 1014.05px   (70.92% / 58.75%)
+            render bounds 10.67 x 9.07  -> export padding  left -1.06  top -5.06  right -0.84  bottom -5.87
+            fill #FFFFFF
+            text "16"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          18  [TEXT]  3298:4722
+            size 12.57 x 20
+            offset in frame  left 60.13px  top 1046.79px   (14.96% / 60.65%)
+            render bounds 10.28 x 9.07  -> export padding  left -1.08  top -5.06  right -1.2  bottom -5.87
+            fill #FFFFFF
+            text "18"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          19  [TEXT]  3298:4723
+            size 12.57 x 20
+            offset in frame  left 104.2px  top 1046.79px   (25.92% / 60.65%)
+            render bounds 10.67 x 9.07  -> export padding  left -1.06  top -5.06  right -0.83  bottom -5.87
+            fill #FFFFFF
+            text "19"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          20  [TEXT]  3298:4724
+            size 14.66 x 20
+            offset in frame  left 147.57px  top 1046.79px   (36.71% / 60.65%)
+            render bounds 12.49 x 9.07  -> export padding  left -1.06  top -5.06  right -1.11  bottom -5.87
+            fill #FFFFFF
+            text "20"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          24  [TEXT]  3298:4725
+            size 13.61 x 20
+            offset in frame  left 325.45px  top 1046.79px   (80.96% / 60.65%)
+            render bounds 12.15 x 8.94  -> export padding  left -0.78  top -5.06  right -0.68  bottom -6
+            fill #FFFFFF
+            text "24"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          21  [TEXT]  3298:4726
+            size 11.52 x 20
+            offset in frame  left 196.52px  top 1046.79px   (48.89% / 60.65%)
+            render bounds 9.38 x 8.94  -> export padding  left -0.74  top -5.06  right -1.4  bottom -6
+            fill #FFFFFF
+            text "21"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          22  [TEXT]  3298:4727
+            size 13.61 x 20
+            offset in frame  left 239.46px  top 1046.79px   (59.57% / 60.65%)
+            render bounds 11.92 x 8.94  -> export padding  left -0.82  top -5.06  right -0.87  bottom -6
+            fill #FFFFFF
+            text "22"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          23  [TEXT]  3298:4728
+            size 13.61 x 20
+            offset in frame  left 284px  top 1046.79px   (70.65% / 60.65%)
+            render bounds 12.03 x 9.07  -> export padding  left -0.81  top -5.06  right -0.76  bottom -5.87
+            fill #FFFFFF
+            text "23"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          25  [TEXT]  3298:4729
+            size 14.66 x 20
+            offset in frame  left 58.99px  top 1078.01px   (14.67% / 62.46%)
+            render bounds 12.32 x 9.07  -> export padding  left -1.2  top -5.06  right -1.14  bottom -5.87
+            fill #FFFFFF
+            text "25"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          26  [TEXT]  3298:4730
+            size 14.66 x 20
+            offset in frame  left 103.08px  top 1078.01px   (25.64% / 62.46%)
+            render bounds 12.53 x 9.07  -> export padding  left -1.15  top -5.06  right -0.98  bottom -5.87
+            fill #FFFFFF
+            text "26"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          27  [TEXT]  3298:4731
+            size 13.61 x 20
+            offset in frame  left 147.57px  top 1078.01px   (36.71% / 62.46%)
+            render bounds 12 x 8.94  -> export padding  left -0.95  top -5.06  right -0.67  bottom -6
+            fill #FFFFFF
+            text "27"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          31  [TEXT]  3298:4732
+            size 11.52 x 20
+            offset in frame  left 326.59px  top 1078.01px   (81.24% / 62.46%)
+            render bounds 9.44 x 9.07  -> export padding  left -0.68  top -5.06  right -1.39  bottom -5.87
+            fill #FFFFFF
+            text "31"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          28  [TEXT]  3298:4733
+            size 14.66 x 20
+            offset in frame  left 195.38px  top 1078.01px   (48.6% / 62.46%)
+            render bounds 12.27 x 9.07  -> export padding  left -1.11  top -5.06  right -1.28  bottom -5.87
+            fill #FFFFFF
+            text "28"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          29  [TEXT]  3298:4734
+            size 14.66 x 20
+            offset in frame  left 239.46px  top 1078.01px   (59.57% / 62.46%)
+            render bounds 12.66 x 9.07  -> export padding  left -1.09  top -5.06  right -0.91  bottom -5.87
+            fill #FFFFFF
+            text "29"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+          30  [TEXT]  3298:4735
+            size 14.66 x 20
+            offset in frame  left 284px  top 1078.01px   (70.65% / 62.46%)
+            render bounds 12.55 x 9.07  -> export padding  left -1  top -5.06  right -1.11  bottom -5.87
+            fill #FFFFFF
+            text "30"
+            font Gabarito 400  12.95px / 19.43px  align CENTER
+
+        Frame 48096441  [FRAME]  3298:4736
+          size 311.28 x 168.77
+          offset in frame  left 45.99px  top 1137.94px   (11.44% / 65.93%)
+          auto-layout VERTICAL  gap 12.17  padding 0 0 0 0
+
+          This Week  [TEXT]  3298:4737
+            size 311.28 x 21
+            offset in frame  left 45.99px  top 1137.94px   (11.44% / 65.93%)
+            render bounds 78.27 x 12.41  -> export padding  left -0.17  top -3.76  right -232.84  bottom -4.83
+            fill #FFFFFF
+            text "This Week"
+            font Gabarito 400  17.38px / 20.86px  align LEFT
+
+          Frame 48096439  [FRAME]  3298:4738
+            size 311.28 x 61.72
+            offset in frame  left 45.99px  top 1171.11px   (11.44% / 67.85%)
+            fill linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)
+            border-radius: 6.95px
+            auto-layout VERTICAL  gap 8.69  padding 10.43 111.26 9.56 17.38
+
+            Frame 48096429  [FRAME]  3298:4739
+              size 134.77 x 42
+              offset in frame  left 63.38px  top 1181.54px   (15.77% / 68.46%)
+              auto-layout HORIZONTAL  gap 13.91  padding 0 0 0 0
+
+          Frame 48096440  [FRAME]  3298:4744
+            size 311.28 x 61.72
+            offset in frame  left 45.99px  top 1244.99px   (11.44% / 72.13%)
+            fill linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)
+            border-radius: 6.95px
+            auto-layout VERTICAL  gap 8.69  padding 9.56 53.89 10.43 17.38
+
+            Frame 48096430  [FRAME]  3298:4745
+              size 191.77 x 42
+              offset in frame  left 63.38px  top 1254.55px   (15.77% / 72.69%)
+              auto-layout HORIZONTAL  gap 13.91  padding 0 0 0 0
+
+  Footer Mobile  [FRAME]  3298:4750
+    size 404.01 x 368.24
+    offset in frame  left -2px  top 1358px   (-0.5% / 78.68%)
+    render bounds 402 x 368  -> export padding  left -2  top 0  right 0  bottom -0.24
+    fill #091B3F
+    fill linear-gradient(180deg, #091B3F 0%, #11337B 100%)
+    auto-layout VERTICAL  gap 24.26  padding 36.38 44.72 36.38 44.72
+
+    Frame 48096306  [FRAME]  3298:4751
+      size 314.57 x 121.28
+      offset in frame  left 42.72px  top 1394.38px   (10.63% / 80.79%)
+      auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+      kincir angin  [GROUP]  3298:4752
+        size 124.41 x 127.55
+        offset in frame  left 42.72px  top 1391.25px   (10.63% / 80.61%)
+
+        Mask group  [GROUP]  3298:4753
+          size 122.09 x 125.06
+          offset in frame  left 43.73px  top 1392.46px   (10.88% / 80.68%)
+          box-shadow: 0px 1.94px 1.94px rgba(0, 0, 0, 0.25)
+
+          Group 2  [GROUP]  3298:4754
+            size 117.03 x 120.17
+            offset in frame  left 46.26px  top 1394.9px   (11.51% / 80.82%)
+            box-shadow: 0px 1.94px 1.94px rgba(0, 0, 0, 0.05)
+
+            Rectangle 27  [VECTOR]  3298:4755
+              size 68.1 x 70.15
+              offset in frame  left 63.85px  top 1400.05px   (15.88% / 81.12%)
+              render bounds 38.3 x 66.56  -> export padding  left -15.79  top -1.79  right -14  bottom -1.79
+              mix-blend-mode: hard-light
+              fill linear-gradient(180deg, #8E1010 0%, #C91111 100%)
+
+            Rectangle 27  [VECTOR]  3298:4756
+              size 73.16 x 73.05
+              offset in frame  left 83.26px  top 1411.02px   (20.71% / 81.75%)
+              render bounds 68.74 x 44.34  -> export padding  left -2.21  top -15.12  right -2.21  bottom -13.59
+              mix-blend-mode: hard-light
+              fill linear-gradient(21.7deg, #FFE343 0%, #FAD500 100%)
+
+            Rectangle 27  [VECTOR]  3298:4757
+              size 70.86 x 69.01
+              offset in frame  left 79.38px  top 1437.74px   (19.75% / 83.3%)
+              render bounds 47.09 x 65.25  -> export padding  left -11.33  top -1.88  right -12.44  bottom -1.88
+              mix-blend-mode: hard-light
+              fill linear-gradient(12.1deg, #6CCB59 0%, #56B444 100%)
+
+            Rectangle 27  [VECTOR]  3298:4758
+              size 58.11 x 61.72
+              offset in frame  left 60.71px  top 1444.23px   (15.1% / 83.68%)
+              render bounds 56.42 x 46.67  -> export padding  left -0.84  top -7.44  right -0.85  bottom -7.61
+              mix-blend-mode: hard-light
+              fill linear-gradient(11.4deg, #5E82CF 0%, #35518D 100%)
+
+            Rectangle 27  [VECTOR]  3298:4759
+              size 60.27 x 56.47
+              offset in frame  left 49.18px  top 1423.92px   (12.23% / 82.5%)
+              render bounds 58.9 x 43.09  -> export padding  left -0.68  top -6.69  right -0.68  bottom -6.69
+              mix-blend-mode: hard-light
+              fill linear-gradient(10.2deg, #894DB7 0%, #5D2E81 100%)
+
+          Rectangle 28  [VECTOR]  3298:4760
+            size 132.21 x 129.47
+            offset in frame  left 41.01px  top 1391.37px   (10.2% / 80.61%)
+            render bounds 108.24 x 106.92  -> export padding  left -6.91  top -10.48  right -17.06  bottom -12.08
+            fill #FFFFFF
+
+        Group 2  [GROUP]  3298:4761
+          size 122.1 x 125.06
+          offset in frame  left 43.72px  top 1392.46px   (10.88% / 80.68%)
+
+          warna  [GROUP]  3298:4762
+            size 117.04 x 120.17
+            offset in frame  left 46.26px  top 1394.9px   (11.51% / 80.82%)
+            box-shadow: 0px 1.94px 1.94px rgba(0, 0, 0, 0.05)
+
+            Rectangle 27  [VECTOR]  3298:4763
+              size 68.1 x 70.15
+              offset in frame  left 63.86px  top 1400.05px   (15.89% / 81.12%)
+              render bounds 42.19 x 70.45  -> export padding  left -13.85  top -1.79  right -12.06  bottom 2.09
+              mix-blend-mode: hard-light
+              fill linear-gradient(276.4deg, #8E7310 0%, #8E1010 100%)
+              box-shadow: 0px 1.94px 1.94px rgba(0, 0, 0, 0.25)
+
+            Rectangle 27  [VECTOR]  3298:4764
+              size 73.16 x 73.05
+              offset in frame  left 83.27px  top 1411.02px   (20.71% / 81.75%)
+              render bounds 72.63 x 48.23  -> export padding  left -0.27  top -15.12  right -0.27  bottom -9.7
+              mix-blend-mode: hard-light
+              fill linear-gradient(99.9deg, #DBC12D 0%, #A8BC2E 38.3%, #79AA44 68.7%, #6BAC2F 100%)
+              box-shadow: 0px 1.94px 1.94px rgba(0, 0, 0, 0.25)
+
+            Rectangle 27  [VECTOR]  3298:4765
+              size 70.86 x 69.01
+              offset in frame  left 79.38px  top 1437.74px   (19.75% / 83.3%)
+              render bounds 50.98 x 69.14  -> export padding  left -9.39  top -1.88  right -10.49  bottom 2.01
+              mix-blend-mode: hard-light
+              fill linear-gradient(90deg, #56B444 0%, #72E15C 100%)
+              box-shadow: 0px 1.94px 1.94px rgba(0, 0, 0, 0.25)
+
+            Rectangle 27  [VECTOR]  3298:4766
+              size 58.11 x 61.72
+              offset in frame  left 60.71px  top 1444.23px   (15.1% / 83.68%)
+              render bounds 60.31 x 50.56  -> export padding  left 1.1  top -7.44  right 1.1  bottom -3.72
+              mix-blend-mode: hard-light
+              fill linear-gradient(321.5deg, #725ECF 0%, #35518D 100%)
+              box-shadow: 0px 1.94px 1.94px rgba(0, 0, 0, 0.25)
+
+            Rectangle 27  [VECTOR]  3298:4767
+              size 60.27 x 56.47
+              offset in frame  left 49.18px  top 1423.92px   (12.23% / 82.5%)
+              render bounds 62.79 x 46.97  -> export padding  left 1.26  top -6.69  right 1.26  bottom -2.81
+              mix-blend-mode: hard-light
+              fill linear-gradient(290.9deg, #5E1616 0%, #5D2E81 100%)
+              box-shadow: 0px 1.94px 1.94px rgba(0, 0, 0, 0.25)
+
+          texture  [GROUP]  3298:4768
+            size 122.1 x 125.06
+            offset in frame  left 43.72px  top 1392.46px   (10.88% / 80.68%)
+
+            Group 2  [GROUP]  3298:4769
+              size 117.04 x 120.17
+              offset in frame  left 46.25px  top 1394.9px   (11.51% / 80.82%)
+              border-radius: 0px
+
+            Group 11  [GROUP]  3298:4775
+              size 62.23 x 42.42
+              offset in frame  left 103.71px  top 1423.99px   (25.8% / 82.5%)
+              mix-blend-mode: multiply
+              border-radius: 0px
+              filter: blur(0.22px)
+
+            Group 21  [GROUP]  3298:4789
+              size 50.42 x 50.51
+              offset in frame  left 36.18px  top 1419.5px   (9% / 82.24%)
+              opacity: 0.44
+              mix-blend-mode: multiply
+              border-radius: 0px
+              filter: blur(0.22px)
+
+            Group 14  [GROUP]  3298:4801
+              size 55.56 x 42.92
+              offset in frame  left 56.09px  top 1459.72px   (13.95% / 84.57%)
+              opacity: 0.62
+              mix-blend-mode: multiply
+              border-radius: 0px
+              filter: blur(0.22px)
+
+            Group 22  [GROUP]  3298:4810
+              size 78.68 x 74.46
+              offset in frame  left 70.52px  top 1381.75px   (17.54% / 80.06%)
+              opacity: 0.3
+              mix-blend-mode: multiply
+              border-radius: 0px
+              filter: blur(0.22px)
+
+            Group 24  [GROUP]  3298:4824
+              size 59.51 x 76.44
+              offset in frame  left 84.83px  top 1454.56px   (21.1% / 84.27%)
+              opacity: 0.41
+              mix-blend-mode: multiply
+              border-radius: 0px
+              filter: blur(0.22px)
+
+            Rectangle 28  [VECTOR]  3298:4852
+              size 405.95 x 404.32
+              offset in frame  left 485.62px  top 1488.24px   (120.8% / 86.22%)
+              opacity: 0.27
+              mix-blend-mode: overlay
+              fill #000000
+              NOISE
+              TEXTURE
+
+        OUTLINE  [GROUP]  3298:4901
+          size 119.25 x 122.57
+          offset in frame  left 45.3px  top 1393.74px   (11.27% / 80.75%)
+          box-shadow: 0px 1.94px 1.94px rgba(0, 0, 0, 0.05)
+
+          Rectangle 27 (Stroke)  [VECTOR]  3298:4902
+            size 70.28 x 72.33
+            offset in frame  left 62.76px  top 1398.96px   (15.61% / 81.05%)
+            render bounds 41.7 x 69.96  -> export padding  left -15.19  top -2.07  right -13.39  bottom -0.3
+            mix-blend-mode: hard-light
+            fill linear-gradient(199.6deg, #FFFFFF 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%)
+            box-shadow: 0px 0.88px 0.88px rgba(0, 0, 0, 0.25)
+
+          Rectangle 27 (Stroke)  [VECTOR]  3298:4903
+            size 75.47 x 75.35
+            offset in frame  left 82.1px  top 1409.87px   (20.42% / 81.68%)
+            render bounds 72.14 x 47.74  -> export padding  left -1.67  top -15.45  right -1.67  bottom -12.16
+            mix-blend-mode: hard-light
+            fill linear-gradient(192deg, #FFFFFF 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%)
+            box-shadow: 0px 0.88px 0.88px rgba(0, 0, 0, 0.25)
+
+          Rectangle 27 (Stroke)  [VECTOR]  3298:4904
+            size 73.06 x 71.22
+            offset in frame  left 78.27px  top 1436.64px   (19.47% / 83.24%)
+            render bounds 50.48 x 68.64  -> export padding  left -10.74  top -2.17  right -11.84  bottom -0.4
+            mix-blend-mode: hard-light
+            fill linear-gradient(197.6deg, #FFFFFF 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%)
+            box-shadow: 0px 0.88px 0.88px rgba(0, 0, 0, 0.25)
+
+          Rectangle 27 (Stroke)  [VECTOR]  3298:4905
+            size 60 x 63.61
+            offset in frame  left 59.75px  top 1443.29px   (14.86% / 83.62%)
+            render bounds 59.82 x 50.07  -> export padding  left -0.09  top -7.57  right -0.09  bottom -5.97
+            mix-blend-mode: hard-light
+            fill linear-gradient(188.4deg, #FFFFFF 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%)
+            box-shadow: 0px 0.88px 0.88px rgba(0, 0, 0, 0.25)
+
+          Rectangle 27 (Stroke)  [VECTOR]  3298:4906
+            size 62.11 x 58.32
+            offset in frame  left 48.25px  top 1422.99px   (12% / 82.44%)
+            render bounds 62.3 x 46.48  -> export padding  left 0.09  top -6.8  right 0.09  bottom -5.03
+            mix-blend-mode: hard-light
+            fill linear-gradient(188.4deg, #FFFFFF 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%)
+            box-shadow: 0px 0.88px 0.88px rgba(0, 0, 0, 0.25)
+
+        STAR  [GROUP]  3298:4907
+          size 35.88 x 34.03
+          offset in frame  left 82.61px  top 1439.66px   (20.55% / 83.41%)
+          render bounds 37.03 x 35.82  -> export padding  left 0.58  top 1.79  right 0.58  bottom 0
+          box-shadow: 0px 0px 1.79px rgba(255, 255, 255, 0.25)
+
+          Polygon 39  [VECTOR]  3298:4908
+            size 4.01 x 17.58
+            offset in frame  left 96.59px  top 1439.66px   (24.03% / 83.41%)
+            fill #EEEEEE
+
+          Polygon 39 (Stroke)  [VECTOR]  3298:4909
+            size 4.01 x 17.58
+            offset in frame  left 96.59px  top 1439.66px   (24.03% / 83.41%)
+            fill #FFFFFF
+
+          Polygon 40  [VECTOR]  3298:4910
+            size 3.82 x 17.58
+            offset in frame  left 100.6px  top 1439.66px   (25.03% / 83.41%)
+            fill #FFFFFF
+
+          Polygon 40 (Stroke)  [VECTOR]  3298:4911
+            size 3.82 x 17.58
+            offset in frame  left 100.6px  top 1439.66px   (25.03% / 83.41%)
+            fill #FFFFFF
+
+          Polygon 39  [VECTOR]  3298:4912
+            size 17.94 x 9.15
+            offset in frame  left 99.34px  top 1448.01px   (24.71% / 83.89%)
+            render bounds 16.73 x 5.44  -> export padding  left -1.21  top -3.72  right 0  bottom 0
+            fill #EEEEEE
+
+          Polygon 39 (Stroke)  [VECTOR]  3298:4913
+            size 17.94 x 9.15
+            offset in frame  left 99.34px  top 1448.01px   (24.71% / 83.89%)
+            render bounds 16.73 x 5.44  -> export padding  left -1.21  top -3.72  right 0  bottom 0
+            fill #FFFFFF
+
+          Polygon 40  [VECTOR]  3298:4914
+            size 17.94 x 9.15
+            offset in frame  left 100.55px  top 1451.73px   (25.01% / 84.11%)
+            render bounds 16.73 x 7.54  -> export padding  left 0  top 0  right -1.21  bottom -1.61
+            fill #FFFFFF
+
+          Polygon 40 (Stroke)  [VECTOR]  3298:4915
+            size 17.94 x 9.15
+            offset in frame  left 100.55px  top 1451.73px   (25.01% / 84.11%)
+            render bounds 16.73 x 7.54  -> export padding  left 0  top 0  right -1.21  bottom -1.61
+            fill #FFFFFF
+
+          Polygon 39  [VECTOR]  3298:4916
+            size 13.5 x 16.53
+            offset in frame  left 100.55px  top 1454.86px   (25.01% / 84.29%)
+            render bounds 10.34 x 14.23  -> export padding  left 0  top -2.3  right -3.16  bottom 0
+            fill #EEEEEE
+
+          Polygon 39 (Stroke)  [VECTOR]  3298:4917
+            size 13.5 x 16.53
+            offset in frame  left 100.55px  top 1454.86px   (25.01% / 84.29%)
+            render bounds 10.34 x 14.23  -> export padding  left 0  top -2.3  right -3.16  bottom 0
+            fill #FFFFFF
+
+          Polygon 40  [VECTOR]  3298:4918
+            size 13.5 x 16.53
+            offset in frame  left 97.39px  top 1457.16px   (24.23% / 84.42%)
+            render bounds 10.44 x 14.23  -> export padding  left -3.06  top 0  right 0  bottom -2.3
+            fill #FFFFFF
+
+          Polygon 40 (Stroke)  [VECTOR]  3298:4919
+            size 13.5 x 16.53
+            offset in frame  left 97.39px  top 1457.16px   (24.23% / 84.42%)
+            render bounds 10.44 x 14.23  -> export padding  left -3.06  top 0  right 0  bottom -2.3
+            fill #FFFFFF
+
+          Polygon 39  [VECTOR]  3298:4920
+            size 13.5 x 16.53
+            offset in frame  left 90.21px  top 1457.16px   (22.44% / 84.42%)
+            render bounds 10.44 x 14.23  -> export padding  left 0  top 0  right -3.06  bottom -2.3
+            fill #EEEEEE
+
+          Polygon 39 (Stroke)  [VECTOR]  3298:4921
+            size 13.5 x 16.53
+            offset in frame  left 90.21px  top 1457.16px   (22.44% / 84.42%)
+            render bounds 10.44 x 14.23  -> export padding  left 0  top 0  right -3.06  bottom -2.3
+            fill #FFFFFF
+
+          Polygon 40  [VECTOR]  3298:4922
+            size 13.5 x 16.53
+            offset in frame  left 87.04px  top 1454.86px   (21.65% / 84.29%)
+            render bounds 10.34 x 14.23  -> export padding  left -3.16  top -2.3  right 0  bottom 0
+            fill #FFFFFF
+
+          Polygon 40 (Stroke)  [VECTOR]  3298:4923
+            size 13.5 x 16.53
+            offset in frame  left 87.04px  top 1454.86px   (21.65% / 84.29%)
+            render bounds 10.34 x 14.23  -> export padding  left -3.16  top -2.3  right 0  bottom 0
+            fill #FFFFFF
+
+          Polygon 39  [VECTOR]  3298:4924
+            size 17.94 x 9.15
+            offset in frame  left 82.61px  top 1451.73px   (20.55% / 84.11%)
+            render bounds 16.73 x 7.54  -> export padding  left -1.21  top 0  right 0  bottom -1.61
+            fill #EEEEEE
+
+          Polygon 39 (Stroke)  [VECTOR]  3298:4925
+            size 17.94 x 9.15
+            offset in frame  left 82.61px  top 1451.73px   (20.55% / 84.11%)
+            render bounds 16.73 x 7.54  -> export padding  left -1.21  top 0  right 0  bottom -1.61
+            fill #FFFFFF
+
+          Polygon 40  [VECTOR]  3298:4926
+            size 17.94 x 9.15
+            offset in frame  left 83.82px  top 1448.01px   (20.85% / 83.89%)
+            render bounds 16.73 x 5.44  -> export padding  left 0  top -3.72  right -1.21  bottom 0
+            fill #FFFFFF
+
+          Polygon 40 (Stroke)  [VECTOR]  3298:4927
+            size 17.94 x 9.15
+            offset in frame  left 83.82px  top 1448.01px   (20.85% / 83.89%)
+            render bounds 16.73 x 5.44  -> export padding  left 0  top -3.72  right -1.21  bottom 0
+            fill #FFFFFF
+
+      Group 25  [GROUP]  3298:4938
+        size 190.15 x 62.6
+        offset in frame  left 167.13px  top 1423.72px   (41.57% / 82.49%)
+
+        ITB  [GROUP]  3298:4939
+          size 24.55 x 12.49
+          offset in frame  left 167.13px  top 1423.72px   (41.57% / 82.49%)
+
+          Vector  [VECTOR]  3298:4940
+            size 8.88 x 12.49
+            offset in frame  left 182.81px  top 1423.72px   (45.47% / 82.49%)
+            fill #FFFFFF
+
+          Vector  [VECTOR]  3298:4941
+            size 10.05 x 12.49
+            offset in frame  left 171.14px  top 1423.72px   (42.57% / 82.49%)
+            fill #FFFFFF
+
+          Vector  [VECTOR]  3298:4942
+            size 2.4 x 12.49
+            offset in frame  left 167.13px  top 1423.72px   (41.57% / 82.49%)
+            fill #FFFFFF
+
+        INSIGHT  [GROUP]  3298:4943
+          size 189.49 x 29.96
+          offset in frame  left 167.59px  top 1440.33px   (41.69% / 83.45%)
+
+          Vector  [VECTOR]  3298:4944
+            size 23.74 x 28.46
+            offset in frame  left 333.34px  top 1441.09px   (82.92% / 83.49%)
+            fill #FFFFFF
+
+          Vector  [VECTOR]  3298:4945
+            size 24.28 x 28.46
+            offset in frame  left 301.12px  top 1441.09px   (74.91% / 83.49%)
+            fill #FFFFFF
+
+          Vector  [VECTOR]  3298:4946
+            size 28.08 x 29.59
+            offset in frame  left 264.67px  top 1440.54px   (65.84% / 83.46%)
+            fill #FFFFFF
+
+          Vector  [VECTOR]  3298:4947
+            size 7.56 x 28.46
+            offset in frame  left 248.97px  top 1441.09px   (61.93% / 83.49%)
+            fill #FFFFFF
+
+          Vector  [VECTOR]  3298:4948
+            size 22.73 x 29.96
+            offset in frame  left 217.92px  top 1440.33px   (54.21% / 83.45%)
+            fill #FFFFFF
+
+          Vector  [VECTOR]  3298:4949
+            size 25.2 x 28.46
+            offset in frame  left 184.42px  top 1441.09px   (45.87% / 83.49%)
+            fill #FFFFFF
+
+          Vector  [VECTOR]  3298:4950
+            size 7.56 x 28.46
+            offset in frame  left 167.59px  top 1441.09px   (41.69% / 83.49%)
+            fill #FFFFFF
+
+        2026  [GROUP]  3298:4951
+          size 41.62 x 12.91
+          offset in frame  left 315.67px  top 1473.41px   (78.52% / 85.37%)
+
+          Vector  [VECTOR]  3298:4952
+            size 9.13 x 12.91
+            offset in frame  left 348.15px  top 1473.41px   (86.61% / 85.37%)
+            fill #FFFFFF
+
+          Vector  [VECTOR]  3298:4953
+            size 8.12 x 12.69
+            offset in frame  left 337.65px  top 1473.41px   (83.99% / 85.37%)
+            fill #FFFFFF
+
+          Vector  [VECTOR]  3298:4954
+            size 8.93 x 12.91
+            offset in frame  left 326.4px  top 1473.41px   (81.19% / 85.37%)
+            fill #FFFFFF
+
+          Vector  [VECTOR]  3298:4955
+            size 8.12 x 12.69
+            offset in frame  left 315.67px  top 1473.41px   (78.52% / 85.37%)
+            fill #FFFFFF
+
+    Frame 48096307  [FRAME]  3298:4958
+      size 213.71 x 30.53
+      offset in frame  left 93.15px  top 1539.92px   (23.17% / 89.22%)
+      render bounds 213.71 x 32.9  -> export padding  left 0  top 1.18  right 0  bottom 1.18
+      auto-layout HORIZONTAL  gap 15.26  padding 0 0 0 0
+
+      InstagramLogo  [INSTANCE]  3298:4959
+        size 29.81 x 32.9
+        offset in frame  left 93.15px  top 1538.73px   (23.17% / 89.15%)
+
+        Vector  [VECTOR]  I3298:4959;8899:36713
+          size 29.81 x 32.9
+          offset in frame  left 93.15px  top 1538.73px   (23.17% / 89.15%)
+
+        Vector  [VECTOR]  I3298:4959;8899:36714
+          size 9.32 x 10.28
+          offset in frame  left 103.39px  top 1550.04px   (25.72% / 89.81%)
+          render bounds 11.22 x 12.19  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+        Vector  [VECTOR]  I3298:4959;8899:36715
+          size 22.36 x 24.67
+          offset in frame  left 96.87px  top 1542.84px   (24.1% / 89.39%)
+          render bounds 24.27 x 26.58  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+        Vector  [VECTOR]  I3298:4959;8899:36716
+          size 2.79 x 3.08
+          offset in frame  left 112.71px  top 1546.96px   (28.04% / 89.63%)
+          fill #7FA9F6
+
+      XLogo  [INSTANCE]  3298:4960
+        size 30.84 x 32.9
+        offset in frame  left 138.22px  top 1538.73px   (34.38% / 89.15%)
+
+        Vector  [VECTOR]  I3298:4960;8899:39279
+          size 30.84 x 32.9
+          offset in frame  left 138.22px  top 1538.73px   (34.38% / 89.15%)
+
+        Vector  [VECTOR]  I3298:4960;8899:39280
+          size 19.27 x 22.62
+          offset in frame  left 144.01px  top 1543.87px   (35.82% / 89.45%)
+          render bounds 21.18 x 24.52  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+        Vector  [VECTOR]  I3298:4960;8899:39281
+          size 7.94 x 9.31
+          offset in frame  left 144.01px  top 1557.18px   (35.82% / 90.22%)
+          render bounds 9.84 x 11.22  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+        Vector  [VECTOR]  I3298:4960;8899:39282
+          size 7.94 x 9.31
+          offset in frame  left 155.34px  top 1543.87px   (38.64% / 89.45%)
+          render bounds 9.84 x 11.22  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+      LinkedinLogo  [INSTANCE]  3298:4961
+        size 29.81 x 32.9
+        offset in frame  left 184.33px  top 1538.73px   (45.85% / 89.15%)
+
+        Vector  [VECTOR]  I3298:4961;8899:36813
+          size 29.81 x 32.9
+          offset in frame  left 184.33px  top 1538.73px   (45.85% / 89.15%)
+
+        Vector  [VECTOR]  I3298:4961;8899:36814
+          size 22.36 x 24.67
+          offset in frame  left 188.05px  top 1542.84px   (46.78% / 89.39%)
+          render bounds 24.27 x 26.58  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+        Vector  [VECTOR]  I3298:4961;8899:36815
+          size 0 x 8.22
+          offset in frame  left 198.3px  top 1553.12px   (49.33% / 89.98%)
+          render bounds 1.91 x 10.13  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+        Vector  [VECTOR]  I3298:4961;8899:36816
+          size 0 x 8.22
+          offset in frame  left 194.58px  top 1553.12px   (48.4% / 89.98%)
+          render bounds 1.91 x 10.13  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+        Vector  [VECTOR]  I3298:4961;8899:36817
+          size 6.52 x 8.22
+          offset in frame  left 198.3px  top 1553.12px   (49.33% / 89.98%)
+          render bounds 8.43 x 10.13  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+        Vector  [VECTOR]  I3298:4961;8899:36818
+          size 2.79 x 3.08
+          offset in frame  left 193.18px  top 1547.98px   (48.05% / 89.69%)
+          fill #7FA9F6
+
+      YoutubeLogo  [INSTANCE]  3298:4962
+        size 30.84 x 32.9
+        offset in frame  left 229.41px  top 1538.73px   (57.07% / 89.15%)
+
+        Vector  [VECTOR]  I3298:4962;8899:39334
+          size 30.84 x 32.9
+          offset in frame  left 229.41px  top 1538.73px   (57.07% / 89.15%)
+
+        Vector  [VECTOR]  I3298:4962;8899:39335
+          size 5.78 x 8.22
+          offset in frame  left 242.9px  top 1551.07px   (60.42% / 89.86%)
+          render bounds 7.69 x 10.13  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+        Vector  [VECTOR]  I3298:4962;8899:39336
+          size 25.06 x 20.56
+          offset in frame  left 232.3px  top 1544.9px   (57.79% / 89.51%)
+          render bounds 26.97 x 22.47  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+      TiktokLogo  [INSTANCE]  3298:4963
+        size 30.84 x 32.9
+        offset in frame  left 275.51px  top 1538.73px   (68.53% / 89.15%)
+
+        Vector  [VECTOR]  I3298:4963;8899:38916
+          size 30.84 x 32.9
+          offset in frame  left 275.51px  top 1538.73px   (68.53% / 89.15%)
+
+        Vector  [VECTOR]  I3298:4963;8899:38917
+          size 23.13 x 25.7
+          offset in frame  left 279.36px  top 1541.82px   (69.49% / 89.33%)
+          render bounds 25.04 x 27.61  -> export padding  left 0.95  top 0.95  right 0.95  bottom 0.95
+          stroke #7FA9F6  weight 1.91px  align CENTER
+
+    Frame 48096312  [FRAME]  3298:4964
+      size 187.37 x 95.16
+      offset in frame  left 106.32px  top 1594.7px   (26.45% / 92.39%)
+      render bounds 189.36 x 95.16  -> export padding  left 0  top 0  right 2  bottom 0
+      auto-layout HORIZONTAL  gap 32.9  padding 0 0 0 0
+
+      Frame 48096309  [FRAME]  3298:4965
+        size 30.32 x 95.16
+        offset in frame  left 106.32px  top 1594.7px   (26.45% / 92.39%)
+        auto-layout VERTICAL  gap 6.06  padding 0 0 0 0
+
+        Event  [TEXT]  3298:4966
+          size 30.32 x 16
+          offset in frame  left 106.32px  top 1594.7px   (26.45% / 92.39%)
+          render bounds 28.43 x 8.38  -> export padding  left -1.03  top -3.74  right -0.86  bottom -3.88
+          fill #FFFFFF
+          text "Event"
+          font Gabarito 400  12.13px / 15.16px  align JUSTIFIED
+
+        Frame 48096308  [FRAME]  3298:4967
+          size 30.32 x 73.1
+          offset in frame  left 106.32px  top 1616.76px   (26.45% / 93.67%)
+          auto-layout VERTICAL  gap 3.03  padding 0 0 0 0
+
+          Text Button  [INSTANCE]  3298:4968
+            size 30.32 x 16
+            offset in frame  left 106.32px  top 1616.76px   (26.45% / 93.67%)
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4968;620:1683
+              size 27 x 16
+              offset in frame  left 106.32px  top 1616.76px   (26.45% / 93.67%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+          Text Button  [INSTANCE]  3298:4969
+            size 30.32 x 16
+            offset in frame  left 106.32px  top 1635.8px   (26.45% / 94.77%)
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4969;620:1683
+              size 27 x 16
+              offset in frame  left 106.32px  top 1635.8px   (26.45% / 94.77%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+          Text Button  [INSTANCE]  3298:4970
+            size 30.32 x 16
+            offset in frame  left 106.32px  top 1654.83px   (26.45% / 95.88%)
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4970;620:1683
+              size 27 x 16
+              offset in frame  left 106.32px  top 1654.83px   (26.45% / 95.88%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+          Text Button  [INSTANCE]  3298:4971
+            size 30.32 x 16
+            offset in frame  left 106.32px  top 1673.86px   (26.45% / 96.98%)
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4971;620:1683
+              size 27 x 16
+              offset in frame  left 106.32px  top 1673.86px   (26.45% / 96.98%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+      Frame 48096310  [FRAME]  3298:4972
+        size 67 x 95.16
+        offset in frame  left 169.53px  top 1594.7px   (42.17% / 92.39%)
+        auto-layout VERTICAL  gap 6.06  padding 0 0 0 0
+
+        Competition  [TEXT]  3298:4973
+          size 67 x 16
+          offset in frame  left 169.53px  top 1594.7px   (42.17% / 92.39%)
+          render bounds 65.61 x 10.84  -> export padding  left -0.36  top -3.46  right -1.02  bottom -1.7
+          fill #FFFFFF
+          text "Competition"
+          font Gabarito 400  12.13px / 15.16px  align JUSTIFIED
+
+        Frame 48096308  [FRAME]  3298:4974
+          size 67 x 73.1
+          offset in frame  left 169.53px  top 1616.76px   (42.17% / 93.67%)
+          auto-layout VERTICAL  gap 3.03  padding 0 0 0 0
+
+          Text Button  [INSTANCE]  3298:4975
+            size 66.7 x 16
+            offset in frame  left 169.53px  top 1616.76px   (42.17% / 93.67%)
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4975;620:1683
+              size 27 x 16
+              offset in frame  left 169.53px  top 1616.76px   (42.17% / 93.67%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+          Text Button  [INSTANCE]  3298:4976
+            size 66.7 x 16
+            offset in frame  left 169.53px  top 1635.8px   (42.17% / 94.77%)
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4976;620:1683
+              size 27 x 16
+              offset in frame  left 169.53px  top 1635.8px   (42.17% / 94.77%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+          Text Button  [INSTANCE]  3298:4977
+            size 66.7 x 16
+            offset in frame  left 169.53px  top 1654.83px   (42.17% / 95.88%)
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4977;620:1683
+              size 27 x 16
+              offset in frame  left 169.53px  top 1654.83px   (42.17% / 95.88%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+          Text Button  [INSTANCE]  3298:4978
+            size 66.7 x 16
+            offset in frame  left 169.53px  top 1673.86px   (42.17% / 96.98%)
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4978;620:1683
+              size 27 x 16
+              offset in frame  left 169.53px  top 1673.86px   (42.17% / 96.98%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+      Frame 48096311  [FRAME]  3298:4979
+        size 24.26 x 95.16
+        offset in frame  left 269.43px  top 1594.7px   (67.02% / 92.39%)
+        render bounds 26.25 x 95.16  -> export padding  left 0  top 0  right 2  bottom 0
+        auto-layout VERTICAL  gap 6.06  padding 0 0 0 0
+
+        Map  [TEXT]  3298:4980
+          size 24 x 16
+          offset in frame  left 269.43px  top 1594.7px   (67.02% / 92.39%)
+          render bounds 22.67 x 10.56  -> export padding  left -0.44  top -3.74  right -0.9  bottom -1.7
+          fill #FFFFFF
+          text "Map"
+          font Gabarito 400  12.13px / 15.16px  align JUSTIFIED
+
+        Frame 48096308  [FRAME]  3298:4981
+          size 24.26 x 73.1
+          offset in frame  left 269.43px  top 1616.76px   (67.02% / 93.67%)
+          render bounds 26.25 x 73.1  -> export padding  left 0  top 0  right 2  bottom 0
+          auto-layout VERTICAL  gap 3.03  padding 0 0 0 0
+
+          Text Button  [INSTANCE]  3298:4982
+            size 24.26 x 16
+            offset in frame  left 269.43px  top 1616.76px   (67.02% / 93.67%)
+            render bounds 26.25 x 16  -> export padding  left 0  top 0  right 2  bottom 0
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4982;620:1683
+              size 27 x 16
+              offset in frame  left 269.43px  top 1616.76px   (67.02% / 93.67%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+          Text Button  [INSTANCE]  3298:4983
+            size 24.26 x 16
+            offset in frame  left 269.43px  top 1635.8px   (67.02% / 94.77%)
+            render bounds 26.25 x 16  -> export padding  left 0  top 0  right 2  bottom 0
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4983;620:1683
+              size 27 x 16
+              offset in frame  left 269.43px  top 1635.8px   (67.02% / 94.77%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+          Text Button  [INSTANCE]  3298:4984
+            size 24.26 x 16
+            offset in frame  left 269.43px  top 1654.83px   (67.02% / 95.88%)
+            render bounds 26.25 x 16  -> export padding  left 0  top 0  right 2  bottom 0
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4984;620:1683
+              size 27 x 16
+              offset in frame  left 269.43px  top 1654.83px   (67.02% / 95.88%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+          Text Button  [INSTANCE]  3298:4985
+            size 24.26 x 16
+            offset in frame  left 269.43px  top 1673.86px   (67.02% / 96.98%)
+            render bounds 26.25 x 16  -> export padding  left 0  top 0  right 2  bottom 0
+            auto-layout HORIZONTAL  gap 0  padding 0 0 0 0
+
+            Button  [TEXT]  I3298:4985;620:1683
+              size 27 x 16
+              offset in frame  left 269.43px  top 1673.86px   (67.02% / 96.98%)
+              render bounds 24.84 x 10.66  -> export padding  left -1.41  top -3.74  right -0.75  bottom -1.6
+              fill #A3A3A3
+              text "Page"
+              font Gabarito 400  12.13px / 15.16px  align CENTER
+
+  Header Mobile  [FRAME]  3298:4986
+    size 393 x 99.05
+    offset in frame  left 4.5px  top 0px   (1.12% / 0%)
+    auto-layout HORIZONTAL  gap 253  padding 24 24 24 24
+
+    image 2  [RECTANGLE]  3298:4987
+      size 49 x 48
+      offset in frame  left 28.5px  top 25.52px   (7.09% / 1.48%)
+      fill image (ref 69de0cb5970a62c586a738f2ceb480981269ffdf, STRETCH)
+
+    Group 48096289  [GROUP]  3298:4988
+      size 125 x 24.48
+      offset in frame  left 137.48px  top 37.29px   (34.2% / 2.16%)
+
+      Dashboard  [TEXT]  3298:4989
+        size 97 x 24
+        offset in frame  left 137.48px  top 37.76px   (34.2% / 2.19%)
+        render bounds 89.53 x 13.9  -> export padding  left -3.94  top -5.38  right -3.53  bottom -4.72
+        fill linear-gradient(180deg, #DEE8FB 0%, #ACC7FF 100%)
+        text "Dashboard"
+        font Gabarito 400  20px / 24px  align CENTER
+
+      nav-arrow-down  [INSTANCE]  3298:4990
+        size 24 x 24
+        offset in frame  left 238.48px  top 37.29px   (59.32% / 2.16%)
+
+        Vector  [VECTOR]  I3298:4990;620:2742
+          size 12 x 6
+          offset in frame  left 244.48px  top 46.29px   (60.81% / 2.68%)
+          render bounds 13.5 x 7.5  -> export padding  left 0.75  top 0.75  right 0.75  bottom 0.75
+          stroke #DEE8FB  weight 1.5px  align CENTER
+
+    Button  [INSTANCE]  3298:4991
+      size 51.05 x 51.05
+      offset in frame  left 322.45px  top 24px   (80.21% / 1.39%)
+      fill linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)
+      stroke linear-gradient(180deg, #DEE8FB 0%, #ACC7FF 100%)  weight 5.1px  align INSIDE
+      border-radius: 15.31px
+      auto-layout HORIZONTAL  gap 0  padding 10.21 10.21 10.21 10.21
+
+      menu  [INSTANCE]  I3298:4991;620:360
+        size 30.63 x 30.63
+        offset in frame  left 332.66px  top 34.21px   (82.75% / 1.98%)
+
+        Vector  [VECTOR]  I3298:4991;620:360;620:3073
+          size 22.97 x 0
+          offset in frame  left 336.49px  top 40.59px   (83.7% / 2.35%)
+          render bounds 24.89 x 1.91  -> export padding  left 0.96  top 0.96  right 0.96  bottom 0.96
+          stroke #1B3B7D  weight 1.91px  align CENTER
+
+        Vector  [VECTOR]  I3298:4991;620:360;620:3074
+          size 22.97 x 0
+          offset in frame  left 336.49px  top 49.52px   (83.7% / 2.87%)
+          render bounds 24.89 x 1.91  -> export padding  left 0.96  top 0.96  right 0.96  bottom 0.96
+          stroke #091B3F  weight 1.91px  align CENTER
+
+        Vector  [VECTOR]  I3298:4991;620:360;620:3075
+          size 22.97 x 0
+          offset in frame  left 336.49px  top 58.46px   (83.7% / 3.39%)
+          render bounds 24.89 x 1.91  -> export padding  left 0.96  top 0.96  right 0.96  bottom 0.96
+          stroke #091B3F  weight 1.91px  align CENTER
+
+  dashboard down  [INSTANCE]  3298:4992
+    size 365 x 40
+    offset in frame  left 13.5px  top 27px   (3.36% / 1.56%)
+    opacity: 0
+    auto-layout VERTICAL  gap 4.01  padding 0 0 0 0
+
+    Button Home Dashboard  [INSTANCE]  I3298:4992;1571:24874
+      size 365 x 59
+      offset in frame  left 13.5px  top 27px   (3.36% / 1.56%)
+      fill #1B3B7D
+      border-radius: 8px
+      auto-layout HORIZONTAL  gap 10  padding 17 142 18 20
+
+      Frame 48096447  [FRAME]  I3298:4992;1571:24874;1569:18831
+        size 101.5 x 24
+        offset in frame  left 33.5px  top 44px   (8.33% / 2.55%)
+        auto-layout HORIZONTAL  gap 25  padding 0 0 0 0
+
+        home  [INSTANCE]  I3298:4992;1571:24874;1569:18792
+          size 24 x 24
+          offset in frame  left 33.5px  top 44px   (8.33% / 2.55%)
+
+          Vector  [VECTOR]  I3298:4992;1571:24874;1569:18792;620:6446
+            size 20 x 5
+            offset in frame  left 35.5px  top 47px   (8.83% / 2.72%)
+            stroke #FAFAFA  weight 1.5px  align CENTER
+            border-radius: 0px
+
+          Vector  [VECTOR]  I3298:4992;1571:24874;1569:18792;620:6447
+            size 16 x 10
+            offset in frame  left 37.5px  top 55px   (9.33% / 3.19%)
+            stroke #FAFAFA  weight 1.5px  align CENTER
+            border-radius: 2px
+
+        Home  [TEXT]  I3298:4992;1571:24874;1569:18791
+          size 43 x 20
+          offset in frame  left 82.5px  top 46px   (20.52% / 2.67%)
+          fill #FFFFFF
+          text "Home"
+          font Gabarito 400  16px / 20px  align LEFT
+
+    Button Lomba Dashboard  [INSTANCE]  I3298:4992;1571:24875
+      size 365 x 58
+      offset in frame  left 13.5px  top 90.01px   (3.36% / 5.22%)
+      auto-layout HORIZONTAL  gap 10  padding 17 20 17 20
+
+      Frame 48096447  [FRAME]  I3298:4992;1571:24875;1569:19760
+        size 228 x 24
+        offset in frame  left 33.5px  top 107.01px   (8.33% / 6.2%)
+        auto-layout HORIZONTAL  gap 25  padding 0 0 0 0
+
+        Frame 48096277  [FRAME]  I3298:4992;1571:24875;1569:19761
+          size 143 x 24
+          offset in frame  left 33.5px  top 107.01px   (8.33% / 6.2%)
+          auto-layout HORIZONTAL  gap 25  padding 0 0 0 0
+
+          trophy  [INSTANCE]  I3298:4992;1571:24875;1569:19762
+            size 24 x 24
+            offset in frame  left 33.5px  top 107.01px   (8.33% / 6.2%)
+
+            Vector  [VECTOR]  I3298:4992;1571:24875;1569:19762;620:3781
+              size 10.57 x 13.26
+              offset in frame  left 40.24px  top 111.01px   (10.01% / 6.43%)
+              stroke #FFFFFF  weight 1.5px  align CENTER
+
+            Vector  [VECTOR]  I3298:4992;1571:24875;1569:19762;620:3782
+              size 4.73 x 7.86
+              offset in frame  left 49.77px  top 110.01px   (12.38% / 6.37%)
+              stroke #FFFFFF  weight 1.5px  align CENTER
+
+            Vector  [VECTOR]  I3298:4992;1571:24875;1569:19762;620:3783
+              size 4.79 x 7.86
+              offset in frame  left 36.5px  top 110.01px   (9.08% / 6.37%)
+              stroke #FFFFFF  weight 1.5px  align CENTER
+
+            Vector  [VECTOR]  I3298:4992;1571:24875;1569:19762;620:3784
+              size 7.05 x 2.74
+              offset in frame  left 42.01px  top 124.27px   (10.45% / 7.2%)
+              stroke #FFFFFF  weight 1.5px  align CENTER
+
+          Daftar Lomba  [TEXT]  I3298:4992;1571:24875;1569:19763
+            size 94 x 20
+            offset in frame  left 82.5px  top 109.01px   (20.52% / 6.32%)
+            fill #FFFFFF
+            text "Daftar Lomba"
+            font Gabarito 400  16px / 20px  align LEFT
+
+    Button Event Dashboard  [INSTANCE]  I3298:4992;1571:24876
+      size 365 x 58
+      offset in frame  left 13.5px  top 152.02px   (3.36% / 8.81%)
+      auto-layout HORIZONTAL  gap 10  padding 17 20 17 20
+
+      Frame 48096278  [FRAME]  I3298:4992;1571:24876;1569:19824
+        size 136 x 24
+        offset in frame  left 33.5px  top 169.02px   (8.33% / 9.79%)
+        auto-layout HORIZONTAL  gap 25  padding 0 0 0 0
+
+        calendar  [INSTANCE]  I3298:4992;1571:24876;1569:19825
+          size 24 x 24
+          offset in frame  left 33.5px  top 169.02px   (8.33% / 9.79%)
+
+          Vector  [VECTOR]  I3298:4992;1571:24876;1569:19825;620:8214
+            size 18 x 19
+            offset in frame  left 36.5px  top 171.02px   (9.08% / 9.91%)
+            stroke #FFFFFF  weight 1.5px  align CENTER
+
+          Vector  [VECTOR]  I3298:4992;1571:24876;1569:19825;620:8215
+            size 4 x 6
+            offset in frame  left 36.5px  top 173.02px   (9.08% / 10.02%)
+            stroke #FFFFFF  weight 1.5px  align CENTER
+
+          Vector  [VECTOR]  I3298:4992;1571:24876;1569:19825;620:8216
+            size 0 x 4
+            offset in frame  left 40.5px  top 171.02px   (10.07% / 9.91%)
+            stroke #FFFFFF  weight 1.5px  align CENTER
+
+          Vector  [VECTOR]  I3298:4992;1571:24876;1569:19825;620:8217
+            size 2.5 x 6
+            offset in frame  left 52px  top 173.02px   (12.94% / 10.02%)
+            stroke #FFFFFF  weight 1.5px  align CENTER
+
+        Daftar Event  [TEXT]  I3298:4992;1571:24876;1569:19826
+          size 87 x 20
+          offset in frame  left 82.5px  top 171.02px   (20.52% / 9.91%)
+          fill #FFFFFF
+          text "Daftar Event"
+          font Gabarito 400  16px / 20px  align LEFT
+
+    Button Profil Dashboard  [INSTANCE]  I3298:4992;1571:24877
+      size 365 x 58
+      offset in frame  left 13.5px  top 214.04px   (3.36% / 12.4%)
+      auto-layout HORIZONTAL  gap 10  padding 17 20 17 20
+
+      Frame 48096279  [FRAME]  I3298:4992;1571:24877;1569:19873
+        size 85 x 24
+        offset in frame  left 33.5px  top 231.04px   (8.33% / 13.39%)
+        auto-layout HORIZONTAL  gap 25  padding 0 0 0 0
+
+        user  [INSTANCE]  I3298:4992;1571:24877;1569:19874
+          size 24 x 24
+          offset in frame  left 33.5px  top 231.04px   (8.33% / 13.39%)
+
+          Vector  [VECTOR]  I3298:4992;1571:24877;1569:19874;620:3449
+            size 14 x 8
+            offset in frame  left 38.5px  top 243.04px   (9.58% / 14.08%)
+            stroke #FFFFFF  weight 1.5px  align CENTER
+            border-radius: 0px
+
+          Vector  [VECTOR]  I3298:4992;1571:24877;1569:19874;620:3450
+            size 8 x 8
+            offset in frame  left 41.5px  top 235.04px   (10.32% / 13.62%)
+            stroke #FFFFFF  weight 1.5px  align CENTER
+
+        Profil  [TEXT]  I3298:4992;1571:24877;1569:19875
+          size 36 x 20
+          offset in frame  left 82.5px  top 233.04px   (20.52% / 13.5%)
+          fill #FFFFFF
+          text "Profil"
+          font Gabarito 400  16px / 20px  align LEFT

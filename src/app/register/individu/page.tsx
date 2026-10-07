@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Navbar from "@/shared/components/Navbar/Navbar";
+import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
 
 export default function RegisterIndividuPage() {
   return (
@@ -226,7 +226,7 @@ export default function RegisterIndividuPage() {
 
       {/* ── NAVBAR ── */}
       <div style={{ position: "relative", zIndex: 50 }}>
-        <Navbar isSolid={false} />
+        <NavbarHifi isSolid={false} />
       </div>
 
       {/* ── HEADER REGISTRASI ── */}

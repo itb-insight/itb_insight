@@ -40,7 +40,7 @@ const DATA: Competition[] = [
     syllabusUrl: "#",
     guidebookUrl: "#",
     contactUrl: "#",
-    registerUrl: "#",
+    registerUrl: "/signup",
     timeline: [
       { id: "pendaftaran", title: "Pendaftaran", dateLabel: "14 Agustus - 6 September 2026", date: "2026-08-14" },
       { id: "pengumuman-penyisihan", title: "Pengumuman Penyisihan", dateLabel: "19 Oktober 2026", date: "2026-10-19" },
@@ -91,7 +91,7 @@ const DATA: Competition[] = [
     syllabusUrl: "#",
     guidebookUrl: "#",
     contactUrl: "#",
-    registerUrl: "#",
+    registerUrl: "/signup",
     timeline: [
       { id: "pendaftaran", title: "Pendaftaran", dateLabel: "14 Agustus - 20 November 2026", date: "2026-08-14" },
       { id: "technical-meeting", title: "Technical Meeting", dateLabel: "21 November 2026", date: "2026-11-21" },
@@ -147,7 +147,7 @@ const DATA: Competition[] = [
     syllabusUrl: "#",
     guidebookUrl: "#",
     contactUrl: "#",
-    registerUrl: "#",
+    registerUrl: "/signup",
     timeline: [
       { id: "registration", title: "Registration", dateLabel: "20 Agustus - 18 September 2026", date: "2026-08-20" },
       { id: "case-release", title: "Pre-Elim: Case Release", dateLabel: "25 September 2026", date: "2026-09-25" },
@@ -204,7 +204,7 @@ const DATA: Competition[] = [
     syllabusUrl: "#",
     guidebookUrl: "#",
     contactUrl: "#",
-    registerUrl: "#",
+    registerUrl: "/signup",
     timeline: [
       { id: "registration", title: "Registration", dateLabel: "22 Agustus 2026", date: "2026-08-22" },
       { id: "try-out", title: "Try Out", dateLabel: "2026", date: "2026-09-01" },

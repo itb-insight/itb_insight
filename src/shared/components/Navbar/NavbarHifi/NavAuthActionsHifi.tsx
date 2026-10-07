@@ -95,7 +95,7 @@ export default function NavAuthActionsHifi({
       <Link href="/login" className={primaryClass} onClick={onAction}>
         Log In
       </Link>
-      <Link href="/register" className={secondaryClass} onClick={onAction}>
+      <Link href="/signup" className={secondaryClass} onClick={onAction}>
         Sign Up
       </Link>
     </>
