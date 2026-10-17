@@ -11,9 +11,8 @@ const columns = [
 const socials = [
   { href: "https://instagram.com/insightitb", label: "Instagram", icon: "/images/icons/InstagramLogo.svg" },
   { href: "https://twitter.com/insightitb", label: "X", icon: "/images/icons/XLogo.svg" },
-  { href: "#", label: "LinkedIn", icon: "/images/icons/LinkedinLogo.svg" },
   { href: "https://youtube.com/@insightitb", label: "Youtube", icon: "/images/icons/YoutubeLogo.svg" },
-  { href: "#", label: "TikTok", icon: "/images/icons/TiktokLogo.svg" },
+  { href: "https://www.tiktok.com/@itb_insight", label: "TikTok", icon: "/images/icons/TiktokLogo.svg" },
 ]
 
 export default function FooterHifi() {

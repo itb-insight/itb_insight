@@ -33,6 +33,22 @@ Mohon transfer sesuai nominal gelombang. Simpan bukti transfer Anda.
 [!] Update the guidebook
 
 
+CHECK ADMIN CREDS
+Landing page change if you're already logged in
+Map <- limit area
+Compe Mobile Scaling
+Compe disable??
+Events disable??
+Countdownnya udh dari awal aja
+Dashboard Selection
+Personal Profile QR
+Gallery
+Media Partner
+Footer links
+ITB Insight section
+Prize pool
+[+] on Dashboard
+Notification system
 # HOW TO STATIC DEPLOY
 ## Don't use a static export on Vercel
 
