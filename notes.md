@@ -56,7 +56,8 @@ Media Partner
 Prize pool
 PLACEHOLDER DATA MARK
 
-Home miobile scaling
+Header for map must be different (since it fits more)
+[x] Home miobile scaling
 
 
 [+] on Dashboard
