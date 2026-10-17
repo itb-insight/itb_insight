@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import styles from "./HeroSectionHifi.module.css"
 import { useIsMobile } from "@/features/landing/hooks/useIsMobile"
+import { COUNTDOWN_TARGET } from "@/features/home/homeConfig"
 
 interface TimeLeft {
   days: number
@@ -43,7 +44,7 @@ export default function HeroSectionHifi() {
   const [mounted, setMounted] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
   const sectionRef = useRef<HTMLElement>(null)
-  const { days, hours, minutes, seconds } = useCountdown("2026-09-11T00:00:00")
+  const { days, hours, minutes, seconds } = useCountdown(COUNTDOWN_TARGET)
   const isMobile = useIsMobile(768)
 
   useEffect(() => { setMounted(true) }, [])
