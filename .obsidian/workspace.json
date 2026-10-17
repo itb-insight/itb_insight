@@ -98,7 +98,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "034e7f8a9a76fa28",
@@ -202,19 +203,19 @@
   },
   "active": "f8f219eede9f12c7",
   "lastOpenFiles": [
+    "node_modules/@img/sharp-wasm32/README.md",
+    "node_modules/@img/sharp-wasm32/versions.json",
+    "node_modules/@img/sharp-wasm32/package.json",
+    "node_modules/@img/sharp-wasm32/lib/sharp-wasm32-0.35.5.node.wasm",
+    "node_modules/@img/sharp-wasm32/lib/sharp-wasm32-0.35.5.node.js",
+    "node_modules/@img/sharp-wasm32/lib",
+    "node_modules/@img/sharp-wasm32/index.cjs",
+    "node_modules/@img/sharp-wasm32/LICENSE",
+    "node_modules/@img/sharp-wasm32",
     "tsconfig.tsbuildinfo",
     "src/shared/components/Navbar/NavbarHifi/NavbarHifi.module.css.tmp.16874.a43b2689ebfa",
-    "src/app/event-map/page.tsx.tmp.16874.be47300faa44",
-    "src/app/event-map/page.tsx.tmp.16874.1d15fcf721be",
-    "src/shared/components/DashboardSidebar/DashboardSidebar.module.css.tmp.303457.662518a032f7",
-    "src/shared/components/DashboardSidebar/DashboardSidebar.module.css.tmp.303457.2cf39691df2a",
     "qr-notes.md",
     "notes.md",
-    "src/features/landing/components/HeroSectionHifi/HeroSectionHifi.module.css.tmp.240851.b9ce765100d7",
-    "src/features/landing/components/HeroSectionHifi/HeroSectionHifi.tsx.tmp.240851.bddf86993dc7",
-    "src/features/landing/components/HeroSection/HeroSection.tsx.tmp.221636.5e425437ab05",
-    "src/features/landing/components/HeroSection/HeroSection.tsx.tmp.221636.87474c31cd07",
-    "src/features/landing/components/HeroSectionHifi/HeroSectionHifi.tsx.tmp.221636.3157708b96d8",
     "public/images/gallery/fountain.webp",
     "public/images/gallery/topo.webp",
     "public/images/gallery/foutain.webp",

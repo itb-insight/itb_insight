@@ -38,8 +38,8 @@ CHECK ADMIN CREDS
 Landing page change if you're already logged in
 [x] Map <- limit area
 Compe Mobile Scaling
-Compe disable??
-Events disable??
+[x] Compe disable??
+[x] Events disable??
 Hide SUPABASE link in google login
 [x] Countdownnya udh dari awal aja
 [x] Dashboard Selection
@@ -48,13 +48,15 @@ Personal Profile QR
 Login -> Profil - Mobile view personal QR must be ontop.
 Mobile view QR width is still wrong
 Header start mobile view is wrong (check dashboard)
-DASHBOARD DROPDOWN ISNT STICKY!
+[x] DASHBOARD DROPDOWN ISNT STICKY!
 [x] Gallery
 Media Partner
 [x] Footer links
 [x] ITB Insight section
 Prize pool
 PLACEHOLDER DATA MARK
+
+Home miobile scaling
 
 
 [+] on Dashboard
