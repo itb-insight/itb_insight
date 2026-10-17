@@ -202,6 +202,8 @@
   },
   "active": "f8f219eede9f12c7",
   "lastOpenFiles": [
+    "src/shared/components/DashboardSidebar/DashboardSidebar.module.css.tmp.303457.662518a032f7",
+    "src/shared/components/DashboardSidebar/DashboardSidebar.module.css.tmp.303457.2cf39691df2a",
     "qr-notes.md",
     "notes.md",
     "src/features/landing/components/HeroSectionHifi/HeroSectionHifi.module.css.tmp.240851.b9ce765100d7",
@@ -213,7 +215,6 @@
     "src/features/home/homeConfig.ts.tmp.221636.90b8af31b2d2",
     "src/features/landing/components/HeroSectionHifi/HeroSectionHifi.tsx.tmp.221636.fe38c486e667",
     "src/features/landing/components/GallerySectionHifi/GallerySectionHifi.module.css.tmp.221636.27f3a72ed304",
-    "src/features/landing/components/GallerySectionHifi/GallerySectionHifi.tsx.tmp.221636.a18982f5f23e",
     "public/images/gallery/fountain.webp",
     "public/images/gallery/topo.webp",
     "public/images/gallery/foutain.webp",

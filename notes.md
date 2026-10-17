@@ -43,10 +43,12 @@ Events disable??
 Hide SUPABASE link in google login
 [x] Countdownnya udh dari awal aja
 Dashboard Selection
+Competition card delay
 Personal Profile QR
 Login -> Profil - Mobile view personal QR must be ontop.
 Mobile view QR width is still wrong
 Header start mobile view is wrong (check dashboard)
+DASHBOARD DROPDOWN ISNT STICKY!
 [x] Gallery
 Media Partner
 [x] Footer links

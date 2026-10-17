@@ -17,6 +17,13 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+/* Selaras dengan breakpoint dropdown DashboardSidebar (899px) */
+@media (max-width: 899px) {
+  .navbar.solidOnMobile {
+    background-color: #091B3F;
+  }
+}
+
 .left {
   display: flex;
   align-items: center;
@@ -243,7 +250,7 @@
 }
 
 /* Mobile — collapse nav links + actions into one menu button */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .navLinks,
   .actions {
     display: none;

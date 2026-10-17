@@ -8,29 +8,29 @@ import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi";
 
 // ── DATA KOMPETISI ────────────────────────────────────────────────────────────
 const COMPETITIONS = [
+  // {
+  //   id: 1,
+  //   slug: "safety-and-rescue-robot-competition",
+  //   title: "SAR",
+  //   gradient: "linear-gradient(135deg, #FFE4EC 0%, #FFAAAA 100%)",
+  //   icon: "/images/icon-sar.png"
+  // },
   {
     id: 1,
-    slug: "safety-and-rescue-robot-competition",
-    title: "SAR",
-    gradient: "linear-gradient(135deg, #FFE4EC 0%, #FFAAAA 100%)",
-    icon: "/images/icon-sar.png"
-  },
-  {
-    id: 2,
     slug: "microdrone-obstacle-race",
     title: "Microdrone Obstacle",
     gradient: "linear-gradient(135deg, #C08CFF 0%, #E9DBF9 100%)",
     icon: "/images/icon-microdrone.png"
   },
   {
-    id: 3,
+    id: 2,
     slug: "business-plan-competition",
     title: "BPC",
     gradient: "linear-gradient(135deg, #D0FFC7 0%, #76DF62 100%)",
     icon: "/images/icon-bpc.png"
   },
   {
-    id: 4,
+    id: 3,
     slug: "olimpiade-engineering",
     title: "Olimpiade Engineering",
     gradient: "linear-gradient(135deg, #ACC7FF 0%, #DEEBFB 100%)",

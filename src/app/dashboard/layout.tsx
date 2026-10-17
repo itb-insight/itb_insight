@@ -24,7 +24,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className={styles.shell} style={shellVars}>
-      <NavbarHifi />
+      <NavbarHifi solidOnMobile />
       <DashboardSidebar
         topOffset={SIDEBAR_TOP}
         mobileMode="dropdown"

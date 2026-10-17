@@ -230,10 +230,18 @@
     padding-top: var(--mobile-top, 60px);
   }
 
+  /* Panel menempel tepat di bawah header dan tidak ikut tergulung bersama halaman.
+     .mobileMenuWrap tetap di aliran halaman hanya untuk menyisihkan ruang header. */
   .mobileMenuCollapse {
+    position: fixed;
+    top: var(--mobile-top, 60px);
+    left: 0;
+    right: 0;
+    z-index: 99;
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 0.3s ease;
+    background: #091B3F;
   }
 
   .mobileMenuCollapseOpen {
@@ -247,6 +255,10 @@
     flex-direction: column;
     gap: 4px;
     padding: 0 20px;
+  }
+
+  .mobileMenuCollapseOpen {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   }
 
   .mobileMenuCollapseOpen .mobileMenu {
