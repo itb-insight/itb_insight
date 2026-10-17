@@ -20,8 +20,23 @@
               "icon": "lucide-file",
               "title": "notes"
             }
+          },
+          {
+            "id": "f8f219eede9f12c7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "notes.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "notes"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -83,8 +98,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "034e7f8a9a76fa28",
@@ -186,8 +200,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "f35e29f127ef9527",
+  "active": "f8f219eede9f12c7",
   "lastOpenFiles": [
+    "qr-notes.md",
+    "notes.md",
     "src/features/landing/components/HeroSectionHifi/HeroSectionHifi.module.css.tmp.240851.b9ce765100d7",
     "src/features/landing/components/HeroSectionHifi/HeroSectionHifi.tsx.tmp.240851.bddf86993dc7",
     "src/features/landing/components/HeroSection/HeroSection.tsx.tmp.221636.5e425437ab05",
@@ -198,7 +214,6 @@
     "src/features/landing/components/HeroSectionHifi/HeroSectionHifi.tsx.tmp.221636.fe38c486e667",
     "src/features/landing/components/GallerySectionHifi/GallerySectionHifi.module.css.tmp.221636.27f3a72ed304",
     "src/features/landing/components/GallerySectionHifi/GallerySectionHifi.tsx.tmp.221636.a18982f5f23e",
-    "src/features/landing/components/GallerySectionHifi/GallerySectionHifi.module.css.tmp.221636.1bb45e72870a",
     "public/images/gallery/fountain.webp",
     "public/images/gallery/topo.webp",
     "public/images/gallery/foutain.webp",

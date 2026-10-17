@@ -40,15 +40,21 @@ Map <- limit area
 Compe Mobile Scaling
 Compe disable??
 Events disable??
-Countdownnya udh dari awal aja
+Hide SUPABASE link in google login
+[x] Countdownnya udh dari awal aja
 Dashboard Selection
 Personal Profile QR
-Gallery
+Login -> Profil - Mobile view personal QR must be ontop.
+Mobile view QR width is still wrong
+Header start mobile view is wrong (check dashboard)
+[x] Gallery
 Media Partner
-Footer links
-ITB Insight section
+[x] Footer links
+[x] ITB Insight section
 Prize pool
 PLACEHOLDER DATA MARK
+
+
 [+] on Dashboard
 
 Notification system

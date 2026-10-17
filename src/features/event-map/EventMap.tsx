@@ -19,6 +19,11 @@ const dummyLocations = [
   { id: 'toilet-1', category: 'Toilet', name: 'Toilet CC Barat', lat: -6.8918, lng: 107.6104 },
 ];
 
+const EVENT_BOUNDS: [[number, number], [number, number]] = [
+  [107.6070, -6.8950], // southwest [lng, lat]
+  [107.6140, -6.8880], // northeast [lng, lat]
+];
+
 const areaData: any = {
   type: 'FeatureCollection',
   features: [
@@ -234,6 +239,8 @@ export default function EventMap() {
             ref={mapRef}
             {...viewState}
             onMove={evt => setViewState(evt.viewState)}
+            maxBounds={EVENT_BOUNDS}
+            maxZoom={19.5}
             mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
           >
             <NavigationControl position="bottom-right" />

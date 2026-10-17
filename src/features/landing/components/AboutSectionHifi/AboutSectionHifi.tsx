@@ -55,9 +55,9 @@ export default function AboutSectionHifi() {
             >
               <h2 className={styles.title}>ITB INSIGHT</h2>
               <p className={styles.description}>
-                Insight ITB merupakan sebuah event teknologi yang telah
-                diselenggarakan dari tahun 20XX yang diprakarsai oleh XXXX.
-                Kini, Insight ITB merupakan event teknologi terbesar di ITB
+                ITB Insight merupakan sebuah event teknologi yang telah
+                diselenggarakan dari tahun 20XX oleh Himpunan Mahasiswa Fisika.
+                Teknik (HMFT) ITB. Kini, ITB Insight merupakan event teknologi terbesar di ITB
                 yang terdiri dari beberapa rangkaian acara seperti pameran,
                 seminar, dan kompetisi.
               </p>
@@ -71,15 +71,15 @@ export default function AboutSectionHifi() {
               }}
             >
               <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>REGISTRATION DATE</span>
+                <span className={styles.infoLabel}>OPEN FOR PUBLIC!</span>
                 <div className={styles.infoValue}>
                   <img src="/images/icons/calendar-icon.svg" alt="" className={styles.calendarIcon} />
-                  <span>1 - 5 Mei 2026</span>
+                  <span>26 November 2026</span>
                 </div>
               </div>
 
               <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>TOTAL PRIZEPOOL</span>
+                <span className={styles.infoLabel}>TOTAL COMPETITION PRIZEPOOL</span>
                 <div className={styles.infoValue}>
                   <span>RP67.000.000</span>
                 </div>
