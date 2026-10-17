@@ -34,6 +34,7 @@ Mohon transfer sesuai nominal gelombang. Simpan bukti transfer Anda.
 
 
 CHECK ADMIN CREDS
+`/admin`
 Landing page change if you're already logged in
 Map <- limit area
 Compe Mobile Scaling
@@ -47,8 +48,11 @@ Media Partner
 Footer links
 ITB Insight section
 Prize pool
+PLACEHOLDER DATA MARK
 [+] on Dashboard
+
 Notification system
+CLOSE DEPLOY AFTER ALUMN GATH
 # HOW TO STATIC DEPLOY
 ## Don't use a static export on Vercel
 

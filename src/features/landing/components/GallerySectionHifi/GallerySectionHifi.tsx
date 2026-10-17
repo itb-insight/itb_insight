@@ -6,9 +6,10 @@ import { motion } from "framer-motion"
 import styles from "./GallerySectionHifi.module.css"
 
 const slides = [
-  { src: "/images/gallery-2015.webp", alt: "Gallery 2015" },
-  { src: "/images/gallery-2017.webp", alt: "Gallery 2017" },
-  { src: "/images/gallery-2019.webp", alt: "Gallery 2019" },
+  { src: "/images/gallery/laser_show.webp", alt: "Laser show" },
+  { src: "/images/gallery/stage.webp", alt: "Stage" },
+  { src: "/images/gallery/fountain.webp", alt: "Fountain" },
+  { src: "/images/gallery/y2017.webp", alt: "stage2" },
 ]
 
 export default function GallerySectionHifi() {
@@ -117,14 +118,18 @@ export default function GallerySectionHifi() {
                 if (offset === 1) next()
               }}
             >
-              <Image
-                src={slide.src}
-                alt={slide.alt}
-                fill
-                sizes={isActive ? "55vw" : "20vw"}
-                className={styles.cardImage}
-                priority={isActive}
-              />
+              <div className={styles.imageClip}>
+                <Image
+                  src={slide.src}
+                  alt={slide.alt}
+                  fill
+                  sizes={isActive ? "55vw" : "20vw"}
+                  className={`${styles.cardImage} ${
+                    slide.src === "/images/gallery/stage.webp" ? styles.cardImageRotated : ""
+                  }`}
+                  priority={isActive}
+                />
+              </div>
             </motion.div>
           )
         })}
