@@ -72,9 +72,6 @@ export default function HeroSectionHifi() {
     ? (scrollProgress - 0.5) * 100
     : 0
 
-  const countdownOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.2) / 0.3))
-  const countdownY = Math.max(0, 30 * (1 - (scrollProgress - 0.2) / 0.3))
-
   const bottomOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.6) / 0.3))
   const bottomY = Math.max(0, 30 * (1 - (scrollProgress - 0.6) / 0.3))
 
@@ -134,13 +131,7 @@ export default function HeroSectionHifi() {
             ITB INSIGHT
           </h1>
 
-          <div
-            className={styles.countdown}
-            style={{
-              opacity: countdownOpacity,
-              transform: `translateY(${countdownY}px)`,
-            }}
-          >
+          <div className={styles.countdown}>
             {[
               { value: days, label: "d" },
               { value: hours, label: "h" },
