@@ -56,7 +56,7 @@ export default function AboutSectionHifi() {
               <h2 className={styles.title}>ITB INSIGHT</h2>
               <p className={styles.description}>
                 ITB Insight merupakan sebuah event teknologi yang telah
-                diselenggarakan dari tahun 20XX oleh Himpunan Mahasiswa Fisika.
+                diselenggarakan dari tahun 2013 oleh Himpunan Mahasiswa Fisika.
                 Teknik (HMFT) ITB. Kini, ITB Insight merupakan event teknologi terbesar di ITB
                 yang terdiri dari beberapa rangkaian acara seperti pameran,
                 seminar, dan kompetisi.

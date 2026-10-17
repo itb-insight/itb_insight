@@ -36,13 +36,13 @@ Mohon transfer sesuai nominal gelombang. Simpan bukti transfer Anda.
 CHECK ADMIN CREDS
 `/admin`
 Landing page change if you're already logged in
-Map <- limit area
+[x] Map <- limit area
 Compe Mobile Scaling
 Compe disable??
 Events disable??
 Hide SUPABASE link in google login
 [x] Countdownnya udh dari awal aja
-Dashboard Selection
+[x] Dashboard Selection
 Competition card delay
 Personal Profile QR
 Login -> Profil - Mobile view personal QR must be ontop.

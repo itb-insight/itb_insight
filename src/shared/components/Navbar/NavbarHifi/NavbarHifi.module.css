@@ -13,8 +13,7 @@
 }
 
 .navbar.isSolid {
-  background-color: var(--color-bg-primary);
-  border-bottom: 1px solid var(--color-border);
+  background-color: #091B3F;
 }
 
 /* Selaras dengan breakpoint dropdown DashboardSidebar (899px) */
