@@ -125,7 +125,7 @@ export default function GallerySectionHifi() {
                   fill
                   sizes={isActive ? "55vw" : "20vw"}
                   className={`${styles.cardImage} ${
-                    slide.src === "/images/gallery/stage.webp" ? styles.cardImageRotated : ""
+                    slide.src === "/images/gallery/stage.webp" ? styles.cardImageStage : ""
                   }`}
                   priority={isActive}
                 />

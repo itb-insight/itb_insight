@@ -66,13 +66,7 @@
   pointer-events: none;
 }
 
-.cardImageRotated {
-  top: 50% !important;
-  left: 50% !important;
-  right: auto !important;
-  bottom: auto !important;
-  width: calc(100% * 799 / 1106) !important;
-  height: calc(100% * 1106 / 799) !important;
-  transform: translate(-50%, -50%) rotate(-90deg);
-  object-fit: cover;
+/* stage.webp is portrait (4000x6000); crop to the stage, skipping the dark sky above it */
+.cardImageStage {
+  object-position: 50% 55%;
 }
