@@ -1,0 +1,221 @@
+<!doctype html>
+<!-- ========================================================
+  COUNTDOWN-ONLY PAGE
+  Served by `src/proxy.ts` (rewrite) for every route when COUNTDOWN_ONLY=true.
+  Standalone mirror of the landing hero's first screen (HeroSectionHifi at
+  scroll 0 + LandingBackground gradient): no navbar, footer, or scrolling.
+  Keep COUNTDOWN_TARGET in sync with src/features/home/homeConfig.ts.
+=========================================================== -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ITB Insight</title>
+  <meta name="description" content="Insight ITB merupakan event teknologi terbesar di ITB, terdiri dari beberapa rangkaian acara seperti pameran, seminar, dan kompetisi." />
+  <link rel="icon" href="/icon.png" />
+  <link rel="preload" href="/fonts/excratch.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/Bitcount-Variable.ttf" as="font" type="font/ttf" crossorigin />
+  <style>
+    @font-face {
+      font-family: "EXCRATCH";
+      src: url("/fonts/excratch.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Bitcount";
+      src: url("/fonts/Bitcount-Variable.ttf") format("truetype");
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #091B3F;
+      color: #ffffff;
+    }
+
+    .page {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #091B3F 0%, #0E2452 100%);
+    }
+
+    .stage {
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+      text-align: center;
+      overflow: hidden;
+      container-type: inline-size;
+      max-width: 1600px;
+      margin: 0 auto;
+      zoom: var(--page-scale, 1);
+    }
+
+    .patternWrapper {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .patternLeft,
+    .patternRight {
+      position: absolute;
+      width: calc(50vw / var(--page-scale, 1));
+      max-width: 600px;
+    }
+
+    .patternLeft {
+      transform-origin: right center;
+      transform: translateX(-50%) scale(2.5);
+    }
+
+    .patternRight {
+      transform-origin: left center;
+      transform: translateX(50%) scale(2.5);
+    }
+
+    .topGroup {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .title {
+      font-family: "EXCRATCH", sans-serif;
+      font-size: clamp(4rem, 8cqw, 7rem);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin: 0;
+      line-height: 1;
+      background: linear-gradient(to bottom, #FFFFFF, #D1E4FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 10px rgba(209, 228, 255, 1));
+    }
+
+    .countdown {
+      display: flex;
+      align-items: baseline;
+      margin-top: -20px;
+      gap: 48px;
+    }
+
+    .unit {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .number {
+      font-family: "Bitcount", monospace;
+      font-size: clamp(6rem, 12cqw, 10rem);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .label {
+      font-family: "Bitcount", monospace;
+      font-size: clamp(2rem, 5cqw, 4rem);
+      font-weight: 400;
+    }
+
+    @media (max-width: 768px) {
+      .stage { padding: 0 20px; }
+
+      .patternLeft { transform: translateX(-50%) scale(3.5); }
+      .patternRight { transform: translateX(50%) scale(3.5); }
+
+      .title {
+        font-size: clamp(2rem, 10cqw, 3rem);
+        letter-spacing: 0.06em;
+      }
+
+      .countdown {
+        position: absolute;
+        top: 100%;
+        flex-direction: column;
+        align-items: center;
+        margin-top: -10px;
+        gap: 4px;
+      }
+
+      .unit { justify-content: center; }
+      .number { font-size: clamp(2.25rem, 13cqw, 3rem); }
+      .label { font-size: clamp(1.1rem, 6cqw, 1.5rem); }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="stage">
+      <div class="patternWrapper" aria-hidden="true">
+        <img src="/images/Pattern_Kiri.svg" alt="" class="patternLeft" />
+        <img src="/images/Pattern_Kanan.svg" alt="" class="patternRight" />
+      </div>
+
+      <div class="topGroup">
+        <h1 class="title">ITB INSIGHT</h1>
+        <div class="countdown" role="timer" aria-label="Countdown to ITB Insight">
+          <div class="unit"><span class="number" data-unit="d">00</span><span class="label">d</span></div>
+          <div class="unit"><span class="number" data-unit="h">00</span><span class="label">h</span></div>
+          <div class="unit"><span class="number" data-unit="m">00</span><span class="label">m</span></div>
+          <div class="unit"><span class="number" data-unit="s">00</span><span class="label">s</span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      // Same as COUNTDOWN_TARGET in src/features/home/homeConfig.ts
+      var COUNTDOWN_TARGET = "2026-11-28T08:00:00+07:00";
+      var target = new Date(COUNTDOWN_TARGET).getTime();
+
+      // Same page scaling as the root layout's page-scale script
+      function updateScale() {
+        var scale = Math.min(1.25, Math.max(1, window.innerWidth / 1536));
+        document.documentElement.style.setProperty("--page-scale", String(scale));
+      }
+      updateScale();
+      window.addEventListener("resize", updateScale);
+
+      var els = {};
+      document.querySelectorAll("[data-unit]").forEach(function (el) {
+        els[el.getAttribute("data-unit")] = el;
+      });
+
+      function pad(n) { return String(n).padStart(2, "0"); }
+
+      function tick() {
+        var diff = Math.max(0, target - Date.now());
+        els.d.textContent = pad(Math.floor(diff / 86400000));
+        els.h.textContent = pad(Math.floor((diff / 3600000) % 24));
+        els.m.textContent = pad(Math.floor((diff / 60000) % 60));
+        els.s.textContent = pad(Math.floor((diff / 1000) % 60));
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+</body>
+</html>
