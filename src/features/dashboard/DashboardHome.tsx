@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import type { RegistrationRow } from "@/lib/registrations"
 import AccountQrCard from "./AccountQrCard"
+import PayButton from "./PayButton"
 import TeamSubmitButton from "./TeamSubmitButton"
 import styles from "./Dashboard.module.css"
 
@@ -12,6 +13,29 @@ const statusBadge: Record<string, { className: string; label: string }> = {
   submitted: { className: styles.badgeSubmitted, label: "Submitted" },
   verified: { className: styles.badgeVerified, label: "Terverifikasi" },
   rejected: { className: styles.badgeRejected, label: "Ditolak" },
+}
+
+const paymentBadge: Record<string, { className: string; label: string }> = {
+  pending: { className: styles.badgePayPending, label: "Menunggu pembayaran" },
+  paid: { className: styles.badgePayPaid, label: "Lunas" },
+  failed: { className: styles.badgePayFailed, label: "Pembayaran gagal" },
+  expired: { className: styles.badgePayFailed, label: "Pembayaran kedaluwarsa" },
+  cancelled: { className: styles.badgePayFailed, label: "Pembayaran dibatalkan" },
+  refunded: { className: styles.badgePayRefunded, label: "Dikembalikan" },
+}
+
+const formatIdr = (amount?: number) =>
+  typeof amount === "number" ? `Rp${amount.toLocaleString("id-ID")}` : undefined
+
+// Which pay action (if any) applies. Draft teams and rejected registrations cannot pay; only the
+// registrant / team leader can; paid or refunded registrations are done.
+function payAction(reg: RegistrationRow): "unpaid" | "pending" | "retry" | null {
+  if (reg.id.startsWith("team-") || reg.status === "draft" || reg.status === "rejected") return null
+  if (!reg.can_pay) return null
+  if (reg.payment_status === "paid" || reg.payment_status === "refunded") return null
+  if (reg.payment_status === "pending") return "pending"
+  if (reg.payment_status) return "retry"
+  return "unpaid"
 }
 
 export default function DashboardHome({
@@ -68,6 +92,8 @@ export default function DashboardHome({
             <div className={styles.grid}>
               {registrations.map((reg) => {
                 const badge = statusBadge[reg.status] || statusBadge.submitted
+                const payBadge = reg.payment_status ? paymentBadge[reg.payment_status] : undefined
+                const action = payAction(reg)
                 const isDraftTeamLeader =
                   reg.registration_kind === "team" && reg.status === "draft" && reg.is_team_leader && reg.team_id
                 const submitDisabledReason =
@@ -99,6 +125,16 @@ export default function DashboardHome({
 
                     {isDraftTeamLeader && reg.team_id ? (
                       <TeamSubmitButton teamId={reg.team_id} disabledReason={submitDisabledReason} />
+                    ) : null}
+
+                    {payBadge ? (
+                      <span className={`${styles.badge} ${payBadge.className}`}>
+                        {payBadge.label}
+                        {formatIdr(reg.payment_amount) ? ` · ${formatIdr(reg.payment_amount)}` : ""}
+                      </span>
+                    ) : null}
+                    {action ? (
+                      <PayButton registrationId={reg.id} state={action} amountLabel={formatIdr(reg.payment_amount)} />
                     ) : null}
                   </article>
                 )

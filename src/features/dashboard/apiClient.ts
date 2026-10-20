@@ -30,3 +30,24 @@ export async function postWithAuth<T>(
   const payload = (await response.json()) as ApiEnvelope<T>
   return { needsAuth: false, ok: response.ok, payload }
 }
+
+// Same contract as postWithAuth, for GET routes.
+export async function getWithAuth<T>(
+  path: string,
+): Promise<{ needsAuth: true } | { needsAuth: false; ok: boolean; payload: ApiEnvelope<T> }> {
+  const supabase = createClient()
+  const { data: sessionData } = await supabase.auth.getSession()
+  const accessToken = sessionData.session?.access_token
+
+  if (!accessToken) {
+    return { needsAuth: true }
+  }
+
+  const response = await fetch(path, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    cache: "no-store",
+  })
+
+  const payload = (await response.json()) as ApiEnvelope<T>
+  return { needsAuth: false, ok: response.ok, payload }
+}
