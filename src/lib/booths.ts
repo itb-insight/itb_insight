@@ -1,3 +1,9 @@
+/* 
+Server-side data layer for booth visit feature.
+[!!] FALSE IMPLEMENTATION
+*/
+
+
 import { createServiceClient } from '@/lib/supabase/server'
 import { type Booth, type BoothScanEvent } from '@/lib/types/database'
 import { recordAuditLog } from '@/lib/audit'
