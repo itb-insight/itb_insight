@@ -1,4 +1,10 @@
 import { createClient } from "@/lib/supabase/client"
+import type { Booth, VisitorTicket } from "@/lib/types/database"
+import type {
+  BoothAdminSummary,
+  BoothPerimeterUpdateResult,
+  UserBoothProgress,
+} from "@/lib/booths"
 
 export type ApiEnvelope<T> =
   | { success: true; data: T; error: null }
@@ -50,4 +56,108 @@ export async function getWithAuth<T>(
 
   const payload = (await response.json()) as ApiEnvelope<T>
   return { needsAuth: false, ok: response.ok, payload }
+}
+
+// --- QR, Attendance & Booth Point Allocation Wiring Helpers (docs/QR-FEATURES.md) ---
+
+export type BoothPointsAllocationData = {
+  booth: Booth
+  visitor: {
+    userId: string
+    fullName: string
+    email: string
+    institution: string | null
+  }
+  pointsAwarded: number
+  standardPointsAwarded: number
+  bonusPointsAwarded: number
+  totalBoothPointsForVisitor: number
+  standardPointsValue: number
+  maxBonusPoints: number
+  remainingBonusAllowance: number
+  alreadyVisited: boolean
+  withinPerimeter: boolean | null
+  totalPoints: number
+  totalVisited: number
+}
+
+/**
+ * Booth Staff scans a visitor's Personal QR to allocate standard + bonus points (up to booth max).
+ */
+export async function allocateVisitorBoothPoints(params: {
+  visitorQrCode: string
+  boothId?: string
+  boothSlug?: string
+  boothQrCode?: string
+  bonusPoints?: number
+  activityNote?: string
+  latitude?: number
+  longitude?: number
+}) {
+  return postWithAuth<BoothPointsAllocationData>("/api/booths/scan", params)
+}
+
+/**
+ * Geo-fencing service helper: updates whether the visitor is inside a booth's perimeter.
+ */
+export async function updateBoothPerimeterStatus(params: {
+  boothId?: string
+  latitude?: number
+  longitude?: number
+  withinPerimeter?: boolean
+}) {
+  return postWithAuth<BoothPerimeterUpdateResult>("/api/booths/scan", {
+    action: "perimeter",
+    ...params,
+  })
+}
+
+/**
+ * Fetches Booth Admin View summary & recent visitor scans for Booth Staff / Exhibitor.
+ */
+export async function fetchBoothAdminView(boothId?: string) {
+  const query = boothId ? `?boothId=${encodeURIComponent(boothId)}` : ""
+  return getWithAuth<BoothAdminSummary>(`/api/booths/scan${query}`)
+}
+
+/**
+ * Fetches the authenticated visitor's booth visit & point progress.
+ */
+export async function fetchUserBoothProgress() {
+  return getWithAuth<UserBoothProgress>("/api/booths/progress")
+}
+
+/**
+ * Campus geo-fencing attendance helper: marks visitor as attending on enter or exited on exit
+ * for live visitor count tracking.
+ */
+export async function reportCampusGeoAttendance(params?: {
+  event?: "enter" | "exit"
+  latitude?: number
+  longitude?: number
+  gateName?: string
+}) {
+  return postWithAuth<{
+    event: "enter" | "exit"
+    checkedIn: boolean
+    isOnCampus: boolean
+    alreadyCheckedIn: boolean
+    checkInTime: string
+    ticket: VisitorTicket
+  }>("/api/check-in/self", params || {})
+}
+
+/**
+ * Gate Staff scan helper: confirms entry through an assigned gate and serves as QR tutorial.
+ */
+export async function scanVisitorGateQr(params: { qrCode: string; gateName?: string }) {
+  return postWithAuth<{
+    ticket: VisitorTicket
+    profile: { full_name: string; email: string; institution?: string | null }
+    alreadyCheckedIn: boolean
+    gateConfirmed: boolean
+    isTutorialScan: boolean
+    tutorialMessage: string
+    checkInTime: string
+  }>("/api/check-in/scan", params)
 }

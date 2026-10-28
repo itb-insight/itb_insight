@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useActionState, useRef, useState } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import styles from './ProfileCard.module.css'
 import { updateProfile, type ProfileState } from './action'
 import Image from 'next/image';
@@ -19,7 +20,13 @@ const FIELDS = [
   { name: 'institution', label: 'Institusi',   type: 'text', placeholder: 'Asal institusi' },
 ] as const
 
-export default function ProfileCard({ initial }: { initial: Initial }) {
+export default function ProfileCard({
+  initial,
+  qrValue,
+}: {
+  initial: Initial;
+  qrValue?: string;
+}) {
   const [isEditing, setIsEditing] = useState(false)
   const [iconFailed, setIconFailed] = useState(false) // pencil icon missing -> show text only
   const [qrFailed, setQrFailed] = useState(false)       // QR image missing -> show fallback text
@@ -37,6 +44,8 @@ export default function ProfileCard({ initial }: { initial: Initial }) {
     formRef.current?.reset() // Back to saved values
     setIsEditing(false)
   }
+
+  const hasValidQr = Boolean(qrValue && qrValue.trim().length > 0)
 
   return (
     <div className={styles.container}>
@@ -111,24 +120,47 @@ export default function ProfileCard({ initial }: { initial: Initial }) {
               <h2 className={styles.qrTitle}>Personal QR</h2>
               <div className={styles.qrCard}>
                 {/* Caption always renders (hidden on failure) so the card keeps its exact height */}
-                <p className={styles.qrHint} style={qrFailed ? { visibility: 'hidden' } : undefined} aria-hidden={qrFailed}>
+                <p
+                  className={styles.qrHint}
+                  style={!hasValidQr && qrFailed ? { visibility: 'hidden' } : undefined}
+                  aria-hidden={!hasValidQr && qrFailed}
+                >
                   Tunjukkan QR di Booth
                 </p>
-                {qrFailed ? (
+                {hasValidQr ? (
+                  <div
+                    className={styles.qrImage}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: '#ffffff',
+                      padding: '16px',
+                      boxSizing: 'border-box',
+                    }}
+                  >
+                    <QRCodeSVG
+                      value={qrValue!.trim()}
+                      size={260}
+                      level="H"
+                      marginSize={2}
+                      fgColor="#08090f"
+                      bgColor="#ffffff"
+                    />
+                  </div>
+                ) : qrFailed ? (
                   <div className={styles.qrFallback}>
                     <p className={styles.qrHint}>Hmm.. QRnya belum muncul...</p>
                   </div>
                 ) : (
-                  <>
-                    <Image
-                      src="/images/qr-placeholder.png"
-                      alt="Personal QR"
-                      width={240}
-                      height={240}
-                      className={styles.qrImage}
-                      onError={() => setQrFailed(true)}
-                    />
-                  </>
+                  <Image
+                    src="/images/qr-placeholder.png"
+                    alt="Personal QR"
+                    width={240}
+                    height={240}
+                    className={styles.qrImage}
+                    onError={() => setQrFailed(true)}
+                  />
                 )}
               </div>
             </section>
