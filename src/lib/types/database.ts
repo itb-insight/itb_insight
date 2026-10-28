@@ -19,6 +19,12 @@ export type VisitorTicket = {
   checked_in: boolean
   checked_in_at: string | null
   checked_in_by?: string | null
+  is_on_campus?: boolean
+  last_entered_at?: string | null
+  last_exited_at?: string | null
+  gate_confirmed?: boolean
+  current_booth_id?: string | null
+  booth_perimeter_updated_at?: string | null
   created_at: string
   updated_at: string
 }
@@ -29,7 +35,7 @@ export type GateCheckIn = {
   user_id: string
   checked_in_by?: string | null
   gate_name: string
-  check_in_type: 'staff_scan' | 'self_scan' | 'manual_lookup'
+  check_in_type: 'staff_scan' | 'self_scan' | 'manual_lookup' | 'geofence_enter' | 'geofence_exit'
   checked_in_at: string
 }
 
@@ -44,6 +50,8 @@ export type Booth = {
   coordinate_y?: number | null
   qr_code: string
   points: number
+  max_bonus_points?: number
+  perimeter_radius_meters?: number
   exhibitor_user_id?: string | null
   is_active: boolean
   created_at: string
@@ -55,7 +63,13 @@ export type BoothScanEvent = {
   user_id: string
   booth_id: string
   points_awarded: number
+  standard_points_awarded?: number
+  bonus_points_awarded?: number
+  awarded_by?: string | null
+  activity_note?: string | null
+  within_perimeter?: boolean | null
   scanned_at: string
+  updated_at?: string
 }
 
 export type RSVPInvite = {
