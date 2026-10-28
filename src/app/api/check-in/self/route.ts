@@ -2,8 +2,7 @@ import { type NextRequest } from 'next/server'
 
 import { apiError, apiSuccess, unauthorizedResponse } from '@/lib/api-response'
 import { getAuthenticatedUser } from '@/lib/auth'
-import { ensureVisitorTicket } from '@/lib/tickets'
-import { processGateCheckIn } from '@/lib/check-in'
+import { processCampusGeoAttendance } from '@/lib/check-in'
 
 export async function POST(request: NextRequest) {
   const auth = await getAuthenticatedUser(request)
@@ -13,20 +12,14 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json().catch(() => ({}))
-    const { gateName } = body
+    const { gateName, event, latitude, longitude } = body
 
-    // 1. Ensure user has a valid ticket
-    const ticketResult = await ensureVisitorTicket(auth.user.id)
-    if (!ticketResult.ok || !ticketResult.ticket) {
-      return apiError('TICKET_ERROR', 'Gagal memuat tiket pengunjung Anda.', 500)
-    }
-
-    // 2. Perform self check-in
-    const result = await processGateCheckIn({
-      qrCode: ticketResult.ticket.qr_code,
-      staffUserId: auth.user.id,
+    const result = await processCampusGeoAttendance({
+      userId: auth.user.id,
+      event: event === 'exit' ? 'exit' : event === 'enter' ? 'enter' : undefined,
+      latitude: typeof latitude === 'number' ? latitude : null,
+      longitude: typeof longitude === 'number' ? longitude : null,
       gateName: gateName || 'self_service_gate',
-      checkInType: 'self_scan',
     })
 
     if (!result.ok) {
@@ -34,13 +27,15 @@ export async function POST(request: NextRequest) {
     }
 
     return apiSuccess({
-      checkedIn: true,
+      event: result.event,
+      checkedIn: result.attending,
+      isOnCampus: result.isOnCampus,
       alreadyCheckedIn: result.alreadyCheckedIn,
-      checkInTime: result.checkInTime,
+      checkInTime: result.timestamp,
       ticket: result.ticket,
     })
   } catch (err) {
     console.error('[API Check-In Self Error]', err)
-    return apiError('SERVER_ERROR', 'Terjadi kesalahan saat memproses presensi mandiri.', 500)
+    return apiError('SERVER_ERROR', 'Terjadi kesalahan saat memproses presensi kehadiran.', 500)
   }
 }

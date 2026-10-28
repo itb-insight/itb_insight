@@ -5,7 +5,7 @@ import { getScopedUser } from '@/lib/admin'
 import { processGateCheckIn } from '@/lib/check-in'
 
 export async function POST(request: NextRequest) {
-  const auth = await getScopedUser(request, ['gate_staff', 'admin'])
+  const auth = await getScopedUser(request, ['gate_staff', 'field_staff', 'admin'])
   if (!auth.ok) {
     return apiError(auth.code, auth.message, auth.status)
   }
@@ -33,6 +33,9 @@ export async function POST(request: NextRequest) {
       ticket: result.ticket,
       profile: result.profile,
       alreadyCheckedIn: result.alreadyCheckedIn,
+      gateConfirmed: result.gateConfirmed,
+      isTutorialScan: result.isTutorialScan,
+      tutorialMessage: result.tutorialMessage,
       checkInTime: result.checkInTime,
     })
   } catch (err) {

@@ -2,6 +2,7 @@ import { type NextRequest } from 'next/server'
 
 import { apiError, apiSuccess } from '@/lib/api-response'
 import { getScopedUser } from '@/lib/admin'
+import { getLiveVisitorStats } from '@/lib/check-in'
 import { createServiceClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
@@ -15,15 +16,8 @@ export async function GET(request: NextRequest) {
   try {
     const supabase = createServiceClient()
 
-    // 1. Visitor Tickets & Gate Check-ins
-    const { count: totalTickets } = await supabase
-      .from('visitor_tickets')
-      .select('*', { count: 'exact', head: true })
-
-    const { count: checkedInTickets } = await supabase
-      .from('visitor_tickets')
-      .select('*', { count: 'exact', head: true })
-      .eq('checked_in', true)
+    // 1. Visitor Tickets, Live Visitor Count (Entry/Exit), & Gate Check-ins
+    const visitorStats = await getLiveVisitorStats()
 
     // 2. Booth Scans
     const { count: totalBoothScans } = await supabase
@@ -63,11 +57,13 @@ export async function GET(request: NextRequest) {
 
     return apiSuccess({
       visitors: {
-        totalTickets: totalTickets || 0,
-        checkedIn: checkedInTickets || 0,
+        totalTickets: visitorStats.totalTickets,
+        checkedIn: visitorStats.checkedIn,
+        liveVisitorCount: visitorStats.liveVisitorCount,
+        gateConfirmedCount: visitorStats.gateConfirmedCount,
         gateConversionRate:
-          totalTickets && totalTickets > 0
-            ? Number((((checkedInTickets || 0) / totalTickets) * 100).toFixed(1))
+          visitorStats.totalTickets > 0
+            ? Number(((visitorStats.checkedIn / visitorStats.totalTickets) * 100).toFixed(1))
             : 0,
       },
       booths: {
