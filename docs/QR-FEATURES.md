@@ -10,6 +10,11 @@ are scanned by a Gate Staff. This step is NOT necessary for taking note of atten
 serves as a TUTORIAL to new visitors of how the personal profile QR work through
 demonstration of attendance scanning!
 
+There will be an **alternative** method for attendance in that a QR code is shown
+at each gate. Scanning it with any QR tool, will bring you to the personal QR page,
+along with pop-ups that tell to show this when visiting a booth, and that you can
+open the map to help guide your adventure.
+
 ## Points Allocation (Booth)
 While visiting a booth, the visitors are marked to be within the perimeter by the
 geo-fencing service. This may not be updated live if the local internet bandwith

@@ -11,10 +11,14 @@
             "id": "f35e29f127ef9527",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "docs/QR-BE.md",
+                "mode": "preview",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "QR-BE"
             }
           }
         ]
@@ -182,5 +186,11 @@
     }
   },
   "active": "f35e29f127ef9527",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "docs/QR-FE.md",
+    "docs/QR-BE.md",
+    "docs/QR-FEATURES.md",
+    "docs/QR-BE.md.tmp.25898.e9ff75ccbdf8",
+    "docs/QR-FE.md.tmp.25898.de71ac601544"
+  ]
 }
