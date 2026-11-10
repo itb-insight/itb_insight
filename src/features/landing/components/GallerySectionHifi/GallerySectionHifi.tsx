@@ -10,6 +10,8 @@ const slides = [
   { src: "/images/gallery/stage.webp", alt: "Stage" },
   { src: "/images/gallery/fountain.webp", alt: "Fountain" },
   { src: "/images/gallery/y2017.webp", alt: "stage2" },
+  { src: "/images/gallery/topo.webp", alt: "Topo" },
+  { src: "/images/gallery/mirror_logo.webp", alt: "Mirror logo" },
 ]
 
 export default function GallerySectionHifi() {
@@ -109,8 +111,6 @@ export default function GallerySectionHifi() {
                 position: "absolute",
                 left: "50%",
                 translateX: "-50%",
-                width: "55%",
-                aspectRatio: "1106 / 799",
                 pointerEvents: isVisible ? "auto" : "none",
               }}
               onClick={() => {
@@ -123,7 +123,7 @@ export default function GallerySectionHifi() {
                   src={slide.src}
                   alt={slide.alt}
                   fill
-                  sizes={isActive ? "55vw" : "20vw"}
+                  sizes={isActive ? "(max-width: 768px) 75vw, 40vw" : "(max-width: 768px) 30vw, 20vw"}
                   className={`${styles.cardImage} ${
                     slide.src === "/images/gallery/stage.webp" ? styles.cardImageStage : ""
                   }`}
