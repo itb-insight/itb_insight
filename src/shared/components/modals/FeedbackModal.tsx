@@ -54,24 +54,51 @@ function Star({ filled }: { filled: boolean }) {
   )
 }
 
+/** Sesuai kolom `context` di feedback_responses (migrasi 0007). */
+export type FeedbackContext = "event" | "booth" | "inspirates"
+
+/**
+ * Bentuknya sengaja dibikin sedekat mungkin dengan body POST /api/feedback,
+ * supaya waktu disambungkan tinggal diteruskan.
+ *
+ * Empat yang pertama punya kolom sendiri di feedback_responses. `name` dan
+ * `email` TIDAK — tabelnya cuma punya `user_id` ke profiles. Keduanya tetap
+ * dikirim lewat callback supaya tidak hilang, tapi pemanggilnya yang memutuskan
+ * mau diapakan: dimasukkan ke `metadata` jsonb, dibuatkan kolom lewat migrasi
+ * baru, atau dibuang kalau ternyata feedback hanya untuk yang sudah login.
+ */
 export interface FeedbackValue {
+  context: FeedbackContext
+  boothId: string | null
   rating: number
+  /** null kalau kosong, mengikuti submitFeedback() yang menormalkan "" jadi null. */
+  comment: string | null
   name: string
   email: string
-  feedback: string
 }
 
 interface FeedbackModalProps {
   open: boolean
   onClose: () => void
+  /** Kolom `context` wajib di tabel; default "event" sama seperti POST /api/feedback. */
+  context?: FeedbackContext
+  /** Diisi kalau context "booth" — misal dari halaman scanner booth. */
+  boothId?: string | null
+  /** Belum tersambung ke mana-mana — wiring menyusul. */
   onSubmit?: (value: FeedbackValue) => void
 }
 
-export default function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
+export default function FeedbackModal({
+  open,
+  onClose,
+  context = "event",
+  boothId = null,
+  onSubmit,
+}: FeedbackModalProps) {
   const [rating, setRating] = useState(1)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
-  const [feedback, setFeedback] = useState("")
+  const [comment, setComment] = useState("")
 
   return (
     <Modal open={open} onClose={onClose} label="Feedback" width={354} radius={20}>
@@ -79,7 +106,14 @@ export default function FeedbackModal({ open, onClose, onSubmit }: FeedbackModal
         className={styles.body}
         onSubmit={(e) => {
           e.preventDefault()
-          onSubmit?.({ rating, name, email, feedback })
+          onSubmit?.({
+            context,
+            boothId,
+            rating,
+            comment: comment.trim() || null,
+            name: name.trim(),
+            email: email.trim(),
+          })
         }}
       >
         <h2 className={styles.title}>Feedback</h2>
@@ -128,8 +162,8 @@ export default function FeedbackModal({ open, onClose, onSubmit }: FeedbackModal
             <textarea
               className={styles.textarea}
               placeholder="Write down feedback..."
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
             />
           </label>
         </div>
