@@ -1,0 +1,161 @@
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 40px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---- baris lencana + judul ------------------------------------------------ */
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  position: relative;
+  flex: none;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  border: 1.92px solid transparent;
+  border-radius: 50%;
+}
+
+.badgeSuccess {
+  background:
+    linear-gradient(0deg, #d0ffc7 0%, #76df62 100%) padding-box,
+    linear-gradient(180deg, #d0ffc7 0%, #76df62 100%) border-box;
+}
+
+.badgeError {
+  background:
+    linear-gradient(0deg, #ffe4ec 0%, #ffaaaa 100%) padding-box,
+    linear-gradient(0deg, #ffaaaa 0%, #ffe4ec 100%) border-box;
+}
+
+.badgeIcon {
+  position: absolute;
+  inset: -1.92px;
+  width: 24px;
+  height: 24px;
+  color: #091b3f;
+}
+
+.title {
+  margin: 0;
+  min-width: 0;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #ffffff;
+}
+
+/* ---- nama + detail -------------------------------------------------------- */
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--identity-gap, 2px);
+}
+
+/* Baris nama: nama di kiri, blok poin (kalau ada) menempel kanan. */
+.nameRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.name {
+  margin: 0;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 56px;
+  color: #ffffff;
+}
+
+/* Teks abu bergradien: 0deg = #FAFAFA di bawah, #D3D3D3 di atas. */
+.detail,
+.note,
+.points,
+.pointsTotal {
+  background: linear-gradient(0deg, #fafafa 0%, #d3d3d3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.detail {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.note {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+/* ---- blok poin (hanya pop-up "Points diberikan") -------------------------- */
+
+.pointsBlock {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+}
+
+.points,
+.pointsTotal {
+  background: linear-gradient(0deg, #d0ffc7 0%, #76df62 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.points {
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 34px;
+}
+
+.pointsTotal {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+/* ---- tombol --------------------------------------------------------------- */
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.actionsSpread {
+  justify-content: space-between;
+}
+
+.actionsEqual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.actionsFull {
+  display: grid;
+  grid-template-columns: 1fr;
+}
