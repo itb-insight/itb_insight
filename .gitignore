@@ -49,3 +49,8 @@ next-env.d.ts
 /.agents/
 /.claude/
 /tools/codebase-memory-mcp.cmd
+
+# obsidian
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
