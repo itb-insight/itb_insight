@@ -194,8 +194,12 @@
   padding: 0 20px;
   border: 2px solid transparent;
   border-radius: 8px;
+  /* Warna solid ditulis sebagai gradien satu warna, bukan "#fff padding-box".
+     Di shorthand `background`, <color> hanya sah di layer terakhir — menaruhnya
+     di layer pertama bikin SELURUH deklarasi invalid dan dibuang, jadi kotaknya
+     malah transparan. */
   background:
-    #ccddff padding-box,
+    linear-gradient(#ccddff, #ccddff) padding-box,
     linear-gradient(0deg, #517eda 1%, #acc7ff 100%) border-box;
 }
 

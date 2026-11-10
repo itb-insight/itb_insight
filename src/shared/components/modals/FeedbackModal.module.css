@@ -1,0 +1,128 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 40px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 34px;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* ---- bintang -------------------------------------------------------------- */
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+}
+
+.star {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.star:focus-visible {
+  outline: 2px solid #acc7ff;
+  outline-offset: -6px;
+  border-radius: 8px;
+}
+
+/* ---- isian ---------------------------------------------------------------- */
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #dee8fb;
+}
+
+.input,
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 6px 10px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  /* Warna solid ditulis sebagai gradien satu warna, bukan "#fff padding-box".
+     Di shorthand `background`, <color> hanya sah di layer terakhir — menaruhnya
+     di layer pertama bikin SELURUH deklarasi invalid dan dibuang, jadi kotaknya
+     malah transparan. */
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(0deg, #517eda 1%, #acc7ff 100%) border-box;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  /* Warna teks terisi tidak ada di dump; dipakai navy paling gelap dari palet. */
+  color: #091b3f;
+}
+
+.input {
+  height: 40px;
+}
+
+.textarea {
+  height: 100px;
+  resize: none;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: #acc7ff;
+  opacity: 1;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: 2px solid #517eda;
+  outline-offset: 1px;
+}
+
+/* ---- tombol --------------------------------------------------------------- */
+
+.submit {
+  box-sizing: border-box;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border: 4px solid transparent;
+  border-radius: 12px;
+  background:
+    linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%) padding-box,
+    linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%) border-box;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #1b3b7d;
+  cursor: pointer;
+}

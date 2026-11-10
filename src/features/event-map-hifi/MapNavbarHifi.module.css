@@ -1,0 +1,88 @@
+
+.navbar {
+  flex: none;
+  box-sizing: border-box;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 21px 0 23px;
+  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%), #091b3f;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+/* Pembungkus tautan logo. line-height 0 supaya tidak menambah tinggi baris. */
+.logoLink {
+  flex: none;
+  display: block;
+  line-height: 0;
+  border-radius: 8px;
+}
+
+.logoLink:focus-visible {
+  outline: 2px solid #acc7ff;
+  outline-offset: 2px;
+}
+
+.logo {
+  flex: none;
+  display: block;
+  width: 32px;
+  height: 31px;
+  object-fit: contain;
+}
+
+.tabs {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  flex: none;
+  box-sizing: border-box;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 18px;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  color: #dee8fb;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tabActive {
+  color: #1b3b7d;
+  background:
+    linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%) padding-box,
+    linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%) border-box;
+}
+
+.search {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #acc7ff;
+  cursor: pointer;
+}

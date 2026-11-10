@@ -1,0 +1,160 @@
+.page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+.content {
+  position: relative;
+  padding: 94px 24px 48px;
+}
+
+/* ---- judul ---------------------------------------------------------------- */
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 56px;
+  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #1b3b7d;
+}
+
+/* ---- dua kartu angka ------------------------------------------------------ */
+
+.stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.statCard {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 4px solid transparent;
+  border-radius: 16px;
+  background:
+    linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%) padding-box,
+    linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%) border-box;
+}
+
+.statLabel {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #091b3f;
+}
+
+.statValue {
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 34px;
+  color: #091b3f;
+}
+
+/* ---- kotak pemindai ------------------------------------------------------- */
+
+.scanner {
+  margin-top: 24px;
+}
+
+.viewport {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 40px;
+  background: rgba(27, 59, 125, 0.5);
+}
+
+.viewport::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 4px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.corner {
+  position: absolute;
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px 0 0 0;
+}
+
+.corner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 4px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.cornerTopLeft {
+  left: 43px;
+  top: 43px;
+}
+
+.cornerTopRight {
+  right: 43px;
+  top: 43px;
+}
+
+.cornerBottomLeft {
+  left: 43px;
+  bottom: 43px;
+}
+
+.cornerBottomRight {
+  right: 43px;
+  bottom: 43px;
+}
+
+.caption {
+  margin: 12px 0 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: center;
+  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

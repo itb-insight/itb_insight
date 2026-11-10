@@ -1,0 +1,48 @@
+.row {
+  box-sizing: border-box;
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px 0 12px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  font: inherit;
+  color: #dee8fb;
+  text-align: left;
+  cursor: pointer;
+}
+
+.icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--row-icon-color, #dee8fb);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #dee8fb;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #7fa9f6;
+}
