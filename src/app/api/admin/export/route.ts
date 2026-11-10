@@ -4,13 +4,17 @@ import { apiError } from '@/lib/api-response'
 import { getScopedUser } from '@/lib/admin'
 import { createServiceClient } from '@/lib/supabase/server'
 import { recordAuditLog } from '@/lib/audit'
+import { buildFeedbackExport } from '@/lib/feedback/export'
 
 export const dynamic = 'force-dynamic'
 
 function escapeCsvCell(value: unknown): string {
   if (value === null || value === undefined) return '""'
-  const str = String(value).replace(/"/g, '""')
-  return `"${str}"`
+  let str = String(value)
+  // CSV/formula injection: spreadsheet apps execute text cells starting with these.
+  // Free-text fields (feedback, inquiries) come from anonymous users.
+  if (typeof value === 'string' && /^[=+\-@\t\r]/.test(str)) str = `'${str}`
+  return `"${str.replace(/"/g, '""')}"`
 }
 
 function toCsvRow(cells: unknown[]): string {
@@ -99,28 +103,15 @@ export async function GET(request: NextRequest) {
 
       csvContent = [toCsvRow(header), ...rows].join('\n')
     } else if (type === 'feedback') {
-      const { data, error } = await supabase
-        .from('feedback_responses')
-        .select('id, context, rating, category, comment, created_at, booths(name)')
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-
-      const header = ['ID', 'Konteks', 'Booth', 'Rating', 'Kategori', 'Komentar', 'Waktu']
-      const rows = (data || []).map((row) => {
-        const booth = Array.isArray(row.booths) ? row.booths[0] : row.booths
-        return toCsvRow([
-          row.id,
-          row.context,
-          booth?.name || '',
-          row.rating,
-          row.category || '',
-          row.comment || '',
-          row.created_at,
-        ])
-      })
-
-      csvContent = [toCsvRow(header), ...rows].join('\n')
+      const formSlug = searchParams.get('form')
+      const exported = await buildFeedbackExport(formSlug)
+      if (!exported) {
+        return apiError('FORM_NOT_FOUND', 'Form feedback tidak ditemukan.', 404)
+      }
+      if (formSlug) {
+        filename = `itb-insight-feedback-${formSlug}-${new Date().toISOString().split('T')[0]}.csv`
+      }
+      csvContent = [toCsvRow(exported.header), ...exported.rows.map(toCsvRow)].join('\n')
     } else if (type === 'rsvp') {
       const { data, error } = await supabase
         .from('rsvp_invites')
@@ -155,7 +146,7 @@ export async function GET(request: NextRequest) {
     await recordAuditLog({
       userId: auth.user.id,
       action: `DATA_EXPORT_${type.toUpperCase()}`,
-      metadata: { type, exportedBy: auth.user.email },
+      metadata: { type, form: searchParams.get('form'), exportedBy: auth.user.email },
     })
 
     return new NextResponse(csvContent, {

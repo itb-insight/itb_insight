@@ -2,6 +2,7 @@ import { type NextRequest } from 'next/server'
 
 import { apiError, apiSuccess } from '@/lib/api-response'
 import { getScopedUser } from '@/lib/admin'
+import { getFeedbackSummaries } from '@/lib/feedback/summary'
 import { createServiceClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
@@ -40,21 +41,12 @@ export async function GET(request: NextRequest) {
       .select('*', { count: 'exact', head: true })
       .eq('status', 'verified')
 
-    // 4. Feedback
-    const { data: feedbackData } = await supabase
-      .from('feedback_responses')
-      .select('rating')
-
-    const totalFeedback = feedbackData?.length || 0
-    const averageRating =
-      totalFeedback > 0
-        ? Number(
-            (
-              (feedbackData || []).reduce((acc, curr) => acc + (curr.rating || 0), 0) /
-              totalFeedback
-            ).toFixed(2),
-          )
-        : 0
+    // 4. Feedback (weighted across forms by number of overall ratings)
+    const feedbackSummaries = await getFeedbackSummaries()
+    const totalFeedback = feedbackSummaries.reduce((acc, f) => acc + f.total, 0)
+    const ratedCount = feedbackSummaries.reduce((acc, f) => acc + f.ratedCount, 0)
+    const ratedSum = feedbackSummaries.reduce((acc, f) => acc + (f.averageRating ?? 0) * f.ratedCount, 0)
+    const averageRating = ratedCount > 0 ? Number((ratedSum / ratedCount).toFixed(2)) : 0
 
     // 5. Inquiries
     const { count: totalInquiries } = await supabase

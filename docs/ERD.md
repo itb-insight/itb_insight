@@ -25,7 +25,8 @@
 | `gate_check_ins` | Gate check-in audit log and multi-gate records | Yes; `/api/check-in/*`. |
 | `booths`, `booth_scan_events` | Booth directory and gamification point logging | Yes; `/api/booths/*`. |
 | `rsvp_invites` | Tokenized VIP and alumni invitation & confirmation | Yes; `/api/rsvp/*`. |
-| `feedback_responses` | Universal feedback engine (event, booth, inspirates) | Yes; `/api/feedback`. |
+| `feedback_responses` | Legacy feedback table, read-only since 0009 | No. |
+| `feedback_forms`, `feedback_submissions` | Configurable feedback engine (0009) | Yes; `/api/feedback/[slug]`. |
 | `partners`, `partnership_inquiries` | Partner tiered display and inquiry handling | Yes; `/api/partners/*`. |
 | `inspirates_records` | Inspirates school dissemination logging | Yes; `/api/admin/inspirates`. |
 | `audit_logs` | Audit trail for sensitive access and data export | Yes; recorded on exports/check-ins. |

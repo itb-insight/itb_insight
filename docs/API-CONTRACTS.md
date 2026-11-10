@@ -13,10 +13,10 @@ Only **Current** rows are implemented.
 | `POST /api/check-in/scan`, `POST /api/check-in/self`, `POST /api/check-in/manual` | Current | Gate scanner (staff), self-scan, and manual lookup with duplicate prevention. |
 | `GET /api/booths`, `POST /api/booths/scan`, `GET /api/booths/progress` | Current | Booth catalog, gate-dependent visit scanning, and gamification progress. |
 | `GET /api/rsvp/[token]`, `POST /api/rsvp/[token]` | Current | Tokenized RSVP invitations and response submission with substitution support. |
-| `POST /api/feedback`, `GET /api/feedback` | Current | Universal feedback engine (event, booth, inspirates) and staff summary. |
+| `GET/POST /api/feedback/[slug]`, `GET /api/feedback?form=` | Current | Configurable feedback forms (public form + submit) and staff summary. See `docs/FEEDBACK.md`. |
 | `GET /api/partners`, `POST /api/partners/inquiry` | Current | Tiered partners listing and integrated inquiry submission. |
 | `POST /api/payments/create`, `POST /api/payments/webhook`, `GET /api/payments/status` | Current | Midtrans Snap session creation (server-side fee), verified webhook, and status retry. |
-| `GET /api/admin/stats`, `GET /api/admin/export` | Current | Live analytics statistics and audited CSV data export (registrations, visitors, feedback, rsvp). |
+| `GET /api/admin/stats`, `GET /api/admin/export` | Current | Live analytics statistics and audited CSV data export (registrations, visitors, feedback `&form=<slug>`, rsvp). |
 | `GET /api/admin/inspirates`, `POST /api/admin/inspirates` | Current | Inspirates dissemination records for field staff. |
 | `POST /api/track`, `GET /api/admin/events` | Current | Analytics ingest (in-memory ring buffer + persistent Supabase insert) and feed. |
 | `/login`, `/auth/callback`, `/dashboard*` | Current | Login/callback and participant dashboard. Only `/dashboard*` is protected. |
