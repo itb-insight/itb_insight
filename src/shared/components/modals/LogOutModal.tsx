@@ -13,6 +13,10 @@ interface LogOutModalProps {
   /** The destructive choice. */
   onConfirm?: () => void
   title?: string
+  /** Label of the dismiss button (solid). */
+  cancelLabel?: string
+  /** Label of the confirm button (outline). */
+  confirmLabel?: string
 }
 
 export default function LogOutModal({
@@ -20,6 +24,8 @@ export default function LogOutModal({
   onClose,
   onConfirm,
   title = "Keluar Akun?",
+  cancelLabel = "Kembali",
+  confirmLabel = "Keluar",
 }: LogOutModalProps) {
   return (
     <Modal open={open} onClose={onClose} label={title} width={450} radius={12} minHeight={500}>
@@ -37,10 +43,10 @@ export default function LogOutModal({
 
         <div className={styles.buttons}>
           <ModalButton className={styles.button} onClick={onClose}>
-            Kembali
+            {cancelLabel}
           </ModalButton>
           <ModalButton className={styles.button} variant="outline" onClick={onConfirm}>
-            Keluar
+            {confirmLabel}
           </ModalButton>
         </div>
       </div>

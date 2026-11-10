@@ -48,7 +48,8 @@
   content: "";
   position: absolute;
   inset: 0;
-  padding: 4px;
+  /* Outline thickness. Override per use with `--outline-width` on the button. */
+  padding: var(--outline-width, 4px);
   border-radius: inherit;
   background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
   -webkit-mask:

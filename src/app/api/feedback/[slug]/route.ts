@@ -2,6 +2,7 @@ import { type NextRequest } from 'next/server'
 
 import { apiError, apiSuccess } from '@/lib/api-response'
 import { getAuthenticatedUser } from '@/lib/auth'
+import { resolveAccountIdentity } from '@/lib/feedback/account'
 import { getFeedbackFormBySlug, toPublicForm } from '@/lib/feedback/forms'
 import { processSubmission } from '@/lib/feedback/submit'
 import { checkRateLimit, getClientIp, rateLimitResponse } from '@/lib/rate-limit'
@@ -12,13 +13,21 @@ export const dynamic = 'force-dynamic'
 // Per IP: high, because a whole class submits from one school NAT at the same moment.
 const RATE_LIMIT = { limit: 10, ipLimit: 300, windowMs: 10 * 60_000 } as const
 
-export async function GET(_request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+// Returns the form plus, for a signed-in caller, the name and email the submission will be
+// stored under (shown read-only in the form). Per-user, so never cache it.
+export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const form = await getFeedbackFormBySlug(slug)
   if (!form || !form.isActive) {
     return apiError('FORM_NOT_FOUND', 'Form feedback tidak ditemukan.', 404)
   }
-  return apiSuccess(toPublicForm(form))
+
+  const auth = await getAuthenticatedUser(request)
+  const account = auth.ok ? await resolveAccountIdentity({ id: auth.user.id, email: auth.user.email }) : null
+
+  const response = apiSuccess({ form: toPublicForm(form), account })
+  response.headers.set('Cache-Control', 'private, no-store')
+  return response
 }
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {

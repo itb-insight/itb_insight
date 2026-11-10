@@ -116,7 +116,7 @@ revoke execute on function private.purge_expired_feedback_pii() from public, ano
 
 -- ─── Seed: Inspirates 2026 (first use case) ──────────────────────────────────
 -- Source: docs/references/CPWR_INSPIRATES.pdf (section "FORM FEEDBACK", school timeline).
--- QR per school: /feedback/inspirates-2026?school=<option value>  (pre-selects the school).
+-- URL / QR: /feedback/inspirates-2026 (one link for every school; students pick their school).
 insert into public.feedback_forms (slug, title, description, context, opens_at, closes_at, questions)
 values (
   'inspirates-2026',

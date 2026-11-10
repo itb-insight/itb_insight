@@ -1,177 +1,85 @@
 "use client"
 
-import { useId, useState } from "react"
+import { useEffect, useState } from "react"
+
+import FeedbackPanel from "@/features/feedback/FeedbackPanel"
+import { FEEDBACK_DIALOG_WIDTH } from "@/features/feedback/layout"
+import type { FeedbackAccount } from "@/lib/feedback/account"
+import type { PublicFeedbackForm } from "@/lib/feedback/forms"
 
 import Modal from "./Modal"
 import styles from "./FeedbackModal.module.css"
 
-const STAR_PATH =
-  "M23.34 0 L28.84 16.95 L46.67 16.95 L32.25 27.43 L37.76 44.39 " +
-  "L23.34 33.91 L8.91 44.39 L14.42 27.43 L0 16.95 L17.83 16.95 Z"
-
-function Star({ filled }: { filled: boolean }) {
-  const id = useId()
-
-  return (
-    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
-      {/*
-
-      */}
-      <defs>
-        <linearGradient
-          id={`${id}-fill`}
-          gradientUnits="userSpaceOnUse"
-          x1="0"
-          y1="44.39"
-          x2="0"
-          y2="0"
-        >
-          <stop stopColor="#DEE8FB" />
-          <stop offset="1" stopColor="#ACC7FF" />
-        </linearGradient>
-        <linearGradient
-          id={`${id}-stroke`}
-          gradientUnits="userSpaceOnUse"
-          x1="0"
-          y1="0"
-          x2="0"
-          y2="44.39"
-        >
-          <stop stopColor="#DEE8FB" />
-          <stop offset="1" stopColor="#ACC7FF" />
-        </linearGradient>
-      </defs>
-      <g transform="translate(4.67 5.83)">
-        <path
-          d={STAR_PATH}
-          fill={filled ? `url(#${id}-fill)` : "none"}
-          stroke={filled ? `url(#${id}-stroke)` : "#7FA9F6"}
-          strokeWidth="2"
-          strokeLinejoin="round"
-        />
-      </g>
-    </svg>
-  )
-}
-
-/** Sesuai kolom `context` di feedback_responses (migrasi 0007). */
-export type FeedbackContext = "event" | "booth" | "inspirates"
-
-/**
- * Bentuknya sengaja dibikin sedekat mungkin dengan body POST /api/feedback,
- * supaya waktu disambungkan tinggal diteruskan.
- *
- * Empat yang pertama punya kolom sendiri di feedback_responses. `name` dan
- * `email` TIDAK — tabelnya cuma punya `user_id` ke profiles. Keduanya tetap
- * dikirim lewat callback supaya tidak hilang, tapi pemanggilnya yang memutuskan
- * mau diapakan: dimasukkan ke `metadata` jsonb, dibuatkan kolom lewat migrasi
- * baru, atau dibuang kalau ternyata feedback hanya untuk yang sudah login.
- */
-export interface FeedbackValue {
-  context: FeedbackContext
-  boothId: string | null
-  rating: number
-  /** null kalau kosong, mengikuti submitFeedback() yang menormalkan "" jadi null. */
-  comment: string | null
-  name: string
-  email: string
-}
-
 interface FeedbackModalProps {
   open: boolean
   onClose: () => void
-  /** Kolom `context` wajib di tabel; default "event" sama seperti POST /api/feedback. */
-  context?: FeedbackContext
-  /** Diisi kalau context "booth" — misal dari halaman scanner booth. */
-  boothId?: string | null
-  /** Belum tersambung ke mana-mana — wiring menyusul. */
-  onSubmit?: (value: FeedbackValue) => void
+  /** Slug of a row in feedback_forms, e.g. "inspirates-2026". */
+  slug: string
 }
 
-export default function FeedbackModal({
-  open,
-  onClose,
-  context = "event",
-  boothId = null,
-  onSubmit,
-}: FeedbackModalProps) {
-  const [rating, setRating] = useState(1)
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [comment, setComment] = useState("")
+type Loaded = { form: PublicFeedbackForm; account: FeedbackAccount | null }
+
+type LoadResult = { slug: string; data: Loaded; error: null } | { slug: string; data: null; error: string }
+
+type Envelope = { success: true; data: Loaded } | { success: false; error: { message: string } }
+
+/**
+ * Feedback pop-up. Loads the form definition (and the signed-in user's name/email)
+ * the first time it opens, then renders the same FeedbackPanel as /feedback/[slug].
+ */
+export default function FeedbackModal({ open, onClose, slug }: FeedbackModalProps) {
+  const [result, setResult] = useState<LoadResult | null>(null)
+
+  const current = result?.slug === slug ? result : null
+
+  useEffect(() => {
+    if (!open || current) return
+
+    const controller = new AbortController()
+    fetch(`/api/feedback/${encodeURIComponent(slug)}`, { signal: controller.signal, cache: "no-store" })
+      .then((res) => res.json() as Promise<Envelope>)
+      .then((json) =>
+        setResult(
+          json.success
+            ? { slug, data: json.data, error: null }
+            : { slug, data: null, error: json.error.message },
+        ),
+      )
+      .catch(() => {
+        if (!controller.signal.aborted) {
+          setResult({ slug, data: null, error: "Koneksi bermasalah. Periksa internetmu lalu coba lagi." })
+        }
+      })
+    return () => controller.abort()
+  }, [open, slug, current])
 
   return (
-    <Modal open={open} onClose={onClose} label="Feedback" width={354} radius={20}>
-      <form
-        className={styles.body}
-        onSubmit={(e) => {
-          e.preventDefault()
-          onSubmit?.({
-            context,
-            boothId,
-            rating,
-            comment: comment.trim() || null,
-            name: name.trim(),
-            email: email.trim(),
-          })
-        }}
-      >
-        <h2 className={styles.title}>Feedback</h2>
-
-        <div className={styles.stars} role="radiogroup" aria-label="Beri nilai">
-          {[1, 2, 3, 4, 5].map((value) => (
-            <button
-              key={value}
-              type="button"
-              className={styles.star}
-              role="radio"
-              aria-checked={rating === value}
-              aria-label={`${value} bintang`}
-              onClick={() => setRating(value)}
-            >
-              <Star filled={value <= rating} />
-            </button>
-          ))}
+    <Modal open={open} onClose={onClose} label="Feedback" width={FEEDBACK_DIALOG_WIDTH} radius={20}>
+      {current?.data ? (
+        <FeedbackPanel form={current.data.form} account={current.data.account} onClose={onClose} />
+      ) : (
+        <div className={styles.status}>
+          <h2 className={styles.title}>Feedback</h2>
+          {current?.error ? (
+            <>
+              <p className={styles.message} role="alert">
+                {current.error}
+              </p>
+              <button
+                type="button"
+                className={styles.retry}
+                onClick={() => setResult(null)}
+              >
+                Coba lagi
+              </button>
+            </>
+          ) : (
+            <p className={styles.message} aria-live="polite">
+              Memuat form…
+            </p>
+          )}
         </div>
-
-        <div className={styles.fields}>
-          <label className={styles.field}>
-            <span className={styles.label}>Name</span>
-            <input
-              className={styles.input}
-              type="text"
-              placeholder="Insert name..."
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </label>
-
-          <label className={styles.field}>
-            <span className={styles.label}>Email</span>
-            <input
-              className={styles.input}
-              type="email"
-              placeholder="Insert email address..."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </label>
-
-          <label className={styles.field}>
-            <span className={styles.label}>Feedback (optional)</span>
-            <textarea
-              className={styles.textarea}
-              placeholder="Write down feedback..."
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-            />
-          </label>
-        </div>
-
-        <button type="submit" className={styles.submit}>
-          Submit
-        </button>
-      </form>
+      )}
     </Modal>
   )
 }

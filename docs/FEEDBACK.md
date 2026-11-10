@@ -54,9 +54,17 @@ issues. `npm test` also parses the Inspirates seed straight from the migration.
 
 ## Flow
 
-- Page: `/feedback/[slug]` (server-rendered, `noindex`). Choice questions can be pre-filled by
-  query string, e.g. a per-school QR: `/feedback/inspirates-2026?school=sman-1-bandung`.
-- API: `GET /api/feedback/[slug]` (public form definition), `POST /api/feedback/[slug]` (submit),
+- Page: `/feedback/[slug]` (server-rendered, `noindex`). Every feedback link is just
+  `/feedback/<event-name>-2026`, e.g. `/feedback/inspirates-2026`: one URL / QR per event, no
+  query parameters. Questions like the school are answered in the form.
+- Pop-up: `<FeedbackModal open onClose slug="inspirates-2026" />`
+  (`src/shared/components/modals/FeedbackModal.tsx`) loads the form when first opened. The page
+  and the pop-up render the same hi-fi form, `src/features/feedback/FeedbackPanel.tsx`: the overall
+  star rating first, then name/email, then the other questions in order. Choice and scale
+  questions are `ModalButton`s (solid = selected, outline = not), and clicking the selected option
+  of an optional question clears it.
+- API: `GET /api/feedback/[slug]` returns `{ form, account }` (account = the signed-in user's
+  name/email, or null; `Cache-Control: private, no-store`), `POST /api/feedback/[slug]` (submit),
   `GET /api/feedback?form=<slug>` (staff summary), `GET /api/admin/export?type=feedback&form=<slug>` (CSV).
 - Signed in: name/email come from the profile **on the server**; the request body is ignored.
 - Not signed in: name/email inputs with `autocomplete="name"` / `"email"`. Browsers cannot
@@ -103,7 +111,7 @@ Tests: `src/lib/feedback/*.test.ts`, `src/lib/rate-limit.test.ts` (`npm test`). 
 
 | Trigger | Status |
 |---|---|
-| QR scan | **Ready**: print a QR for `/feedback/<slug>` (optionally with `?<question>=<value>`). |
+| QR scan | **Ready**: print one QR per event for `/feedback/<slug>`. |
 | Set time / pop-up | Not built; needs the PWA/notification work. Forms already carry `opens_at`. A dashboard banner can list open forms the user attended but hasn't submitted. |
 | Geofence exit | Not built. Web pages cannot geofence in the background (no background location for PWAs, notably on iOS), so it only works while the page is open. See CLAUDE.md. |
 | Follow-up email | Suggested fallback for the time trigger; not built. |

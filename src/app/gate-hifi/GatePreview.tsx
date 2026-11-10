@@ -39,14 +39,7 @@ export default function GatePreview() {
       <CheckedInModal open={open === "checkedIn"} onClose={close} onNextScan={close} />
       <BelumAbsenModal open={open === "belumAbsen"} onClose={close} onConfirm={close} />
       <PoinDiberikanModal open={open === "poin"} onClose={close} onNextScan={close} />
-      <FeedbackModal
-        open={open === "feedback"}
-        onClose={close}
-        onSubmit={(value) => {
-          console.log("feedback", value)
-          close()
-        }}
-      />
+      <FeedbackModal open={open === "feedback"} onClose={close} slug="inspirates-2026" />
     </>
   )
 }

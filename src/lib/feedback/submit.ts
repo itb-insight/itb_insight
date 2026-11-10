@@ -1,10 +1,9 @@
 import { createServiceClient } from '@/lib/supabase/server'
 
+import { resolveAccountIdentity, type SubmitterAccount } from './account'
 import { getFormWindowState, type FeedbackForm } from './forms'
 import { MIN_FILL_MS, submissionSchema, validateAnswers, validateIdentity } from './schema'
 import { verifyTurnstile } from './turnstile'
-
-export type SubmitterAccount = { id: string; email?: string | null }
 
 export type SubmitOutcome =
   | { ok: true; id: string | null }
@@ -30,15 +29,6 @@ const fail = (
   message: string,
   fieldErrors?: Record<string, string>,
 ): SubmitOutcome => ({ ok: false, status, code, message, fieldErrors })
-
-async function resolveAccountIdentity(account: SubmitterAccount) {
-  const supabase = createServiceClient()
-  const { data } = await supabase.from('profiles').select('full_name, email').eq('id', account.id).maybeSingle()
-  return {
-    name: (data?.full_name as string | undefined) ?? '',
-    email: (data?.email as string | undefined) ?? account.email ?? '',
-  }
-}
 
 /**
  * Validates and stores one feedback submission. Order matters: cheap checks first,
