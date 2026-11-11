@@ -20,17 +20,17 @@ const OPEN_CARD_BG =
   'linear-gradient(0deg, rgba(172, 199, 255, 0.5) 0%, rgba(81, 126, 218, 0.5) 99.04%)';
 
 const competitions: Competition[] = [
-  {
-    id: 'safety-rescue',
-    title: 'Safety and Rescue Robot Competition',
-    description: 'Penjelasan singkat lomba Lorem ipsum dolor sit amet yadayada',
-    registrationDeadline: 'XX Bulan 2026',
-    iconPath: '/assets/icon-sar.png',
-    iconAlt: 'Safety and Rescue',
-    buttonText: 'Registrasi',
-    gradientBackground: OPEN_CARD_BG,
-    titleGradient: 'linear-gradient(0deg, #FFAAAA 0%, #FFE4EC 100%)',
-  },
+  // {
+  //   id: 'safety-rescue',
+  //   title: 'Safety and Rescue Robot Competition',
+  //   description: 'Penjelasan singkat lomba Lorem ipsum dolor sit amet yadayada',
+  //   registrationDeadline: 'XX Bulan 2026',
+  //   iconPath: '/assets/icon-sar.png',
+  //   iconAlt: 'Safety and Rescue',
+  //   buttonText: 'Registrasi',
+  //   gradientBackground: OPEN_CARD_BG,
+  //   titleGradient: 'linear-gradient(0deg, #FFAAAA 0%, #FFE4EC 100%)',
+  // },
   {
     id: 'microdrone',
     title: 'Microdrone Obstacle Race',

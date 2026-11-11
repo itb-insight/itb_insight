@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import styles from "./HeroSection.module.css"
 import Link from "next/link"
+import { COUNTDOWN_TARGET } from "@/features/home/homeConfig"
 
 interface TimeLeft {
   days: number
@@ -40,7 +41,7 @@ function pad(n: number): string {
 
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false)
-  const { days, hours, minutes, seconds } = useCountdown("2026-08-11T00:00:00")
+  const { days, hours, minutes, seconds } = useCountdown(COUNTDOWN_TARGET)
 
   useEffect(() => {
     setMounted(true)

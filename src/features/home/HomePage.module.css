@@ -38,7 +38,7 @@
   gap: 29px;
 }
 
-@media (max-width: 899px) {
+@media (max-width: 1300px) {
   .page {
     grid-template-columns: minmax(0, 1fr);
     padding: 24px 24px 80px;

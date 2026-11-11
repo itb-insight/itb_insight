@@ -6,10 +6,14 @@ import MobileMenuHifi from "./MobileMenuHifi"
 
 interface NavbarHifiProps {
   isSolid?: boolean;
+  /** Latar biru solid hanya di lebar layar mobile (dipakai dashboard, selaras dengan dropdown-nya) */
+  solidOnMobile?: boolean;
 }
 
-export default function NavbarHifi({ isSolid = false }: NavbarHifiProps) {
-  const navbarClassName = `${styles.navbar} ${isSolid ? styles.isSolid : ""}`;
+export default function NavbarHifi({ isSolid = false, solidOnMobile = false }: NavbarHifiProps) {
+  const navbarClassName = `${styles.navbar} ${isSolid ? styles.isSolid : ""} ${
+    solidOnMobile ? styles.solidOnMobile : ""
+  }`;
 
   return (
     <nav className={navbarClassName}>
