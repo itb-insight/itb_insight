@@ -234,7 +234,17 @@ export default function FeedbackPanel({ form, account, onClose }: Props) {
           />
           <FieldError id={`${fieldId("email")}-error`} message={errors.email} />
         </div>
-        {account ? <p className={styles.hint}>Terisi dari akunmu.</p> : null}
+        {account ? (
+          <p className={styles.hint}>Terisi dari akunmu.</p>
+        ) : (
+          <p className={styles.hint}>
+            Punya akun?{" "}
+            <Link href={`/login?next=${encodeURIComponent(`/feedback/${form.slug}`)}`} className={styles.hintLink}>
+              Log in
+            </Link>{" "}
+            supaya nama dan email terisi otomatis.
+          </p>
+        )}
 
         {rest.map((q) => (
           <QuestionField

@@ -172,6 +172,11 @@ a.submit {
   text-align: right;
 }
 
+.hintLink {
+  color: #dee8fb;
+  text-decoration: underline;
+}
+
 .counterOver,
 .fieldError,
 .formError {

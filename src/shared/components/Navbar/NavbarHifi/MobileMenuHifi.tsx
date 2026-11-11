@@ -14,8 +14,11 @@ const LINKS = [
 
 export default function MobileMenuHifi({
   variant = "navbar",
+  countdownOnly = false,
 }: {
   variant?: "navbar" | "header"
+  /** COUNTDOWN_ONLY=true: only the auth actions, no page links (they would hit the countdown). */
+  countdownOnly?: boolean
 }) {
   const [open, setOpen] = useState(false)
   const wrapRef = useRef<HTMLDivElement>(null)
@@ -73,22 +76,26 @@ export default function MobileMenuHifi({
       )}
 
       {open && (
-        <div className={styles.mobileMenu}>
-          {LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={styles.mobileMenuLink}
-              onClick={close}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className={`${styles.mobileMenu} ${countdownOnly ? styles.mobileMenuCompact : ""}`}>
+          {countdownOnly ? null : (
+            <>
+              {LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={styles.mobileMenuLink}
+                  onClick={close}
+                >
+                  {link.label}
+                </Link>
+              ))}
 
-          <div className={styles.mobileMenuDivider} />
+              <div className={styles.mobileMenuDivider} />
+            </>
+          )}
 
           <div className={styles.mobileMenuAuth}>
-            <NavAuthActionsHifi variant="mobile" onAction={close} />
+            <NavAuthActionsHifi variant="mobile" onAction={close} hideDashboard={countdownOnly} />
           </div>
         </div>
       )}

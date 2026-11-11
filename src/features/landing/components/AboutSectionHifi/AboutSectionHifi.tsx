@@ -74,7 +74,7 @@ export default function AboutSectionHifi() {
                 <span className={styles.infoLabel}>OPEN FOR PUBLIC!</span>
                 <div className={styles.infoValue}>
                   <img src="/images/icons/calendar-icon.svg" alt="" className={styles.calendarIcon} />
-                  <span>26 November 2026</span>
+                  <span>28 November 2026</span>
                 </div>
               </div>
 

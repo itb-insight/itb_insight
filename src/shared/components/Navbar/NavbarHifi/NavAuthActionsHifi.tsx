@@ -13,9 +13,12 @@ import styles from "./NavbarHifi.module.css"
 export default function NavAuthActionsHifi({
   variant = "desktop",
   onAction,
+  hideDashboard = false,
 }: {
   variant?: "desktop" | "mobile"
   onAction?: () => void
+  /** COUNTDOWN_ONLY=true: the dashboard is behind the countdown, so only "Sign out" is shown. */
+  hideDashboard?: boolean
 }) {
   const router = useRouter()
   const [signedIn, setSignedIn] = useState<boolean | null>(null)
@@ -68,9 +71,11 @@ export default function NavAuthActionsHifi({
   if (signedIn) {
     return (
       <>
-        <Link href="/dashboard" className={primaryClass} onClick={onAction}>
-          Dashboard
-        </Link>
+        {hideDashboard ? null : (
+          <Link href="/dashboard" className={primaryClass} onClick={onAction}>
+            Dashboard
+          </Link>
+        )}
         <button
           type="button"
           onClick={handleSignOutRequest}

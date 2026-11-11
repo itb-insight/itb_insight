@@ -1,5 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
+
+import { isCountdownOnly } from "@/lib/countdown"
 import styles from "./NavbarHifi.module.css"
 import NavAuthActionsHifi from "./NavAuthActionsHifi"
 import MobileMenuHifi from "./MobileMenuHifi"
@@ -15,6 +17,10 @@ export default function NavbarHifi({ isSolid = false, solidOnMobile = false }: N
     solidOnMobile ? styles.solidOnMobile : ""
   }`;
 
+  // COUNTDOWN_ONLY=true: only the feedback form and login are reachable, so drop the links that
+  // would land on the countdown page. Read on the server; in a client tree (error.tsx) it is false.
+  const countdownOnly = isCountdownOnly();
+
   return (
     <nav className={navbarClassName}>
       <div className={styles.left}>
@@ -28,21 +34,25 @@ export default function NavbarHifi({ isSolid = false, solidOnMobile = false }: N
           />
         </Link>
 
-        <div className={styles.navLinks}>
-          <Link href="/event" className={styles.navLink}>Event</Link>
-          <Link href="/competition" className={styles.navLink}>Competition</Link>
-          <Link href="/event-map" className={styles.navLink}>Map</Link>
-        </div>
+        {countdownOnly ? null : (
+          <div className={styles.navLinks}>
+            <Link href="/event" className={styles.navLink}>Event</Link>
+            <Link href="/competition" className={styles.navLink}>Competition</Link>
+            <Link href="/event-map" className={styles.navLink}>Map</Link>
+          </div>
+        )}
       </div>
 
       <div className={styles.actions}>
-        <button className={styles.searchBtn} aria-label="Search">
-          <img src="/images/icons/search-icon.svg" alt="" className={styles.searchIcon} />
-        </button>
-        <NavAuthActionsHifi />
+        {countdownOnly ? null : (
+          <button className={styles.searchBtn} aria-label="Search">
+            <img src="/images/icons/search-icon.svg" alt="" className={styles.searchIcon} />
+          </button>
+        )}
+        <NavAuthActionsHifi hideDashboard={countdownOnly} />
       </div>
 
-      <MobileMenuHifi />
+      <MobileMenuHifi countdownOnly={countdownOnly} />
     </nav>
   )
 }

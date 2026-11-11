@@ -179,6 +179,11 @@
     0 18px 40px rgba(9, 27, 63, 0.45);
 }
 
+/* COUNTDOWN_ONLY: only the auth buttons, so drop the fixed tall shape. */
+.mobileMenuCompact {
+  aspect-ratio: auto;
+}
+
 .mobileMenuLink {
   font-family: 'Gabarito', sans-serif;
   font-size: 1.15rem;

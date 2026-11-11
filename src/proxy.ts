@@ -1,11 +1,12 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { getMaintenanceState, isPageUnderMaintenance } from './lib/maintenance'
-import { COUNTDOWN_PAGE, isCountdownAsset, isCountdownOnly } from './lib/countdown'
+import { COUNTDOWN_PAGE, isCountdownAsset, isCountdownOnly, isCountdownOpenApi, isCountdownOpenPage } from './lib/countdown'
 import { updateSession } from '@/lib/supabase/middleware'
 
 // Next.js 16 renamed the `middleware` convention to `proxy` (Node runtime, no edge config).
 /*
-  0. Countdown-only mode: Every page is rewritten to the static countdown, everything else is 503.
+  0. Countdown-only mode: Every page is rewritten to the static countdown, everything else is 503,
+     except the feedback form and login / sign-up (see src/lib/countdown.ts).
   1. Maintenance mode: Rewrites blocked requests to /maintenance/* with a 503.
   2. Refreshes the Supabase auth session on every matched request and guard `/dashboard`.
 */
@@ -13,7 +14,16 @@ import { updateSession } from '@/lib/supabase/middleware'
 const BYPASS_COOKIE = 'maintenance-bypass'
 
 export async function proxy(request: NextRequest) {
-  if (isCountdownOnly()) return handleCountdownOnly(request)
+  if (isCountdownOnly()) {
+    const { pathname } = request.nextUrl
+    // Feedback API: GET loads the form, POST submits it. It does its own auth and rate limiting.
+    if (isCountdownOpenApi(pathname) && (request.method === 'GET' || request.method === 'POST')) {
+      return NextResponse.next()
+    }
+    // Feedback form and login: GET only, with the usual session refresh.
+    if (isCountdownOpenPage(pathname) && request.method === 'GET') return updateSession(request)
+    return handleCountdownOnly(request)
+  }
 
   // API routes do their own auth; the proxy only matches them for countdown mode
   if (isApiRoute(request.nextUrl.pathname)) return NextResponse.next()
@@ -30,7 +40,7 @@ function isApiRoute(pathname: string) {
 }
 
 /*
-COUNTDOWN_ONLY=true: no bypass, no other page / endpoint / auth flow is reachable
+COUNTDOWN_ONLY=true: no bypass; only the pages / endpoints allowed in src/lib/countdown.ts are reachable
 */
 function handleCountdownOnly(request: NextRequest): NextResponse {
   const { pathname } = request.nextUrl
