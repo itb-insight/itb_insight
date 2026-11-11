@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700&display=swap');
+
+.container {
+  --navbar-height: 92px;
+
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.main {
+  box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: calc(var(--navbar-height) + 64px);
+  padding-bottom: 48px;
+}
+
+.content {
+  container-type: inline-size;
+  width: 100%;
+  max-width: 1400px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 0 32px;
+}
+
+.pageTitle {
+  font-family: 'EXCRATCH', monospace;
+  font-size: clamp(32px, 6.2cqw, 64px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+  text-align: center;
+  margin: 0;
+  text-transform: uppercase;
+
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background: linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.titleWord {
+  display: inline;
+}
+
+.cardsGrid {
+  --gap: 16px;
+  --card-w: min(318px, 100cqw);
+
+  display: grid;
+  grid-template-columns: var(--card-w);
+  gap: 32px;
+  justify-content: center;
+}
+
+@media (min-width: 900px) and (max-width: 1279px) {
+  .cardsGrid {
+    --card-w: min(318px, calc((100cqw - 24px) / 2));
+    grid-template-columns: repeat(2, var(--card-w));
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .cardsGrid {
+    --card-w: min(
+      318px,
+      calc((100cqw - 3 * var(--gap)) / 4),
+      max(240px, calc((100vh - var(--navbar-height) - 192px) * 0.5483))
+    );
+    grid-template-columns: repeat(4, var(--card-w));
+    gap: var(--gap);
+  }
+}
+
+@media (max-width: 899px) {
+  .main {
+    min-height: auto;
+    padding-top: 24px;
+  }
+
+  .content {
+    gap: 24px;
+    padding: 0 20px;
+  }
+
+  .pageTitle {
+    font-size: clamp(24px, 8.2cqw, 48px);
+  }
+
+  .titleWord {
+    display: block;
+  }
+}

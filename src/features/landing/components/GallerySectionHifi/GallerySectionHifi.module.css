@@ -1,0 +1,86 @@
+.gallery {
+  /* TUNE HERE: main card width as a % of the section (was 55). Smaller = smaller gallery. */
+  --card-width: 40;
+
+  padding: 80px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  container-type: inline-size;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  font-family: 'Excratch', sans-serif;
+  font-size: clamp(1.5rem, 3cqw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  background: linear-gradient(to bottom, #FFFFFF, #D1E4FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(209, 228, 255, 0.6));
+  margin: 0;
+}
+
+.carousel {
+  width: 100%;
+  height: calc(var(--card-width) * 1cqw * (799 / 1106) + 12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel:active {
+  cursor: grabbing;
+}
+
+.card {
+  position: absolute;
+  cursor: pointer;
+  width: calc(var(--card-width) * 1%);
+  aspect-ratio: 1106 / 799;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #5B9DFF, #FFFFFF);
+  z-index: -1;
+}
+
+.imageClip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.cardImage {
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* stage.webp is portrait (4000x6000); crop to the stage, skipping the dark sky above it */
+.cardImageStage {
+  object-position: 50% 55%;
+}
+
+/* TUNE HERE: mobile card width as a % of the screen. Neighbour cards peek in at the edges. */
+@media (max-width: 768px) {
+  .gallery {
+    --card-width: 75;
+    padding: 48px 0;
+    gap: 24px;
+  }
+}

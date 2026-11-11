@@ -58,7 +58,7 @@ export default function NavAuthActions() {
       <Link href="/login" className={styles.logInBtn}>
         Log In
       </Link>
-      <Link href="/register" className={styles.signUpBtn}>
+      <Link href="/signup" className={styles.signUpBtn}>
         Sign up
       </Link>
     </>

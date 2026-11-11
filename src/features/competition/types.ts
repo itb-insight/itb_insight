@@ -10,6 +10,17 @@ export interface TimelineItem {
   status?: TimelineStatus;
 }
 
+export interface CompetitionDesktopDesign {
+  logoSrc: string;
+  logoWidth: number;
+  heroMaxWidth: number;
+  titleFrom: string;
+  titleTo: string;
+  timelineFrom: string;
+  timelineTo: string;
+  descriptionLines?: string[];
+}
+
 export interface Competition {
   slug: string;
   title: string;
@@ -49,6 +60,7 @@ export interface Competition {
   contactUrl: string;
   registerUrl: string;
   timeline: TimelineItem[];
+  desktop: CompetitionDesktopDesign;
   seo: {
     metaTitle: string;
     metaDescription: string;

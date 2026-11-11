@@ -46,7 +46,9 @@ export function competitionJsonLd(c: Competition) {
       "@type": "Offer",
       price: c.registrationFee,
       priceCurrency: "IDR",
-      url: c.registerUrl,
+      // registerUrl disimpan relatif di data.ts ("/signup"); schema.org butuh URL
+      // absolut. new URL() membiarkan URL eksternal yang sudah absolut apa adanya.
+      url: new URL(c.registerUrl, SITE_URL).toString(),
       availability: "https://schema.org/InStock",
       // Dihilangkan dari JSON-LD kalau deadline belum ditentukan, supaya
       // tidak mengirim "validThrough": null ke Google.

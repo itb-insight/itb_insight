@@ -4,12 +4,9 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 
+import { safeNext } from "@/lib/safe-next"
 import { createClient } from "@/lib/supabase/client"
 import styles from "./Login.module.css"
-
-function safeNext(next: string | null) {
-  return next && next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard"
-}
 
 export default function Login() {
   const searchParams = useSearchParams()
@@ -110,7 +107,7 @@ export default function Login() {
 
             <p className={styles.signupText}>
               Don&apos;t have an account?{" "}
-              <Link href="/register" className={styles.signupLink}>
+              <Link href="/signup" className={styles.signupLink}>
                 Sign up
               </Link>
             </p>

@@ -39,7 +39,7 @@ export default function ExhibitionPage({ onExplore }: ExhibitionPageProps) {
         flexDirection: 'column', 
         alignItems: 'center', 
         overflowX: 'hidden', 
-        fontFamily: "'Roboto Mono', monospace",
+        fontFamily: "var(--font-mono)",
         margin: 0,
         padding: 0,
         boxSizing: 'border-box',
@@ -89,7 +89,7 @@ export default function ExhibitionPage({ onExplore }: ExhibitionPageProps) {
               color: '#000000', 
               margin: 0,
               letterSpacing: '-2px',
-              fontFamily: "'Roboto Mono', monospace"
+              fontFamily: "var(--font-mono)"
             }}
           >
             TECHNOLOGY
@@ -103,7 +103,7 @@ export default function ExhibitionPage({ onExplore }: ExhibitionPageProps) {
               marginTop: '-20px', 
               marginBottom: 0,
               letterSpacing: '-2px',
-              fontFamily: "'Roboto Mono', monospace"
+              fontFamily: "var(--font-mono)"
             }}
           >
             EXHIBITION

@@ -1,0 +1,197 @@
+.hero {
+  min-height: calc(300vh / var(--page-scale, 1));
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+  margin-top: clamp(0px, calc(10vh / var(--page-scale, 1)), 80px);
+  top: 0;
+  height: calc(100vh / var(--page-scale, 1));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  padding: 0 24px;
+  text-align: center;
+  overflow: hidden;
+  container-type: inline-size;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.topGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+  will-change: transform;
+}
+
+.title {
+  font-family: 'Excratch', sans-serif;
+  font-size: clamp(4rem, 8cqw, 7rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin: 0;
+  line-height: 1;
+  transform-origin: top center;
+  will-change: transform;
+  background: linear-gradient(to bottom, #FFFFFF, #D1E4FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px rgba(209, 228, 255, 1));
+}
+
+/* Countdown */
+.countdown {
+  display: flex;
+  align-items: baseline;
+  margin-top: -20px;
+  gap: 48px;
+}
+
+.countdownUnit {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.countdownNumber {
+  font-family: 'Bitcount', monospace;
+  font-size: clamp(6rem, 12cqw, 10rem);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.countdownLabel {
+  font-family: 'Bitcount', monospace;
+  font-size: clamp(2rem, 5cqw, 4rem);
+  color: var(--color-text-primary);
+  font-weight: 400;
+}
+
+/* Description + Button */
+.bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -100px;
+  gap: 24px;
+  will-change: opacity, transform;
+}
+
+.description {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(1rem, 1.8cqw, 2.4rem);
+  color: #E9E9E9;
+  max-width: 800px;
+  line-height: 1.8;
+  font-weight: 200;
+  margin: 0;
+}
+
+.registerBtn {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: #3D65B8;
+  background-image: url('/images/buttons/registerbutton-default.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  aspect-ratio: 318 / 136;
+  width: 220px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.registerBtn:hover {
+  background-image: url('/images/buttons/registerbutton-hover.svg');
+}
+
+.registerBtn:active {
+  background-image: url('/images/buttons/registerbutton-click.svg');
+  color: #DEE8FB;
+}
+
+.patternWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.patternLeft {
+  position: absolute;
+  width: calc(50vw / var(--page-scale, 1));
+  max-width: 600px;
+  transform-origin: right center;
+  will-change: transform, opacity;
+}
+
+.patternRight {
+  position: absolute;
+  width: calc(50vw / var(--page-scale, 1));
+  max-width: 600px;
+  transform-origin: left center;
+  will-change: transform, opacity;
+}
+
+/* Mobile — text/layout only for now, pattern objects untouched */
+@media (max-width: 768px) {
+  .sticky {
+    padding: 0 20px;
+  }
+
+  .title {
+    font-size: clamp(2rem, 10cqw, 3rem);
+    letter-spacing: 0.06em;
+  }
+
+  .topGroup {
+    position: relative;
+  }
+
+  .countdown {
+    position: absolute;
+    top: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -10px;
+    gap: 4px;
+  }
+
+  .countdownUnit {
+    justify-content: center;
+  }
+
+  .countdownNumber {
+    font-size: clamp(2.25rem, 13cqw, 3rem);
+  }
+
+  .countdownLabel {
+    font-size: clamp(1.1rem, 6cqw, 1.5rem);
+  }
+
+  .bottom {
+    margin-top: 110px;
+  }
+
+  .description {
+    font-size: 0.9rem;
+    max-width: 320px;
+  }
+}

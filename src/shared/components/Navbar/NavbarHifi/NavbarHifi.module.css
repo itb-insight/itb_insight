@@ -1,0 +1,261 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.navbar.isSolid {
+  background-color: #091B3F;
+}
+
+/* Selaras dengan breakpoint dropdown DashboardSidebar (899px) */
+@media (max-width: 899px) {
+  .navbar.solidOnMobile {
+    background-color: #091B3F;
+  }
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navLink {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #CCDDFF;
+  transition: color 0.2s ease;
+}
+
+.navLink:hover {
+  color: rgba(222, 232, 251, 0.9);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.searchBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.searchBtn:hover {
+  opacity: 1;
+}
+
+.searchIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.logInBtn {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #CCDDFF;
+  transition: color 0.2s ease;
+}
+
+.logInBtn:hover {
+  color: #DEE8FB;
+}
+
+.signUpBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 152 / 67;
+  height: 52px;
+  background-image: url('/images/buttons/signupbutton-default.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1B3B7D;
+}
+
+.signUpBtn:hover {
+  background-image: url('/images/buttons/signupbutton-hover.svg');
+}
+
+.signUpBtn:active {
+  background-image: url('/images/buttons/signupbutton-click.svg');
+  color: #E9E9E9;
+}
+
+.mobileMenuBtn {
+  display: block;
+  aspect-ratio: 1 / 1;
+  height: 48px;
+  background-image: url('/images/buttons/navbarmobile-default.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.mobileMenuBtn:active {
+  background-image: url('/images/buttons/navbarmobile-click.svg');
+}
+
+.menuWrapNavbar {
+  display: none;
+  position: relative;
+}
+
+/* Dipakai di dalam MobileHeader, yang kanvasnya 393px dan tombolnya
+   diposisikan absolut di koordinat Figma. */
+.menuWrapHeader {
+  position: absolute;
+  right: 23px;
+  top: 24px;
+  z-index: 40;
+}
+
+.headerMenuBtn {
+  display: grid;
+  place-items: center;
+  width: 51px;
+  height: 51px;
+  border-radius: 15.3px;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.mobileMenu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 200;
+  width: 220px;
+  max-width: calc(100vw - 48px);
+  aspect-ratio: 160 / 268;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 22px 20px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #294D97 0%, #517EDA 100%);
+  box-shadow:
+    0 0 42px rgba(127, 169, 246, 0.55),
+    0 18px 40px rgba(9, 27, 63, 0.45);
+}
+
+.mobileMenuLink {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #FFFFFF;
+  padding: 6px 4px 6px 14px;
+  transition: opacity 0.2s ease;
+}
+
+.mobileMenuLink:hover {
+  opacity: 0.8;
+}
+
+.mobileMenuDivider {
+  height: 1px;
+  margin: 0;
+  background: rgba(222, 232, 251, 0.6);
+}
+
+.mobileMenuAuth {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.mobilePrimaryBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 136 / 40;
+  background-image: url('/images/buttons/loginmobilebutton-default.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  font-family: 'Gabarito', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #1B3B7D;
+}
+
+.mobilePrimaryBtn:hover {
+  background-image: url('/images/buttons/loginmobilebutton-hover.svg');
+}
+
+.mobilePrimaryBtn:active {
+  background-image: url('/images/buttons/loginmobilebutton-click.svg');
+  color: #E9E9E9;
+}
+
+.mobileSecondaryBtn {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #DEE8FB;
+  text-align: center;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.mobileSecondaryBtn:hover {
+  opacity: 0.8;
+}
+
+/* Mobile — collapse nav links + actions into one menu button */
+@media (max-width: 900px) {
+  .navLinks,
+  .actions {
+    display: none;
+  }
+
+  .menuWrapNavbar {
+    display: block;
+  }
+}

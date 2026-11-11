@@ -8,6 +8,9 @@ import RegistrationFee from "@/features/competition/RegistrationFee";
 import PrizePool from "@/features/competition/PrizePool";
 import Timeline from "@/features/competition/Timeline";
 import ContactRegister from "@/features/competition/ContactRegister";
+import CompetitionDesktopLayout from "@/features/compe-desktop/CompetitionDesktopLayout";
+import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
+import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi";
 import { getCompetition, getCompetitionSlugs } from "@/features/competition/data";
 import { competitionJsonLd, competitionMetadata } from "@/features/competition/seo";
 
@@ -58,28 +61,41 @@ export default async function CompetitionPage({
         absolut pada koordinat Y yang sama persis dengan Figma. Karena itu
         posisinya cocok tanpa perlu tebak-tebakan margin.
       */}
-      <div className="mobile-shell">
-        <div className="relative" style={{ height: CANVAS_HEIGHT }}>
-        <PageBackground slug={competition.slug} height={CANVAS_HEIGHT} />
+      <div className="md:hidden">
+        <div
+          className="mobile-shell-wrapper"
+          style={{ "--mobile-shell-height": `${CANVAS_HEIGHT}px` } as React.CSSProperties}
+        >
+          <div className="mobile-shell">
+            <div className="relative" style={{ height: CANVAS_HEIGHT }}>
+              <PageBackground slug={competition.slug} height={CANVAS_HEIGHT} />
 
-        <MobileHeader />
+              <MobileHeader />
 
-        <main>
-          <CompetitionHero competition={competition} />
-          <CountdownSection deadline={competition.registrationDeadline} />
-          <RegistrationFee fee={competition.registrationFee} />
-          <PrizePool amount={competition.prizePool} />
-          <Timeline
-            items={competition.timeline}
-            accentFrom={competition.accentFrom}
-            accentTo={competition.accentTo}
-            titleY={competition.timelineTitleY}
-            textY={competition.timelineTextY}
-            dotX={competition.timelineDotX}
-          />
-          <ContactRegister competition={competition} />
-          </main>
+              <main>
+                <CompetitionHero competition={competition} />
+                <CountdownSection deadline={competition.registrationDeadline} />
+                <RegistrationFee fee={competition.registrationFee} />
+                <PrizePool amount={competition.prizePool} />
+                <Timeline
+                  items={competition.timeline}
+                  accentFrom={competition.accentFrom}
+                  accentTo={competition.accentTo}
+                  titleY={competition.timelineTitleY}
+                  textY={competition.timelineTextY}
+                  dotX={competition.timelineDotX}
+                />
+                <ContactRegister competition={competition} />
+              </main>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div className="hidden md:block">
+        <NavbarHifi />
+        <CompetitionDesktopLayout competition={competition} />
+        <FooterHifi />
       </div>
     </>
   );

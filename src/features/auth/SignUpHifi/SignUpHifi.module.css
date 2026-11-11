@@ -1,0 +1,235 @@
+.page {
+  display: flex;
+  min-height: 105vh;
+  padding-top: 80px;
+  background: linear-gradient(to bottom, #091B3F 0%, #234487 100%);
+  font-family: 'Gabarito', sans-serif;
+}
+
+.left {
+  flex: 1;
+  padding: 40px;
+}
+
+.right {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+}
+
+.card {
+  width: 100%;
+  background: linear-gradient(160deg, rgba(36, 53, 107, 0.55), rgba(124, 147, 217, 0.28));
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 3px solid rgba(222, 232, 251, 0.35);
+  border-radius: 24px;
+  padding: 80px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+  margin: 16px 16px 16px 0;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.title {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(to bottom, #DEE8FB, #ACC7FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #DEE8FB;
+  margin: 0;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #DEE8FB;
+}
+
+.input {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.875rem;
+  padding: 12px 20px !important;
+  border: 3px solid rgba(222, 232, 251, 0.35);
+  border-radius: 10px;
+  outline: none;
+  background: rgba(222, 232, 251, 0.08);
+  color: #DEE8FB;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.input::placeholder {
+  color: rgba(222, 232, 251, 0.45);
+}
+
+.input:focus {
+  border-color: #ACC7FF;
+  background: rgba(222, 232, 251, 0.12);
+}
+
+.loginBtn {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1B2A4E;
+  background-image: url('/images/buttons/authbutton-default.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  aspect-ratio: 482 / 52;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.loginBtn:hover {
+  background-image: url('/images/buttons/authbutton-hover.svg');
+}
+
+.loginBtn:active {
+  background-image: url('/images/buttons/authbutton-click.svg');
+  color: #E9E9E9;
+}
+
+.loginBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.orText {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.875rem;
+  color: rgba(222, 232, 251, 0.55);
+  text-align: center;
+  margin: 0;
+}
+
+.googleBtn {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #DEE8FB;
+  background-image: url('/images/buttons/secondarybutton-default.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  aspect-ratio: 482 / 56;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.googleBtn:hover {
+  background-image: url('/images/buttons/secondarybutton-hover.svg');
+}
+
+.googleBtn:active {
+  background-image: url('/images/buttons/secondarybutton-click.svg');
+}
+
+.googleIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.signupText {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.875rem;
+  color: rgba(222, 232, 251, 0.6);
+  text-align: center;
+  margin: 0;
+}
+
+.signupLink {
+  font-weight: 700;
+  color: #DEE8FB;
+  text-decoration: none;
+}
+
+.signupLink:hover {
+  text-decoration: underline;
+}
+
+.messageOk {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.8125rem;
+  color: #9BE8B8;
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.messageError {
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.8125rem;
+  color: #FF98A8;
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Mobile — single section, no left/right split, slimmer card */
+@media (max-width: 768px) {
+  .left {
+    display: none;
+  }
+
+  .right {
+    flex: 1;
+    width: 100%;
+    align-items: center;
+    padding: 0 16px;
+  }
+
+  .card {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .title {
+    font-size: clamp(1.75rem, 9vw, 2.25rem);
+  }
+}

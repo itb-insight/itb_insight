@@ -2,7 +2,7 @@
   display: flex;
   min-height: 100vh;
   background-color: #D9D9D9;
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
 }
 
 .left {
@@ -11,7 +11,7 @@
 }
 
 .back {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.875rem;
   font-weight: 400;
   color: #000;
@@ -51,7 +51,7 @@
 }
 
 .title {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: clamp(2rem, 3vw, 3rem);
   font-weight: 700;
   color: #000;
@@ -59,7 +59,7 @@
 }
 
 .subtitle {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.875rem;
   color: #666;
   margin: 0;
@@ -82,14 +82,14 @@
 }
 
 .label {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.875rem;
   font-weight: 500;
   color: #000;
 }
 
 .input {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.875rem;
   padding: 8px 20px !important;
   border: 1.5px solid #aaa;
@@ -105,7 +105,7 @@
 }
 
 .loginBtn {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.875rem;
   font-weight: 500;
   color: #fff;
@@ -123,7 +123,7 @@
 }
 
 .orText {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.875rem;
   color: #666;
   text-align: center;
@@ -132,7 +132,7 @@
 
 
 .signupText {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.875rem;
   color: #666;
   text-align: center;
@@ -149,7 +149,7 @@
   text-decoration: underline;
 }
 .googleBtn {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.875rem;
   font-weight: 500;
   color: #000;
@@ -164,7 +164,7 @@
   background-color: #f5f5f5;
 }
 .messageOk {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
   color: #1a7f37;
   text-align: center;
@@ -172,7 +172,7 @@
   line-height: 1.5;
 }
 .messageError {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
   color: #c1121f;
   text-align: center;

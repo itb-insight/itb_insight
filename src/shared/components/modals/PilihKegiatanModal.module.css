@@ -1,0 +1,140 @@
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 40px 48px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 34px;
+  color: #dee8fb;
+}
+
+.close {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 40.84px;
+  height: 40.84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5.1px;
+  cursor: pointer;
+  color: #1b3b7d;
+  border: 2.55px solid transparent;
+  border-radius: 10.21px;
+  background:
+    linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%) padding-box,
+    linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%) border-box;
+  transition: opacity 0.2s ease;
+}
+
+.close:hover {
+  opacity: 0.85;
+}
+
+.choices {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.choice {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 36px 44px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(
+    0deg,
+    rgba(172, 199, 255, 0.5) 0%,
+    rgba(81, 126, 218, 0.5) 99%
+  );
+}
+
+.choice::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 4px;
+  border-radius: inherit;
+  background: linear-gradient(0deg, #acc7ff 0%, #517eda 99%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.choiceText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.choiceHeading {
+  margin: 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 34px;
+  text-align: center;
+  color: #dee8fb;
+}
+
+.choiceDescription {
+  margin: 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  color: #dee8fb;
+}
+
+.choiceButton {
+  width: 100%;
+  min-height: 51px;
+  padding: 0 20.42px;
+  border-width: 5.1px;
+  border-radius: 15.31px;
+  font-size: 20.42px;
+  line-height: 25.52px;
+}
+
+@media (max-width: 720px) {
+  .body {
+    padding: 24px;
+  }
+
+  .choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .title {
+    font-size: 28px;
+  }
+}

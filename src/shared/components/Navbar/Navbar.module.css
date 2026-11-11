@@ -37,7 +37,7 @@
 }
 
 .navLink {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   font-weight: 400;
   color: var(--color-text-primary);
@@ -71,7 +71,7 @@
 }
 
 .logInBtn {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   font-weight: 400;
   color: var(--color-text-primary);
@@ -83,7 +83,7 @@
 }
 
 .signUpBtn {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--color-text-primary);

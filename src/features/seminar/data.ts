@@ -4,7 +4,7 @@ export const COLORS = {
   white: "rgba(255, 255, 255, 1)",
 };
 
-export const FONT = "'Roboto Mono', monospace";
+export const FONT = "var(--font-mono)";
 
 export type Hex = {
   fx: number;

@@ -1,0 +1,87 @@
+.layer {
+  position: absolute;
+  inset: calc(-1 * var(--mobile-nav-space, 0px)) 0 0 calc(-1 * var(--sidebar-offset, 0px));
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  height: auto;
+  /* globals.css caps every img at max-width:100%; these decorations are deliberately
+     wider than their container (most of the mobile ones are ~175% of the viewport),
+     so the cap has to be lifted or they silently shrink to the layer width. */
+  max-width: none;
+}
+
+.deco1 {
+  left: 58.03%;
+  top: -106px;
+  width: 50.46%;
+}
+
+.deco2 {
+  left: -9.99%;
+  top: 518px;
+  width: 40.51%;
+}
+
+.greenBlob {
+  left: 10%;
+  top: -114px;
+  width: 57.29%;
+}
+
+.yellowBlob {
+  left: -23.25%;
+  top: 526px;
+  width: 71.7%;
+}
+
+.redBlob {
+  left: 44.18%;
+  top: 801px;
+  width: 64.35%;
+}
+
+/* Mobile frame is 402 x 1726 (Figma 3298:4587) and uses only three of the five
+   decorations. Percentages below are of that 402px width so the blobs scale with
+   the viewport the same way the desktop ones do; tops stay in px because they are
+   tied to content, not width.
+
+   The SVGs are the desktop exports, and a Figma blur radius does not scale with
+   the shape it is applied to. For the two blobs that means the mobile shape:blur
+   ratio differs from the baked-in one, so each is sized to match the designed
+   glow footprint (shape + 2x radius of padding) rather than the core -- the
+   footprint is what reads at 40% opacity, and it keeps the clipping against the
+   frame edges correct. Positions are exact either way: both blobs are centred in
+   their export canvas to within 0.4px, so the canvas centre is the shape centre. */
+@media (max-width: 899px) {
+  /* not present in the mobile frame */
+  .deco1,
+  .redBlob {
+    display: none;
+  }
+
+  /* group "p" -- same scale as desktop, repositioned only */
+  .deco2 {
+    left: -41.575%;
+    top: 323.25px;
+    width: 174.129%;
+  }
+
+  /* "Vector 84" -- canvas 256.6 + 2x202.8 = 662.2 */
+  .yellowBlob {
+    left: -18.191%;
+    top: -122.57px;
+    width: 164.726%;
+  }
+
+  /* "Vector 85" -- canvas 355.03 + 2x200 = 755.03 */
+  .greenBlob {
+    left: -57.98%;
+    top: 974.17px;
+    width: 187.819%;
+  }
+}

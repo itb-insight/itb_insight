@@ -1,13 +1,17 @@
 // src/app/login/page.tsx
 import { Suspense } from "react"
 
-import Login from "@/features/auth/Login/Login"
+import LoginHifi from "@/features/auth/LoginHifi/LoginHifi"
+import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi"
+import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi"
 
 export default function LoginPage() {
-  // Login reads `useSearchParams()`, which must sit under a Suspense boundary.
+  // LoginHifi reads `useSearchParams()`, which must sit under a Suspense boundary.
   return (
     <Suspense>
-      <Login />
+      <NavbarHifi />
+      <LoginHifi />
+      <FooterHifi />
     </Suspense>
   )
 }

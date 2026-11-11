@@ -35,7 +35,7 @@ function ContentColumn({
         color: isDark ? "#fff" : "#000",
         boxSizing: "border-box",
         paddingTop: "24px",
-        fontFamily: "'Roboto Mono', monospace",
+        fontFamily: "var(--font-mono)",
         flexShrink: 0,
       }}
     >
@@ -127,7 +127,7 @@ export default function ContentPage({ onBack }: ContentPageProps) {
         backgroundColor: '#ffffff',
         display: 'flex',
         flexDirection: 'column',
-        fontFamily: "'Roboto Mono', monospace",
+        fontFamily: "var(--font-mono)",
         margin: 0,
         padding: 0,
         boxSizing: 'border-box'
@@ -163,7 +163,7 @@ export default function ContentPage({ onBack }: ContentPageProps) {
             lineHeight: '80px',
             color: '#000000',
             margin: '4px 0 0 0',
-            fontFamily: "'Roboto Mono', monospace",
+            fontFamily: "var(--font-mono)",
             flexShrink: 0
           }}
         >

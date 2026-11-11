@@ -1,0 +1,149 @@
+.about {
+  min-height: calc(150vh / var(--page-scale, 1));
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: calc(100vh / var(--page-scale, 1));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 80px;
+  overflow: hidden;
+  gap: 48px;
+  container-type: inline-size;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.illustrationWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  z-index: 2;
+}
+
+.illustration {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  object-fit: contain;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.textWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  z-index: 2;
+  padding-left: 40px;
+  text-align: center;
+}
+
+.phase2Text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  will-change: opacity, transform;
+}
+
+.title {
+  font-family: 'Excratch', sans-serif;
+  font-size: clamp(3rem, 3.5cqw, 4rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin: 0;
+  line-height: 1;
+  text-align: center;
+  background: linear-gradient(to bottom, #ACC7FF, #DEE8FB);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px rgba(209, 228, 255, 1));
+}
+
+.description {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(0.8rem, 1.2cqw, 1rem);
+  color: #E9E9E9;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 780px;
+  text-align: justify;
+}
+
+.phase3Text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  will-change: opacity, transform;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.infoLabel {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(1.5rem, 1.8cqw, 1.8rem);
+  font-weight: 400;
+  color: #7EB3FF;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.infoValue {
+  font-family: 'Gabarito', sans-serif;
+  font-size: clamp(2rem, 2.8cqw, 3.2rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.calendarIcon {
+  width: 1em;
+  height: 1em;
+}
+
+/* Mobile — hide illustration, center the text column */
+@media (max-width: 768px) {
+  .sticky {
+    padding: 0 24px;
+  }
+
+  .illustrationWrapper {
+    display: none;
+  }
+
+  .textWrapper {
+    flex: none;
+    width: 100%;
+    padding-left: 0;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  .description {
+    text-align: justify;
+  }
+}

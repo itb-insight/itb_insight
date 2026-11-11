@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import Navbar from "@/shared/components/Navbar/Navbar";
 
 // ── EMBEDDED IMAGES (Figma page 2 assets) ────────────────────────────────────
@@ -19,7 +20,7 @@ const STATIC_DATA = {
   sylabusUrl:           "#",
   guidebookUrl:         "#",
   whatsappUrl:          "https://wa.me/6281234567890",
-  registrationUrl:      "#",
+  registrationUrl:      "/signup",
 };
 
 // ── Countdown hook (days + hours only, per Figma) ────────────────────────────
@@ -45,7 +46,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 // ── FONT STACKS & TOKENS (Disamakan dengan Halaman Utama) ───────────────────
 const G  = "'Gabarito', sans-serif";
-const RM = "'Roboto Mono', monospace";
+const RM = "var(--font-mono)";
 
 // Headings (INSIGHT COMPETITION / TOTAL PRIZE / FAQ skala)
 const HEADING = {
@@ -254,7 +255,7 @@ export default function CompetitionDetailPage({ competition = STATIC_DATA }) {
             />
           </button>
 
-          <button className="cta-btn" onClick={() => window.open(competition.registrationUrl)}>
+          <Link href={competition.registrationUrl} className="cta-btn">
             <span style={{
               fontFamily: RM, fontWeight: 500,
               fontSize: "clamp(1.8rem, 3vw, 3rem)", // Setara ukuran FAQ
@@ -262,7 +263,7 @@ export default function CompetitionDetailPage({ competition = STATIC_DATA }) {
             }}>
               REGISTER NOW
             </span>
-          </button>
+          </Link>
 
         </div>
       </section>

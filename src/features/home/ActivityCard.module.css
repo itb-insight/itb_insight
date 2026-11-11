@@ -1,0 +1,379 @@
+.card {
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardTitle {
+  margin: 0 0 32px;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 34px;
+  color: #ffffff;
+}
+
+/* ── Tab strip ────────────────────────────────────────────────────────────────
+   Figma unions the active tab and the panel into one shape, so there is no line
+   where they meet. Here they are separate elements and the tab is pulled down 4px
+   to sit over the panel's top border, which reproduces the join. */
+.tabs {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.tabActive {
+  height: 66.51px;
+  width: 136.36px;
+  margin-bottom: -4px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 0 4px 13px;
+  border: 4px solid transparent;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  background:
+    linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%) padding-box,
+    linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%) border-box;
+}
+
+.tabActiveLabel {
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #091b3f;
+}
+
+.tabButton,
+.tabAdd {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #1b3b7d;
+  border: 4px solid transparent;
+  border-radius: 12px;
+  background:
+    linear-gradient(0deg, #acc7ff 0%, #517eda 99%) padding-box,
+    linear-gradient(0deg, #517eda 1%, #acc7ff 100%) border-box;
+  transition: opacity 0.2s ease;
+}
+
+.tabButton:hover,
+.tabAdd:hover {
+  opacity: 0.85;
+}
+
+.tabButton {
+  min-width: 148px;
+  max-width: 260px;
+  gap: 0;
+  padding: 0 24px;
+}
+
+.tabAdd {
+  width: 56px;
+  padding: 0;
+}
+
+.tabButtonLabel {
+  flex: 1;
+  padding: 0 8px;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.panel {
+  padding: 34.89px 18px 28px 15px;
+  border: 4px solid transparent;
+  border-radius: 0 12px 12px 12px;
+  background:
+    linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%) padding-box,
+    linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%) border-box;
+}
+
+.headingRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.competitionName {
+  margin: 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 34px;
+  color: #1b3b7d;
+}
+
+.statusChip {
+  min-width: 58px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #54b8ff;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  color: #1b3b7d;
+  white-space: nowrap;
+}
+
+.teamName {
+  margin: 18.6px 0 0;
+}
+
+.universityRow {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.teamName,
+.university {
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: #1b3b7d;
+}
+
+.university {
+  margin: 0;
+}
+
+.editData {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  white-space: nowrap;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #003f6b;
+}
+
+/* ── Member rows ──────────────────────────────────────────────────────────────
+   Figma: first row at y=582 (19 below the university line), then 14 between rows. */
+.members {
+  margin-top: 19px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.memberRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 60px;
+  padding: 0 20px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background:
+    #ccddff padding-box,
+    linear-gradient(0deg, #517eda 1%, #acc7ff 100%) border-box;
+}
+
+/* The leader's row is the dark one, per Figma Frame 48096282 */
+.memberRowLeader {
+  background:
+    linear-gradient(180deg, #091b3f 0%, #294d97 100%) padding-box,
+    linear-gradient(0deg, #517eda 1%, #acc7ff 100%) border-box;
+}
+
+.memberInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.memberRole,
+.memberName {
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: #1b3b7d;
+  white-space: nowrap;
+}
+
+.memberName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.memberRowLeader .memberRole,
+.memberRowLeader .memberName {
+  color: #ffffff;
+}
+
+/* Figma gives this icon #33363F, which is all but invisible against the leader row's
+   dark gradient — almost certainly an unadjusted default. White so it reads. */
+.memberEdit {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #ffffff;
+}
+
+/* Figma Frame 48096451 — 849x57, outline only */
+.inviteRow {
+  position: relative;
+  margin-top: 12px;
+  width: 100%;
+  height: 57px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 22px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  color: #1b3b7d;
+}
+
+.inviteRow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(0deg, #517eda 1%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.invitePlus {
+  font-size: 28px;
+  line-height: 34px;
+}
+
+.inviteLabel {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* ── Activity ─────────────────────────────────────────────────────────────── */
+.activityLabel {
+  margin: 39.4px 0 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: #000000;
+}
+
+/* Figma Rectangle 42582 — 849x54, radius 8 */
+.submissionRow {
+  margin-top: 12.6px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 13px 0 17px;
+  border-radius: 8px;
+  background: linear-gradient(0deg, #acc7ff 0%, #517eda 99%);
+  color: #ffffff;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+}
+
+.submissionLabel {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.submissionDate {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+/* Figma Frame 48096463 — three 274.67x56 buttons, 12px apart */
+/* Figma Frame 48096463 — three 274.67x56 buttons, 12px apart.
+   Three fixed columns only hold labels like "Line Contact Person" while the card is
+   near its designed width; narrower than that and they truncate. auto-fit keeps three
+   across whenever they fit and drops to two (then one) rather than clipping the text. */
+.actions {
+  margin-top: 23px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.actionButton {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  /* With the trailing arrow gone, the icon and label read better centred as a pair
+     than with the icon pinned left and the label floating in what is left. */
+  justify-content: center;
+  gap: 8px;
+  padding: 0 24px;
+  cursor: pointer;
+  border: 4px solid transparent;
+  border-radius: 12px;
+  background:
+    linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%) padding-box,
+    linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%) border-box;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #1b3b7d;
+  transition: opacity 0.2s ease;
+}
+
+.actionButton:hover {
+  opacity: 0.85;
+}
+
+.actionIcon {
+  flex-shrink: 0;
+}
+
+.actionLabel {
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

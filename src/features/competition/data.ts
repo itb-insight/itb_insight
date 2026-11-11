@@ -16,47 +16,57 @@ import type { Competition } from "@/features/competition/types";
  */
 
 const DATA: Competition[] = [
-  {
-    slug: "safety-and-rescue-robot-competition",
-    title: "Safety and Rescue Robot Competition",
-    description:
-      "Lomba robot Search and Rescue (SAR) ITB Insight 2026 adalah ajang kompetisi nasional bagi mahasiswa/i di Indonesia yang bertujuan mengembangkan kreativitas dalam menjawab permasalahan dunia nyata yang membutuhkan solusi berbasis teknologi. Kompetisi ini dilaksanakan melalui tiga tahap, yaitu tahap pendaftaran, tahap implementasi, dan tahap final.",
-    iconSrc: "/assets/icon-sar.png",
-    titleFrom: "#ffe4ec",
-    titleTo: "#ffaaaa",
-    accentFrom: "#ffe4ec",
-    accentTo: "#ffaaaa",
-    heroIconY: 217,
-    heroTitleY: 421,
-    heroDescY: 505,
-    timelineTitleY: 2272,
-    timelineTextY: 2342,
-    timelineDotX: 68,
-    iconWidth: 146,
-    iconHeight: 172,
-    registrationDeadline: null,
-    registrationFee: 0,
-    prizePool: 0,
-    syllabusUrl: "#",
-    guidebookUrl: "#",
-    contactUrl: "#",
-    registerUrl: "#",
-    timeline: [
-      { id: "pendaftaran", title: "Pendaftaran", dateLabel: "14 Agustus - 6 September 2026", date: "2026-08-14" },
-      { id: "pengumuman-penyisihan", title: "Pengumuman Penyisihan", dateLabel: "19 Oktober 2026", date: "2026-10-19" },
-      { id: "technical-meeting", title: "Technical Meeting", dateLabel: "14 November 2026", date: "2026-11-14" },
-      { id: "semifinal", title: "Semifinal", dateLabel: "27 November 2026", date: "2026-11-27" },
-      { id: "final", title: "Final", dateLabel: "28 November 2026", date: "2026-11-28" },
-      { id: "awarding", title: "Awarding", dateLabel: "28 November 2026", date: "2026-11-28" },
-    ],
-    seo: {
-      metaTitle: "Safety and Rescue Robot Competition",
-      metaDescription:
-        "Kompetisi robot Search and Rescue nasional ITB Insight 2026 untuk mahasiswa se-Indonesia. Pendaftaran 14 Agustus - 6 September 2026.",
-      ogImage: "/assets/og-sar.png",
-      keywords: ["lomba robot", "search and rescue", "SAR robot", "ITB Insight 2026", "kompetisi mahasiswa"],
-    },
-  },
+  //{
+  //   slug: "safety-and-rescue-robot-competition",
+  //   title: "Safety and Rescue Robot Competition",
+  //   description:
+  //     "Lomba robot Search and Rescue (SAR) ITB Insight 2026 adalah ajang kompetisi nasional bagi mahasiswa/i di Indonesia yang bertujuan mengembangkan kreativitas dalam menjawab permasalahan dunia nyata yang membutuhkan solusi berbasis teknologi. Kompetisi ini dilaksanakan melalui tiga tahap, yaitu tahap pendaftaran, tahap implementasi, dan tahap final.",
+  //   iconSrc: "/assets/icon-sar.png",
+  //   titleFrom: "#ffe4ec",
+  //   titleTo: "#ffaaaa",
+  //   accentFrom: "#ffe4ec",
+  //   accentTo: "#ffaaaa",
+  //   heroIconY: 217,
+  //   heroTitleY: 421,
+  //   heroDescY: 505,
+  //   timelineTitleY: 2272,
+  //   timelineTextY: 2342,
+  //   timelineDotX: 68,
+  //   iconWidth: 146,
+  //   iconHeight: 172,
+  //   registrationDeadline: null,
+  //   registrationFee: 0,
+  //   prizePool: 0,
+  //   syllabusUrl: "#",
+  //   guidebookUrl: "#",
+  //   contactUrl: "#",
+  //   registerUrl: "/signup",
+  //   timeline: [
+  //     { id: "pendaftaran", title: "Pendaftaran", dateLabel: "14 Agustus - 6 September 2026", date: "2026-08-14" },
+  //     { id: "pengumuman-penyisihan", title: "Pengumuman Penyisihan", dateLabel: "19 Oktober 2026", date: "2026-10-19" },
+  //     { id: "technical-meeting", title: "Technical Meeting", dateLabel: "14 November 2026", date: "2026-11-14" },
+  //     { id: "semifinal", title: "Semifinal", dateLabel: "27 November 2026", date: "2026-11-27" },
+  //     { id: "final", title: "Final", dateLabel: "28 November 2026", date: "2026-11-28" },
+  //     { id: "awarding", title: "Awarding", dateLabel: "28 November 2026", date: "2026-11-28" },
+  //   ],
+  //   desktop: {
+  //     logoSrc: "/images/sar_logo.png",
+  //     logoWidth: 256,
+  //     heroMaxWidth: 1100,
+  //     titleFrom: "#DEE8FB",
+  //     titleTo: "#FFAAAA",
+  //     timelineFrom: "#FFE4EC",
+  //     timelineTo: "#FFAAAA",
+  //   },
+  //   seo: {
+  //     metaTitle: "Safety and Rescue Robot Competition",
+  //     metaDescription:
+  //       "Kompetisi robot Search and Rescue nasional ITB Insight 2026 untuk mahasiswa se-Indonesia. Pendaftaran 14 Agustus - 6 September 2026.",
+  //     ogImage: "/assets/og-sar.png",
+  //     keywords: ["lomba robot", "search and rescue", "SAR robot", "ITB Insight 2026", "kompetisi mahasiswa"],
+  //   },
+  // },
+  
   {
     slug: "microdrone-obstacle-race",
     title: "Microdrone Obstacle Race",
@@ -81,7 +91,7 @@ const DATA: Competition[] = [
     syllabusUrl: "#",
     guidebookUrl: "#",
     contactUrl: "#",
-    registerUrl: "#",
+    registerUrl: "/signup",
     timeline: [
       { id: "pendaftaran", title: "Pendaftaran", dateLabel: "14 Agustus - 20 November 2026", date: "2026-08-14" },
       { id: "technical-meeting", title: "Technical Meeting", dateLabel: "21 November 2026", date: "2026-11-21" },
@@ -91,6 +101,20 @@ const DATA: Competition[] = [
       { id: "final", title: "Final", dateLabel: "28 November 2026", date: "2026-11-28" },
       { id: "awarding", title: "Awarding", dateLabel: "2026", date: "2026-11-28" },
     ],
+    desktop: {
+      logoSrc: "/images/mor.png",
+      logoWidth: 350,
+      heroMaxWidth: 1400,
+      titleFrom: "#ACC7FF",
+      titleTo: "#C08CFF",
+      timelineFrom: "#C08CFF",
+      timelineTo: "#E9DBF9",
+      descriptionLines: [
+        "Lomba Drone Obstacle adalah ajang kompetisi nasional bagi mahasiswa/i Indonesia yang bertujuan mengembangkan kreativitas",
+        "dalam menjawab permasalahan dunia nyata yang membutuhkan solusi berbasis teknologi. Kompetisi ini dilaksanakan selama dua",
+        "hari, hari pertama merupakan babak penyisihan, hari kedua merupakan babak eliminasi hingga terdapat juara 1, 2, dan 3.",
+      ],
+    },
     seo: {
       metaTitle: "Microdrone Obstacle Race",
       metaDescription:
@@ -123,7 +147,7 @@ const DATA: Competition[] = [
     syllabusUrl: "#",
     guidebookUrl: "#",
     contactUrl: "#",
-    registerUrl: "#",
+    registerUrl: "/signup",
     timeline: [
       { id: "registration", title: "Registration", dateLabel: "20 Agustus - 18 September 2026", date: "2026-08-20" },
       { id: "case-release", title: "Pre-Elim: Case Release", dateLabel: "25 September 2026", date: "2026-09-25" },
@@ -133,6 +157,21 @@ const DATA: Competition[] = [
       { id: "pitching", title: "Pitching", dateLabel: "26 November 2026", date: "2026-11-26" },
       { id: "awarding", title: "Awarding", dateLabel: "26 November 2026", date: "2026-11-26" },
     ],
+    desktop: {
+      logoSrc: "/images/bpc.png",
+      logoWidth: 350,
+      heroMaxWidth: 1400,
+      titleFrom: "#DEE8FB",
+      titleTo: "#6CCB59",
+      timelineFrom: "#DEE8FB",
+      timelineTo: "#6CCB59",
+      descriptionLines: [
+        "Business Plan Competition (BPC) ITB INSIGHT 2026 merupakan kompetisi nasional di bidang inovasi bisnis yang mengangkat",
+        "tema pengaplikasian Artificial Intelligence (AI) yang ditujukan bagi mahasiswa (D3/D4/S1) dan siswa SMA/SMK/MA sederajat.",
+        "Kompetisi ini dirancang sebagai wadah pengembangan generasi muda dalam menciptakan solusi bisnis yang inovatif, adaptif, dan",
+        "berdaya saing melalui pemanfaatan teknologi AI, melalui tahapan BMC, proposal dan MVP, hingga final pitching",
+      ],
+    },
     seo: {
       metaTitle: "Business Plan Competition",
       metaDescription:
@@ -165,7 +204,7 @@ const DATA: Competition[] = [
     syllabusUrl: "#",
     guidebookUrl: "#",
     contactUrl: "#",
-    registerUrl: "#",
+    registerUrl: "/signup",
     timeline: [
       { id: "registration", title: "Registration", dateLabel: "22 Agustus 2026", date: "2026-08-22" },
       { id: "try-out", title: "Try Out", dateLabel: "2026", date: "2026-09-01" },
@@ -175,6 +214,19 @@ const DATA: Competition[] = [
       { id: "final", title: "Final", dateLabel: "28 November 2026", date: "2026-11-28" },
       { id: "awarding", title: "Awarding", dateLabel: "28 November 2026", date: "2026-11-28" },
     ],
+    desktop: {
+      logoSrc: "/images/oe.png",
+      logoWidth: 350,
+      heroMaxWidth: 1400,
+      titleFrom: "#DEE8FB",
+      titleTo: "#ACC7FF",
+      timelineFrom: "#DEE8FB",
+      timelineTo: "#ACC7FF",
+      descriptionLines: [
+        "Kompetisi berbasis olimpiade untuk siswa SMA/SMK/MA/sederajat di seluruh Indonesia dengan tujuan mengenal dunia",
+        "engineering di perguruan tinggi.",
+      ],
+    },
     seo: {
       metaTitle: "Olimpiade Engineering",
       metaDescription:

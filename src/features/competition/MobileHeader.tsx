@@ -1,4 +1,5 @@
 import Image from "next/image";
+import MobileMenuHifi from "@/shared/components/Navbar/NavbarHifi/MobileMenuHifi";
 
 /**
  * Figma: "Header Mobile" 393x99. Logo 49x48 di x=23 y=24.
@@ -16,16 +17,7 @@ export default function MobileHeader() {
         priority
         style={{ position: "absolute", left: 23, top: 24, width: 49, height: 48, maxWidth: "none" }}
       />
-      <button
-        type="button"
-        aria-label="Buka menu"
-        className="absolute right-[23px] top-[24px] grid h-[51px] w-[51px] place-items-center rounded-[15.3px]"
-        style={{ background: "linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%)" }}
-      >
-        <svg width="22" height="15" viewBox="0 0 22 15" aria-hidden="true">
-          <path d="M0 1.5h22M0 7.5h22M0 13.5h22" stroke="#1b3b7d" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-      </button>
+      <MobileMenuHifi variant="header" />
     </header>
   );
 }

@@ -1,0 +1,83 @@
+/*
+ * Tombol "Registrasi" — Figma component 620:290 (Default) dan 620:295 (Hover).
+ *
+ * Di Figma, ketujuh tombol punya interaksi prototype:
+ *   ON_HOVER -> CHANGE_TO varian Hover
+ *
+ * Diukur dari render Figma (bukan hanya dibaca dari JSON):
+ *   isi      gradient biru di ATAS -> terang di BAWAH
+ *            Default  #acc7ff -> #dee8fb
+ *            Hover    #517eda -> #acc7ff (lebih biru, stop pertama di 1%)
+ *   tepi     4px ke dalam, gradient terang di ATAS -> biru di BAWAH
+ *            #dee8fb -> #acc7ff, sama di kedua varian
+ * Isi dan tepi yang arahnya berlawanan itulah yang membuat efek timbul.
+ * Warna per baris sudah dicocokkan dengan render Figma (selisih maks 1).
+ *
+ * CARA MENGGAMBAR
+ * Tepi TIDAK memakai `border`, karena browser membulatkan border-width ke
+ * piksel bulat: 4px desain di layar 1722px = 3.986px, dibulatkan jadi 3px.
+ * Sebagai gantinya:
+ *   .button        latar = gradient tepi, setinggi penuh tombol
+ *   .button::after isi Default, dipotong ke bagian dalam dengan clip-path
+ *   .button::before isi Hover, sama, opacity 0 -> 1 saat hover
+ * clip-path tidak dibulatkan, jadi tebal tepinya tepat. Kedua isi juga
+ * membentang setinggi penuh tombol seperti di Figma.
+ *
+ * --border dan --radius-inner datang dari inline style dalam satuan cqw.
+ *
+ * Peralihan hover 150ms. Gradient CSS tidak bisa dianimasikan langsung,
+ * makanya lewat opacity lapisan. Figma sendiri berganti seketika
+ * (transition: null); set durasi ke 0ms kalau ingin sama persis.
+ */
+
+.button {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  color: #1b3b7d;
+  text-decoration: none;
+  cursor: pointer;
+  isolation: isolate;
+}
+
+.button::before,
+.button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: inset(var(--border) round var(--radius-inner));
+  pointer-events: none;
+}
+
+/* isi Default */
+.button::after {
+  background: linear-gradient(180deg, #acc7ff 0%, #dee8fb 100%);
+  z-index: -2;
+}
+
+/* isi Hover, di atas isi Default */
+.button::before {
+  background: linear-gradient(180deg, #517eda 1%, #acc7ff 100%);
+  opacity: 0;
+  transition: opacity 150ms ease;
+  z-index: -1;
+}
+
+.button:hover::before,
+.button:focus-visible::before {
+  opacity: 1;
+}
+
+.button:focus-visible {
+  outline: 2px solid #dee8fb;
+  outline-offset: 3px;
+}
+
+/* PRD PERF-08 / ACS-04: semua animasi menghormati prefers-reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+  .button::before {
+    transition: none;
+  }
+}

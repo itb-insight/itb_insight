@@ -1,0 +1,141 @@
+.timeline {
+  padding: 80px 40px;
+  container-type: inline-size;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pinned {
+  position: sticky;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+}
+
+.title {
+  font-family: 'Excratch', sans-serif;
+  font-size: clamp(1.5rem, 3cqw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  background: linear-gradient(to bottom, #FFFFFF, #D1E4FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(209, 228, 255, 0.6));
+  margin: 0;
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 880px;
+  height: 700px;
+}
+
+/* Fixed reference canvas the zigzag (circle1-5 / conn1-4) was designed at.
+   Desktop scales this whole thing down via JS to fit narrower wrappers. */
+.canvas {
+  position: relative;
+  width: 1100px;
+  height: 700px;
+  transform-origin: top left;
+}
+
+/* Circles — semua sama ukurannya */
+.circle {
+  position: absolute;
+  width: 330px;
+  height: 330px;
+}
+
+.circle1 { left: -80px;  top: 40px; }
+.circle2 { left: 150px; top: 400px; }
+.circle3 { left: 380px; top: 40px; }
+.circle4 { left: 610px; top: 400px; }
+.circle5 { left: 840px; top: 40px; }
+
+.circleImage {
+  object-fit: contain;
+}
+
+/* Connectors */
+.connector {
+  position: absolute;
+}
+
+.conn1 { left: 82px; top: 296px; width: 200px; height: 300px; }
+.conn2 { left: 310px; top: 170px; width: 200px; height: 300px; }
+.conn3 { left: 590px; top: 170px; width: 200px; height: 300px; }
+.conn4 { left: 820px; top: 296px; width: 200px; height: 300px; }
+
+.connectorImage {
+  object-fit: contain;
+}
+
+/* Mobile — single vertical column, one reusable straight connector */
+@media (max-width: 768px) {
+  .timeline {
+    padding: 60px 20px;
+  }
+
+  .pinned {
+    position: static;
+    gap: 32px;
+  }
+
+  .runway {
+    display: none;
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    max-width: 320px;
+  }
+
+  .canvas {
+    display: contents;
+  }
+
+  .circle {
+    position: relative;
+    width: clamp(96px, 32cqw, 150px);
+    height: clamp(96px, 32cqw, 150px);
+  }
+
+  .circle1, .circle2, .circle3, .circle4, .circle5 {
+    left: auto;
+    top: auto;
+  }
+
+  .circle1 { order: 1; }
+  .circle2 { order: 3; }
+  .circle3 { order: 5; }
+  .circle4 { order: 7; }
+  .circle5 { order: 9; }
+
+  .connector {
+    position: relative;
+    width: 10px;
+    height: 24px;
+  }
+
+  .connectorImage {
+    object-fit: fill;
+  }
+
+  .conn1, .conn2, .conn3, .conn4 {
+    left: auto;
+    top: auto;
+  }
+
+  .conn1 { order: 2; }
+  .conn2 { order: 4; }
+  .conn3 { order: 6; }
+  .conn4 { order: 8; }
+}
