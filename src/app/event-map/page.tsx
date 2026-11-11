@@ -1,14 +1,16 @@
-import EventMap from "@/features/event-map/EventMap";
-import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
+import EventMapHifi from "@/features/event-map-hifi/EventMapHifi"
 
-export default function Home() {
-  return (
-    <main className="w-full h-screen overflow-hidden">
-      {/* Shared hi-fi header overlays the full-screen map (fixed position). Solid
-          backdrop keeps it legible over map tiles instead of a transparent overlay. */}
-      <NavbarHifi isSolid />
-      {/* Panggil komponen peta di sini */}
-      <EventMap />
-    </main>
-  );
+export const metadata = {
+  title: "Event Map | ITB Insight",
+  description: "Peta lokasi booth, panggung, dan fasilitas ITB Insight 2026.",
+}
+
+/*
+  Versi hi-fi sekarang yang dipakai di route ini.
+
+  Versi lo-fi-nya masih ada di src/features/event-map/ (MapLibre + sidebar putih)
+  tapi sudah tidak punya route — disimpan sebagai rujukan, bukan dihapus.
+*/
+export default function EventMapPage() {
+  return <EventMapHifi />
 }

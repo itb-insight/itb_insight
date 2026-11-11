@@ -49,6 +49,28 @@ export async function POST(request: Request) {
 
   const accepted = appendBatch(result.batch)
 
+  // Persist to Supabase analytics_events table if service client is available
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    import('@/lib/supabase/server').then(({ createServiceClient }) => {
+      try {
+        const supabase = createServiceClient()
+        const rows = result.batch.events.map((event) => ({
+          session_id: result.batch.sessionId,
+          event_name: event.name,
+          path: event.pagePath,
+          props: {
+            ...event.metadata,
+            division: event.division,
+            device: result.batch.device,
+          },
+        }))
+        supabase.from('analytics_events').insert(rows).then()
+      } catch (err) {
+        console.warn('[Analytics Persist Error]', err)
+      }
+    })
+  }
+
   if (process.env.NODE_ENV !== "production") {
     const names = result.batch.events.map((event) => event.name).join(", ")
     console.info(`[analytics] accepted ${accepted} event(s): ${names}`)

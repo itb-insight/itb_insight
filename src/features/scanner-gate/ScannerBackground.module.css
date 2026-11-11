@@ -1,0 +1,31 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  height: auto;
+  max-width: none;
+}
+
+.deco2 {
+  left: -41.575%;
+  top: 323.25px;
+  width: 174.129%;
+}
+
+.yellowBlob {
+  left: -18.191%;
+  top: -122.57px;
+  width: 164.726%;
+}
+
+.greenBlob {
+  left: -58.682%;
+  top: 797.04px;
+  width: 187.818%;
+}

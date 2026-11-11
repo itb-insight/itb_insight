@@ -34,3 +34,12 @@
     width: 100%;
   }
 }
+
+/* Width given as a CSS length: the dialog itself takes it, the panel fills the dialog. */
+.fluid {
+  width: var(--modal-width);
+}
+
+.fluid .panel {
+  width: 100%;
+}

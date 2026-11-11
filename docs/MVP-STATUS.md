@@ -9,14 +9,17 @@
 | Runtime | Next.js 16.2.10, React 19.2.4, Supabase, MapLibre, Three.js, Framer Motion, and Lottie. |
 | Auth | Google OAuth is implemented. `/dashboard*` redirects unauthenticated users to `/login?next=…`. |
 | Registration | Individual/team APIs, final team submission lock, `submitted`/`verified`/`rejected` statuses. |
-| Tickets | Authenticated ticket ensure uses `visitor_tickets`. |
-| Schema | Migrations `0001`–`0006`, including payment and analytics tables. |
-| Analytics | `/api/track` is per-process, in-memory/volatile; `/api/admin/events` exposes its recent feed. |
+| Tickets & Gate | Authenticated ticket ensure uses `visitor_tickets`, gate scanning with duplicate prevention (`/api/check-in/*`). |
+| Booths & Gamification | Booth directory and gate-dependent visit scanning with point accrual (`/api/booths/*`). |
+| RSVP & Feedback | Tokenized VIP/alumni RSVP (`/api/rsvp/*`) and universal feedback engine (`/api/feedback`). |
+| Partners & Inquiry | Tiered partner display and inquiry intake (`/api/partners/*`). |
+| Payments | Midtrans Snap integration, server-side fee calculation, verified webhook, idempotent status updates, and retry flow (`/api/payments/*`). |
+| Admin & Audit | Scoped RBAC helper (`@/lib/admin`), audit logging (`@/lib/audit`), live stats (`/api/admin/stats`), CSV data exports (`/api/admin/export`), and Inspirates dissemination tracking (`/api/admin/inspirates`). |
+| Schema | Migrations `0001`–`0007`, fully covering PRD core entities. |
+| Analytics | `/api/track` ingests to in-memory buffer and persistently stores to Supabase `analytics_events`. |
 
-## Important current limits
+## Remaining frontend & integration milestones
 
-- `/admin` is public demo/mock UI. The `admin_roles` then `ADMIN_EMAILS` helper is not wired; this does not meet PRD scoped RBAC or audit requirements.
-- Payment tables exist, but no Midtrans API, Snap/hosted UI, verified webhook, retries, reconciliation, or refund runtime exists.
-- `analytics_events` is not written by active ingest; dashboard metrics are mock/non-authoritative.
-- GSAP, Lenis, PostHog, Cloudflare SDK/config, and Midtrans runtime are absent. They are PRD targets/assumptions, not current integrations.
-- Current routes differ from the PRD sitemap; see [API-CONTRACTS.md](API-CONTRACTS.md) for mapping.
+- Admin frontend UI pages currently present mock panels; they can now be wired directly to the ready `/api/admin/*`, `/api/check-in/*`, and `/api/payments/*` endpoints.
+- External production credentials (live Midtrans merchant account, live Supabase project) to be configured in `.env`.
+

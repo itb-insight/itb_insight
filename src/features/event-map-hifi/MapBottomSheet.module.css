@@ -1,0 +1,170 @@
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: var(--sheet-h, 360px);
+  border-radius: 20px 20px 0 0;
+  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%), #091b3f;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  transition: height 0.25s ease;
+}
+
+.collapsed {
+  --sheet-h: 120px;
+}
+
+.handle {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 33px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.handleBar {
+  display: block;
+  width: 80px;
+  height: 4px;
+  border-radius: 2px;
+  background: #dee8fb;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.body::-webkit-scrollbar {
+  display: none;
+}
+
+.body > * {
+  flex: none;
+}
+
+/* ---- state 1: daftar kategori --------------------------------------------- */
+
+.list {
+  margin: 14px 21px 0 22px;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---- state 2 & 3: kepala dengan judul dan tombol back ---------------------- */
+
+.head {
+  position: relative;
+  /* judul y=33, pegangan selesai di 33 -> 0 */
+  margin: 0 26px 0 37px;
+}
+
+.heading {
+  min-width: 0;
+  padding-right: 72px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 34px;
+  color: #ffffff;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #ffffff;
+}
+
+.back {
+  position: absolute;
+  right: 0;
+  top: -9px;
+  box-sizing: border-box;
+  width: 56px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  color: #ccddff;
+  cursor: pointer;
+}
+
+.backIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+/* ---- state 2: daftar lokasi ------------------------------------------------ */
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 34px 31px 24px 37px;
+  padding: 0;
+  list-style: none;
+}
+
+.empty {
+  margin: 34px 31px 0 37px;
+  font-size: 16px;
+  line-height: 24px;
+  color: #acc7ff;
+}
+
+/* ---- state 3: detail lokasi ------------------------------------------------ */
+
+.navigate {
+  box-sizing: border-box;
+  height: 52px;
+  margin: 16px 18px 0 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  border: 4px solid transparent;
+  border-radius: 12px;
+  background:
+    linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%) padding-box,
+    linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%) border-box;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #1b3b7d;
+  cursor: pointer;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 393 / 259;
+  object-fit: cover;
+  margin-top: 16px;
+}

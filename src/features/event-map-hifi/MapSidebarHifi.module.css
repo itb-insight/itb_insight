@@ -1,0 +1,263 @@
+
+.sidebar {
+  --sidebar-w: clamp(360px, 26.27315vw, 454px);
+  container-type: inline-size;
+  --gutter-left: clamp(16px, 7.04846cqw, 32px);
+  --gutter-right: clamp(12px, 5.28634cqw, 24px);
+
+  flex: 0 0 var(--sidebar-w);
+  width: var(--sidebar-w);
+  min-height: 100%;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%), #091b3f;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar > * {
+  flex: none;
+}
+
+/* ---- baris atas: logo + tab ------------------------------------------------ */
+
+.top {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: clamp(12px, 8.14978cqw, 37px);
+  row-gap: 16px;
+  padding: 44px var(--gutter-right) 0 var(--gutter-left);
+}
+
+/* Pembungkus tautan logo. line-height 0 supaya tidak menambah tinggi baris. */
+.logoLink {
+  flex: none;
+  display: block;
+  line-height: 0;
+  border-radius: 8px;
+}
+
+.logoLink:focus-visible {
+  outline: 2px solid #acc7ff;
+  outline-offset: 2px;
+}
+
+.logo {
+  display: block;
+  width: 48px;
+  height: 47px;
+  object-fit: contain;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  box-sizing: border-box;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 18px;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  background: none;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #dee8fb;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+@container (max-width: 453px) {
+  .top {
+    gap: 16px;
+  }
+
+  .tab {
+    padding: 0 12px;
+  }
+}
+
+@container (max-width: 395px) {
+  .top {
+    gap: 12px;
+  }
+
+  .tab {
+    padding: 0 9px;
+  }
+}
+
+.tabActive {
+  color: #1b3b7d;
+  background:
+    linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%) padding-box,
+    linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%) border-box;
+}
+
+/* ---- kolom pencarian ------------------------------------------------------- */
+
+.search {
+  position: relative;
+  box-sizing: border-box;
+  height: 48px;
+  margin: 32px var(--gutter-right) 0 var(--gutter-left);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+}
+
+.search::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(0deg, #517eda 1%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #dee8fb;
+}
+
+.searchInput::placeholder {
+  color: #acc7ff;
+  opacity: 1;
+}
+
+.searchIcon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #acc7ff;
+}
+
+/* ---- daftar kategori. Barisnya sendiri ada di CategoryRow.module.css ------- */
+
+.list {
+  margin: 32px var(--gutter-right) 0 var(--gutter-left);
+  list-style: none;
+  padding: 0;
+}
+
+.back {
+  box-sizing: border-box;
+  width: 90px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 21px 0 0 var(--gutter-left);
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  font: inherit;
+  color: #ccddff;
+  cursor: pointer;
+}
+
+.backIcon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.backLabel {
+  padding: 0 8px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 26px var(--gutter-right) 0 var(--gutter-left);
+  list-style: none;
+  padding: 0;
+}
+
+.empty {
+  margin: 26px var(--gutter-right) 0 var(--gutter-left);
+  font-size: 16px;
+  line-height: 24px;
+  color: #acc7ff;
+}
+
+@media (max-width: 899px) {
+  .sidebar {
+    flex: none;
+    width: 100%;
+    height: 50vh;
+    min-height: 0;
+    overflow-y: auto;
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+    /* sembunyikan scrollbar seperti sidebar lo-fi */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .top {
+    padding-top: 24px;
+  }
+
+  .search,
+  .list {
+    margin-top: 20px;
+  }
+}

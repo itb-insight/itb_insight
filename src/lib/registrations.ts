@@ -26,6 +26,45 @@ export type RegistrationRow = {
   team_max?: number
   created_at?: string
   updated_at?: string
+  // Latest payment for this registration (undefined when none / not yet submitted).
+  payment_status?: 'pending' | 'paid' | 'failed' | 'expired' | 'cancelled' | 'refunded'
+  payment_amount?: number
+  // True for the individual registrant or the team leader (the only ones who may pay).
+  can_pay?: boolean
+}
+
+// Attaches the latest payment to each submitted registration. Draft teams use a synthetic
+// `team-…` id and have no payment, so they are skipped.
+async function attachPayments(rows: RegistrationRow[]): Promise<RegistrationRow[]> {
+  const ids = rows.map((row) => row.id).filter((id) => !id.startsWith('team-'))
+
+  if (!ids.length || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return rows
+  }
+
+  const { data } = await createServiceClient()
+    .from('payments')
+    .select('registration_id, status, amount, created_at')
+    .in('registration_id', ids)
+    .order('created_at', { ascending: false })
+
+  const latest = new Map<string, { status: RegistrationRow['payment_status']; amount: number }>()
+  for (const payment of data || []) {
+    if (!latest.has(payment.registration_id)) {
+      latest.set(payment.registration_id, { status: payment.status, amount: payment.amount })
+    }
+  }
+
+  return rows.map((row) => {
+    const payment = latest.get(row.id)
+    const isLeaderOrOwner = row.registration_kind === 'individual' || Boolean(row.is_team_leader)
+    return {
+      ...row,
+      can_pay: isLeaderOrOwner,
+      payment_status: payment?.status,
+      payment_amount: payment?.amount,
+    }
+  })
 }
 
 export async function getRegistrations(): Promise<RegistrationRow[]> {
@@ -74,7 +113,7 @@ export async function getRegistrations(): Promise<RegistrationRow[]> {
     }) as RegistrationRow[]
 
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      return individualRegistrations
+      return attachPayments(individualRegistrations)
     }
 
     const serviceSupabase = createServiceClient()
@@ -86,7 +125,7 @@ export async function getRegistrations(): Promise<RegistrationRow[]> {
       .eq('user_id', user.id)
 
     if (membershipsError || !memberships?.length) {
-      return individualRegistrations
+      return attachPayments(individualRegistrations)
     }
 
     const teamIds = memberships.map((membership) => membership.team_id)
@@ -130,7 +169,7 @@ export async function getRegistrations(): Promise<RegistrationRow[]> {
       }),
     )
 
-    return [...individualRegistrations, ...teamRows]
+    return attachPayments([...individualRegistrations, ...teamRows])
   } catch {
     return []
   }

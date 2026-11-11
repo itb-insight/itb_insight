@@ -12,12 +12,16 @@ type RateLimitScope =
   | 'team-member-remove'
   | 'team-leave'
   | 'team-join'
+  | 'feedback-submit'
 
 type RateLimitOptions = {
   readonly scope: RateLimitScope
   readonly identity: string
   readonly limit: number
   readonly windowMs: number
+  // Per-IP limit when it should differ from the per-identity one, e.g. many students
+  // submitting from one school NAT. Defaults to `limit`.
+  readonly ipLimit?: number
 }
 
 type RateLimitBucket = {
@@ -47,10 +51,17 @@ function hashedValue(value: string) {
   return createHash('sha256').update(value).digest('hex').slice(0, 24)
 }
 
-function requestIpKey(request: NextRequest) {
+// Behind the Cloudflare proxy, x-forwarded-for at the origin can be a Cloudflare edge IP
+// shared by many visitors; cf-connecting-ip is the real client.
+export function getClientIp(request: NextRequest): string | null {
+  const cfIp = request.headers.get('cf-connecting-ip')?.trim()
   const forwardedFor = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
   const realIp = request.headers.get('x-real-ip')?.trim()
-  return hashedValue(forwardedFor || realIp || 'unknown-ip')
+  return cfIp || forwardedFor || realIp || null
+}
+
+function requestIpKey(request: NextRequest) {
+  return hashedValue(getClientIp(request) || 'unknown-ip')
 }
 
 function consumeBucket(key: string, now: number, options: Pick<RateLimitOptions, 'limit' | 'windowMs'>): RateLimitResult {
@@ -77,7 +88,7 @@ export function checkRateLimit(request: NextRequest, options: RateLimitOptions):
 
   if (!identityResult.allowed) return identityResult
 
-  return consumeBucket(ipKey, now, options)
+  return consumeBucket(ipKey, now, { limit: options.ipLimit ?? options.limit, windowMs: options.windowMs })
 }
 
 export function rateLimitResponse(retryAfterSeconds: number) {

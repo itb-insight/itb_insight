@@ -19,6 +19,16 @@
   opacity: 0.85;
 }
 
+/* Ukuran bawaan; ditulis eksplisit supaya "sm" punya pasangan. */
+.md {
+  min-height: 48px;
+}
+
+/* Pop-up hasil scan memakai tombol 40px. */
+.sm {
+  min-height: 40px;
+}
+
 .solid {
   border: 4px solid transparent;
   color: #1b3b7d;
@@ -38,7 +48,8 @@
   content: "";
   position: absolute;
   inset: 0;
-  padding: 4px;
+  /* Outline thickness. Override per use with `--outline-width` on the button. */
+  padding: var(--outline-width, 4px);
   border-radius: inherit;
   background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
   -webkit-mask:
