@@ -44,13 +44,30 @@
 
 .logoWrapper {
   position: relative;
-  width: 200px;
-  height: 100px;
+  /* width is set per size tier inline */
+  height: 110px;
   flex-shrink: 0;
+  /* White card keeps dark/transparent logos legible on the dark background */
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 0 24px rgba(209, 228, 255, 0.25);
+}
+
+.clickable {
+  display: block;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.clickable:hover,
+.clickable:focus-visible {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 0 0 32px rgba(209, 228, 255, 0.45);
 }
 
 .logo {
   object-fit: contain;
+  padding: 14px 18px;
 }
 
 @keyframes marquee {

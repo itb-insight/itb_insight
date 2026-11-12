@@ -1,0 +1,97 @@
+.section {
+  padding: 80px 32px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  container-type: inline-size;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  font-family: 'Excratch', sans-serif;
+  font-size: clamp(1.5rem, 3cqw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  background: linear-gradient(to bottom, #FFFFFF, #D1E4FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(209, 228, 255, 0.6));
+  margin: 0;
+  text-align: center;
+}
+
+/* Max 4 columns; wrapped + centered so a short last row stays centered. */
+.grid {
+  --gap: 24px;
+  --cols: 4;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
+}
+
+.item {
+  width: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+}
+
+/* Equal-size cards. White keeps dark/transparent logos legible on the dark page. */
+.card {
+  position: relative;
+  display: block;
+  aspect-ratio: 2 / 1;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 0 24px rgba(209, 228, 255, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.logo {
+  object-fit: contain;
+  padding: 7% 9%;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover,
+.clickable:focus-visible {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35), 0 0 32px rgba(209, 228, 255, 0.45);
+}
+
+.clickable:focus-visible {
+  outline: 3px solid #D1E4FF;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+  .clickable:hover,
+  .clickable:focus-visible {
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 56px 16px 0;
+    gap: 32px;
+  }
+
+  .grid {
+    --cols: 2;
+    --gap: 14px;
+  }
+}

@@ -4,6 +4,7 @@ import AboutSectionHifi from "@/features/landing/components/AboutSectionHifi/Abo
 import StatsSectionHifi from "@/features/landing/components/StatsSectionHifi/StatsSectionHifi"
 import GallerySectionHifi from "@/features/landing/components/GallerySectionHifi/GallerySectionHifi"
 import TimelineSectionHifi from "@/features/landing/components/TimelineSectionHifi/TimelineSectionHifi"
+import SponsorsSectionHifi from "@/features/landing/components/SponsorsSectionHifi/SponsorsSectionHifi"
 import MediaPartnersSectionHifi from "@/features/landing/components/MediaPartnersSectionHifi/MediaPartnersSectionHifi"
 import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi"
 import LandingBackground from "@/features/landing/components/LandingBackground/LandingBackground"
@@ -23,6 +24,7 @@ export default function LandingPageHifi({ children }: { children?: React.ReactNo
       <StatsSectionHifi />
       <GallerySectionHifi />
       <TimelineSectionHifi />
+      <SponsorsSectionHifi />
       <MediaPartnersSectionHifi />
       <FooterHifi />
     </main>
