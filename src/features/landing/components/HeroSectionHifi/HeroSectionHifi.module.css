@@ -195,3 +195,45 @@
     max-width: 320px;
   }
 }
+/* "Scroll ke bawah" hint — first view only */
+.scrollHint {
+  position: absolute;
+  bottom: clamp(56px, 12vh, 120px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #E9E9E9;
+  font-family: 'Gabarito', sans-serif;
+  transition: opacity 0.2s ease;
+}
+
+.scrollHintText {
+  font-size: 1.2rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+}
+
+.scrollHintChevron {
+  animation: scrollHintBounce 1.6s ease-in-out infinite;
+}
+
+.scrollHint:hover .scrollHintChevron {
+  color: #fff;
+}
+
+@keyframes scrollHintBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollHintChevron { animation: none; }
+}

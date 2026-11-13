@@ -4,7 +4,11 @@ import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import styles from "./HeroSectionHifi.module.css"
 import { useIsMobile } from "@/features/landing/hooks/useIsMobile"
+import { useIsSignedIn } from "@/features/landing/hooks/useIsSignedIn"
 import { COUNTDOWN_TARGET } from "@/features/home/homeConfig"
+
+/** "Scroll ke bawah" jumps to this fraction (0–1) of the page's total scroll distance. Tune freely. */
+const SCROLL_HINT_TARGET = 0.2
 
 interface TimeLeft {
   days: number
@@ -46,6 +50,25 @@ export default function HeroSectionHifi() {
   const sectionRef = useRef<HTMLElement>(null)
   const { days, hours, minutes, seconds } = useCountdown(COUNTDOWN_TARGET)
   const isMobile = useIsMobile(768)
+  const signedIn = useIsSignedIn()
+
+  const handleScrollHint = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight
+    window.scrollTo({ top: max * SCROLL_HINT_TARGET, behavior: "smooth" })
+  }
+
+  // Hint is only for the first view: fade it out as soon as the user starts scrolling.
+  const hintOpacity = Math.max(0, 1 - scrollProgress / 0.08)
+
+  // The About section is scroll-driven (sticky), so its text only fades in a little way past the
+  // section's top. Land there instead of on the (still empty) top edge.
+  const handleExplore = () => {
+    const about = document.getElementById("about")
+    if (!about) return
+    const rect = about.getBoundingClientRect()
+    const top = rect.top + window.scrollY + rect.height * 0.35
+    window.scrollTo({ top, behavior: "smooth" })
+  }
 
   useEffect(() => { setMounted(true) }, [])
 
@@ -160,10 +183,30 @@ export default function HeroSectionHifi() {
           <p className={styles.description}>
             Are you ready for the biggest technological event in ITB?
           </p>
-          <Link href="/signup" className={styles.registerBtn}>
-            Register Now
-          </Link>
+          {signedIn ? (
+            <button type="button" className={styles.registerBtn} onClick={handleExplore}>
+              Explore
+            </button>
+          ) : (
+            <Link href="/signup" className={styles.registerBtn}>
+              Register Now
+            </Link>
+          )}
         </div>
+
+        <button
+          type="button"
+          className={styles.scrollHint}
+          onClick={handleScrollHint}
+          aria-label="Scroll ke bawah"
+          tabIndex={hintOpacity > 0.5 ? 0 : -1}
+          style={{ opacity: hintOpacity, pointerEvents: hintOpacity > 0.5 ? "auto" : "none" }}
+        >
+          <span className={styles.scrollHintText}>Scroll ke bawah</span>
+          <svg className={styles.scrollHintChevron} viewBox="0 0 24 24" width="40" height="40" aria-hidden="true">
+            <path d="M4 8l8 8 8-8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
 
       </div>
     </section>

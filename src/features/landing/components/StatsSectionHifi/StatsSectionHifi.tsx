@@ -5,9 +5,9 @@ import Image from "next/image"
 import styles from "./StatsSectionHifi.module.css"
 
 const stats = [
-  { value: "120", label: "collaborators", className: "collaborators" },
-  { value: "670", label: "exhibitors", className: "exhibitors" },
-  { value: "67.000", label: "visitors", className: "visitors" },
+  { value: "130+", label: "Wahana Teknologi \n Interaktif", className: "collaborators" },
+  { value: "150+", label: "Technology Exhibitors", className: "exhibitors" },
+  { value: "55.000+", label: "Cummulative Visitors", className: "visitors" },
 ]
 
 export default function StatsSectionHifi() {

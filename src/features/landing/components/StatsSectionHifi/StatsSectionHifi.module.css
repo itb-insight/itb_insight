@@ -55,6 +55,7 @@
   font-weight: 400;
   font-size: clamp(1rem, 2.5cqw, 1.6rem);
   margin-top: 4px;
+  white-space: pre-line;
   background: linear-gradient(to bottom, #091B3F, #294D97);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
