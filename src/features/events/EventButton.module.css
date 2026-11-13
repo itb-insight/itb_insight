@@ -81,3 +81,21 @@
     transition: none;
   }
 }
+
+/*
+ * Coming Soon: bukan tautan. Tepi dan isi diredupkan, tanpa hover, supaya
+ * jelas tidak bisa diklik tapi tetap satu keluarga dengan tombol lain.
+ */
+.disabled {
+  cursor: default;
+  color: #dee8fb;
+  background: linear-gradient(180deg, rgba(222, 232, 251, 0.55) 0%, rgba(172, 199, 255, 0.35) 100%);
+}
+
+.disabled::after {
+  background: linear-gradient(180deg, rgba(41, 77, 151, 0.92) 0%, rgba(19, 46, 98, 0.92) 100%);
+}
+
+.disabled::before {
+  display: none;
+}

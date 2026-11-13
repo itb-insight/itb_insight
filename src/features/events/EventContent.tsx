@@ -69,9 +69,9 @@ export default function EventContent({ event }: { event: EventItem }) {
 
       <EventButton
         box={b}
-        href={event.registerUrl}
+        href={event.buttonHref}
         label={event.buttonLabel}
-        ariaLabel={`${event.buttonLabel} ${event.title.replace(/\n/g, " ")}`}
+        ariaLabel={`${event.buttonLabel} ${event.title.replace(/-\n/g, "-").replace(/\n/g, " ")}`}
       />
     </>
   );

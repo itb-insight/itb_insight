@@ -1,774 +1,220 @@
 import "server-only";
-import type { EventItem } from "@/features/events/types";
+import type { Box, EventCopy, EventItem, EventSlot } from "@/features/events/types";
+import { LAYOUT_SLOTS } from "@/features/events/layoutSlots";
 
 /**
  * Data halaman Events (desktop).
  *
- * Seluruh isi dan koordinat di bawah DIHASILKAN dari file Figma
- * "UI-UX Website ITB INSIGHT (Copy)" page Hi-Fi, frame "Event Info"
- * (1728 x 1024), lewat Figma REST API — bukan disalin tangan.
+ * Tampilan (ornamen, sisi foto, latar, sambungan) berasal dari Figma
+ * "UI-UX Website ITB INSIGHT (Copy)" page Hi-Fi, frame "Event Info", dan
+ * disimpan per slot di layoutSlots.ts.
  *
- * Semua angka koordinat dalam piksel desain (frame 1728 lebar).
- * Komponen mengubahnya ke satuan cqw, jadi tampilannya ikut menyusut
- * atau membesar secara proporsional mengikuti lebar layar.
+ * Isi di bawah (judul, deskripsi, tanggal, lokasi) berasal dari lembar
+ * copywriting tiap divisi di docs/references/event/, BUKAN dari Figma.
+ * Teks Figma lama masih placeholder ("Sabuga, ITB" untuk semua event) dan
+ * catatan perencanaan internal.
  *
- * layers = urutan lapisan PERSIS seperti di Figma (bawah ke atas).
- * Urutan ini penting: contohnya di Insight Festival, blob hijau berada
- * di ATAS foto sehingga pojok kiri bawah foto ikut tersamar.
+ * Event ke-n memakai slot ke-n. Jumlah event tidak boleh melebihi jumlah
+ * slot; tambahkan slot dulu di layoutSlots.ts kalau perlu.
  *
- * Pindah ke Supabase/CMS nanti: cukup ganti isi getEvents() dengan
- * fetch, komponennya tidak perlu diubah.
+ * Pindah ke Supabase/CMS nanti: cukup ganti isi getEvents() dengan fetch,
+ * komponennya tidak perlu diubah.
  */
 
-const EVENTS: EventItem[] = [
+const EVENT_COPY: EventCopy[] = [
   {
-    "slug": "insight-festival",
-    "blendWithPrevious": false,
-    "title": "Insight Festival",
-    "description": "Secara struktur, Insight Festival mengintegrasikan empat komponen utama, yaitu Technology Showcase, Final Day Competition, Technology Seminar, dan Insight on Stage, yang masing-masing merepresentasikan dimensi berbeda dari sains dan teknologi: eksplorasi, partisipasi, pendalaman, dan pengalaman imersif.",
-    "day": "Sabtu",
-    "dateLabel": "28 November, 2026",
-    "date": "2026-11-28",
-    "location": "Sabuga, ITB",
-    "registerUrl": "#",
-    "buttonLabel": "Registrasi",
-    "badgeColor": "#7245f5",
-    "badgeOpacity": 0.73,
-    "bgTop": "#091b3f",
-    "bgBottom": "#294d97",
-    "titleBox": {
-      "x": 173,
-      "y": 291,
-      "w": 529,
-      "h": 151
+    slug: "insight-festival",
+    title: "Insight\nFestival",
+    description:
+      "Secara struktur, Insight Festival mengintegrasikan empat komponen utama, yaitu Technology Showcase, Final Day Competition, Technology Seminar, dan Insight on Stage, yang masing-masing merepresentasikan dimensi berbeda dari sains dan teknologi: eksplorasi, partisipasi, pendalaman, dan pengalaman imersif.",
+    day: "Sabtu",
+    dateLabel: "28 November, 2026",
+    date: "2026-11-28",
+    location: "ITB Ganesha",
+    badgeColor: "#7245f5",
+    photo: {
+      src: "/events/tech-xhibition/hero.webp",
+      alt: "Gapura ITB Insight Festival di Kampus ITB Ganesha",
     },
-    "rowBox": {
-      "x": 173,
-      "y": 466,
-      "w": 403.3,
-      "h": 48
-    },
-    "descBox": {
-      "x": 173,
-      "y": 538,
-      "w": 676,
-      "h": 120
-    },
-    "buttonBox": {
-      "x": 173,
-      "y": 682,
-      "w": 256,
-      "h": 52
-    },
-    "photoBox": {
-      "x": 900,
-      "y": 272,
-      "w": 655,
-      "h": 480
-    },
-    "layers": [
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-01.svg",
-        "cx": 1398.5,
-        "cy": 512,
-        "w": 1143,
-        "h": 1121
-      },
-      {
-        "kind": "photo"
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-02.svg",
-        "cx": 374.6,
-        "cy": 272,
-        "w": 1234,
-        "h": 708
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-03.svg",
-        "cx": 864,
-        "cy": 961.4,
-        "w": 1211,
-        "h": 1060
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-04.svg",
-        "cx": 585.8,
-        "cy": 1190.9,
-        "w": 435,
-        "h": 435
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-05.svg",
-        "cx": 111.6,
-        "cy": 1424.6,
-        "w": 894,
-        "h": 894
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-06.svg",
-        "cx": -124.4,
-        "cy": 1190.9,
-        "w": 427,
-        "h": 427
-      },
-      {
-        "kind": "content"
-      }
-    ]
+    buttonHref: "/event-map",
+    buttonLabel: "Lihat Peta",
   },
   {
-    "slug": "exhibition-manager",
-    "blendWithPrevious": false,
-    "title": "EXHIBITION\nMANAGER",
-    "description": "Tech-xhibition merupakan sebuah exhibition yang menggabungkan karya-karya civitas ITB (HMPS, UKM, dosen, badan lain di ITB) dan teknologi inovatif di industri untuk disebarluaskan dan dikenalkan kepada masyarakat luas dengan metode yang interaktif dan aplikatif.",
-    "day": "Sabtu",
-    "dateLabel": "28 November, 2026",
-    "date": "2026-11-28",
-    "location": "Sabuga, ITB",
-    "registerUrl": "#",
-    "buttonLabel": "Registrasi",
-    "badgeColor": "#c05150",
-    "badgeOpacity": 0.73,
-    "bgTop": "#294d97",
-    "bgBottom": "#091b3f",
-    "titleBox": {
-      "x": 879,
-      "y": 286,
-      "w": 610,
-      "h": 160
+    slug: "tech-xhibition",
+    title: "Tech-\nXhibition",
+    description:
+      "Lebih dari sekadar melihat, saatnya berinteraksi dengan teknologi! Tech-Xhibition menampilkan produk dan prototipe inovatif lewat demonstrasi langsung dan pengalaman interaktif bersama para exhibitor dari perusahaan, startup, komunitas, dan institusi pendidikan.",
+    day: "Sabtu",
+    dateLabel: "28 November, 2026",
+    date: "2026-11-28",
+    location: "Labtek V, ITB",
+    badgeColor: "#c05150",
+    photo: {
+      src: "/events/tech-xhibition/gallery-1.webp",
+      alt: "Pengunjung mencoba demo di booth exhibitor Tech-Xhibition",
     },
-    "rowBox": {
-      "x": 879,
-      "y": 470,
-      "w": 403.3,
-      "h": 48
-    },
-    "descBox": {
-      "x": 879,
-      "y": 542,
-      "w": 676,
-      "h": 120
-    },
-    "buttonBox": {
-      "x": 879,
-      "y": 686,
-      "w": 256,
-      "h": 52
-    },
-    "photoBox": {
-      "x": 173,
-      "y": 272,
-      "w": 655,
-      "h": 480
-    },
-    "layers": [
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-07.svg",
-        "cx": 229.5,
-        "cy": 512,
-        "w": 1143,
-        "h": 1121
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-08.svg",
-        "cx": 1042.7,
-        "cy": 1190.7,
-        "w": 435,
-        "h": 435
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-09.svg",
-        "cx": 1516.9,
-        "cy": 1424.3,
-        "w": 894,
-        "h": 894
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-10.svg",
-        "cx": 1752.9,
-        "cy": 1190.7,
-        "w": 427,
-        "h": 427
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-11.svg",
-        "cx": 926.4,
-        "cy": -50.1,
-        "w": 193,
-        "h": 193
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-12.svg",
-        "cx": 1516.4,
-        "cy": -400.6,
-        "w": 427,
-        "h": 894
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-13.svg",
-        "cx": 1044.4,
-        "cy": -166.9,
-        "w": 427,
-        "h": 427
-      },
-      {
-        "kind": "photo"
-      },
-      {
-        "kind": "content"
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-14.svg",
-        "cx": 863.5,
-        "cy": -28.1,
-        "w": 1211,
-        "h": 1060
-      }
-    ]
+    buttonHref: "/event/tech-xhibition",
+    buttonLabel: "Lihat Detail",
+    detailSlug: "tech-xhibition",
   },
   {
-    "slug": "play-tech",
-    "blendWithPrevious": true,
-    "title": "Play-Tech",
-    "description": "Deskripsi: Membangun permainan dan peraga interaktif untuk pengunjung festival. Aksentuasi aspek keilmuan yang dipelajari di TF agar dapat menyampaikan sebagian ilmu tersebut ke masyarakat luas. 2 wahana besar, 6 wahana utama, 12 wahana pendamping, 20 wahana pengisi. Non-newtonian fluid pool, VR booth, robo-soccer arena, dsb.",
-    "day": "Sabtu",
-    "dateLabel": "28 November, 2026",
-    "date": "2026-11-28",
-    "location": "Sabuga, ITB",
-    "registerUrl": "#",
-    "buttonLabel": "Registrasi",
-    "badgeColor": "#7b7b7b",
-    "badgeOpacity": 0.73,
-    "bgTop": "#091b3f",
-    "bgBottom": "#294d97",
-    "titleBox": {
-      "x": 173,
-      "y": 326,
-      "w": 521,
-      "h": 80
+    slug: "play-tech",
+    title: "Play-Tech",
+    description:
+      "Coba berbagai permainan interaktif, sendiri atau bareng teman, yang memadukan keseruan dengan prinsip sains dan teknologi. Ada 18 wahana, mulai dari Robo Sumo, Wave & Go!, sampai kolam fluida non-Newtonian.",
+    day: "Sabtu",
+    dateLabel: "28 November, 2026",
+    date: "2026-11-28",
+    location: "CC Timur, ITB",
+    badgeColor: "#7b7b7b",
+    photo: {
+      src: "/events/playtech-showtech/hero.webp",
+      alt: "Pengunjung bersorak menonton robot gripper di Playtech",
     },
-    "rowBox": {
-      "x": 173,
-      "y": 430,
-      "w": 403.3,
-      "h": 48
-    },
-    "descBox": {
-      "x": 173,
-      "y": 502,
-      "w": 676,
-      "h": 120
-    },
-    "buttonBox": {
-      "x": 173,
-      "y": 646,
-      "w": 256,
-      "h": 52
-    },
-    "photoBox": {
-      "x": 900,
-      "y": 272,
-      "w": 655,
-      "h": 480
-    },
-    "layers": [
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-15.svg",
-        "cx": 1398.5,
-        "cy": 512,
-        "w": 1143,
-        "h": 1121
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-16.svg",
-        "cx": 990.2,
-        "cy": 474,
-        "w": 1056,
-        "h": 1346
-      },
-      {
-        "kind": "photo"
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-17.svg",
-        "cx": 585.8,
-        "cy": 1190.9,
-        "w": 435,
-        "h": 435
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-18.svg",
-        "cx": 111.6,
-        "cy": 1424.6,
-        "w": 894,
-        "h": 894
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-19.svg",
-        "cx": -124.4,
-        "cy": 1190.9,
-        "w": 427,
-        "h": 427
-      },
-      {
-        "kind": "content"
-      }
-    ]
+    buttonHref: "/event/playtech-showtech#playtech",
+    buttonLabel: "Lihat Detail",
+    detailSlug: "playtech-showtech",
   },
   {
-    "slug": "show-tech",
-    "blendWithPrevious": true,
-    "title": "Show-Tech",
-    "description": "Menambahkan kecantikan festival. Instalasi teknologi audio-visual untuk mengenalkan saintek & membangun suasana festival yang punya tema narasi. 32 instalasi buatan mahasiswa TF dengan konten edukasi di setiap instalasinya. Immersive world, sound-responsive led floor, LED 16, cloud light, kaleidoscope portal, hologram, dll.",
-    "day": "Sabtu",
-    "dateLabel": "28 November, 2026",
-    "date": "2026-11-28",
-    "location": "Sabuga, ITB",
-    "registerUrl": "#",
-    "buttonLabel": "Registrasi",
-    "badgeColor": "#073c46",
-    "badgeOpacity": 0.73,
-    "bgTop": "#294d97",
-    "bgBottom": "#091b3f",
-    "titleBox": {
-      "x": 879,
-      "y": 326,
-      "w": 592,
-      "h": 80
+    slug: "show-tech",
+    title: "Show-Tech",
+    description:
+      "Demonstrasi dan instalasi teknologi dengan sentuhan visual dan artistik yang bikin penasaran. Dari Infinity Mirror, Piano Stairs, sampai Chroma Tunnel, temukan sains di balik cahaya dan suara.",
+    day: "Sabtu",
+    dateLabel: "28 November, 2026",
+    date: "2026-11-28",
+    location: "CC Timur, ITB",
+    badgeColor: "#073c46",
+    photo: {
+      src: "/events/playtech-showtech/gallery-4.webp",
+      alt: "Pengunjung melihat instalasi Infinity Mirror di Showtech",
+      position: "70% 50%",
     },
-    "rowBox": {
-      "x": 879,
-      "y": 430,
-      "w": 403.3,
-      "h": 48
-    },
-    "descBox": {
-      "x": 879,
-      "y": 502,
-      "w": 676,
-      "h": 120
-    },
-    "buttonBox": {
-      "x": 879,
-      "y": 646,
-      "w": 256,
-      "h": 52
-    },
-    "photoBox": {
-      "x": 173,
-      "y": 272,
-      "w": 655,
-      "h": 480
-    },
-    "layers": [
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-20.svg",
-        "cx": 229.5,
-        "cy": 512,
-        "w": 1143,
-        "h": 1121
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-21.svg",
-        "cx": 1042.7,
-        "cy": 1190.7,
-        "w": 435,
-        "h": 435
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-22.svg",
-        "cx": 261,
-        "cy": 194.2,
-        "w": 1707,
-        "h": 1700
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-23.svg",
-        "cx": 1422.3,
-        "cy": 608.2,
-        "w": 992,
-        "h": 1152
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-24.svg",
-        "cx": 1516.9,
-        "cy": 1424.3,
-        "w": 894,
-        "h": 894
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-25.svg",
-        "cx": 1752.9,
-        "cy": 1190.7,
-        "w": 427,
-        "h": 427
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-26.svg",
-        "cx": 926.4,
-        "cy": -50.1,
-        "w": 193,
-        "h": 193
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-27.svg",
-        "cx": 1516.4,
-        "cy": -400.6,
-        "w": 427,
-        "h": 894
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-28.svg",
-        "cx": 1044.4,
-        "cy": -166.9,
-        "w": 427,
-        "h": 427
-      },
-      {
-        "kind": "photo"
-      },
-      {
-        "kind": "content"
-      }
-    ]
+    buttonHref: "/event/playtech-showtech#showtech",
+    buttonLabel: "Lihat Detail",
+    detailSlug: "playtech-showtech",
   },
   {
-    "slug": "insight-on-stage",
-    "blendWithPrevious": true,
-    "title": "Insight on Stage",
-    "description": "Insight on Stage adalah pertunjukan teknologi-artistik dengan mengadakan pertunjukan yang berbasis teknologi, misalkan: Laser + Projection Mapping, Light hologram performance / Light Dance, Drone Light Show, dan Guest Star Band Performance.",
-    "day": "Sabtu",
-    "dateLabel": "28 November, 2026",
-    "date": "2026-11-28",
-    "location": "Sabuga, ITB",
-    "registerUrl": "#",
-    "buttonLabel": "Registrasi",
-    "badgeColor": "#073c46",
-    "badgeOpacity": 0.73,
-    "bgTop": "#091b3f",
-    "bgBottom": "#294d97",
-    "titleBox": {
-      "x": 173,
-      "y": 291,
-      "w": 529,
-      "h": 151
+    slug: "technology-seminar",
+    title: "Technology\nSeminar",
+    description:
+      "Forum diskusi interaktif yang mempertemukan akademisi, industri, dan generasi muda untuk mengeksplorasi perkembangan teknologi serta dampaknya terhadap kehidupan dan masa depan dunia kerja. Kursi terbatas, 100 peserta per sesi.",
+    day: "Sabtu",
+    dateLabel: "28 November, 2026",
+    date: "2026-11-28",
+    location: "CC Timur, ITB",
+    badgeColor: "#3c5fb0",
+    photo: {
+      src: "/events/technology-seminar/hero.webp",
+      alt: "Peserta bertanya kepada pembicara di Insight Seminar",
     },
-    "rowBox": {
-      "x": 173,
-      "y": 466,
-      "w": 403.3,
-      "h": 48
-    },
-    "descBox": {
-      "x": 173,
-      "y": 538,
-      "w": 676,
-      "h": 120
-    },
-    "buttonBox": {
-      "x": 173,
-      "y": 682,
-      "w": 256,
-      "h": 52
-    },
-    "photoBox": {
-      "x": 900,
-      "y": 272,
-      "w": 655,
-      "h": 480
-    },
-    "layers": [
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-29.svg",
-        "cx": 1398.5,
-        "cy": 512,
-        "w": 1143,
-        "h": 1121
-      },
-      {
-        "kind": "photo"
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-30.svg",
-        "cx": 652.6,
-        "cy": 373.9,
-        "w": 1707,
-        "h": 1700
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-31.svg",
-        "cx": 585.8,
-        "cy": 1190.9,
-        "w": 435,
-        "h": 435
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-32.svg",
-        "cx": 111.6,
-        "cy": 1424.6,
-        "w": 894,
-        "h": 894
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-33.svg",
-        "cx": -124.4,
-        "cy": 1190.9,
-        "w": 427,
-        "h": 427
-      },
-      {
-        "kind": "content"
-      }
-    ]
+    buttonHref: "/event/technology-seminar",
+    buttonLabel: "Lihat Detail",
+    detailSlug: "technology-seminar",
   },
   {
-    "slug": "inspirates",
-    "blendWithPrevious": false,
-    "title": "Inspirates",
-    "description": "Inspirates merupakan kegiatan diseminasi ke sekolah (SD, SMP, SMA, SMK) untuk memberikan motivasi dan inspirasi terkait sains, teknologi, dan TF serta ajang promosi ITB Insight. Kegiatan ini juga berkolaborasi dengan FKMTF maupun BKSTF agar dapat tersilh ke seluruh Indonesia.",
-    "day": "Sabtu",
-    "dateLabel": "28 November, 2026",
-    "date": "2026-11-28",
-    "location": "Sabuga, ITB",
-    "registerUrl": "#",
-    "buttonLabel": "Registrasi",
-    "badgeColor": "#073c46",
-    "badgeOpacity": 0.73,
-    "bgTop": "#294d97",
-    "bgBottom": "#091b3f",
-    "titleBox": {
-      "x": 879,
-      "y": 326,
-      "w": 599,
-      "h": 80
+    slug: "insight-on-stage",
+    title: "Insight\non Stage",
+    description:
+      "Panggung utama ITB INSIGHT 2026 dengan penampilan band, bintang tamu spesial, serta projection mapping dan light show yang memukau, dari pagi sampai malam. Terbuka untuk umum dan gratis, ajak teman dan keluargamu!",
+    day: "Sabtu",
+    dateLabel: "28 November, 2026",
+    date: "2026-11-28",
+    location: "ITB Ganesha",
+    badgeColor: "#073c46",
+    photo: {
+      src: "/events/insight-on-stage/hero.webp",
+      alt: "Penonton menyaksikan band di panggung Insight on Stage pada malam hari",
     },
-    "rowBox": {
-      "x": 879,
-      "y": 430,
-      "w": 403.3,
-      "h": 48
-    },
-    "descBox": {
-      "x": 879,
-      "y": 502,
-      "w": 676,
-      "h": 120
-    },
-    "buttonBox": {
-      "x": 879,
-      "y": 646,
-      "w": 256,
-      "h": 52
-    },
-    "photoBox": {
-      "x": 173,
-      "y": 272,
-      "w": 655,
-      "h": 480
-    },
-    "layers": [
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-34.svg",
-        "cx": 229.5,
-        "cy": 512,
-        "w": 1143,
-        "h": 1121
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-35.svg",
-        "cx": 484.8,
-        "cy": 557,
-        "w": 1619,
-        "h": 1359
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-36.svg",
-        "cx": 1042.7,
-        "cy": 1190.7,
-        "w": 435,
-        "h": 435
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-37.svg",
-        "cx": 1516.9,
-        "cy": 1424.3,
-        "w": 894,
-        "h": 894
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-38.svg",
-        "cx": 1752.9,
-        "cy": 1190.7,
-        "w": 427,
-        "h": 427
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-39.svg",
-        "cx": 926.4,
-        "cy": -50.1,
-        "w": 193,
-        "h": 193
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-40.svg",
-        "cx": 1516.4,
-        "cy": -400.6,
-        "w": 427,
-        "h": 894
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-41.svg",
-        "cx": 1044.4,
-        "cy": -166.9,
-        "w": 427,
-        "h": 427
-      },
-      {
-        "kind": "photo"
-      },
-      {
-        "kind": "content"
-      }
-    ]
+    buttonHref: "/event/insight-on-stage",
+    buttonLabel: "Lihat Detail",
+    detailSlug: "insight-on-stage",
   },
   {
-    "slug": "alumni-gathering",
-    "blendWithPrevious": true,
-    "title": "Alumni Gathering",
-    "description": "Alumni Gathering merupakan salah satu kegiatan yang mengundang para alumni agar dapat berinteraksi langsung dengan HMFT-ITB serta prodi untuk mensosialisasikan perkembangan mahasiswa, HMFT-ITB, ITB Insight, dan menjadikan ajang seru-seruan dan reuni antar alumni.",
-    "day": "Sabtu",
-    "dateLabel": "28 November, 2026",
-    "date": "2026-11-28",
-    "location": "Sabuga, ITB",
-    "registerUrl": "#",
-    "buttonLabel": "Registrasi",
-    "badgeColor": "#073c46",
-    "badgeOpacity": 0.73,
-    "bgTop": "#091b3f",
-    "bgBottom": "#294d97",
-    "titleBox": {
-      "x": 173,
-      "y": 286,
-      "w": 572,
-      "h": 160
+    slug: "inspirates",
+    title: "Inspirates",
+    description:
+      "Program roadshow ITB Insight 2026 dari mahasiswa Teknik Fisika ITB ke sekolah. Kenali Teknik Fisika, temukan teknologi di sekitarmu, dan coba langsung alat demonstrasi karya mahasiswa.",
+    day: "Roadshow",
+    // MENUNGGU KONFIRMASI: lembar menulis 2-20 November, jadwal sekolahnya 11-17 November.
+    dateLabel: "2–20 November, 2026",
+    date: "2026-11-02",
+    location: "Bandung",
+    badgeColor: "#073c46",
+    photo: {
+      src: "/events/inspirates/hero.webp",
+      alt: "Tim Inspirates berfoto bersama siswa di sekolah",
     },
-    "rowBox": {
-      "x": 173,
-      "y": 470,
-      "w": 403.3,
-      "h": 48
+    buttonHref: "/event/inspirates",
+    buttonLabel: "Lihat Detail",
+    detailSlug: "inspirates",
+  },
+  {
+    slug: "alumni-gathering",
+    title: "Alumni\nGathering",
+    description:
+      "Alumni Gathering merupakan salah satu kegiatan yang mengundang para alumni agar dapat berinteraksi langsung dengan HMFT-ITB serta prodi untuk mensosialisasikan perkembangan mahasiswa, HMFT-ITB, ITB Insight, dan menjadikan ajang seru-seruan dan reuni antar alumni.",
+    day: "Segera",
+    dateLabel: "Tanggal menyusul",
+    date: null,
+    location: "Menyusul",
+    badgeColor: "#7b7b7b",
+    photo: {
+      src: "/events/event-photo.jpg",
+      alt: "Dokumentasi kegiatan ITB Insight",
     },
-    "descBox": {
-      "x": 173,
-      "y": 542,
-      "w": 676,
-      "h": 120
-    },
-    "buttonBox": {
-      "x": 173,
-      "y": 686,
-      "w": 256,
-      "h": 52
-    },
-    "photoBox": {
-      "x": 900,
-      "y": 272,
-      "w": 655,
-      "h": 480
-    },
-    "layers": [
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-42.svg",
-        "cx": 1398.5,
-        "cy": 512,
-        "w": 1143,
-        "h": 1121
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-43.svg",
-        "cx": 1101.8,
-        "cy": 518,
-        "w": 2258,
-        "h": 3081
-      },
-      {
-        "kind": "photo"
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-44.svg",
-        "cx": 585.8,
-        "cy": 1190.9,
-        "w": 435,
-        "h": 435
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-45.svg",
-        "cx": 111.6,
-        "cy": 1424.6,
-        "w": 894,
-        "h": 894
-      },
-      {
-        "kind": "decor",
-        "src": "/events/decor/decor-46.svg",
-        "cx": -124.4,
-        "cy": 1190.9,
-        "w": 427,
-        "h": 427
-      },
-      {
-        "kind": "content"
-      }
-    ]
-  }
+    buttonHref: null,
+    buttonLabel: "Coming Soon",
+    status: "coming-soon",
+  },
 ];
 
+/*
+ * Posisi blok teks dari Figma. Judul satu baris membuat seluruh blok turun
+ * 36px agar tetap di tengah secara vertikal, persis seperti frame Figma
+ * Play-Tech / Show-Tech / Inspirates. Judul dua baris = frame Insight
+ * Festival / Insight on Stage.
+ */
+const TEXT_Y = {
+  1: { title: 326, row: 430, desc: 502, button: 646 },
+  2: { title: 291, row: 466, desc: 538, button: 682 },
+} as const;
+
+/** Teks di kiri saat foto di kanan, dan sebaliknya (x dari Figma). */
+const TEXT_X = { right: 173, left: 879 } as const;
+const PHOTO_X = { right: 900, left: 173 } as const;
+
+/*
+ * Lebar kotak judul. Baris terpanjang ("Technology") sekitar 600px pada
+ * EXCRATCH 64px, jadi 700 aman tanpa pindah baris otomatis. Pindah baris
+ * selalu lewat "\n" di judul supaya jumlah barisnya pasti.
+ */
+const TITLE_W = 700;
+
+function compose(slot: EventSlot, copy: EventCopy): EventItem {
+  const lines = copy.title.split("\n").length;
+  if (lines !== 1 && lines !== 2) {
+    throw new Error(`Judul event "${copy.slug}" harus 1 atau 2 baris.`);
+  }
+  const y = TEXT_Y[lines];
+  const x = TEXT_X[slot.photoSide];
+  const box = (by: number, w: number, h: number): Box => ({ x, y: by, w, h });
+
+  return {
+    ...slot,
+    ...copy,
+    badgeOpacity: 0.73,
+    titleBox: box(y.title, TITLE_W, lines * 80),
+    rowBox: box(y.row, 676, 48),
+    descBox: box(y.desc, 676, 120),
+    buttonBox: box(y.button, 256, 52),
+    photoBox: { x: PHOTO_X[slot.photoSide], y: 272, w: 655, h: 480 },
+  };
+}
+
 export async function getEvents(): Promise<EventItem[]> {
-  return EVENTS;
+  if (EVENT_COPY.length > LAYOUT_SLOTS.length) {
+    throw new Error("Event lebih banyak dari slot tata letak. Tambah slot di layoutSlots.ts.");
+  }
+  return EVENT_COPY.map((copy, i) => compose(LAYOUT_SLOTS[i], copy));
 }

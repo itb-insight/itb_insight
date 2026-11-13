@@ -3,7 +3,7 @@ import type { EventItem } from "@/features/events/types";
 import { u } from "@/features/events/scale";
 
 /**
- * Foto kegiatan. Figma: 655x480, radius 25, scaleMode FILL (dipotong untuk
+ * Foto kegiatan (event.photo, dari data.ts). Figma: 655x480, radius 25, scaleMode FILL (dipotong untuk
  * menutupi kotak, rasio terjaga), drop shadow #dee8fb radius 10 tanpa offset
  * — tampil sebagai pendar terang di sekeliling foto.
  *
@@ -27,11 +27,11 @@ export default function EventPhoto({ event }: { event: EventItem }) {
       }}
     >
       <Image
-        src="/events/event-photo.jpg"
-        alt={`Dokumentasi kegiatan ${event.title.replace(/\n/g, " ")}`}
+        src={event.photo.src}
+        alt={event.photo.alt}
         fill
         sizes="38vw"
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: "cover", objectPosition: event.photo.position ?? "50% 50%" }}
       />
     </div>
   );
