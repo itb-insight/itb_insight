@@ -4,6 +4,8 @@
     Until Fathir gets the Vercel project back from Farhan :(
 ============================================= */
 
+import { MAP_PATH, isMapsDisabled } from './maps'
+
 export type MaintenanceState = {
     site: boolean
     pages: string[]
@@ -16,7 +18,9 @@ export function getMaintenanceState(): MaintenanceState {
         pages: (process.env.MAINTENANCE_PAGES ?? '')
             .split(',')
             .map((p) => p.trim())
-            .filter(Boolean),
+            .filter(Boolean)
+            // NEXT_PUBLIC_MAPS_DISABLED=true: the map goes to the maintenance page too
+            .concat(isMapsDisabled() ? [MAP_PATH] : []),
     }
 }
 

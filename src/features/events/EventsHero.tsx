@@ -29,9 +29,10 @@ import { u, sectionStyle } from "@/features/events/scale";
  */
 export const HERO_CURTAIN = "/events/hero-curtain.webp";
 
-export default function EventsHero() {
+export default function EventsHero({ className }: { className?: string }) {
   return (
     <section
+      className={className}
       aria-labelledby="events-hero-title"
       style={{
         ...sectionStyle,

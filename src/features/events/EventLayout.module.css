@@ -1,0 +1,26 @@
+/*
+ * Pemilih tata letak halaman /event.
+ *
+ * Desktop (>= 900px, sama dengan breakpoint navbar): kanvas Figma 1728 x 1024
+ * yang diskalakan (EventsHero, EventSection). Di bawah itu kanvas mengecil
+ * sampai teksnya ~5px, jadi dipakai tata letak bertumpuk khusus mobile
+ * (EventsHeroMobile, EventSectionMobile). Keduanya dirender; yang tidak
+ * dipakai display: none, jadi gambar lazy-nya tidak diunduh.
+ */
+.desktopOnly {
+  display: none;
+}
+
+.mobileOnly {
+  display: block;
+}
+
+@media (min-width: 900px) {
+  .desktopOnly {
+    display: block;
+  }
+
+  .mobileOnly {
+    display: none;
+  }
+}

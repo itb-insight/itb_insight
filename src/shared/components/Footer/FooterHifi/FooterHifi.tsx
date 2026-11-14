@@ -1,5 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
+import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
+import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
 import styles from "./FooterHifi.module.css"
 
 type FooterLink = { label: string; href: string }
@@ -32,6 +34,18 @@ const competitionLinks: FooterLink[] = [
   { label: "Olimpiade Engineering", href: "/competition/olimpiade-engineering" },
 ]
 
+/*
+ * Area di peta acara. Belum ada tautan per area, jadi semuanya menuju /event-map;
+ * saat NEXT_PUBLIC_MAPS_DISABLED=true tampil redup dengan pill "Coming Soon!".
+ */
+const mapLinks: FooterLink[] = [
+  { label: "Parkir", href: MAP_PATH },
+  { label: "Booths", href: MAP_PATH },
+  { label: "Stage", href: MAP_PATH },
+  { label: "Plaza Widya", href: MAP_PATH },
+  { label: "Lapangan Cinta", href: MAP_PATH },
+]
+
 /**
  * links kosong = kolom masih placeholder ("Page").
  * linkHeader = judul kolom ikut menjadi tautan ke href.
@@ -39,7 +53,7 @@ const competitionLinks: FooterLink[] = [
 const columns: { header: string; href: string; links?: FooterLink[]; linkHeader?: boolean }[] = [
   { header: "Event", href: "/event", links: eventLinks, linkHeader: true },
   { header: "Competition", href: "/competition", links: competitionLinks, linkHeader: true },
-  { header: "Map", href: "/event-map" },
+  { header: "Map", href: MAP_PATH, links: mapLinks },
 ]
 
 const socials = [
@@ -72,7 +86,11 @@ export default function FooterHifi() {
         <div className={styles.columns}>
           {columns.map(({ header, href, links, linkHeader }) => (
             <div key={header} className={styles.column}>
-              {linkHeader ? (
+              {href === MAP_PATH && isMapsDisabled() ? (
+                <ComingSoon className={styles.columnHeader} placement="top">
+                  {header}
+                </ComingSoon>
+              ) : linkHeader ? (
                 <Link href={href} className={`${styles.columnHeader} ${styles.columnHeaderLink}`}>
                   {header}
                 </Link>
@@ -80,11 +98,17 @@ export default function FooterHifi() {
                 <p className={styles.columnHeader}>{header}</p>
               )}
               {links
-                ? links.map(({ label, href }) => (
-                    <Link key={href} href={href} className={styles.columnLink}>
-                      {label}
-                    </Link>
-                  ))
+                ? links.map(({ label, href }) =>
+                    href === MAP_PATH && isMapsDisabled() ? (
+                      <ComingSoon key={label} className={styles.columnLink} placement="top">
+                        {label}
+                      </ComingSoon>
+                    ) : (
+                      <Link key={label} href={href} className={styles.columnLink}>
+                        {label}
+                      </Link>
+                    ),
+                  )
                 : [1, 2, 3, 4].map((i) => (
                     <Link key={i} href="#" className={styles.columnLink}>
                       Page

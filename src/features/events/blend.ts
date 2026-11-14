@@ -51,3 +51,31 @@ const BLEND_STYLE = {
 export function blendStyle(enabled: boolean) {
   return enabled ? BLEND_STYLE : null;
 }
+
+/**
+ * Versi mobile: tumpang tindih dan masker dalam PIKSEL, bukan persen lebar,
+ * karena section mobile tingginya mengikuti isi (bukan rasio 1728 x 1024).
+ * Padding atas/bawah section mobile (EventMobile.module.css) harus lebih besar
+ * dari BLEND_HEIGHT_MOBILE supaya teks tidak ikut memudar.
+ */
+export const BLEND_HEIGHT_MOBILE = 64;
+
+const MASK_MOBILE = (() => {
+  const stops: string[] = [];
+  for (let i = 0; i <= 10; i++) {
+    const t = i / 10;
+    const alpha = t * t * (3 - 2 * t); // smoothstep
+    stops.push(`rgba(0, 0, 0, ${alpha.toFixed(3)}) ${(t * BLEND_HEIGHT_MOBILE).toFixed(2)}px`);
+  }
+  return `linear-gradient(180deg, ${stops.join(", ")})`;
+})();
+
+export function blendStyleMobile(enabled: boolean) {
+  return enabled
+    ? {
+        marginTop: `-${BLEND_HEIGHT_MOBILE}px`,
+        maskImage: MASK_MOBILE,
+        WebkitMaskImage: MASK_MOBILE,
+      }
+    : null;
+}

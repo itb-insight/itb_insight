@@ -38,20 +38,22 @@ const COMPETITIONS = [
   },
 ];
 
-const FAQS = [
-  "Apa itu Insight Competition?",
-  "Siapa yang bisa mendaftar?",
-  "Bagaimana cara mendaftar?",
-  "Kapan deadline pendaftaran?",
-];
-
 // ── DATA TIMELINE ─────────────────────────────────────────────────────────────
+// Garis waktu UMUM untuk semua lomba, jadi isinya rentang bulan kasar, bukan
+// tanggal. Diambil dari timeline tiap lomba di src/features/competition/data.ts
+// (Drone Soccer, BPC, Olimpiade Engineering; SAR masih disembunyikan):
+//   Pendaftaran                Drone 14 Agu - 20 Nov, BPC 20 Agu - 24 Sep, OE 22 Agu - 20 Okt
+//   Warm Up & Technical Meeting  BPC Case Release 25 Sep sampai Technical Meeting Drone 21 Nov
+//   Penyisihan                 BPC BMC 8 Okt dan proposal 15-29 Okt, sampai semifinal 27 Nov
+//   Pengumuman Finalis         BPC 15 Okt (pre-elim) dan 5 Nov (semifinal)
+//   Final                      BPC pitching 26 Nov, Drone dan OE 28 Nov
+// Kalau jadwal sebuah lomba berubah, sesuaikan rentang di sini secara manual.
 const TIMELINE_STEPS = [
-  { id: 1, title: "Pendaftaran", year: "2026", align: "right" },
-  { id: 2, title: "Warm Up &\nTechnical Meeting", year: "2026", align: "left" },
-  { id: 3, title: "Penyisihan", year: "2026", align: "right" },
-  { id: 4, title: "Pengumuman Finalis", year: "2026", align: "left" },
-  { id: 5, title: "Final", year: "2026", align: "right" },
+  { id: 1, title: "Pendaftaran", period: "Agustus – November 2026", align: "right" },
+  { id: 2, title: "Warm Up &\nTechnical Meeting", period: "September – November 2026", align: "left" },
+  { id: 3, title: "Penyisihan", period: "Oktober – November 2026", align: "right" },
+  { id: 4, title: "Pengumuman Finalis", period: "Oktober – November 2026", align: "left" },
+  { id: 5, title: "Final", period: "Akhir November 2026", align: "right" },
 ];
 
 const CW = 320; 
@@ -63,9 +65,12 @@ const SIDE_OFFSET = 180;
 const CAROUSEL_H  = ACTIVE_TOP + CH + 40;
 const ICON_SIZE   = 140;
 
-export default function CompePage1() {
+export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] }) {
   const router = useRouter();
   const [active, setActive] = useState(0);
+  // FAQ: satu jawaban terbuka pada satu waktu; yang pertama terbuka dari awal
+  // supaya halaman tidak tampak kosong. Jawaban dihitung di server (faq.ts).
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const n = COMPETITIONS.length;
   const touchX = useRef<number | null>(null);
 
@@ -171,11 +176,24 @@ export default function CompePage1() {
         }
 
         .faq-dropdown {
-          display: flex; flex-direction: row; align-items: center; justify-content: space-between;
-          padding: 12px 24px; width: 100%; max-width: 820px; height: 48px; margin: 0 auto;
+          display: block;
+          width: 100%; max-width: 820px; min-height: 48px; margin: 0 auto;
           border-radius: 12px; background: rgba(255,255,255,0.02);
-          cursor: pointer; transition: all 0.3s ease; z-index: 10; position: relative;
+          transition: all 0.3s ease; z-index: 10; position: relative;
         }
+        .faq-toggle {
+          display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 16px;
+          width: 100%; min-height: 48px; padding: 12px 24px; border-radius: 12px;
+          background: none; border: none; cursor: pointer; text-align: left;
+        }
+        .faq-toggle:focus-visible { outline: 2px solid #DEE8FB; outline-offset: 3px; }
+        .faq-chevron { flex: none; transition: transform 0.25s ease; }
+        .faq-open .faq-chevron { transform: rotate(180deg); }
+        .faq-answer {
+          margin: 0; padding: 0 24px 20px; white-space: pre-line;
+          font-family: 'Gabarito', sans-serif; font-size: 15px; line-height: 1.65; color: rgba(222, 232, 251, 0.9);
+        }
+        @media (prefers-reduced-motion: reduce) { .faq-chevron, .faq-dropdown { transition: none; } }
         .faq-dropdown::before {
           content: ""; position: absolute; inset: 0; border-radius: 12px; 
           padding: 2px; 
@@ -371,8 +389,8 @@ export default function CompePage1() {
                     <span style={{ fontFamily: "'Gabarito', sans-serif", fontWeight: 400, fontSize: "clamp(1.1rem, 2.5vw, 36px)", lineHeight: "1.2", whiteSpace: "pre-line", background: "linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                       {step.title}
                     </span>
-                    <span style={{ fontFamily: "'Gabarito', sans-serif", fontWeight: 400, fontSize: "clamp(0.9rem, 2vw, 28px)", lineHeight: "1.2", marginTop: "4px", background: "linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                      {step.year}
+                    <span style={{ fontFamily: "'Gabarito', sans-serif", fontWeight: 400, fontSize: "clamp(0.9rem, 2vw, 28px)", lineHeight: "1.2", marginTop: "4px", textWrap: "balance", background: "linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                      {step.period}
                     </span>
                   </>
                 )}
@@ -386,8 +404,8 @@ export default function CompePage1() {
                     <span style={{ fontFamily: "'Gabarito', sans-serif", fontWeight: 400, fontSize: "clamp(1.1rem, 2.5vw, 36px)", lineHeight: "1.2", whiteSpace: "pre-line", background: "linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                       {step.title}
                     </span>
-                    <span style={{ fontFamily: "'Gabarito', sans-serif", fontWeight: 400, fontSize: "clamp(0.9rem, 2vw, 28px)", lineHeight: "1.2", marginTop: "4px", background: "linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                      {step.year}
+                    <span style={{ fontFamily: "'Gabarito', sans-serif", fontWeight: 400, fontSize: "clamp(0.9rem, 2vw, 28px)", lineHeight: "1.2", marginTop: "4px", textWrap: "balance", background: "linear-gradient(0deg, #DEE8FB 0%, #ACC7FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                      {step.period}
                     </span>
                   </>
                 )}
@@ -415,14 +433,31 @@ export default function CompePage1() {
 
         {/* Dropdown FAQ */}
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "820px", zIndex: 2 }}>
-          {FAQS.map((q, i) => (
-            <div key={i} className="faq-dropdown">
-              <span className="faq-text">{q}</span>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 9L12 15L18 9" stroke="#DEE8FB" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-          ))}
+          {faqs.map((f, i) => {
+            const open = openFaq === i;
+            return (
+              <div key={f.q} className={`faq-dropdown${open ? " faq-open" : ""}`}>
+                <button
+                  type="button"
+                  id={`faq-q-${i}`}
+                  aria-expanded={open}
+                  aria-controls={`faq-a-${i}`}
+                  className="faq-toggle"
+                  onClick={() => setOpenFaq(open ? null : i)}
+                >
+                  <span className="faq-text">{f.q}</span>
+                  <svg className="faq-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M6 9L12 15L18 9" stroke="#DEE8FB" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                {open ? (
+                  <p id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} className="faq-answer">
+                    {f.a}
+                  </p>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
 
         {/* Contact Us */}

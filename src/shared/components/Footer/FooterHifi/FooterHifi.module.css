@@ -74,6 +74,8 @@
 .column {
   display: flex;
   flex-direction: column;
+  /* items hug their text, so the "Coming Soon!" pill centres on the word */
+  align-items: flex-start;
   gap: 12px;
 }
 

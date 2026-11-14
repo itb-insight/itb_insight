@@ -149,6 +149,22 @@
   filter: brightness(1.06);
 }
 
+/* Fitur dimatikan (mis. peta): redup, tanpa efek hover, pill "Coming Soon!" di atasnya. */
+.btnDisabled {
+  position: relative;
+  cursor: not-allowed;
+  /* bukan opacity: itu ikut meredupkan pill-nya */
+  background:
+    linear-gradient(rgba(9, 27, 63, 0.75), rgba(9, 27, 63, 0.75)) padding-box,
+    linear-gradient(180deg, rgba(222, 232, 251, 0.35) 0%, rgba(172, 199, 255, 0.2) 100%) border-box;
+  color: rgba(222, 232, 251, 0.45);
+}
+
+.btnDisabled:hover {
+  transform: none;
+  filter: none;
+}
+
 .btn:focus-visible {
   outline: 2px solid var(--ice-100);
   outline-offset: 3px;

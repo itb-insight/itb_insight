@@ -99,3 +99,14 @@
 .disabled::before {
   display: none;
 }
+
+/* Fitur dimatikan (NEXT_PUBLIC_MAPS_DISABLED): naik di atas elemen lain saat
+   hover / fokus supaya pill "Coming Soon!" tidak tertutup. */
+.comingSoon {
+  cursor: not-allowed;
+}
+
+.comingSoon:hover,
+.comingSoon:focus {
+  z-index: 10;
+}

@@ -49,3 +49,8 @@ export function variantHref(href: string, variant: "desktop" | "mobile"): string
 export function whatsappUrl(localNumber: string): string {
   return `https://wa.me/62${localNumber.replace(/\D/g, "").replace(/^0/, "")}`;
 }
+
+/** 135000 -> "Rp135.000" (untuk teks kalimat; formatRupiah memakai awalan "IDR" untuk kartu). */
+export function formatRp(value: number): string {
+  return `Rp${rupiah.format(value)}`;
+}

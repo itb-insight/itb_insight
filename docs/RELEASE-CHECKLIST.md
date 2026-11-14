@@ -2,7 +2,7 @@
 1. [ ] Fill-in all informational surfaces:
 	- [x] a. Events
 	- [x] b. Competitions
-	- [ ] c. Landing page
+	- [ ] c. Landing page timeline
 	- [x] d. Headers and Footers
 2. [ ] Set interactive map into coming soon.
 3. [ ] Secure account creation and signing in

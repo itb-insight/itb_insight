@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import EventsHero from "@/features/events/EventsHero";
 import EventSection from "@/features/events/EventSection";
+import EventsHeroMobile from "@/features/events/EventsHeroMobile";
+import EventSectionMobile from "@/features/events/EventSectionMobile";
+import layout from "@/features/events/EventLayout.module.css";
 import { getEvents } from "@/features/events/data";
 import { eventsJsonLd, eventsMetadata } from "@/features/events/seo";
 import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
@@ -32,10 +35,18 @@ export default async function EventsPage() {
 
       <NavbarHifi />
 
-      <EventsHero />
+      {/* Desktop (>= 900px): kanvas Figma yang diskalakan. Di bawahnya: tata
+          letak bertumpuk khusus mobile. Lihat EventLayout.module.css. */}
+      <EventsHero className={layout.desktopOnly} />
+      <EventsHeroMobile className={layout.mobileOnly} />
 
+      {/* id anchor (#slug, dipakai tautan footer) ada di pembungkus ini, yang
+          selalu tampil, bukan di salah satu versi yang bisa display: none. */}
       {events.map((event, i) => (
-        <EventSection key={event.slug} event={event} index={i} />
+        <div key={event.slug} id={event.slug}>
+          <EventSection event={event} index={i} className={layout.desktopOnly} />
+          <EventSectionMobile event={event} index={i} className={layout.mobileOnly} />
+        </div>
       ))}
 
       <FooterHifi />

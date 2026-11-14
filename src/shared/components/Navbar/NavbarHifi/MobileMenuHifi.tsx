@@ -3,11 +3,13 @@
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 
+import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
+import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
 import NavAuthActionsHifi from "./NavAuthActionsHifi"
 import styles from "./NavbarHifi.module.css"
 
 const LINKS = [
-  { href: "/event-map", label: "Map" },
+  { href: MAP_PATH, label: "Map" },
   { href: "/event", label: "Event" },
   { href: "/competition", label: "Competition" },
 ]
@@ -79,7 +81,13 @@ export default function MobileMenuHifi({
         <div className={`${styles.mobileMenu} ${countdownOnly ? styles.mobileMenuCompact : ""}`}>
           {countdownOnly ? null : (
             <>
-              {LINKS.map((link) => (
+              {LINKS.map((link) =>
+                link.href === MAP_PATH && isMapsDisabled() ? (
+                  // Tap focuses it (tabIndex=0), which shows the pill on touch screens.
+                  <ComingSoon key={link.href} className={styles.mobileMenuLink} placement="left">
+                    {link.label}
+                  </ComingSoon>
+                ) : (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -88,7 +96,8 @@ export default function MobileMenuHifi({
                 >
                   {link.label}
                 </Link>
-              ))}
+                ),
+              )}
 
               <div className={styles.mobileMenuDivider} />
             </>

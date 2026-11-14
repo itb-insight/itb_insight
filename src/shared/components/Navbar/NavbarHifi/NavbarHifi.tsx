@@ -2,6 +2,8 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { isCountdownOnly } from "@/lib/countdown"
+import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
+import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
 import styles from "./NavbarHifi.module.css"
 import NavAuthActionsHifi from "./NavAuthActionsHifi"
 import MobileMenuHifi from "./MobileMenuHifi"
@@ -39,7 +41,11 @@ export default function NavbarHifi({ isSolid = false, solidOnMobile = false }: N
           <div className={styles.navLinks}>
             <Link href="/event" className={styles.navLink}>Event</Link>
             <Link href="/competition" className={styles.navLink}>Competition</Link>
-            <Link href="/event-map" className={styles.navLink}>Map</Link>
+            {isMapsDisabled() ? (
+              <ComingSoon className={styles.navLink} placement="bottom">Map</ComingSoon>
+            ) : (
+              <Link href={MAP_PATH} className={styles.navLink}>Map</Link>
+            )}
           </div>
         )}
       </div>

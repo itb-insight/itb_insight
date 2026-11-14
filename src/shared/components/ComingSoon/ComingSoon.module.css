@@ -1,0 +1,107 @@
+/*
+ * "Coming Soon!" pill for features that are switched off (e.g. maps).
+ * Pure CSS: shows on :hover (mouse) and on :focus (keyboard / tap on touch
+ * screens, the trigger has tabIndex=0), so it works on mobile without JS.
+ *
+ * .host    anything that should reveal the pill (no positioning of its own,
+ *          so it can be put on an already positioned element)
+ * .anchor  inline wrapper that positions the pill
+ */
+
+.anchor {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.muted {
+  color: rgba(204, 221, 255, 0.4) !important;
+  cursor: not-allowed;
+  outline: none;
+}
+
+.pill {
+  position: absolute;
+  z-index: 300;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(222, 232, 251, 0.75);
+  background: linear-gradient(180deg, #517eda 0%, #294d97 100%);
+  box-shadow:
+    0 0 18px rgba(127, 169, 246, 0.55),
+    0 8px 18px rgba(9, 27, 63, 0.45);
+  color: #ffffff;
+  font-family: 'Gabarito', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+/* below the trigger (navbar) */
+.bottom {
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translate(-50%, -4px);
+}
+
+/* above the trigger (footer, buttons) */
+.top {
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+}
+
+/* left of the trigger (mobile menu: dropdown hugs the right edge) */
+.left {
+  top: 50%;
+  right: calc(100% + 10px);
+  transform: translate(4px, -50%);
+}
+
+/* right of the trigger */
+.right {
+  top: 50%;
+  left: calc(100% + 10px);
+  transform: translate(-4px, -50%);
+}
+
+.host:hover .pill,
+.host:focus .pill,
+.host:focus-within .pill {
+  opacity: 1;
+}
+
+.host:hover .bottom,
+.host:focus .bottom,
+.host:focus-within .bottom,
+.host:hover .top,
+.host:focus .top,
+.host:focus-within .top {
+  transform: translate(-50%, 0);
+}
+
+.host:hover .left,
+.host:focus .left,
+.host:focus-within .left,
+.host:hover .right,
+.host:focus .right,
+.host:focus-within .right {
+  transform: translate(0, -50%);
+}
+
+.host:focus-visible {
+  outline: 2px solid rgba(222, 232, 251, 0.6);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill {
+    transition: none;
+  }
+}

@@ -1,0 +1,186 @@
+/*
+ * Tata letak /event untuk layar < 900px (EventsHeroMobile, EventSectionMobile).
+ *
+ * Warna, gradient, ornamen, foto, badge, dan tombol sama dengan versi desktop;
+ * yang berbeda hanya susunannya: foto di atas, lalu judul, tanggal, deskripsi,
+ * dan tombol dalam satu kolom, dengan ukuran teks yang terbaca di ponsel.
+ *
+ * Semua aturan memakai class (spesifisitas 0,1,0) supaya menang atas aturan
+ * elemen global di globals.css (h1..h6, p) yang tidak berada di @layer.
+ */
+
+/* ---------- hero ---------- */
+
+.hero {
+  /* 1u = 1vw, tapi berhenti membesar di lebar 636px (layar ponsel besar). */
+  --u: min(1vw, 6.36px);
+
+  position: relative;
+  width: 100%;
+  height: calc(var(--u) * 88);
+  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%);
+  overflow: hidden;
+}
+
+.curtain {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: calc(var(--u) * 52);
+}
+
+/* Panel terang yang menutup bagian bawah huruf, seperti di desktop. */
+.panel {
+  position: absolute;
+  left: -1%;
+  right: -1%;
+  top: calc(var(--u) * 52);
+  bottom: 0;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+}
+
+.heroInner {
+  position: relative;
+  width: calc(var(--u) * 100);
+  height: 100%;
+  margin: 0 auto;
+}
+
+/* Proporsi sama dengan desktop: huruf selebar 85% lebar layar. */
+.heroTitle {
+  position: absolute;
+  left: calc(var(--u) * 7.3);
+  top: calc(var(--u) * 41.1);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: calc(var(--u) * 14.4);
+  font-weight: 700;
+  line-height: 0.955;
+  color: #dee8fb;
+  white-space: nowrap;
+}
+
+/* ---------- section ---------- */
+
+.section {
+  position: relative;
+  overflow: hidden;
+  /* Lebih besar dari BLEND_HEIGHT_MOBILE (64px) di blend.ts, supaya teks tidak
+     ikut memudar di tepi atas yang dibaurkan, dan jarak antar event lega. */
+  padding: 92px 24px;
+}
+
+.decor {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Kanvas ornamen desktop (rasio 1728:1024) diskalakan menutupi TINGGI section
+   dan dipusatkan, seperti background-size: cover. */
+.decorCanvas {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  aspect-ratio: 1728 / 1024;
+  transform: translateX(-50%);
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 655 / 480;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 0 10px #dee8fb;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  /* "Technology" (10 huruf EXCRATCH ~0.94em) harus muat di lebar layar 360px. */
+  font-size: clamp(26px, 8.8vw, 56px);
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: pre-line;
+  background-image: linear-gradient(180deg, #acc7ff 0%, #dee8fb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 22px;
+}
+
+.rowGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  width: 34px;
+  height: 34px;
+  flex: none;
+}
+
+.badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 74px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Lapisan kaca, sama dengan badge desktop (EventDateRow.tsx). */
+.badge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(237, 237, 237, 0.2);
+}
+
+.badgeText {
+  position: relative;
+  font-family: var(--font-primary);
+  font-size: 18px;
+  line-height: 1;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.rowText {
+  font-family: var(--font-primary);
+  font-size: 19px;
+  line-height: 1.3;
+  color: #ffffff;
+}
+
+.desc {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #ffffff;
+}

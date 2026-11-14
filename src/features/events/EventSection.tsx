@@ -23,12 +23,22 @@ import EventContent from "@/features/events/EventContent";
  * smoothstep) dijelaskan di blend.ts. Logika yang sama dipakai latar
  * halaman detail (EventsBackdrop.tsx).
  */
-export default function EventSection({ event, index }: { event: EventItem; index: number }) {
+export default function EventSection({
+  event,
+  index,
+  className,
+}: {
+  event: EventItem;
+  index: number;
+  /** Untuk menyembunyikan versi desktop di layar sempit (EventLayout.module.css) */
+  className?: string;
+}) {
   const blend = blendStyle(event.blendWithPrevious);
 
+  // id anchor (#slug) ada di pembungkus di page.tsx, yang selalu tampil.
   return (
     <section
-      id={event.slug}
+      className={className}
       aria-labelledby={`${event.slug}-title`}
       style={{
         ...sectionStyle,
