@@ -41,9 +41,9 @@ const competitions: CompetitionSummary[] = [
   },
   {
     _id: 'microdrone-obstacle-race',
-    title: 'Microdrone Obstacle Race',
+    title: 'Drone Soccer Competition', // dulu Microdrone Obstacle Race; slug tetap
     slug: { current: 'microdrone-obstacle-race' },
-    description: 'Balap drone obstacle nasional bagi mahasiswa/i di Indonesia.',
+    description: 'Lomba drone nasional bagi peserta berusia di atas 10 tahun.',
     category: 'drone',
     registrationType: 'team', // TODO confirm
     teamUidPrefix: 'MOR',

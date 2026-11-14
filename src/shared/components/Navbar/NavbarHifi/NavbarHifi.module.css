@@ -9,11 +9,74 @@
   right: 0;
   z-index: 100;
   background-color: transparent;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, padding 0.25s ease;
 }
 
 .navbar.isSolid {
   background-color: #091B3F;
+}
+
+/*
+ * Pil melayang (desktop saja). Terlihat setelah halaman di-scroll
+ * (.scrolled, dari NavbarShell.tsx): kapsul kaca navy di belakang logo,
+ * tautan, dan tombol, supaya terbaca di atas konten apa pun. Di puncak
+ * halaman navbar tetap transparan. Navbar yang sudah solid (.isSolid)
+ * tidak perlu pil. Di layar <= 900px navbar jadi tombol menu, tanpa pil.
+ */
+@media (min-width: 901px) {
+  /* Isi navbar digeser 3px ke arah tengah: sisi kiri (logo, tautan) dan
+     sisi kanan (cari, Log In, Sign Up) masing-masing diberi jarak 3px lebih
+     banyak dari tepi, supaya tidak menempel ke ujung pil. */
+  .navbar {
+    padding-left: 43px;
+    padding-right: 43px;
+  }
+
+  /* Turun 5px dari tepi atas layar. Navbar solid (.isSolid, dashboard)
+     tetap menempel di atas, supaya tidak ada celah 5px di atasnya. */
+  .navbar:not(.isSolid) {
+    top: 5px;
+  }
+
+  .navbar::before {
+    content: "";
+    position: absolute;
+    /* Dulu 8px 20px. 2px lebih tebal ke arah luar di keempat sisi; isi tidak ikut bergeser. */
+    inset: 3px 18px;
+    z-index: -1;
+    border-radius: 999px;
+    background: rgba(9, 27, 63, 0.72);
+    border: 1px solid rgba(222, 232, 251, 0.2);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: 0 10px 30px rgba(9, 27, 63, 0.35);
+    opacity: 0;
+    transform: translateY(-8px) scale(0.985);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+  }
+
+  .navbar.scrolled::before {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Lebih ramping saat melayang, supaya pil tidak setinggi navbar penuh. */
+  .navbar.scrolled {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .navbar.isSolid::before {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .navbar::before {
+    transition: none;
+  }
 }
 
 /* Selaras dengan breakpoint dropdown DashboardSidebar (899px) */
@@ -42,7 +105,8 @@
 
 .navLink {
   font-family: 'Gabarito', sans-serif;
-  font-size: 0.95rem;
+  /* +6px dari 0.95rem (ukuran awal 15.2px) */
+  font-size: calc(0.95rem + 6px);
   font-weight: 500;
   color: #CCDDFF;
   transition: color 0.2s ease;
@@ -75,13 +139,13 @@
 }
 
 .searchIcon {
-  width: 20px;
-  height: 20px;
+  width: 26px; /* +6px dari 20px */
+  height: 26px;
 }
 
 .logInBtn {
   font-family: 'Gabarito', sans-serif;
-  font-size: 0.95rem;
+  font-size: calc(0.95rem + 6px);
   font-weight: 500;
   color: #CCDDFF;
   transition: color 0.2s ease;
@@ -97,14 +161,14 @@
   align-items: center;
   justify-content: center;
   aspect-ratio: 152 / 67;
-  height: 52px;
+  height: 58px; /* +6px dari 52px, supaya teks yang lebih besar tetap lega */
   background-image: url('/images/buttons/signupbutton-default.svg');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   border: none;
   cursor: pointer;
   font-family: 'Gabarito', sans-serif;
-  font-size: 0.95rem;
+  font-size: calc(0.95rem + 6px);
   font-weight: 500;
   color: #1B3B7D;
 }
@@ -121,7 +185,7 @@
 .mobileMenuBtn {
   display: block;
   aspect-ratio: 1 / 1;
-  height: 48px;
+  height: 54px; /* +6px dari 48px */
   background-image: url('/images/buttons/navbarmobile-default.svg');
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -151,9 +215,9 @@
 .headerMenuBtn {
   display: grid;
   place-items: center;
-  width: 51px;
-  height: 51px;
-  border-radius: 15.3px;
+  width: 57px; /* +6px dari 51px (Figma) */
+  height: 57px;
+  border-radius: 17px;
   background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
   border: none;
   padding: 0;

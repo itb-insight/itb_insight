@@ -5,6 +5,7 @@ import { isCountdownOnly } from "@/lib/countdown"
 import styles from "./NavbarHifi.module.css"
 import NavAuthActionsHifi from "./NavAuthActionsHifi"
 import MobileMenuHifi from "./MobileMenuHifi"
+import NavbarShell from "./NavbarShell"
 
 interface NavbarHifiProps {
   isSolid?: boolean;
@@ -22,14 +23,14 @@ export default function NavbarHifi({ isSolid = false, solidOnMobile = false }: N
   const countdownOnly = isCountdownOnly();
 
   return (
-    <nav className={navbarClassName}>
+    <NavbarShell className={navbarClassName} scrolledClassName={styles.scrolled}>
       <div className={styles.left}>
         <Link href="/" className={styles.logo}>
           <Image
             src="/images/logoinsight-hifi.png"
             alt="ITB Insight Logo"
-            width={56}
-            height={55}
+            width={62}
+            height={61}
             priority
           />
         </Link>
@@ -53,6 +54,6 @@ export default function NavbarHifi({ isSolid = false, solidOnMobile = false }: N
       </div>
 
       <MobileMenuHifi countdownOnly={countdownOnly} />
-    </nav>
+    </NavbarShell>
   )
 }

@@ -4,6 +4,7 @@ import {
   BLOB_LAYERS,
   BLOB_OFFSET_Y,
 } from "@/features/competition/background";
+import type { MobileLayout } from "@/features/competition/mobileLayout";
 
 /**
  * Latar halaman kompetisi. Empat lapis, dari bawah ke atas:
@@ -21,9 +22,16 @@ import {
 export default function PageBackground({
   slug,
   height,
+  layout,
 }: {
   slug: string;
   height: number;
+  /**
+   * Tata letak hasil hitung (mobileLayout.ts). Gradient diskalakan ke
+   * tinggi kanvas baru; neuron dan blob dipindah lewat layout.warp() agar
+   * tetap dekat dengan blok yang tadinya ada di depannya.
+   */
+  layout: MobileLayout;
 }) {
   const neurons = NEURON_PLACEMENTS[slug] ?? [];
   const blobShiftY = BLOB_OFFSET_Y[slug] ?? 0;
@@ -49,8 +57,8 @@ export default function PageBackground({
             position: "absolute",
             left: 0,
             right: 0,
-            top: l.top,
-            height: l.height,
+            top: l.top * layout.scale,
+            height: l.height * layout.scale,
             opacity: l.opacity,
             background: `linear-gradient(180deg, ${l.from} 0%, ${l.to} 100%)`,
           }}
@@ -71,7 +79,8 @@ export default function PageBackground({
             maxWidth: "none",
             position: "absolute",
             left: n.x,
-            top: n.y,
+            // Pusat neuron dipetakan, lalu dikembalikan ke sudut kiri-atas.
+            top: layout.warp(n.y + n.h / 2) - n.h / 2,
             width: n.w,
             height: n.h,
             opacity: n.o,
@@ -98,10 +107,25 @@ export default function PageBackground({
             width: b.w,
             height: b.h,
             left: b.cx - b.w / 2,
-            top: b.cy + blobShiftY - b.h / 2,
+            top: layout.warp(b.cy + blobShiftY) - b.h / 2,
           }}
         />
       ))}
+
+      {/* 4. Pudar ke warna awal bagian Detail Lomba (#294d97, lihat
+             CompetitionInfo.module.css .mobile). Tanpa ini ada garis lurus
+             di sambungan kanvas dan bagian di bawahnya, karena blob dan
+             neuron mewarnai dasar kanvas sedikit berbeda. */}
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 240,
+          background: "linear-gradient(180deg, rgba(41, 77, 151, 0) 0%, #294d97 100%)",
+        }}
+      />
     </div>
   );
 }

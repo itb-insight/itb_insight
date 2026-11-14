@@ -85,6 +85,14 @@
   margin: 0 0 4px;
 }
 
+.columnHeaderLink {
+  transition: color 0.2s ease;
+}
+
+.columnHeaderLink:hover {
+  color: #ffffff;
+}
+
 .columnLink {
   font-family: 'Gabarito', sans-serif;
   font-size: 0.875rem;
@@ -147,14 +155,26 @@ fit the screen.
     order: 2;
   }
 
+  /* Kolom boleh turun baris: kolom Event berisi 7 nama event yang
+     panjang, dan tiga kolom berdampingan tidak muat di layar 360-390px. */
   .columns {
     display: flex;
     width: 100%;
     order: 3;
-    justify-content: space-around;
+    justify-content: center;
     flex-direction: row;
+    flex-wrap: wrap;
     flex: 1;
     align-items: flex-start;
-    gap: 32px;
+    gap: 28px 40px;
+  }
+
+  .logoWrap {
+    width: 88px;
+    height: 88px;
+  }
+
+  .insight {
+    font-size: 2.1rem;
   }
 }

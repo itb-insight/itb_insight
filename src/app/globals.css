@@ -187,32 +187,42 @@ input:focus, textarea:focus, select:focus {
 /* Kanvas 393px persis seperti frame Figma. Warna dan font dikunci di sini,
    bukan di html/body, agar halaman lain tidak ikut berubah.
 
-   .mobile-shell di-scale-down utuh (transform: scale) begitu breakpoint
-   mobile (md, 768px) aktif, supaya ornamen, teks, dan ikon ikut mengecil
-   proporsional alih-alih terpotong di layar sempit. Pembagi dipakai 768,
-   BUKAN 393 (lebar asli kanvas), supaya penyusutan sudah mulai terlihat
-   sejak .md:hidden menyalakan kanvas mobile — 393 baru mulai membatasi di
-   bawah lebar window minimum Chrome desktop (~500px), jadi efeknya tidak
-   pernah kelihatan saat resize manual dari desktop.
-   .mobile-shell-wrapper membungkusnya dan mengecilkan TINGGI LAYOUT-nya ke
-   ukuran setelah scale, karena transform tidak mengubah ukuran box asli. */
+   .mobile-shell di-scale utuh (transform: scale) mengikuti lebar layar,
+   supaya ornamen, teks, dan ikon membesar/mengecil proporsional dan
+   kanvas selalu menutupi layar selebar penuh (lihat --shell-scale).
+   .mobile-shell-wrapper menyesuaikan TINGGI LAYOUT-nya ke ukuran setelah
+   scale, karena transform tidak mengubah ukuran box asli. */
+.mobile-shell-root {
+  container-type: inline-size;
+  background: #091b3f;
+}
+
 .mobile-shell-wrapper {
+  /* Skala kanvas = lebar layar / 393, tanpa satuan. CSS tidak bisa membagi
+     panjang dengan panjang secara langsung (min(1, 100vw / 768) yang dulu
+     dipakai tidak valid, sehingga kanvas selalu 393px: terpotong di layar
+     360px dan menyisakan pita gelap di layar yang lebih lebar).
+     tan(atan2(a, b)) = a / b sebagai angka murni. 100cqw = lebar
+     .mobile-shell-root, jadi scrollbar desktop tidak ikut terhitung.
+     Hasilnya kanvas menutupi lebar layar seperti background-size: cover,
+     proporsinya tetap. */
+  --shell-scale: tan(atan2(100cqw, 393px));
   width: 100%;
-  height: calc(var(--mobile-shell-height, 0px) * min(1, 100vw / 768));
+  height: var(--mobile-shell-height, auto);
+  height: calc(var(--mobile-shell-height, 0px) * var(--shell-scale));
   overflow: hidden;
 }
 
 .mobile-shell {
   width: 393px;
-  margin-inline: auto;
   position: relative;
   overflow: hidden;
   background: #091b3f;
   color: #ffffff;
   font-family: var(--font-primary);
   line-height: normal;
-  transform: scale(min(1, 100vw / 768));
-  transform-origin: top center;
+  transform: scale(var(--shell-scale));
+  transform-origin: top left;
 }
 
 /* Teks bergradient. Di Figma hampir semua teks memakai fill gradient

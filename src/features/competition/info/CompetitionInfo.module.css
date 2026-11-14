@@ -1,0 +1,353 @@
+/*
+ * Detail lomba. Bahasa visualnya mengikuti halaman kompetisi: judul
+ * EXCRATCH bergradient es dengan pendar, kartu kaca (border es 45%,
+ * blur), teks Gabarito. Warna aksen = warna ikon lomba (--accent-from/to).
+ *
+ * Semua aturan memakai class supaya menang atas aturan elemen global di
+ * globals.css (h1..h6, p, ul) yang tidak berada di @layer.
+ */
+
+/* Warna dasar; juga di .tiers karena FeeTiers dipakai di luar .info
+   (kartu Registration Fee desktop). */
+.info,
+.tiers {
+  --ice-100: #dee8fb;
+  --ice-200: #acc7ff;
+  --body: #e6f4ff;
+  --muted: #a9bde3;
+  --line: rgba(222, 232, 251, 0.2);
+}
+
+.info {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 20px;
+  color: var(--body);
+  font-family: var(--font-primary);
+}
+
+.desktop {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(40px, 5vw, 72px) clamp(24px, 4vw, 64px) clamp(24px, 3vw, 40px);
+  gap: clamp(20px, 2vw, 28px);
+}
+
+/* Di bawah kanvas mobile: latar melanjutkan warna akhir kanvas (#294d97)
+   dan berakhir di #091b3f, warna atas footer, supaya tidak ada garis sambungan. */
+.mobile {
+  padding: 40px 20px 56px;
+  background: linear-gradient(180deg, #294d97 0%, #091b3f 100%);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.2vw, 54px);
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  background-image: linear-gradient(180deg, var(--ice-100) 0%, var(--ice-200) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 10px rgba(172, 199, 255, 0.5));
+}
+
+/* ---------- kartu kaca ---------- */
+
+.card,
+.facts {
+  border-radius: 24px;
+  border: 3px solid rgba(222, 232, 251, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.card {
+  padding: clamp(18px, 2vw, 28px);
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  min-width: 0;
+}
+
+.subTitle {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 1.6vw, 24px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ice-100);
+}
+
+.text {
+  color: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ---------- info singkat ---------- */
+
+/* Garis antar sel = celah 1px yang memperlihatkan latar .facts. Sel
+   terakhir melebar mengisi sisa baris, jadi tidak ada sel kosong. */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  background-color: var(--line);
+}
+
+.fact {
+  padding: 16px 20px;
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  min-width: 0;
+  background: rgba(19, 46, 98, 0.82);
+}
+
+.fact:last-child:nth-child(3n + 2) {
+  grid-column: span 2;
+}
+
+.fact:last-child:nth-child(3n + 1) {
+  grid-column: span 3;
+}
+
+.factLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ice-200);
+}
+
+.factValue {
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ice-100);
+}
+
+/* ---------- tema / bidang ---------- */
+
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-from);
+  background: color-mix(in srgb, var(--accent-from) 14%, transparent);
+  color: var(--ice-100);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* ---------- syarat & dokumen ---------- */
+
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: inherit;
+  align-items: start;
+}
+
+.ticks {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.tick {
+  position: relative;
+  padding-left: 22px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--body);
+}
+
+.tick::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--accent-from), var(--accent-to));
+}
+
+/* ---------- gelombang biaya ---------- */
+
+.tiers {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 10px;
+}
+
+.tier {
+  display: grid;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(9, 27, 63, 0.35);
+  text-align: left;
+}
+
+.tierLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-from);
+}
+
+.tierAmount {
+  font-family: var(--font-display);
+  font-size: clamp(17px, 1.35vw, 22px);
+  white-space: nowrap;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ice-100);
+}
+
+.tierMeta {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+/* ---------- berkas per tahap ---------- */
+
+.stages {
+  list-style: none;
+  display: grid;
+}
+
+.stage {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr) auto;
+  gap: 4px 16px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.stage:last-child {
+  border-bottom: none;
+}
+
+.stageName {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-from);
+}
+
+.stageFiles {
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ice-100);
+}
+
+.stageDeadline {
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ---------- kontak ---------- */
+
+/* Tujuan tombol Contact Us (#kontak); jarak untuk navbar desktop yang fixed. */
+.anchor {
+  scroll-margin-top: 110px;
+}
+
+.contacts {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 10px;
+}
+
+.contact {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(9, 27, 63, 0.35);
+}
+
+.contactName {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ice-100);
+}
+
+.contactLink {
+  justify-self: start;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-to);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.contactLink:hover {
+  color: var(--ice-100);
+}
+
+.contactLink:focus-visible {
+  outline: 2px solid var(--ice-100);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- layar sempit ---------- */
+
+@media (max-width: 900px) {
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fact:last-child:nth-child(3n + 2),
+  .fact:last-child:nth-child(3n + 1) {
+    grid-column: auto;
+  }
+
+  .fact:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 520px) {
+  .facts {
+    grid-template-columns: 1fr;
+  }
+
+  .fact:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+
+  .stage {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .stageName {
+    grid-column: 1 / -1;
+  }
+}

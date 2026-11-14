@@ -4,11 +4,14 @@ import { u } from "@/features/events/scale";
 import styles from "@/features/events/EventButton.module.css";
 
 /**
- * Tombol "Registrasi" dengan state hover dari Figma.
+ * Tombol section event dengan state hover dari Figma.
  * Spesifikasi warna dan alasannya ada di EventButton.module.css.
  *
  * Murni CSS (:hover), bukan Client Component — tidak menambah JavaScript ke
  * halaman, dan tetap berfungsi kalau JavaScript gagal dimuat (PRD ACS-06).
+ *
+ * href null = event belum dibuka (Coming Soon): dirender sebagai teks
+ * biasa, bukan tautan, tanpa state hover.
  */
 export default function EventButton({
   box,
@@ -17,7 +20,7 @@ export default function EventButton({
   ariaLabel,
 }: {
   box: Box;
-  href: string;
+  href: string | null;
   label: string;
   ariaLabel: string;
 }) {
@@ -35,6 +38,14 @@ export default function EventButton({
     fontWeight: 400,
     lineHeight: u(20),
   } as CSSProperties;
+
+  if (href === null) {
+    return (
+      <span aria-disabled="true" className={`${styles.button} ${styles.disabled}`} style={style}>
+        {label}
+      </span>
+    );
+  }
 
   return (
     <a href={href} aria-label={ariaLabel} className={styles.button} style={style}>

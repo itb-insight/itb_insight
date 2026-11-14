@@ -1,0 +1,15 @@
+/* Lapisan latar di belakang konten; lihat EventsBackdrop.tsx. */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: #091b3f;
+}
+
+.column {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}

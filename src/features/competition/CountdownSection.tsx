@@ -17,10 +17,9 @@ function diff(target: number): Remaining {
  * Angka y=1166 EXCRATCH 700 32/38 · label DAYS/HOURS y=1214 Gabarito 400 16/24.
  * Hanya DAYS dan HOURS, tanpa menit dan detik.
  *
- * Di Figma angkanya masih "00 : 00" karena deadline pendaftaran belum final.
- * Selama registrationDeadline masih null, komponen ini menampilkan 00 : 00
- * persis seperti desain dan TIDAK menghitung apa pun. Begitu tanggalnya diisi
- * di data.ts, hitung mundurnya hidup sendiri tanpa mengubah komponen ini.
+ * Target dan judul dipilih di server (status.ts countdownFor): batas akhir
+ * pendaftaran selama pendaftaran belum ditutup, lalu hari final setelahnya.
+ * Lewat dari target, angkanya berhenti di 00 : 00.
  *
  * Client Component — satu-satunya bagian yang butuh JS di browser.
  * Render awal "00" supaya HTML server dan client identik (no hydration mismatch).
@@ -46,16 +45,42 @@ const labelStyle = {
   lineHeight: "24px",
 } as const;
 
-export default function CountdownSection({ deadline }: { deadline: string | null }) {
+/**
+ * Sisa hari dan jam menuju target, diperbarui tiap menit. null sebelum
+ * hydration, supaya HTML server dan client identik.
+ */
+export function useCountdown(target: string): Remaining | null {
   const [t, setT] = useState<Remaining | null>(null);
 
   useEffect(() => {
-    if (!deadline) return;
-    const target = new Date(deadline).getTime();
-    setT(diff(target));
-    const id = setInterval(() => setT(diff(target)), 60_000);
-    return () => clearInterval(id);
-  }, [deadline]);
+    const ms = new Date(target).getTime();
+    const tick = () => setT(diff(ms));
+    // Tick pertama lewat timer (bukan langsung di effect) supaya tidak
+    // memicu render berantai; setelah itu diperbarui tiap menit.
+    const first = setTimeout(tick, 0);
+    const id = setInterval(tick, 60_000);
+    return () => {
+      clearTimeout(first);
+      clearInterval(id);
+    };
+  }, [target]);
+
+  return t;
+}
+
+export default function CountdownSection({
+  target,
+  title,
+  titleY,
+  cardY,
+}: {
+  target: string;
+  title: [string, string];
+  /** Y judul dan kartu; dihitung di mobileLayout.ts (Figma: 1034 dan 1130) */
+  titleY: number;
+  cardY: number;
+}) {
+  const t = useCountdown(target);
 
   return (
     <>
@@ -64,7 +89,7 @@ export default function CountdownSection({ deadline }: { deadline: string | null
         style={{
           position: "absolute",
           zIndex: 10,
-          top: 1034,
+          top: titleY,
           left: 0,
           right: 0,
           textAlign: "center",
@@ -75,9 +100,9 @@ export default function CountdownSection({ deadline }: { deadline: string | null
           textTransform: "uppercase",
         }}
       >
-        Registration
+        {title[0]}
         <br />
-        countdown
+        {title[1]}
       </h2>
 
       <div
@@ -85,7 +110,7 @@ export default function CountdownSection({ deadline }: { deadline: string | null
         style={{
           position: "absolute",
           zIndex: 10,
-          top: 1130,
+          top: cardY,
           left: 29,
           width: 336,
           height: 144,

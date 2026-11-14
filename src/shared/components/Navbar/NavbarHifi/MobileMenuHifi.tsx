@@ -56,7 +56,7 @@ export default function MobileMenuHifi({
           onClick={() => setOpen((v) => !v)}
           className={styles.headerMenuBtn}
         >
-          <svg width="22" height="15" viewBox="0 0 22 15" aria-hidden="true">
+          <svg width="28" height="19" viewBox="0 0 22 15" aria-hidden="true">
             <path
               d="M0 1.5h22M0 7.5h22M0 13.5h22"
               stroke="#1b3b7d"

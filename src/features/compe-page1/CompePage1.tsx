@@ -18,7 +18,7 @@ const COMPETITIONS = [
   {
     id: 1,
     slug: "microdrone-obstacle-race",
-    title: "Microdrone Obstacle",
+    title: "Drone Soccer",
     gradient: "linear-gradient(135deg, #C08CFF 0%, #E9DBF9 100%)",
     icon: "/images/icon-microdrone.png"
   },
@@ -340,7 +340,9 @@ export default function CompePage1() {
             backgroundClip: "text",
             color: "transparent",
           }}>
-            IDR 150.000.000
+            {/* BPC Rp20.000.000 + OE Rp10.000.000 + Drone Soccer Rp3.500.000
+                (postingan Instagram resmi). Hadiah barang (laptop, drone) di luar angka ini. */}
+            IDR 33.500.000
           </span>
         </div>
       </section>

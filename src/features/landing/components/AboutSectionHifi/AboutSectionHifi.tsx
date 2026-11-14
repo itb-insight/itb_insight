@@ -42,7 +42,7 @@ export default function AboutSectionHifi() {
   const phase3Y = Math.max(0, 30 * (1 - (scrollProgress - 0.65) / 0.2))
 
   return (
-      <section ref={sectionRef} className={styles.about}>
+      <section ref={sectionRef} id="about" className={styles.about}>
         <div className={styles.sticky}>
 
           <div className={styles.textWrapper}>
@@ -81,7 +81,7 @@ export default function AboutSectionHifi() {
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>TOTAL COMPETITION PRIZEPOOL</span>
                 <div className={styles.infoValue}>
-                  <span>RP67.000.000</span>
+                  <span>Rp30.000.000+</span>
                 </div>
               </div>
             </div>

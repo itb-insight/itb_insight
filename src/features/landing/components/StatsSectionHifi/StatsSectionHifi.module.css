@@ -55,6 +55,7 @@
   font-weight: 400;
   font-size: clamp(1rem, 2.5cqw, 1.6rem);
   margin-top: 4px;
+  white-space: pre-line;
   background: linear-gradient(to bottom, #091B3F, #294D97);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -75,4 +76,38 @@
 .visitors {
   left: 83%;
   top: 80%;
+}
+
+/*
+ * Mobile: lingkaran lebih besar supaya teks tidak meluber keluar lingkaran.
+ *
+ * Ilustrasi (lingkaran dan pita penghubungnya) satu gambar yang mengikuti
+ * lebar .wrapper, sedangkan teks punya ukuran minimum tetap (1rem / 1.5rem).
+ * Dengan padding samping 80px, di layar 393px lebar .wrapper hanya ~233px,
+ * jadi lingkaran ~65px, padahal tulisan "Wahana Teknologi" saja ~125px.
+ * Padding samping dikecilkan ke 12px (.wrapper ~369px, lingkaran ~1,6x
+ * lebih besar), dan label dipatahkan jadi baris-baris pendek (max-width)
+ * supaya lebarnya tidak melebihi lingkaran. Posisi teks memakai persen
+ * dari .wrapper, jadi ikut bergeser sejajar dengan lingkaran.
+ */
+@media (max-width: 768px) {
+  .stats {
+    padding: 80px 12px;
+  }
+
+  .label {
+    white-space: normal;
+    max-width: 7.5em;
+    /* Tiga baris label ("Wahana / Teknologi / Interaktif") memakai line-height
+       body 1.6 terlalu tinggi untuk lingkaran: angka di atasnya keluar dari
+       tepi atas lingkaran. */
+    line-height: 1.25;
+    margin-top: 2px;
+  }
+
+  /* "55.000+" pada 1.5rem (24px) masih lebih lebar dari lingkarannya dan di
+     layar 360px tanda "+" terpotong. Minimum diturunkan ke 1.2rem (~19px). */
+  .value {
+    font-size: clamp(1.2rem, 5.6cqw, 3rem);
+  }
 }

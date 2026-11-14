@@ -154,6 +154,10 @@
 @media (max-width: 768px) {
   .sticky {
     padding: 0 20px;
+    /* Ukuran angka countdown mobile. Ukuran lama (clamp(2.25rem, 13cqw, 3rem),
+       ~46px di layar 393) terlalu kecil; kini ~63px. Dipakai juga untuk
+       menghitung jarak ke deskripsi di .bottom di bawah. */
+    --cd-num: clamp(2.75rem, 18cqw, 4.25rem);
   }
 
   .title {
@@ -163,6 +167,10 @@
 
   .topGroup {
     position: relative;
+    /* Judul ITB INSIGHT naik 16px (countdown ikut, karena anak dari grup ini).
+       Memakai top, bukan transform: transform grup ini diatur inline oleh
+       HeroSectionHifi.tsx untuk animasi scroll. */
+    top: -16px;
   }
 
   .countdown {
@@ -170,7 +178,8 @@
     top: 100%;
     flex-direction: column;
     align-items: center;
-    margin-top: -10px;
+    /* Dulu -10px (angka menempel ke judul); kini +10px = jarak 20px lebih lega. */
+    margin-top: 10px;
     gap: 4px;
   }
 
@@ -179,19 +188,67 @@
   }
 
   .countdownNumber {
-    font-size: clamp(2.25rem, 13cqw, 3rem);
+    font-size: var(--cd-num);
   }
 
   .countdownLabel {
-    font-size: clamp(1.1rem, 6cqw, 1.5rem);
+    font-size: clamp(1.4rem, 8cqw, 2rem);
   }
 
+  /* Countdown absolut (tidak memakan ruang), empat baris bertumpuk. Jarak ke
+     deskripsi dulu 110px untuk angka seukuran clamp(2.25rem, 13cqw, 3rem);
+     tiap baris yang membesar menambah tinggi tumpukan, jadi jaraknya ikut
+     bertambah 4 x selisih ukuran angka, supaya deskripsi tidak tertimpa.
+     114px = 110px + 4px: countdown turun 20px (jarak ke judul) dan naik 16px
+     (grup naik), jadi tumpukannya berakhir 4px lebih rendah dari semula. */
   .bottom {
-    margin-top: 110px;
+    margin-top: calc(114px + 4 * (var(--cd-num) - clamp(2.25rem, 13cqw, 3rem)));
   }
 
   .description {
     font-size: 0.9rem;
     max-width: 320px;
   }
+}
+/* "Scroll ke bawah" hint — first view only */
+.scrollHint {
+  position: absolute;
+  bottom: clamp(56px, 12vh, 120px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #E9E9E9;
+  font-family: 'Gabarito', sans-serif;
+  transition: opacity 0.2s ease;
+}
+
+.scrollHintText {
+  font-size: 1.2rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+}
+
+.scrollHintChevron {
+  animation: scrollHintBounce 1.6s ease-in-out infinite;
+}
+
+.scrollHint:hover .scrollHintChevron {
+  color: #fff;
+}
+
+@keyframes scrollHintBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollHintChevron { animation: none; }
 }

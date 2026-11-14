@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Competition } from "@/features/competition/types";
+import { externalLinkProps } from "@/features/competition/format";
 
 /**
  * Hero halaman kompetisi.
@@ -35,6 +36,10 @@ const BUTTON_Y = 645;
 
 export default function CompetitionHero({ competition }: { competition: Competition }) {
   const titleGradient = `linear-gradient(180deg, ${competition.titleFrom} 0%, ${competition.titleTo} 100%)`;
+  const buttons = [
+    { label: "Silabus", href: competition.syllabusUrl, width: 77 },
+    { label: "Guidebook", href: competition.guidebookUrl, width: 97 },
+  ].filter((b): b is { label: string; href: string; width: number } => b.href !== null);
 
   return (
     <>
@@ -94,51 +99,42 @@ export default function CompetitionHero({ competition }: { competition: Competit
         {competition.description}
       </p>
 
-      <div
-        style={{
-          position: "absolute",
-          zIndex: 10,
-          top: BUTTON_Y,
-          left: 0,
-          right: 0,
-          display: "flex",
-          justifyContent: "center",
-          gap: 12,
-        }}
-      >
-        <a
-          href={competition.syllabusUrl}
-          className="btn-solid"
+      {/* Tombol hanya tampil kalau tautannya sudah ada (null = masih TBA). */}
+      {buttons.length > 0 ? (
+        <div
           style={{
+            position: "absolute",
+            zIndex: 10,
+            top: BUTTON_Y,
+            left: 0,
+            right: 0,
             display: "flex",
-            alignItems: "center",
             justifyContent: "center",
-            width: 77,
-            height: 32,
-            fontFamily: "var(--font-primary)",
-            fontSize: 12,
-            lineHeight: "14px",
+            gap: 12,
           }}
         >
-          Silabus
-        </a>
-        <a
-          href={competition.guidebookUrl}
-          className="btn-solid"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 97,
-            height: 32,
-            fontFamily: "var(--font-primary)",
-            fontSize: 12,
-            lineHeight: "14px",
-          }}
-        >
-          Guidebook
-        </a>
-      </div>
+          {buttons.map((b) => (
+            <a
+              key={b.label}
+              href={b.href}
+              {...externalLinkProps(b.href)}
+              className="btn-solid"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: b.width,
+                height: 32,
+                fontFamily: "var(--font-primary)",
+                fontSize: 12,
+                lineHeight: "14px",
+              }}
+            >
+              {b.label}
+            </a>
+          ))}
+        </div>
+      ) : null}
     </>
   );
 }

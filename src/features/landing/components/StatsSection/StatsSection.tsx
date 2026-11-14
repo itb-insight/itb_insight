@@ -4,7 +4,7 @@ import styles from "./StatsSection.module.css"
 const stats = [
   { value: "120", label: "collaborators" },
   { value: "670", label: "exhibitors" },
-  { value: "67.000", label: "visitors" },
+  { value: "55.000+", label: "visitors" },
 ]
 
 export default function StatsSection() {
