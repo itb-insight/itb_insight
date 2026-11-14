@@ -1,20 +1,29 @@
-import { toDigitBoxes } from "@/features/competition/format";
+import type { Prize } from "@/features/competition/types";
+import { formatRupiah, joinIndonesian } from "@/features/competition/format";
 
 /**
- * Figma: label "TOTAL PRIZEPOOL" y=1998 EXCRATCH 700 20/18.
- * Enam kotak 44x61 radius 9.1 di y=2039, x = 55, 102, 150, 197, 244, 292.
+ * Figma: label "TOTAL PRIZEPOOL" y=1998 EXCRATCH 700 20/18, lalu enam kotak
+ * 44x61 di y=2039 yang di desain masih KOSONG (nominal belum ada).
  *
- * Di Figma kotaknya KOSONG — isinya hanya pola neuron, belum ada angka,
- * karena nominalnya memang belum ditentukan. Selama prizePool masih 0,
- * kotaknya dibiarkan kosong persis seperti desain. Begitu nominal aslinya
- * diisi di data.ts, angkanya muncul otomatis.
+ * Nominal aslinya ternyata 8 digit (Rp15.800.000, Rp10.000.000), tidak muat
+ * di enam kotak, dan ada lomba yang hadiahnya belum bernominal ("Uang
+ * Tunai"). Jadi enam kotak diganti satu kartu kaca selebar deretan kotak
+ * (x=55..336), dengan baris hadiah tambahan di bawahnya kalau ada.
+ * Kartu berakhir paling bawah di y~2160, jauh di atas judul timeline (2262).
  *
  * Inline style: lihat catatan di CompetitionHero.
  */
-const BOX_X = [55, 102, 150, 197, 244, 292];
-
-export default function PrizePool({ amount }: { amount: number }) {
-  const digits = amount > 0 ? toDigitBoxes(amount, BOX_X.length) : null;
+export default function PrizePool({
+  prize,
+  titleY,
+  boxY,
+}: {
+  prize: Prize;
+  /** Y judul dan kartu; dihitung di mobileLayout.ts (Figma: 1998 dan 2039) */
+  titleY: number;
+  boxY: number;
+}) {
+  const main = prize.amount !== null ? formatRupiah(prize.amount) : (prize.fallback ?? "TBA");
 
   return (
     <>
@@ -22,7 +31,7 @@ export default function PrizePool({ amount }: { amount: number }) {
         className="text-grad z-10 text-center"
         style={{
           position: "absolute",
-          top: 1998,
+          top: titleY,
           left: 60,
           width: 269,
           fontFamily: "var(--font-display)",
@@ -35,25 +44,47 @@ export default function PrizePool({ amount }: { amount: number }) {
         Total Prizepool
       </h2>
 
-      {BOX_X.map((x, i) => (
+      <div
+        className="glass-chip z-10 flex flex-col items-center justify-center"
+        style={{
+          position: "absolute",
+          top: boxY,
+          left: 55,
+          width: 281,
+          minHeight: 61,
+          padding: "10px 12px",
+          gap: 4,
+          textAlign: "center",
+        }}
+      >
         <span
-          key={i}
-          className="glass-chip z-10 grid place-items-center"
+          className="text-grad"
           style={{
-            position: "absolute",
-            top: 2039,
-            left: x,
-            width: 44,
-            height: 61,
             fontFamily: "var(--font-display)",
-            fontSize: 24,
+            // 20px: "IDR 15.800.000" (14 karakter EXCRATCH) muat satu baris di 257px.
+            fontSize: 20,
             fontWeight: 700,
+            lineHeight: "28px",
+            whiteSpace: "nowrap",
             fontVariantNumeric: "tabular-nums",
+            textTransform: "uppercase",
           }}
         >
-          {digits && <span className="text-grad">{digits[i]}</span>}
+          {main}
         </span>
-      ))}
+        {prize.extras?.length ? (
+          <span
+            style={{
+              fontFamily: "var(--font-primary)",
+              fontSize: 13,
+              lineHeight: "18px",
+              color: "#dee8fb",
+            }}
+          >
+            + {joinIndonesian(prize.extras)}
+          </span>
+        ) : null}
+      </div>
     </>
   );
 }

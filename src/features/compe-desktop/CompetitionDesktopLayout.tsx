@@ -1,10 +1,21 @@
 import React from "react";
-import { formatRupiah } from "@/features/competition/format";
+import { externalLinkProps, formatRupiah, joinIndonesian, lowestFee } from "@/features/competition/format";
 import type { Competition } from "@/features/competition/types";
+import { registerEnabled } from "@/features/competition/status";
+import CompetitionInfo, { FeeTiers } from "@/features/competition/info/CompetitionInfo";
+import DesktopCountdown from "@/features/compe-desktop/DesktopCountdown";
 
 const vw = (px: number) => `${(px / 1728) * 100}vw`;
-const fluid = (px: number, minFactor = 0.62, maxFactor = 1.15) =>
-  `clamp(${(px * minFactor).toFixed(2)}px, ${vw(px)}, ${(px * maxFactor).toFixed(2)}px)`;
+/**
+ * Skala dari desain 1728px mengikuti lebar layar, TANPA batas atas, supaya
+ * halaman selalu menutupi layar selebar penuh (seperti background-size:
+ * cover) alih-alih berhenti di 1728px dan menyisakan pita gelap di kiri
+ * dan kanan monitor lebar. Batas bawah (minFactor) menjaga teks tetap
+ * terbaca di jendela sempit. Halaman /event dan versi mobile skalanya
+ * juga mengikuti lebar tanpa batas atas.
+ */
+const fluid = (px: number, minFactor = 0.62) =>
+  `max(${(px * minFactor).toFixed(2)}px, ${vw(px)})`;
 
 const colors = {
   bgTop: "#091B3F",
@@ -94,22 +105,30 @@ const TIMELINE_STEP = 115;
 
 export default function CompetitionDesktopLayout({
   competition,
+  countdown,
 }: {
   competition: Competition;
+  /** Target & judul hitung mundur (status.ts countdownFor) */
+  countdown: { target: string; title: [string, string] };
 }) {
   const d = competition.desktop;
+  const heroButtons = [
+    { label: "Silabus", href: competition.syllabusUrl },
+    { label: "Guidebook", href: competition.guidebookUrl },
+  ].filter((b): b is { label: string; href: string } => b.href !== null);
+  const fee = lowestFee(competition.fees.map((f) => f.amount));
+  const prize = competition.prize;
   const timelineGradient = `linear-gradient(180deg, ${d.timelineFrom} 0%, ${d.timelineTo} 100%)`;
   const descriptionLines = d.descriptionLines ?? [competition.description];
 
-  const lineHeight = 580 + (competition.timeline.length - 6) * 120;
+  // Garis timeline dari titik pertama ke titik terakhir.
+  const lineHeight = Math.max(0, competition.timeline.length - 1) * TIMELINE_STEP;
   const timelineHeight = lineHeight + 70;
 
   return (
     <main
       style={{
         width: "100%",
-        maxWidth: "1728px",
-        margin: "0 auto",
         minHeight: "100vh",
         background: `linear-gradient(180deg, ${colors.bgTop} 0%, ${colors.bgMiddle} 40%, ${colors.bgBottom} 100%)`,
         color: colors.bodyText,
@@ -135,7 +154,10 @@ export default function CompetitionDesktopLayout({
           textAlign: "center",
           background:
             "linear-gradient(180deg, rgba(27, 59, 125, 0.5) 0%, rgba(172, 199, 255, 0.4) 100%)",
-          overflow: "hidden",
+          // Sengaja TIDAK overflow: hidden. Bayangan lingkaran blur di hero
+          // (HERO_SHAPES) menjulur melewati tepi bawah hero; kalau dipotong,
+          // tampak garis datar/putus tepat di atas judul countdown. Potongan
+          // horizontal tetap dilakukan oleh <main> (overflowX: hidden).
         }}
       >
         {HERO_SHAPES.map((s) => (
@@ -217,14 +239,16 @@ export default function CompetitionDesktopLayout({
             ))}
           </p>
 
-          <div style={{ display: "flex", gap: fluid(24) }}>
-            <a href={competition.syllabusUrl} style={buttonFilled}>
-              Silabus
-            </a>
-            <a href={competition.guidebookUrl} style={buttonFilled}>
-              Guidebook
-            </a>
-          </div>
+          {/* Tombol hanya tampil kalau tautannya sudah ada (null = masih TBA). */}
+          {heroButtons.length > 0 ? (
+            <div style={{ display: "flex", gap: fluid(24) }}>
+              {heroButtons.map((b) => (
+                <a key={b.label} href={b.href} {...externalLinkProps(b.href)} style={buttonFilled}>
+                  {b.label}
+                </a>
+              ))}
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -306,7 +330,7 @@ export default function CompetitionDesktopLayout({
               zIndex: 1,
             }}
           >
-            REGISTRATION COUNTDOWN
+            {`${countdown.title[0]} ${countdown.title[1]}`.toUpperCase()}
           </h2>
 
           <div
@@ -332,13 +356,12 @@ export default function CompetitionDesktopLayout({
                 width: "100%",
               }}
             >
-              <span style={{ ...textPlainIce, fontFamily: fontExcratch, fontSize: fluid(96), lineHeight: 1.2 }}>00</span>
-              <span style={{ ...textPlainIce, fontFamily: fontExcratch, fontSize: fluid(96), lineHeight: 1 }}>:</span>
-              <span style={{ ...textPlainIce, fontFamily: fontExcratch, fontSize: fluid(96), lineHeight: 1 }}>00</span>
-
-              <span style={{ ...textPlainIce, fontFamily: fontGabarito, fontWeight: 700, fontSize: fluid(32), lineHeight: 1 }}>DAYS</span>
-              <span style={{ ...textPlainIce, fontFamily: fontGabarito, fontWeight: 700, fontSize: fluid(32), lineHeight: 1 }}>:</span>
-              <span style={{ ...textPlainIce, fontFamily: fontGabarito, fontWeight: 700, fontSize: fluid(32), lineHeight: 1 }}>HOURS</span>
+              <DesktopCountdown
+                target={countdown.target}
+                digitStyle={{ ...textPlainIce, fontFamily: fontExcratch, fontSize: fluid(96), lineHeight: 1.2, fontVariantNumeric: "tabular-nums" }}
+                colonStyle={{ ...textPlainIce, fontFamily: fontExcratch, fontSize: fluid(96), lineHeight: 1, fontVariantNumeric: "tabular-nums" }}
+                labelStyle={{ ...textPlainIce, fontFamily: fontGabarito, fontWeight: 700, fontSize: fluid(32), lineHeight: 1 }}
+              />
             </div>
           </div>
         </section>
@@ -378,8 +401,31 @@ export default function CompetitionDesktopLayout({
                 margin: 0,
               }}
             >
-              {formatRupiah(competition.registrationFee)}
+              {formatRupiah(fee)}
             </p>
+            {competition.fees.length > 1 ? (
+              <>
+                <p style={{ fontFamily: fontGabarito, fontSize: fluid(18), color: colors.ice200, margin: 0 }}>
+                  Harga terendah · {competition.fees.length} gelombang
+                </p>
+                <div
+                  style={
+                    {
+                      width: "100%",
+                      marginTop: fluid(8),
+                      "--accent-from": competition.accentFrom,
+                      "--accent-to": competition.accentTo,
+                    } as React.CSSProperties
+                  }
+                >
+                  <FeeTiers competition={competition} />
+                </div>
+              </>
+            ) : (
+              <p style={{ fontFamily: fontGabarito, fontSize: fluid(32), color: colors.ice200, margin: 0 }}>
+                {competition.fees[0].unit}
+              </p>
+            )}
           </div>
         </section>
       </div>
@@ -417,24 +463,42 @@ export default function CompetitionDesktopLayout({
             TOTAL PRIZEPOOL
           </h2>
 
+          {/*
+            Di desain: enam kotak kosong (nominal belum ada). Nominal aslinya
+            8 digit atau belum bernominal ("Uang Tunai"), jadi tampil sebagai
+            satu kartu, sama seperti versi mobile (PrizePool.tsx).
+          */}
           <div
             style={{
+              ...cardBase,
+              maxWidth: fluid(900),
+              margin: "0 auto",
+              padding: `${fluid(40)} ${fluid(32)}`,
               display: "flex",
-              justifyContent: "center",
-              flexWrap: "wrap",
-              gap: fluid(13),
+              flexDirection: "column",
+              alignItems: "center",
+              gap: fluid(12),
+              textAlign: "center",
             }}
           >
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                style={{
-                  ...cardBase,
-                  width: fluid(180),
-                  height: fluid(250),
-                }}
-              />
-            ))}
+            <p
+              style={{
+                ...textPlainIce,
+                fontFamily: fontExcratch,
+                fontSize: fluid(64),
+                lineHeight: 1.1,
+                margin: 0,
+                fontVariantNumeric: "tabular-nums",
+                textTransform: "uppercase",
+              }}
+            >
+              {prize.amount !== null ? formatRupiah(prize.amount) : (prize.fallback ?? "TBA")}
+            </p>
+            {prize.extras?.length ? (
+              <p style={{ fontFamily: fontGabarito, fontSize: fluid(42), color: colors.ice100, margin: 0 }}>
+                + {joinIndonesian(prize.extras)}
+              </p>
+            ) : null}
           </div>
         </section>
 
@@ -447,10 +511,11 @@ export default function CompetitionDesktopLayout({
             style={{
               position: "absolute",
               top: fluid(100),
-              left: 120,
+              // shape11.png terpotong lurus di sisi KIRI; tepi itu harus selalu
+              // di luar layar (di jendela sempit, left: 120px membuatnya muncul).
+              left: fluid(-30),
               width: fluid(400.79),
               height: fluid(466.18),
-              transform: "translateX(-40%)",
               opacity: 0.25,
               pointerEvents: "none",
               zIndex: 0,
@@ -464,10 +529,13 @@ export default function CompetitionDesktopLayout({
             style={{
               position: "absolute",
               top: fluid(100),
-              left: 1300,
+              // shape12.png terpotong lurus di sisi kanannya (piksel paling
+              // kanan masih terisi), jadi sisi itu harus jatuh di luar layar.
+              // Dulu left: 1300 + translateX(-40%) menaruh tepi potongnya di
+              // 92,6% lebar halaman, terlihat sebagai garis vertikal.
+              right: fluid(-40),
               width: fluid(500.79),
               height: fluid(664.18),
-              transform: "translateX(-40%)",
               opacity: 0.25,
               pointerEvents: "none",
               zIndex: 0,
@@ -479,7 +547,7 @@ export default function CompetitionDesktopLayout({
               ...textGlowIce,
               fontFamily: fontExcratch,
               fontSize: fluid(54),
-              textAlign: "left",
+              textAlign: "center",
               margin: 0,
               marginBottom: fluid(48),
               position: "relative",
@@ -565,7 +633,10 @@ export default function CompetitionDesktopLayout({
           </div>
         </section>
 
-        {/* CONTACT */}
+        {/* DETAIL LOMBA (Form Informasi Competition) */}
+        <CompetitionInfo competition={competition} showFees={false} variant="desktop" />
+
+        {/* CONTACT & REGISTER */}
         <div
           style={{
             position: "relative",
@@ -576,12 +647,21 @@ export default function CompetitionDesktopLayout({
             padding: `${fluid(32)} ${fluid(64)} ${fluid(80)}`,
           }}
         >
-          <a href={competition.contactUrl} style={buttonOutline}>
-            Contact Us
-          </a>
-          <a href={competition.registerUrl} style={buttonFilled}>
-            Register Now
-          </a>
+          {/* Contact Us disembunyikan selama kontak resminya belum ada. */}
+          {competition.contactUrl ? (
+            <a href={competition.contactUrl} {...externalLinkProps(competition.contactUrl)} style={buttonOutline}>
+              Contact Us
+            </a>
+          ) : null}
+          {competition.registerUrl && registerEnabled(competition) ? (
+            <a href={competition.registerUrl} {...externalLinkProps(competition.registerUrl)} style={buttonFilled}>
+              Register Now
+            </a>
+          ) : (
+            <span aria-disabled="true" style={{ ...buttonOutline, opacity: 0.75, cursor: "default" }}>
+              Pendaftaran Ditutup
+            </span>
+          )}
         </div>
       </div>
     </main>

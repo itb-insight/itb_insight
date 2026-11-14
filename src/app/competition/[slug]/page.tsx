@@ -13,9 +13,10 @@ import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
 import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi";
 import { getCompetition, getCompetitionSlugs } from "@/features/competition/data";
 import { competitionJsonLd, competitionMetadata } from "@/features/competition/seo";
+import { countdownFor } from "@/features/competition/status";
+import { mobileLayout } from "@/features/competition/mobileLayout";
+import CompetitionInfo from "@/features/competition/info/CompetitionInfo";
 
-/** Tinggi kanvas frame Figma (iPhone SAR/MO/BPC/OE Mobile). */
-const CANVAS_HEIGHT = 3284;
 
 /** ISR: HTML dibangun saat build, lalu di-refresh tiap 1 jam. */
 export const revalidate = 3600;
@@ -47,6 +48,11 @@ export default async function CompetitionPage({
   const competition = await getCompetition(slug);
   if (!competition) notFound();
 
+  // Dihitung saat render; ISR menyegarkannya paling lambat tiap jam.
+  const countdown = countdownFor(competition);
+  // Y tiap blok di kanvas mobile dihitung, bukan koordinat tetap Figma.
+  const layout = mobileLayout(competition);
+
   return (
     <>
       <script
@@ -61,40 +67,55 @@ export default async function CompetitionPage({
         absolut pada koordinat Y yang sama persis dengan Figma. Karena itu
         posisinya cocok tanpa perlu tebak-tebakan margin.
       */}
-      <div className="md:hidden">
+      <div className="mobile-shell-root md:hidden">
         <div
           className="mobile-shell-wrapper"
-          style={{ "--mobile-shell-height": `${CANVAS_HEIGHT}px` } as React.CSSProperties}
+          style={{ "--mobile-shell-height": `${layout.height}px` } as React.CSSProperties}
         >
           <div className="mobile-shell">
-            <div className="relative" style={{ height: CANVAS_HEIGHT }}>
-              <PageBackground slug={competition.slug} height={CANVAS_HEIGHT} />
+            <div className="relative" style={{ height: layout.height }}>
+              <PageBackground slug={competition.slug} height={layout.height} layout={layout} />
 
               <MobileHeader />
 
               <main>
                 <CompetitionHero competition={competition} />
-                <CountdownSection deadline={competition.registrationDeadline} />
-                <RegistrationFee fee={competition.registrationFee} />
-                <PrizePool amount={competition.prizePool} />
+                <CountdownSection
+                  target={countdown.target}
+                  title={countdown.title}
+                  titleY={layout.countdownTitleY}
+                  cardY={layout.countdownCardY}
+                />
+                <RegistrationFee fees={competition.fees} y={layout.feeY} />
+                <PrizePool
+                  prize={competition.prize}
+                  titleY={layout.prizeTitleY}
+                  boxY={layout.prizeBoxY}
+                />
                 <Timeline
                   items={competition.timeline}
                   accentFrom={competition.accentFrom}
                   accentTo={competition.accentTo}
-                  titleY={competition.timelineTitleY}
-                  textY={competition.timelineTextY}
+                  titleY={layout.timelineTitleY}
+                  textY={layout.timelineTextY}
                   dotX={competition.timelineDotX}
                 />
-                <ContactRegister competition={competition} />
+                <ContactRegister competition={competition} y={layout.contactY} />
               </main>
             </div>
           </div>
         </div>
+
+        {/* Detail lomba: alur biasa di bawah kanvas, karena kanvas Figma
+            setinggi tetap dan tidak punya ruang untuk bagian baru. */}
+        <CompetitionInfo competition={competition} showFees variant="mobile" />
+
+        <FooterHifi />
       </div>
 
       <div className="hidden md:block">
         <NavbarHifi />
-        <CompetitionDesktopLayout competition={competition} />
+        <CompetitionDesktopLayout competition={competition} countdown={countdown} />
         <FooterHifi />
       </div>
     </>

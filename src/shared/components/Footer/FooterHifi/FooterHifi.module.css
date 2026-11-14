@@ -85,6 +85,14 @@
   margin: 0 0 4px;
 }
 
+.columnHeaderLink {
+  transition: color 0.2s ease;
+}
+
+.columnHeaderLink:hover {
+  color: #ffffff;
+}
+
 .columnLink {
   font-family: 'Gabarito', sans-serif;
   font-size: 0.875rem;

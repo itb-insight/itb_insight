@@ -10,6 +10,41 @@ export interface TimelineItem {
   status?: TimelineStatus;
 }
 
+export interface FeeTier {
+  /** "Early Bird", "Normal", ... Kosong kalau hanya satu harga. */
+  label?: string;
+  /** Rupiah, angka murni */
+  amount: number;
+  /** "Per tim" / "Per orang" */
+  unit: string;
+  /** Teks periode apa adanya, misal "20 – 31 Agustus 2026" */
+  periodLabel?: string;
+}
+
+export interface Prize {
+  /** Total hadiah uang dalam rupiah. null = nominal belum diumumkan. */
+  amount: number | null;
+  /** Teks pengganti saat amount null, misal "Uang Tunai" */
+  fallback?: string;
+  /** Hadiah lain selain uang, misal ["laptop", "medali"] */
+  extras?: string[];
+}
+
+export interface CompetitionInfoData {
+  /** Info singkat: format, peserta, cakupan, kuota, bahasa, lokasi */
+  facts: { label: string; value: string }[];
+  /** Tema/subtema, bidang materi, atau spesifikasi alat */
+  topics?: { title: string; intro?: string; items: string[] };
+  /** Syarat peserta */
+  requirements: string[];
+  /** Narahubung lomba. WhatsApp ditulis format lokal (08...). */
+  contacts?: { name: string; line?: string; whatsapp?: string }[];
+  /** Data/dokumen yang disiapkan saat mendaftar */
+  documents?: string[];
+  /** Berkas yang dikumpulkan per tahap */
+  stageFiles?: { stage: string; files: string; deadline: string }[];
+}
+
 export interface CompetitionDesktopDesign {
   logoSrc: string;
   logoWidth: number;
@@ -23,6 +58,11 @@ export interface CompetitionDesktopDesign {
 
 export interface Competition {
   slug: string;
+  /**
+   * Kode singkat lomba (sama dengan teamUidPrefix di src/lib/competitions.ts).
+   * Dipakai untuk env REGISTER_OPEN_<code>; lihat status.ts registerEnabled.
+   */
+  code: string;
   title: string;
   /** Paragraf deskripsi di hero */
   description: string;
@@ -46,19 +86,29 @@ export interface Competition {
   iconWidth: number;
   iconHeight: number;
   /**
-   * Deadline pendaftaran (ISO). null = countdown menampilkan 00 : 00,
-   * sama seperti keadaan di Figma sekarang. Isi tanggalnya kalau sudah
-   * final, hitung mundurnya otomatis hidup.
+   * Masa pendaftaran (ISO dengan zona WIB). Menentukan status buka/tutup,
+   * tombol Register, dan target hitung mundur. Lihat status.ts.
    */
-  registrationDeadline: string | null;
-  /** Biaya pendaftaran dalam rupiah (angka murni) */
-  registrationFee: number;
-  /** Total prizepool dalam rupiah (angka murni) */
-  prizePool: number;
-  syllabusUrl: string;
-  guidebookUrl: string;
-  contactUrl: string;
-  registerUrl: string;
+  registration: { opens: string; closes: string };
+  /**
+   * Target hitung mundur setelah pendaftaran ditutup: hari final.
+   * title = judul section hitung mundur, dua baris di mobile.
+   */
+  finalCountdown: { date: string; title: [string, string] };
+  /** Biaya pendaftaran per gelombang. Satu elemen = satu harga. */
+  fees: FeeTier[];
+  prize: Prize;
+  /** null = belum ada tautannya: tombolnya disembunyikan */
+  syllabusUrl: string | null;
+  guidebookUrl: string | null;
+  contactUrl: string | null;
+  /**
+   * Formulir pendaftaran eksternal (Google Form). Pendaftaran lomba tidak
+   * lagi lewat website. null = belum ada tautan: tombol daftar selalu ditutup.
+   */
+  registerUrl: string | null;
+  /** Detail lomba dari Form Informasi Competition. Lihat CompetitionInfo.tsx. */
+  info: CompetitionInfoData;
   timeline: TimelineItem[];
   desktop: CompetitionDesktopDesign;
   seo: {

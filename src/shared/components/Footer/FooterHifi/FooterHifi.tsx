@@ -22,10 +22,23 @@ const eventLinks: FooterLink[] = [
   { label: "Alumni Gathering", href: "/event#alumni-gathering" },
 ]
 
-/** links kosong = kolom masih placeholder ("Page"). */
-const columns: { header: string; href: string; links?: FooterLink[] }[] = [
-  { header: "Event", href: "/event", links: eventLinks },
-  { header: "Competition", href: "/competition" },
+/*
+ * Lomba yang tampil di /competition (SAR masih disembunyikan). Slug sama
+ * dengan src/features/competition/data.ts.
+ */
+const competitionLinks: FooterLink[] = [
+  { label: "Drone Soccer Competition", href: "/competition/microdrone-obstacle-race" },
+  { label: "Business Plan Competition", href: "/competition/business-plan-competition" },
+  { label: "Olimpiade Engineering", href: "/competition/olimpiade-engineering" },
+]
+
+/**
+ * links kosong = kolom masih placeholder ("Page").
+ * linkHeader = judul kolom ikut menjadi tautan ke href.
+ */
+const columns: { header: string; href: string; links?: FooterLink[]; linkHeader?: boolean }[] = [
+  { header: "Event", href: "/event", links: eventLinks, linkHeader: true },
+  { header: "Competition", href: "/competition", links: competitionLinks, linkHeader: true },
   { header: "Map", href: "/event-map" },
 ]
 
@@ -57,9 +70,15 @@ export default function FooterHifi() {
         </div>
 
         <div className={styles.columns}>
-          {columns.map(({ header, links }) => (
+          {columns.map(({ header, href, links, linkHeader }) => (
             <div key={header} className={styles.column}>
-              <p className={styles.columnHeader}>{header}</p>
+              {linkHeader ? (
+                <Link href={href} className={`${styles.columnHeader} ${styles.columnHeaderLink}`}>
+                  {header}
+                </Link>
+              ) : (
+                <p className={styles.columnHeader}>{header}</p>
+              )}
               {links
                 ? links.map(({ label, href }) => (
                     <Link key={href} href={href} className={styles.columnLink}>

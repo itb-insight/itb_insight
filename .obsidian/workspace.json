@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes.md",
+                "file": "docs/RELEASE-CHECKLIST.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "notes"
+              "title": "RELEASE-CHECKLIST"
             }
           }
         ],
@@ -98,7 +98,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 203.5
   },
   "right": {
     "id": "034e7f8a9a76fa28",
@@ -202,6 +202,13 @@
   },
   "active": "f8f219eede9f12c7",
   "lastOpenFiles": [
+    "docs/REGISTRATION-FLOWS.md",
+    "docs/RELEASE-CHECKLIST.md",
+    "docs/RELEASES.md",
+    "docs/analytics/00-overview.md",
+    "docs/analytics/01-tracking-library.md",
+    "notes.md",
+    "src/features/compe-desktop/DesktopCountdown.tsx",
     "public/itb-model/Final Comp_Export4.glb",
     "public/itb-model/Final Comp_Export4.zip",
     "public/itb-model",
@@ -211,11 +218,8 @@
     "src/features/auth/Login/Login.tsx.tmp.24396.d412b0e89bbc",
     "src/features/auth/LoginHifi/LoginHifi.tsx.tmp.24396.752c3ef27b37",
     "src/app/auth/callback/route.ts.tmp.24396.4a8ab74fb361",
-    "src/app/auth/callback/route.ts.tmp.24396.b91120cd6427",
-    "src/lib/safe-next.ts",
     "node_modules/@img/sharp-wasm32/README.md",
     "qr-notes.md",
-    "notes.md",
     "public/images/gallery/fountain.webp",
     "public/images/gallery/topo.webp",
     "public/images/gallery/foutain.webp",

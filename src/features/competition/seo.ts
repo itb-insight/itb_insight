@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import type { Competition } from "@/features/competition/types";
+import { registerEnabled, registrationState } from "@/features/competition/status";
+import { lowestFee } from "@/features/competition/format";
 
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://itbinsight.com"; // TODO: domain asli
@@ -30,8 +32,15 @@ export function competitionMetadata(c: Competition): Metadata {
   };
 }
 
-/** JSON-LD schema.org/Event — bikin lomba muncul sbg rich result di Google. */
+/**
+ * JSON-LD schema.org/Event — bikin lomba muncul sbg rich result di Google.
+ * startDate = hari final. offers hanya dikirim selama pendaftaran dibuka
+ * (tombol daftar aktif lewat env DAN masih dalam masa pendaftaran), dengan
+ * harga terendah dan batas akhir pendaftaran.
+ */
 export function competitionJsonLd(c: Competition) {
+  const open = registerEnabled(c) && registrationState(c) === "open";
+  const registerUrl = c.registerUrl;
   return {
     "@context": "https://schema.org",
     "@type": "Event",
@@ -39,20 +48,29 @@ export function competitionJsonLd(c: Competition) {
     description: c.seo.metaDescription,
     url: `${SITE_URL}/competition/${c.slug}`,
     image: [c.seo.ogImage],
+    startDate: c.finalCountdown.date,
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
-    organizer: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
-    offers: {
-      "@type": "Offer",
-      price: c.registrationFee,
-      priceCurrency: "IDR",
-      // registerUrl disimpan relatif di data.ts ("/signup"); schema.org butuh URL
-      // absolut. new URL() membiarkan URL eksternal yang sudah absolut apa adanya.
-      url: new URL(c.registerUrl, SITE_URL).toString(),
-      availability: "https://schema.org/InStock",
-      // Dihilangkan dari JSON-LD kalau deadline belum ditentukan, supaya
-      // tidak mengirim "validThrough": null ke Google.
-      ...(c.registrationDeadline ? { validThrough: c.registrationDeadline } : {}),
+    location: {
+      "@type": "Place",
+      name: "Institut Teknologi Bandung",
+      address: { "@type": "PostalAddress", addressLocality: "Bandung", addressCountry: "ID" },
     },
+    organizer: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    ...(open && registerUrl
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: lowestFee(c.fees.map((f) => f.amount)),
+            priceCurrency: "IDR",
+            // Formulir eksternal (absolut). new URL() tetap aman bila suatu saat
+            // tautannya relatif.
+            url: new URL(registerUrl, SITE_URL).toString(),
+            availability: "https://schema.org/InStock",
+            validFrom: c.registration.opens,
+            validThrough: c.registration.closes,
+          },
+        }
+      : {}),
   };
 }

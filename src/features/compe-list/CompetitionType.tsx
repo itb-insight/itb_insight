@@ -33,11 +33,11 @@ const competitions: Competition[] = [
   // },
   {
     id: 'microdrone',
-    title: 'Microdrone Obstacle Race',
+    title: 'Drone Soccer Competition',
     description: 'Penjelasan singkat lomba Lorem ipsum dolor sit amet yadayada',
     registrationDeadline: 'XX Bulan 2026',
     iconPath: '/assets/icon-mo.png',
-    iconAlt: 'Microdrone',
+    iconAlt: 'Drone Soccer',
     buttonText: 'Registrasi',
     gradientBackground: OPEN_CARD_BG,
     titleGradient: 'linear-gradient(180deg, #E9DBF9 0%, #C08CFF 100%)',
