@@ -208,6 +208,7 @@
   },
   "active": "696c6d32523082a1",
   "lastOpenFiles": [
+    "supabase/migrations/0012_admin_manual_points.sql",
     "src/features/admin/qr-points/QrPointsTester.module.css",
     "src/features/admin/qr-points/QrPointsTester.module.css.tmp.21650.bd4153bd1b5b",
     "src/features/admin/qr-points/QrPointsTester.tsx",
@@ -218,7 +219,6 @@
     "src/app/admin/qr-points/page.tsx",
     "src/app/admin/qr-points/page.tsx.tmp.21650.0fa37a791510",
     "src/app/admin/qr-points",
-    "node_modules/jsqr/dist/locator/index.d.ts",
     "node_modules/jsqr/README.md",
     "node_modules/@img/sharp-wasm32/README.md",
     "public/images/qr-logo.png",

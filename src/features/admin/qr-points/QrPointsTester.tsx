@@ -12,8 +12,10 @@ type BoothOption = { id: string; name: string }
 
 type Visitor = { userId: string; fullName: string; institution: string | null }
 
+type BoothRef = { id: string; name: string } | null // null = manual admin award
+
 type Preview = {
-  booth: { id: string; name: string }
+  booth: BoothRef
   visitor: Visitor
   checkedIn: boolean
   alreadyVisited: boolean
@@ -21,7 +23,7 @@ type Preview = {
 }
 
 type Award = {
-  booth: { id: string; name: string }
+  booth: BoothRef
   visitor: Visitor
   pointsAwarded: number
   alreadyVisited: boolean
@@ -41,23 +43,24 @@ type Phase =
   | { kind: "error"; message: string }
 
 const MAX_POINTS = 1000 // mirrors MAX_ADMIN_POINTS in src/lib/booths.ts
+const boothLabel = (booth: BoothRef) => booth?.name ?? "Tanpa booth"
 
 // TEMPORARY admin test bench: scan a personal QR, preview who it is, confirm, award points.
 export default function QrPointsTester({ booths }: { booths: BoothOption[] }) {
-  const [boothId, setBoothId] = useState(booths[0]?.id ?? "")
+  const [boothId, setBoothId] = useState("") // "" = no booth
   const [points, setPoints] = useState("10")
   const [phase, setPhase] = useState<Phase>({ kind: "idle" })
   const [log, setLog] = useState<LogEntry[]>([])
 
   const pointsNumber = Number(points)
   const pointsValid = points.trim() !== "" && Number.isInteger(pointsNumber) && pointsNumber >= 0 && pointsNumber <= MAX_POINTS
-  const canScan = Boolean(boothId) && pointsValid && phase.kind !== "loading"
+  const canScan = pointsValid && phase.kind !== "loading"
 
   const addLog = (entry: Omit<LogEntry, "at">) =>
     setLog((prev) => [{ at: new Date().toLocaleTimeString("id-ID"), ...entry }, ...prev].slice(0, 20))
 
   async function call<T>(body: Record<string, unknown>) {
-    const res = await postWithAuth<T>("/api/booths/scan", { boothId, points: pointsNumber, ...body })
+    const res = await postWithAuth<T>("/api/booths/scan", { boothId: boothId || undefined, points: pointsNumber, ...body })
     if (res.needsAuth) throw new Error("Sesi berakhir. Silakan login ulang.")
     if (!res.payload.success) throw new Error(res.payload.error.message)
     return res.payload.data
@@ -80,18 +83,18 @@ export default function QrPointsTester({ booths }: { booths: BoothOption[] }) {
       setPhase({ kind: "done", award })
       addLog({
         name: award.visitor.fullName,
-        booth: award.booth.name,
+        booth: boothLabel(award.booth),
         outcome: award.alreadyVisited ? "sudah pernah (0)" : `+${award.pointsAwarded}`,
       })
     } catch (err) {
       const message = err instanceof Error ? err.message : "Gagal memberi poin."
       setPhase({ kind: "error", message })
-      addLog({ name: preview.visitor.fullName, booth: preview.booth.name, outcome: "gagal" })
+      addLog({ name: preview.visitor.fullName, booth: boothLabel(preview.booth), outcome: "gagal" })
     }
   }
 
   function handleCancel(preview: Preview) {
-    addLog({ name: preview.visitor.fullName, booth: preview.booth.name, outcome: "dibatalkan" })
+    addLog({ name: preview.visitor.fullName, booth: boothLabel(preview.booth), outcome: "dibatalkan" })
     setPhase({ kind: "idle" })
   }
 
@@ -100,23 +103,17 @@ export default function QrPointsTester({ booths }: { booths: BoothOption[] }) {
       <section className={styles.panel} aria-labelledby="scan-heading">
         <h2 id="scan-heading" className={styles.panelTitle}>Pindai &amp; beri poin</h2>
 
-        {booths.length === 0 ? (
-          <p className={styles.notice}>
-            Belum ada booth aktif. Tambahkan minimal satu baris di tabel <code>booths</code> (is_active = true) untuk
-            menguji.
-          </p>
-        ) : (
-          <label className={styles.field}>
-            <span className={styles.label}>Booth</span>
-            <select className={styles.input} value={boothId} onChange={(e) => setBoothId(e.target.value)}>
-              {booths.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
+        <label className={styles.field}>
+          <span className={styles.label}>Booth (opsional)</span>
+          <select className={styles.input} value={boothId} onChange={(e) => setBoothId(e.target.value)}>
+            <option value="">Tanpa booth (uji admin)</option>
+            {booths.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name}
+              </option>
+            ))}
+          </select>
+        </label>
 
         {phase.kind === "scanning" ? (
           <>
@@ -174,7 +171,7 @@ export default function QrPointsTester({ booths }: { booths: BoothOption[] }) {
                 {phase.award.alreadyVisited ? "Sudah pernah diberi poin di booth ini" : `+${phase.award.pointsAwarded} poin`}
               </p>
               <p>
-                {phase.award.visitor.fullName} · {phase.award.booth.name}
+                {phase.award.visitor.fullName} · {boothLabel(phase.award.booth)}
               </p>
               <p className={styles.muted}>
                 Total {phase.award.totalPoints} poin dari {phase.award.totalVisited} booth
@@ -216,12 +213,12 @@ export default function QrPointsTester({ booths }: { booths: BoothOption[] }) {
             </h3>
             <p className={styles.muted}>
               {phase.preview.visitor.institution ? `${phase.preview.visitor.institution} · ` : ""}
-              Booth {phase.preview.booth.name}
+              {boothLabel(phase.preview.booth)}
             </p>
             {phase.preview.alreadyVisited && (
               <p className={styles.warn}>Pengunjung ini sudah pernah diberi poin di booth ini; poin tidak akan bertambah.</p>
             )}
-            {!phase.preview.checkedIn && (
+            {phase.preview.booth && !phase.preview.checkedIn && (
               <p className={styles.warn}>Belum absen di gate. Jika diberi poin, pengunjung dicatat hadir (skipped gate).</p>
             )}
             <div className={styles.dialogActions}>

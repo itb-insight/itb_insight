@@ -2,7 +2,8 @@
 -- (docs/QR-FEATURES.md), replacing the earlier flow where the visitor scanned a booth QR.
 --
 -- 1. booth_staff: which booth(s) a booth_staff account scans for. Booth exhibitors
---    (booths.exhibitor_user_id) and admins may also award; admins must name the booth.
+--    (booths.exhibitor_user_id) and admins may also award; admins must name the booth
+--    (relaxed in 0012: admins may award with no booth).
 -- 2. booths.max_bonus_points: cap on the discretionary bonus on top of booths.points.
 -- 3. booth_scan_events.bonus_points / awarded_by: audit who gave what.
 --    points_awarded stays the total (base + bonus), so sum(points_awarded) is still the score.

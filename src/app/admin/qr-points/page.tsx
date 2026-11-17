@@ -3,8 +3,7 @@ import { redirect } from "next/navigation"
 import PageHeader from "@/features/admin/components/PageHeader/PageHeader"
 import QrPointsTester from "@/features/admin/qr-points/QrPointsTester"
 import { isAdminUser } from "@/lib/admin"
-import { getActiveBooths } from "@/lib/booths"
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createServiceClient } from "@/lib/supabase/server"
 
 export const dynamic = "force-dynamic"
 export const metadata = {
@@ -32,7 +31,11 @@ export default async function QrPointsPage() {
     )
   }
 
-  const booths = await getActiveBooths()
+  // Optional for this test page: every booth, active or not. No booth = manual admin award.
+  const { data: booths } = await createServiceClient()
+    .from("booths")
+    .select("id, name, is_active")
+    .order("name", { ascending: true })
 
   return (
     <>
@@ -40,7 +43,9 @@ export default async function QrPointsPage() {
         title="QR Points (test)"
         subtitle="Scan QR profil pengunjung, konfirmasi, lalu poin dicatat. Halaman uji sementara."
       />
-      <QrPointsTester booths={booths.map((b) => ({ id: b.id, name: b.name }))} />
+      <QrPointsTester
+        booths={(booths ?? []).map((b) => ({ id: b.id as string, name: b.is_active ? b.name : `${b.name} (nonaktif)` }))}
+      />
     </>
   )
 }
