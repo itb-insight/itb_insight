@@ -4,11 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "30c3624f7b53a890",
+        "id": "ba5731ceda13aed1",
         "type": "tabs",
+        "dimension": 53.15487571701721,
         "children": [
           {
-            "id": "f35e29f127ef9527",
+            "id": "696c6d32523082a1",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -19,6 +20,25 @@
               },
               "icon": "lucide-file",
               "title": "RELEASE-CHECKLIST"
+            }
+          }
+        ]
+      },
+      {
+        "id": "644bd59d96feb685",
+        "type": "tabs",
+        "dimension": 46.84512428298279,
+        "children": [
+          {
+            "id": "61f258f9e7e6ccb8",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "public/images/timeline/v2/purple.png"
+              },
+              "icon": "lucide-image",
+              "title": "purple"
             }
           }
         ]
@@ -83,8 +103,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 203.5,
-    "collapsed": true
+    "width": 307.5
   },
   "right": {
     "id": "034e7f8a9a76fa28",
@@ -100,6 +119,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "docs/RELEASE-CHECKLIST.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -186,30 +206,31 @@
       "bases:Create new base": false
     }
   },
-  "active": "f35e29f127ef9527",
+  "active": "696c6d32523082a1",
   "lastOpenFiles": [
+    "public/images/timeline/REF.md",
+    "src/features/landing/components/TimelineSectionHifi/TimelineSectionHifi.module.css.tmp.53520.3ddc45c81db0",
+    "src/features/landing/components/TimelineSectionHifi/TimelineSectionHifi.module.css.tmp.53520.36d94f05c9be",
+    "src/features/landing/components/TimelineSectionHifi/TimelineSectionHifi.tsx.tmp.53520.0c8a39fab582",
+    "public/images/timeline/v1/circle-c4.svg",
+    "public/images/timeline/v1/circle-c5.svg",
+    "public/images/timeline/v1/circle-a2.svg",
+    "public/images/timeline/v1/circle-a3.svg",
+    "public/images/timeline/v1/circle-a4.svg",
+    "public/images/timeline/v1/circle-a5.svg",
+    "public/images/timeline/v1/circle-c1.svg",
+    "public/images/timeline/v1/circle-c2.svg",
+    "public/images/timeline/v2/purple.png",
+    "public/images/timeline/v2/red.png",
+    "public/images/timeline/v2",
+    "public/images/timeline/v1",
+    "docs/RELEASE-CHECKLIST.md",
     "notes.md",
     "src/shared/components/Navbar/NavbarHifi/NavbarShell.tsx",
     "src/features/landing/hooks/useIsSignedIn.ts",
     "src/features/events/layoutSlots.ts",
     "src/features/events/details.ts",
     "src/features/events/detail/SeminarInfo.tsx",
-    "src/features/events/detail/SchoolVisits.tsx",
-    "src/features/events/detail/Rundown.tsx",
-    "src/features/events/detail/QuickFacts.tsx",
-    "src/features/events/detail/PracticalInfo.tsx",
-    "src/features/events/detail/OtherEvents.tsx",
-    "public/events/technology-seminar/og.jpg",
-    "public/events/technology-seminar/highlight-1.webp",
-    "public/events/technology-seminar/hero.webp",
-    "public/events/technology-seminar/gallery-5.webp",
-    "public/events/technology-seminar/gallery-4.webp",
-    "public/events/technology-seminar/gallery-3.webp",
-    "public/events/technology-seminar/gallery-2.webp",
-    "public/events/technology-seminar/gallery-1.webp",
-    "public/events/tech-xhibition/og.jpg",
-    "public/events/tech-xhibition/highlight-1.webp",
-    "docs/RELEASE-CHECKLIST.md",
     "docs/REGISTRATION-FLOWS.md",
     "docs/RELEASES.md",
     "docs/analytics/00-overview.md",

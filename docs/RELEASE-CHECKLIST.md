@@ -1,10 +1,10 @@
 ## Main Features & Components
-1. [ ] Fill-in all informational surfaces:
+1. [x] Fill-in all informational surfaces:
 	- [x] a. Events
 	- [x] b. Competitions
-	- [ ] c. Landing page timeline
+	- [x] c. Landing page timeline
 	- [x] d. Headers and Footers
-2. [ ] Set interactive map into coming soon.
+2. [x] Set interactive map into coming soon.
 3. [ ] Secure account creation and signing in
 4. [ ] Personal QR-code
 5. [ ] Feedback (and config)

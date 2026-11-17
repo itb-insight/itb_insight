@@ -5,13 +5,19 @@ import Image from "next/image"
 import styles from "./TimelineSectionHifi.module.css"
 import { useIsMobile } from "@/features/landing/hooks/useIsMobile"
 
+// Same schedule as TIMELINE_STEPS in src/features/compe-page1/CompePage1.tsx
+// (the competition landing page), with "Final" shown as "D-DAY". Keep in sync.
 const items = [
-  { name: "Pendaftaran", date: "5-23 Januari 2026" },
-  { name: "Warm Up & Technical Meeting", date: "30 Januari 2026" },
-  { name: "Penyisihan", date: "7 Februari 2026" },
-  { name: "Pengumuman Finalis", date: "18 Februari 2026" },
-  { name: "Final", date: "1 Maret 2026" },
+  { name: "Pendaftaran", date: "Agustus – November 2026" },
+  { name: "Warm Up & Technical Meeting", date: "September – November 2026" },
+  { name: "Penyisihan", date: "Oktober – November 2026" },
+  { name: "Pengumuman Finalis", date: "Oktober – November 2026" },
+  { name: "D-DAY", date: "Akhir November 2026" },
 ]
+
+// v2 circle art, per position (see public/images/timeline/REF.md).
+// The active (newest) circle shows its color; past circles use "full".
+const CIRCLE_COLORS = ["green", "purple", "yellow", "blue", "red"]
 
 const STEP_PX = 100
 const STEPS = items.length + 1
@@ -92,11 +98,10 @@ export default function TimelineSectionHifi() {
     // visibleCount > items.length berarti step "semua abu-abu" sudah tercapai
     const allDone = visibleCount > items.length
     const isPast = index < visibleCount - 1 || allDone
-    const isActive = index === visibleCount - 1 && !allDone
 
-    if (isPast) return `/images/timeline/circle-a${index + 1}.svg`
-    if (isActive) return `/images/timeline/circle-c${index + 1}.svg`
-    return `/images/timeline/circle-c${index + 1}.svg`
+    // Active (and not-yet-visible) circles show their color; past ones go "full".
+    if (isPast) return "/images/timeline/v2/full.png"
+    return `/images/timeline/v2/${CIRCLE_COLORS[index]}.png`
   }
 
   return (
@@ -125,7 +130,7 @@ export default function TimelineSectionHifi() {
               }}
             >
               <Image
-                src={isMobile ? "/images/conn-mobile.svg" : `/images/timeline/conn-${i}-${i + 1}.svg`}
+                src={isMobile ? "/images/conn-mobile.svg" : `/images/timeline/v1/conn-${i}-${i + 1}.svg`}
                 alt={`Connector ${i}`}
                 fill
                 className={styles.connectorImage}
@@ -148,10 +153,14 @@ export default function TimelineSectionHifi() {
             >
               <Image
                 src={getCircleSrc(i)}
-                alt={item.name}
+                alt=""
                 fill
                 className={styles.circleImage}
               />
+              <div className={styles.circleText}>
+                <span className={styles.circleName}>{item.name}</span>
+                <span className={styles.circleDate}>{item.date}</span>
+              </div>
             </div>
           ))}
 

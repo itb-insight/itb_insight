@@ -61,6 +61,46 @@
   object-fit: contain;
 }
 
+/* Text overlay on the v2 circle art. Sizes come from REF.md, which specifies them
+   against the 287x311 source PNG. The art is height-bound inside the square box,
+   so cqh maps 1:1 to the art: 33.21/311 ≈ 10.68cqh, 19.37/311 ≈ 6.23cqh. */
+.circle {
+  container-type: size;
+}
+
+.circleText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2cqh;
+  text-align: center;
+  pointer-events: none;
+}
+
+.circleName {
+  max-width: 58cqh;
+  font-family: var(--font-primary), 'Gabarito', sans-serif;
+  font-weight: 700;
+  font-size: 10.68cqh;
+  line-height: 1.15;
+  color: #003F6B;
+}
+
+.circleDate {
+  /* Month ranges ("September – November 2026") are wider than the circle face,
+     so let them wrap onto two balanced lines. */
+  max-width: 64cqh;
+  text-wrap: balance;
+  font-family: var(--font-primary), 'Gabarito', sans-serif;
+  font-weight: 400;
+  font-size: 6.23cqh;
+  line-height: 1.2;
+  color: #006AB5;
+}
+
 /* Connectors */
 .connector {
   position: absolute;
