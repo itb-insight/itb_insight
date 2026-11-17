@@ -1,6 +1,7 @@
 import { createServiceClient } from '@/lib/supabase/server'
-import { type VisitorTicket } from '@/lib/types/database'
+import { type GateCheckIn, type VisitorTicket } from '@/lib/types/database'
 import { recordAuditLog } from '@/lib/audit'
+import { parseVisitorQr } from '@/lib/qr'
 
 export type CheckInResult =
   | {
@@ -20,11 +21,12 @@ export async function processGateCheckIn(params: {
   qrCode: string
   staffUserId?: string
   gateName?: string
-  checkInType?: 'staff_scan' | 'self_scan' | 'manual_lookup'
+  checkInType?: GateCheckIn['check_in_type']
 }): Promise<CheckInResult> {
   const { qrCode, staffUserId, gateName = 'main_gate', checkInType = 'staff_scan' } = params
 
-  if (!qrCode || typeof qrCode !== 'string') {
+  const token = parseVisitorQr(qrCode)
+  if (!token) {
     return { ok: false, code: 'INVALID_INPUT', message: 'Kode QR tidak valid.' }
   }
 
@@ -34,7 +36,7 @@ export async function processGateCheckIn(params: {
   const { data: ticket, error: ticketError } = await supabase
     .from('visitor_tickets')
     .select('id, user_id, qr_code, ticket_type, checked_in, checked_in_at, checked_in_by, profiles(full_name, email, institution)')
-    .eq('qr_code', qrCode.trim())
+    .eq('qr_code', token)
     .maybeSingle()
 
   if (ticketError || !ticket) {

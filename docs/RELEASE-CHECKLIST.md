@@ -14,6 +14,9 @@
 9. [ ] Load test
 10. [ ] CI tests
 
+PASS 1: Secure surfaces
+PASS 2: Discuss backups e.g. if QR didn't generate
+
 ## Post-Release
 Migrate competition data
 ThreeJS

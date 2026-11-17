@@ -1,6 +1,7 @@
 import DashboardHome from "@/features/dashboard/DashboardHome"
 import { getRegistrations } from "@/lib/registrations"
 import { createClient } from "@/lib/supabase/server"
+import { ensureVisitorTicket } from "@/lib/tickets"
 
 export const dynamic = "force-dynamic"
 
@@ -17,7 +18,8 @@ async function getAccount() {
 
     if (!user) return null
 
-    return { id: user.id, email: user.email ?? null }
+    const ticket = await ensureVisitorTicket(user.id)
+    return { id: user.id, email: user.email ?? null, qrToken: ticket.ok ? ticket.ticket.qr_code : null }
   } catch {
     return null
   }

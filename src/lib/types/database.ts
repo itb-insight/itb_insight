@@ -7,9 +7,15 @@ export type Profile = {
   phone?: string | null
   institution?: string | null
   avatar_url?: string | null
+  role_a?: ProfileRoleA | null
+  role_b?: ProfileRoleB | null // only for staff / stakeholder
+  role_c?: string | null // sponsor/partner company; only for sponsor_partner
   created_at: string
   updated_at: string
 }
+
+export type ProfileRoleA = 'staff' | 'stakeholder' | 'sponsor_partner' | 'company' | 'admin'
+export type ProfileRoleB = 'booth' | 'webdev' | 'media' | 'competition' | 'event' | 'sponsorship' | 'partner'
 
 export type VisitorTicket = {
   id: string
@@ -29,7 +35,7 @@ export type GateCheckIn = {
   user_id: string
   checked_in_by?: string | null
   gate_name: string
-  check_in_type: 'staff_scan' | 'self_scan' | 'manual_lookup'
+  check_in_type: 'staff_scan' | 'self_scan' | 'manual_lookup' | 'booth_skipped_gate'
   checked_in_at: string
 }
 
@@ -44,6 +50,7 @@ export type Booth = {
   coordinate_y?: number | null
   qr_code: string
   points: number
+  max_bonus_points: number
   exhibitor_user_id?: string | null
   is_active: boolean
   created_at: string
@@ -55,6 +62,8 @@ export type BoothScanEvent = {
   user_id: string
   booth_id: string
   points_awarded: number
+  bonus_points: number
+  awarded_by?: string | null
   scanned_at: string
 }
 

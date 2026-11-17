@@ -1,20 +1,21 @@
 "use client"
 
-import { QRCodeSVG } from "qrcode.react"
+import PersonalQr from "@/shared/components/PersonalQr/PersonalQr"
 
 import styles from "./Dashboard.module.css"
 
 type AccountQrCardProps = {
   accountId: string
   email?: string | null
+  /** visitor_tickets.qr_code; null when the ticket could not be issued. */
+  qrToken: string | null
 }
 
-// "Account ID" QR shown on the participant dashboard. Booth admins scan it to hand out
-// points, and it doubles as the entry pass for the live event. The encoded value is the
-// Supabase user id — the same id competition_registrations.user_id references, so a scan
-// resolves both the visitor's registrations and the point-assignment target.
-// Mirrors the visitor QR from the itb-insight booth demo (reference/itb-insight).
-export default function AccountQrCard({ accountId, email }: AccountQrCardProps) {
+// "Account ID" QR shown on the participant dashboard. Booth staff scan it to hand out
+// points, and gate staff scan it at entry. It encodes the visitor ticket token (see
+// src/lib/qr.ts), which maps to the account through visitor_tickets.user_id — never the
+// raw user id, which is not secret and cannot be revoked.
+export default function AccountQrCard({ accountId, email, qrToken }: AccountQrCardProps) {
   return (
     <section className={styles.qrCard}>
       <div className={styles.qrHeader}>
@@ -27,14 +28,7 @@ export default function AccountQrCard({ accountId, email }: AccountQrCardProps) 
       </div>
 
       <div className={styles.qrCode}>
-        <QRCodeSVG
-          value={accountId}
-          size={200}
-          level="H"
-          marginSize={2}
-          fgColor="#08090f"
-          bgColor="#ffffff"
-        />
+        {qrToken ? <PersonalQr token={qrToken} size={200} /> : <p className={styles.qrHint}>QR belum tersedia.</p>}
       </div>
 
       <div className={styles.qrMeta}>

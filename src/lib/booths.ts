@@ -1,12 +1,11 @@
-/* 
-Server-side data layer for booth visit feature.
-[!!] FALSE IMPLEMENTATION
-*/
+// Server-side data layer for booths. Points are awarded by booth staff scanning the
+// visitor's personal QR (docs/QR-FEATURES.md).
 
-
-import { createServiceClient } from '@/lib/supabase/server'
-import { type Booth, type BoothScanEvent } from '@/lib/types/database'
 import { recordAuditLog } from '@/lib/audit'
+import { processGateCheckIn } from '@/lib/check-in'
+import { parseVisitorQr } from '@/lib/qr'
+import { createServiceClient } from '@/lib/supabase/server'
+import { type Booth, type UserRole } from '@/lib/types/database'
 
 export async function getActiveBooths(category?: string): Promise<Booth[]> {
   const supabase = createServiceClient()
@@ -28,108 +27,233 @@ export async function getActiveBooths(category?: string): Promise<Booth[]> {
   return data as Booth[]
 }
 
-export async function getBoothByQrCode(qrCode: string): Promise<Booth | null> {
-  const supabase = createServiceClient()
-  const { data, error } = await supabase
-    .from('booths')
-    .select('*')
-    .eq('qr_code', qrCode.trim())
-    .eq('is_active', true)
-    .maybeSingle()
-
-  if (error || !data) {
-    return null
-  }
-
-  return data as Booth
+type Visitor = {
+  userId: string
+  fullName: string
+  institution: string | null
 }
 
-export type BoothScanResult =
+export type BoothAwardResult =
   | {
       ok: true
       booth: Booth
+      visitor: Visitor
       pointsAwarded: number
+      bonusPoints: number
       alreadyVisited: boolean
+      skippedGate: boolean
       totalPoints: number
       totalVisited: number
     }
   | {
+      // Visitor never scanned at the gate. The staff UI asks them to confirm with the visitor
+      // ("Belum absen di gate"), then resends with confirmSkippedGate to record attendance.
       ok: false
-      code: 'GATE_CHECKIN_REQUIRED' | 'BOOTH_NOT_FOUND' | 'DATABASE_ERROR' | 'UNAUTHORIZED'
+      code: 'GATE_CHECKIN_REQUIRED'
+      message: string
+      booth: Booth
+      visitor: Visitor
+      pointsToAward: number
+    }
+  | {
+      ok: false
+      code:
+        | 'INVALID_QR'
+        | 'TICKET_NOT_FOUND'
+        | 'BOOTH_NOT_FOUND'
+        | 'BOOTH_NOT_ASSIGNED'
+        | 'BOOTH_AMBIGUOUS'
+        | 'INVALID_BONUS'
+        | 'SELF_AWARD'
+        | 'DATABASE_ERROR'
       message: string
     }
 
-export async function recordBoothScan(userId: string, boothQrCode: string): Promise<BoothScanResult> {
+type BoothResolution =
+  | { ok: true; booth: Booth }
+  | { ok: false; code: 'BOOTH_NOT_FOUND' | 'BOOTH_NOT_ASSIGNED' | 'BOOTH_AMBIGUOUS'; message: string }
+
+// Which booth the scanning staff awards for. Admins must name it; booth staff and exhibitors
+// are limited to their assignments and may omit it when they have exactly one.
+async function resolveStaffBooth(staffUserId: string, staffRole: UserRole, boothId?: string): Promise<BoothResolution> {
   const supabase = createServiceClient()
+  let targetId = boothId
 
-  // 1. Verify booth exists
-  const booth = await getBoothByQrCode(boothQrCode)
-  if (!booth) {
-    return { ok: false, code: 'BOOTH_NOT_FOUND', message: 'Wahana/Booth tidak ditemukan atau tidak aktif.' }
-  }
+  if (staffRole !== 'admin') {
+    const [{ data: assigned }, { data: owned }] = await Promise.all([
+      supabase.from('booth_staff').select('booth_id').eq('user_id', staffUserId),
+      supabase.from('booths').select('id').eq('exhibitor_user_id', staffUserId),
+    ])
+    const allowed = new Set([...(assigned ?? []).map((r) => r.booth_id as string), ...(owned ?? []).map((r) => r.id as string)])
 
-  // 2. QRS-05: Dependensi gate -> booth (scan booth hanya aktif untuk user yang sudah check-in di gate)
-  const { data: ticket, error: ticketError } = await supabase
-    .from('visitor_tickets')
-    .select('checked_in')
-    .eq('user_id', userId)
-    .maybeSingle()
-
-  if (ticketError || !ticket || !ticket.checked_in) {
-    return {
-      ok: false,
-      code: 'GATE_CHECKIN_REQUIRED',
-      message: 'Anda harus check-in di Gate utama terlebih dahulu sebelum memindai booth.',
+    if (allowed.size === 0) {
+      return { ok: false, code: 'BOOTH_NOT_ASSIGNED', message: 'Akun Anda belum ditugaskan ke booth mana pun.' }
+    }
+    if (targetId && !allowed.has(targetId)) {
+      return { ok: false, code: 'BOOTH_NOT_ASSIGNED', message: 'Anda tidak ditugaskan di booth ini.' }
+    }
+    if (!targetId) {
+      if (allowed.size > 1) {
+        return { ok: false, code: 'BOOTH_AMBIGUOUS', message: 'Anda ditugaskan di beberapa booth. Pilih booth terlebih dahulu.' }
+      }
+      targetId = [...allowed][0]
     }
   }
 
-  // 3. Check if already scanned (idempotent / double-count protection)
-  const { data: existingScan } = await supabase
-    .from('booth_scan_events')
-    .select('id, points_awarded, scanned_at')
-    .eq('user_id', userId)
-    .eq('booth_id', booth.id)
+  if (!targetId) {
+    return { ok: false, code: 'BOOTH_AMBIGUOUS', message: 'Pilih booth terlebih dahulu.' }
+  }
+
+  const { data, error } = await supabase
+    .from('booths')
+    .select('*')
+    .eq('id', targetId)
+    .eq('is_active', true)
     .maybeSingle()
 
-  if (existingScan) {
-    const progress = await getUserBoothProgress(userId)
+  if (error || !data) {
+    return { ok: false, code: 'BOOTH_NOT_FOUND', message: 'Booth tidak ditemukan atau tidak aktif.' }
+  }
+
+  return { ok: true, booth: data as Booth }
+}
+
+// Booth staff scan a visitor's personal QR to award the booth's standard points plus an
+// optional bonus (capped per booth). One award per visitor per booth.
+export async function awardBoothPoints(params: {
+  staffUserId: string
+  staffRole: UserRole
+  visitorQr: unknown
+  boothId?: string
+  bonusPoints?: number
+  confirmSkippedGate?: boolean
+}): Promise<BoothAwardResult> {
+  const { staffUserId, staffRole, visitorQr, boothId, bonusPoints = 0, confirmSkippedGate = false } = params
+
+  const token = parseVisitorQr(visitorQr)
+  if (!token) {
+    return { ok: false, code: 'INVALID_QR', message: 'QR ini bukan QR profil pengunjung ITB Insight.' }
+  }
+
+  const resolved = await resolveStaffBooth(staffUserId, staffRole, boothId)
+  if (!resolved.ok) return resolved
+  const booth = resolved.booth
+
+  if (!Number.isInteger(bonusPoints) || bonusPoints < 0 || bonusPoints > (booth.max_bonus_points ?? 0)) {
+    return {
+      ok: false,
+      code: 'INVALID_BONUS',
+      message: `Bonus harus bilangan bulat antara 0 dan ${booth.max_bonus_points ?? 0}.`,
+    }
+  }
+
+  const supabase = createServiceClient()
+
+  const { data: ticket, error: ticketError } = await supabase
+    .from('visitor_tickets')
+    .select('id, user_id, checked_in, profiles(full_name, institution)')
+    .eq('qr_code', token)
+    .maybeSingle()
+
+  if (ticketError || !ticket) {
+    return { ok: false, code: 'TICKET_NOT_FOUND', message: 'Pengunjung tidak ditemukan. Minta pengunjung memuat ulang QR-nya.' }
+  }
+
+  if (ticket.user_id === staffUserId) {
+    return { ok: false, code: 'SELF_AWARD', message: 'Anda tidak dapat memberi poin ke akun sendiri.' }
+  }
+
+  const profile = Array.isArray(ticket.profiles) ? ticket.profiles[0] : ticket.profiles
+  const visitor: Visitor = {
+    userId: ticket.user_id,
+    fullName: profile?.full_name || 'Pengunjung',
+    institution: profile?.institution || null,
+  }
+
+  const alreadyVisited = async (): Promise<BoothAwardResult> => {
+    const progress = await getUserBoothProgress(visitor.userId)
     return {
       ok: true,
       booth,
+      visitor,
       pointsAwarded: 0,
+      bonusPoints: 0,
       alreadyVisited: true,
+      skippedGate: false,
       totalPoints: progress.totalPoints,
       totalVisited: progress.totalVisited,
     }
   }
 
-  // 4. Record new scan event
-  const points = booth.points || 10
+  const { data: existingScan } = await supabase
+    .from('booth_scan_events')
+    .select('id')
+    .eq('user_id', visitor.userId)
+    .eq('booth_id', booth.id)
+    .maybeSingle()
+
+  if (existingScan) return alreadyVisited()
+
+  const basePoints = booth.points ?? 10
+  const total = basePoints + bonusPoints
+
+  let skippedGate = false
+  if (!ticket.checked_in) {
+    if (!confirmSkippedGate) {
+      return {
+        ok: false,
+        code: 'GATE_CHECKIN_REQUIRED',
+        message: 'Pengunjung belum absen di gate. Konfirmasi ke pengunjung sebelum memberi poin.',
+        booth,
+        visitor,
+        pointsToAward: total,
+      }
+    }
+
+    const checkIn = await processGateCheckIn({
+      qrCode: token,
+      staffUserId,
+      gateName: `booth:${booth.slug}`,
+      checkInType: 'booth_skipped_gate',
+    })
+    if (!checkIn.ok) {
+      return { ok: false, code: 'DATABASE_ERROR', message: checkIn.message }
+    }
+    skippedGate = !checkIn.alreadyCheckedIn
+  }
+
   const { error: insertError } = await supabase.from('booth_scan_events').insert({
-    user_id: userId,
+    user_id: visitor.userId,
     booth_id: booth.id,
-    points_awarded: points,
+    points_awarded: total,
+    bonus_points: bonusPoints,
+    awarded_by: staffUserId,
   })
 
   if (insertError) {
-    return { ok: false, code: 'DATABASE_ERROR', message: 'Gagal mencatat kunjungan booth.' }
+    // unique (user_id, booth_id): another staff device awarded this visitor concurrently.
+    if (insertError.code === '23505') return alreadyVisited()
+    return { ok: false, code: 'DATABASE_ERROR', message: 'Gagal mencatat poin booth.' }
   }
 
   await recordAuditLog({
-    userId,
-    action: 'BOOTH_SCAN',
-    targetTable: 'booths',
+    userId: staffUserId,
+    action: 'BOOTH_POINTS_AWARDED',
+    targetTable: 'booth_scan_events',
     recordId: booth.id,
-    metadata: { boothName: booth.name, points },
+    metadata: { boothName: booth.name, visitorId: visitor.userId, basePoints, bonusPoints, skippedGate },
   })
 
-  const progress = await getUserBoothProgress(userId)
+  const progress = await getUserBoothProgress(visitor.userId)
 
   return {
     ok: true,
     booth,
-    pointsAwarded: points,
+    visitor,
+    pointsAwarded: total,
+    bonusPoints,
     alreadyVisited: false,
+    skippedGate,
     totalPoints: progress.totalPoints,
     totalVisited: progress.totalVisited,
   }
