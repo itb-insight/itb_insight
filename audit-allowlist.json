@@ -1,0 +1,7 @@
+{
+  "GHSA-jrc7-96c5-q579": {
+    "package": "maplibre-gl",
+    "reason": "DOM.sanitize() bypass. Maps are disabled (NEXT_PUBLIC_MAPS_DISABLED=true) and map content is static, not user-supplied. Upgrade to maplibre-gl 6.x before enabling the map.",
+    "expires": "2026-12-31"
+  }
+}

@@ -1,44 +1,8 @@
-import { type NextRequest } from 'next/server'
+import { apiError } from '@/lib/api-response'
 
-import { apiError, apiSuccess } from '@/lib/api-response'
-import { submitPartnershipInquiry } from '@/lib/partners'
-
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const { cooperationType, institutionName, contactPerson, jobTitle, industry, scale, email, phone, description } =
-      body
-
-    if (!institutionName || !contactPerson || !email || !description) {
-      return apiError(
-        'INVALID_INPUT',
-        'Parameter institutionName, contactPerson, email, dan description wajib diisi.',
-        400,
-      )
-    }
-
-    const result = await submitPartnershipInquiry({
-      cooperationType: cooperationType || 'sponsorship',
-      institutionName,
-      contactPerson,
-      jobTitle,
-      industry,
-      scale,
-      email,
-      phone,
-      description,
-    })
-
-    if (!result.ok) {
-      return apiError(result.code, result.message, 400)
-    }
-
-    return apiSuccess({
-      message: 'Pengajuan kemitraan Anda telah diterima. Tim kami akan segera menghubungi Anda.',
-      inquiryId: result.inquiry.id,
-    })
-  } catch (err) {
-    console.error('[API Partnership Inquiry Error]', err)
-    return apiError('SERVER_ERROR', 'Terjadi kesalahan saat memproses formulir kemitraan.', 500)
-  }
+// Disabled until the partnership form ships in the UI. Before re-enabling: validate the body with
+// zod (types + max lengths), add a rate limit and Turnstile (see src/app/api/feedback/[slug]),
+// then call submitPartnershipInquiry from src/lib/partners.ts.
+export async function POST() {
+  return apiError('NOT_AVAILABLE', 'Formulir kemitraan belum dibuka.', 404)
 }

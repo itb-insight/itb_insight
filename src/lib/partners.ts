@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { createServiceClient } from '@/lib/supabase/server'
 import { type Partner, type PartnershipInquiry } from '@/lib/types/database'
 import { recordAuditLog } from '@/lib/audit'

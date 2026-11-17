@@ -109,6 +109,7 @@ export const config = {
      * - (api IS matched so countdown mode can block it; it's passed through otherwise)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ttf)$).*)',
+    // Static files never need the session. Keep this list in sync with what public/ serves.
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|ttf|otf|woff|woff2|mp4|webm|glb|gltf|json|lottie|txt|xml|webmanifest)$).*)',
   ],
 }

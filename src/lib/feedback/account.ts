@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { createServiceClient } from '@/lib/supabase/server'
 
 export type SubmitterAccount = { id: string; email?: string | null }

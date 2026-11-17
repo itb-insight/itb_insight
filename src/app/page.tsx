@@ -1,4 +1,5 @@
 import LandingPageHifi from "@/features/landing/components/LandingPageHifi/LandingPageHifi"
+import { jsonLd } from "@/lib/json-ld"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
 
@@ -22,7 +23,7 @@ export default function HomePage() {
     <LandingPageHifi>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(eventJsonLd) }}
       />
     </LandingPageHifi>
   )

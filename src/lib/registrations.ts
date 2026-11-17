@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { getCompetitionBySlug, type CompetitionSummary } from '@/lib/competitions'
 

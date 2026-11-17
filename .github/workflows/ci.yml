@@ -5,6 +5,14 @@ on:
     branches: [dev, main]
   push:
     branches: [dev, main]
+  schedule:
+    # Mondays 08:00 WIB: new advisories show up even when nobody pushes.
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+
+# Read-only token: CI never needs to write to the repo.
+permissions:
+  contents: read
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -12,8 +20,15 @@ concurrency:
 
 jobs:
   check:
+    name: Typecheck, lint, tests, build
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      # Placeholders only. CI must never hold production keys; nothing here talks to Supabase.
+      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+      NEXT_PUBLIC_SITE_URL: https://ci.invalid
     steps:
       - uses: actions/checkout@v4
 
@@ -27,11 +42,30 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Unit tests
-        run: npm test
-
-      # Non-blocking until the pre-existing lint errors (17 as of 2026-11-10, none in
-      # feedback code) are fixed. Then delete `continue-on-error` so lint gates merges.
+      # Blocking. Pre-existing errors are baselined in eslint-suppressions.json; new ones fail.
+      # After fixing a baselined error, run `npm run lint:prune`.
       - name: Lint
         run: npm run lint
-        continue-on-error: true
+
+      # Unit tests (src/**/*.test.ts) + repo guardrails (tests/guardrails): API auth, RLS,
+      # server/client boundary, filter injection, secrets, asset budget, dev routes.
+      - name: Tests and guardrails
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  audit:
+    name: Production dependency audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # Fails on unapproved high/critical advisories; exceptions live in audit-allowlist.json.
+      - name: npm audit (production dependencies)
+        run: npm run audit:prod

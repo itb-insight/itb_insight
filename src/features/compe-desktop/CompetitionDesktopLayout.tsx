@@ -255,7 +255,7 @@ export default function CompetitionDesktopLayout({
       {/* WRAPPER COUNTDOWN & FEE */}
       <div style={{ position: "relative", overflow: "hidden" }}>
         <img
-          src="/images/shape9.png"
+          src="/images/shape9.webp"
           alt=""
           loading="lazy"
           style={{
@@ -433,7 +433,7 @@ export default function CompetitionDesktopLayout({
       {/* WRAPPER PRIZEPOOL, TIMELINE, CONTACT */}
       <div style={{ position: "relative", overflow: "hidden" }}>
         <img
-          src="/images/shape10.png"
+          src="/images/shape10.webp"
           alt=""
           loading="lazy"
           style={{

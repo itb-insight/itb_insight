@@ -3,9 +3,7 @@ import { notFound } from 'next/navigation'
 
 import FeedbackPageDialog from '@/features/feedback/FeedbackPageDialog'
 import LandingPageHifi from '@/features/landing/components/LandingPageHifi/LandingPageHifi'
-import { resolveAccountIdentity, type FeedbackAccount } from '@/lib/feedback/account'
 import { getFeedbackFormBySlug, toPublicForm } from '@/lib/feedback/forms'
-import { createClient } from '@/lib/supabase/server'
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -21,10 +19,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-async function getAccount(): Promise<FeedbackAccount | null> {
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getUser()
-  return data.user ? resolveAccountIdentity({ id: data.user.id, email: data.user.email }) : null
+// Cached and shared by everyone who scans the QR (ISR): no cookies or per-user data here. The
+// dialog loads the visitor's name/email and the live open/closed state from the API.
+export const revalidate = 60
+
+// Forms live in the database: render each slug on its first request, then serve it from cache.
+export async function generateStaticParams() {
+  return []
 }
 
 export default async function FeedbackPage({ params }: PageProps) {
@@ -35,7 +36,7 @@ export default async function FeedbackPage({ params }: PageProps) {
   return (
     <>
       <LandingPageHifi />
-      <FeedbackPageDialog form={toPublicForm(form)} account={await getAccount()} />
+      <FeedbackPageDialog form={toPublicForm(form)} />
     </>
   )
 }

@@ -1,0 +1,1 @@
+QR works only if user within coordinate of venue.

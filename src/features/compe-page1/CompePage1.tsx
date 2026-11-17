@@ -1,5 +1,6 @@
 "use client";
 
+import { inter } from "@/shared/fonts/inter"
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -27,7 +28,7 @@ const COMPETITIONS = [
     slug: "business-plan-competition",
     title: "BPC",
     gradient: "linear-gradient(135deg, #D0FFC7 0%, #76DF62 100%)",
-    icon: "/images/icon-bpc.png"
+    icon: "/images/icon-bpc.webp"
   },
   {
     id: 3,
@@ -85,7 +86,7 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
   };
 
   return (
-    <div style={{
+    <div className={inter.variable} style={{
       background: "linear-gradient(180deg, #294D97 0%, #091B3F 100%)",
       minHeight: "100svh",
       width: "100%",
@@ -97,8 +98,6 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
       color: "#FFFFFF",
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;700;900&family=Inter:wght@400&family=Roboto+Mono:wght@400;500;700&display=swap');
-
         @font-face {
           font-family: 'EXCRATCH';
           src: url('/fonts/EXCRATCH.otf') format('opentype');

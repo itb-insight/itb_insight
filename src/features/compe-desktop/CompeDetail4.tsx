@@ -278,7 +278,7 @@ export default function SARLandingPage() {
           }}
         >
           <img
-            src="/images/oe.png"
+            src="/images/oe.webp"
             alt="OE Logo"
             loading="lazy"
             style={{
@@ -329,7 +329,7 @@ export default function SARLandingPage() {
       {/* WRAPPER COUNTDOWN & FEE */}
       <div style={{ position: "relative", overflow: "hidden" }}>
         <img
-          src="/images/shape9.png"
+          src="/images/shape9.webp"
           alt="Background Shape 9"
           loading="lazy"
           style={{
@@ -486,7 +486,7 @@ export default function SARLandingPage() {
       {/* WRAPPER PRIZEPOOL, TIMELINE, CONTACT */}
       <div style={{ position: "relative", overflow: "hidden" }}>
         <img
-          src="/images/shape10.png"
+          src="/images/shape10.webp"
           alt="Background Shape 10"
           loading="lazy"
           style={{

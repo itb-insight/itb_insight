@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { jsonLd } from "@/lib/json-ld";
 import type { Metadata } from "next";
 import MobileHeader from "@/features/competition/MobileHeader";
 import PageBackground from "@/features/competition/PageBackground";
@@ -58,7 +59,7 @@ export default async function CompetitionPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(competitionJsonLd(competition)),
+          __html: jsonLd(competitionJsonLd(competition)),
         }}
       />
 

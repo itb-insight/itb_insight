@@ -4,6 +4,8 @@ import { apiError, apiSuccess, unauthorizedResponse } from '@/lib/api-response'
 import { getAuthenticatedUser } from '@/lib/auth'
 import { checkRateLimit, rateLimitResponse, sensitiveMutationRateLimit } from '@/lib/rate-limit'
 import { createServiceClient } from '@/lib/supabase/server'
+import { isRegistrationSwitchOn } from '@/lib/competitions'
+import { UUID_PATTERN } from '@/lib/input'
 import { isRegistrationOpen } from '@/lib/team-registration'
 
 type TeamRegistrationPayload = {
@@ -53,8 +55,9 @@ export async function POST(request: NextRequest) {
     return apiError('INVALID_JSON', 'Format request tidak valid.', 400)
   }
 
-  const teamId = payload.teamId?.trim()
+  const teamId = typeof payload?.teamId === 'string' ? payload.teamId.trim() : ''
   if (!teamId) return apiError('TEAM_REQUIRED', 'Tim wajib dipilih.', 400)
+  if (!UUID_PATTERN.test(teamId)) return apiError('TEAM_NOT_FOUND', 'Tim tidak ditemukan.', 404)
 
   const supabase = createServiceClient()
   const { data: teamData, error: teamError } = await supabase
@@ -80,7 +83,11 @@ export async function POST(request: NextRequest) {
   }
 
   if (!competition) return apiError('COMPETITION_NOT_FOUND', 'Kompetisi tidak ditemukan.', 404)
-  if (!competition.is_active || !isRegistrationOpen(competition.registration_open, competition.registration_close)) {
+  if (
+    !isRegistrationSwitchOn(competition.slug) ||
+    !competition.is_active ||
+    !isRegistrationOpen(competition.registration_open, competition.registration_close)
+  ) {
     return apiError('REGISTRATION_CLOSED', 'Registrasi kompetisi sedang tidak dibuka.', 400)
   }
 

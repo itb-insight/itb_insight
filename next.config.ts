@@ -1,9 +1,50 @@
 import type { NextConfig } from "next";
 
+/**
+ * Security headers for every response. Checked by src/next-config.test.ts.
+ * - frame-ancestors / X-Frame-Options: no framing (clickjacking on the profile form and the
+ *   booth "give points" buttons)
+ * - Permissions-Policy: camera for the QR scanner and geolocation for self check-in, both
+ *   first-party only; everything else off
+ * There is no script-src policy yet: Next's inline bootstrap scripts need nonces, which would
+ * force every page to render dynamically.
+ */
+export const securityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+  },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(self), geolocation=(self), microphone=(), payment=(), usb=(), interest-cohort=()",
+  },
+  { key: "Strict-Transport-Security", value: "max-age=63072000" },
+];
+
+const ONE_YEAR_IMMUTABLE = "public, max-age=31536000, immutable";
+const ONE_DAY_SWR = "public, max-age=86400, stale-while-revalidate=604800";
+
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   experimental: {
-    authInterrupts: true, // To test unauthorized error page
-  }
+    authInterrupts: true, // unauthorized() in src/app/test-unauthorized (dev only)
+  },
+  async headers() {
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // Versioned files: change the name (e.g. scrub-16x9-v3.mp4) when the content changes.
+      { source: "/itb-model/:path*", headers: [{ key: "Cache-Control", value: ONE_YEAR_IMMUTABLE }] },
+      { source: "/fonts/:path*", headers: [{ key: "Cache-Control", value: ONE_YEAR_IMMUTABLE }] },
+      // Replaced in place now and then: cache a day, refresh in the background for a week.
+      {
+        source: "/:dir(images|deco|assets|media-partner|sponsors|events|models|map-pin)/:path*",
+        headers: [{ key: "Cache-Control", value: ONE_DAY_SWR }],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

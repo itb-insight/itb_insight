@@ -2,6 +2,7 @@ import { createHash } from 'crypto'
 import { type NextRequest, NextResponse } from 'next/server'
 
 import { type ApiErrorEnvelope } from '@/lib/api-response'
+import { clientIpFromHeaders } from '@/lib/client-ip'
 
 // In-memory sliding-window rate limiter. Good enough for the MVP (single instance);
 // swap for a shared store (Upstash/Redis) before horizontal scaling.
@@ -13,6 +14,7 @@ type RateLimitScope =
   | 'team-leave'
   | 'team-join'
   | 'feedback-submit'
+  | 'self-check-in'
 
 type RateLimitOptions = {
   readonly scope: RateLimitScope
@@ -51,13 +53,9 @@ function hashedValue(value: string) {
   return createHash('sha256').update(value).digest('hex').slice(0, 24)
 }
 
-// Behind the Cloudflare proxy, x-forwarded-for at the origin can be a Cloudflare edge IP
-// shared by many visitors; cf-connecting-ip is the real client.
+// See src/lib/client-ip.ts: cf-connecting-ip is trusted only from Cloudflare's own addresses.
 export function getClientIp(request: NextRequest): string | null {
-  const cfIp = request.headers.get('cf-connecting-ip')?.trim()
-  const forwardedFor = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-  const realIp = request.headers.get('x-real-ip')?.trim()
-  return cfIp || forwardedFor || realIp || null
+  return clientIpFromHeaders(request.headers)
 }
 
 function requestIpKey(request: NextRequest) {

@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useRef } from "react"
 import Image from "next/image"
-import { motion } from "framer-motion"
+// LazyMotion + m: ships only the DOM animation features this carousel uses (~-25 KB gzipped).
+import { domAnimation, LazyMotion, m } from "framer-motion"
 import styles from "./GallerySectionHifi.module.css"
 
 const slides = [
@@ -88,51 +89,53 @@ export default function GallerySectionHifi() {
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        {slides.map((slide, i) => {
-          let offset = i - current
-          if (offset > slides.length / 2) offset -= slides.length
-          if (offset < -slides.length / 2) offset += slides.length
-
-          const xPercent = offset * 107
-          const isActive = offset === 0
-          const isVisible = Math.abs(offset) <= 1
-
-          return (
-            <motion.div
-              key={i}
-              className={styles.card}
-              animate={{
-                x: `${xPercent}%`,
-                opacity: isActive ? 1 : isVisible ? 1 : 0,
-                zIndex: isActive ? 3 : 2,
-              }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              style={{
-                position: "absolute",
-                left: "50%",
-                translateX: "-50%",
-                pointerEvents: isVisible ? "auto" : "none",
-              }}
-              onClick={() => {
-                if (offset === -1) prev()
-                if (offset === 1) next()
-              }}
-            >
-              <div className={styles.imageClip}>
-                <Image
-                  src={slide.src}
-                  alt={slide.alt}
-                  fill
-                  sizes={isActive ? "(max-width: 768px) 75vw, 40vw" : "(max-width: 768px) 30vw, 20vw"}
-                  className={`${styles.cardImage} ${
-                    slide.src === "/images/gallery/stage.webp" ? styles.cardImageStage : ""
-                  }`}
-                  priority={isActive}
-                />
-              </div>
-            </motion.div>
-          )
-        })}
+        <LazyMotion features={domAnimation}>
+          {slides.map((slide, i) => {
+            let offset = i - current
+            if (offset > slides.length / 2) offset -= slides.length
+            if (offset < -slides.length / 2) offset += slides.length
+  
+            const xPercent = offset * 107
+            const isActive = offset === 0
+            const isVisible = Math.abs(offset) <= 1
+  
+            return (
+              <m.div
+                key={i}
+                className={styles.card}
+                animate={{
+                  x: `${xPercent}%`,
+                  opacity: isActive ? 1 : isVisible ? 1 : 0,
+                  zIndex: isActive ? 3 : 2,
+                }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  translateX: "-50%",
+                  pointerEvents: isVisible ? "auto" : "none",
+                }}
+                onClick={() => {
+                  if (offset === -1) prev()
+                  if (offset === 1) next()
+                }}
+              >
+                <div className={styles.imageClip}>
+                  <Image
+                    src={slide.src}
+                    alt={slide.alt}
+                    fill
+                    sizes={isActive ? "(max-width: 768px) 75vw, 40vw" : "(max-width: 768px) 30vw, 20vw"}
+                    className={`${styles.cardImage} ${
+                      slide.src === "/images/gallery/stage.webp" ? styles.cardImageStage : ""
+                    }`}
+                    priority={isActive}
+                  />
+                </div>
+              </m.div>
+            )
+          })}
+        </LazyMotion>
       </div>
     </section>
   )

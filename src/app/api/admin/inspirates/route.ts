@@ -2,6 +2,7 @@ import { type NextRequest } from 'next/server'
 
 import { apiError, apiSuccess } from '@/lib/api-response'
 import { getScopedUser } from '@/lib/admin'
+import { parseTextFields } from '@/lib/input'
 import { createInspiratesRecord, getInspiratesRecords } from '@/lib/inspirates'
 
 export const dynamic = 'force-dynamic'
@@ -28,18 +29,29 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = await request.json()
-    const { schoolName, activityDate, participantCount, disseminationMembers, notes } = body
-
-    if (!schoolName || typeof participantCount !== 'number') {
-      return apiError('INVALID_INPUT', 'Parameter schoolName dan participantCount wajib diisi.', 400)
+    const body = await request.json().catch(() => null)
+    const fields = parseTextFields(body, { schoolName: 200, activityDate: 10, notes: 2000 })
+    if (!fields.ok) {
+      return apiError('INVALID_INPUT', `Kolom ${fields.field} tidak valid.`, 400)
     }
+    const { schoolName, activityDate, notes } = fields.values
+    const { participantCount, disseminationMembers } = (body ?? {}) as Record<string, unknown>
+
+    if (!schoolName || typeof participantCount !== 'number' || !Number.isInteger(participantCount) || participantCount < 0 || participantCount > 100_000) {
+      return apiError('INVALID_INPUT', 'Parameter schoolName dan participantCount (bilangan bulat) wajib diisi.', 400)
+    }
+    if (activityDate && !/^\d{4}-\d{2}-\d{2}$/.test(activityDate)) {
+      return apiError('INVALID_INPUT', 'activityDate harus berformat YYYY-MM-DD.', 400)
+    }
+    const members = Array.isArray(disseminationMembers)
+      ? disseminationMembers.filter((m): m is string => typeof m === 'string').map((m) => m.trim().slice(0, 120)).filter(Boolean).slice(0, 50)
+      : []
 
     const result = await createInspiratesRecord({
       schoolName,
       activityDate: activityDate || new Date().toISOString().split('T')[0],
       participantCount,
-      disseminationMembers: Array.isArray(disseminationMembers) ? disseminationMembers : [],
+      disseminationMembers: members,
       notes,
       createdBy: auth.user.id,
     })

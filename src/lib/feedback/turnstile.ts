@@ -3,6 +3,8 @@
 // NEXT_PUBLIC_TURNSTILE_SITE_KEY is set. Set both together, or neither (local dev).
 // https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
 
+import 'server-only'
+
 const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
 
 export function isTurnstileEnabled() {

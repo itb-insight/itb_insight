@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { randomBytes } from 'crypto'
 
 import { type SupabaseClient } from '@supabase/supabase-js'

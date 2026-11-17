@@ -1,6 +1,7 @@
 import { type User } from '@supabase/supabase-js'
 
 import { apiError, type ApiErrorCode } from '@/lib/api-response'
+import { isRegistrationSwitchOn } from '@/lib/competitions'
 import { findOrCreateCompetitionRow, type CompetitionRow } from '@/lib/registrations'
 
 type ServiceClient = ReturnType<typeof import('@/lib/supabase/server').createServiceClient>
@@ -28,6 +29,10 @@ export function isRegistrationOpen(registrationOpen: string | null, registration
 }
 
 export async function getTeamCompetition(competitionSlug: string): Promise<TeamCompetitionResult> {
+  if (!isRegistrationSwitchOn(competitionSlug)) {
+    return { ok: false, code: 'REGISTRATION_CLOSED', message: 'Registrasi kompetisi sedang tidak dibuka.', status: 400 }
+  }
+
   const competitionResult = await findOrCreateCompetitionRow(competitionSlug)
 
   if (!competitionResult.ok) {

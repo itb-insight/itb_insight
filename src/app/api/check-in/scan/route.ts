@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const { qrCode, gateName } = body
+    const { qrCode, gateName } = body as { qrCode?: unknown; gateName?: unknown }
 
     if (!qrCode || typeof qrCode !== 'string') {
       return apiError('INVALID_INPUT', 'Parameter qrCode wajib diisi.', 400)
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const result = await processGateCheckIn({
       qrCode,
       staffUserId: auth.user.id,
-      gateName: gateName || 'main_gate',
+      gateName: typeof gateName === 'string' && gateName.trim() ? gateName.trim().slice(0, 64) : 'main_gate',
       checkInType: 'staff_scan',
     })
 

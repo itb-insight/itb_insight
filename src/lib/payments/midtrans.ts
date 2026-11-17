@@ -1,3 +1,5 @@
+import 'server-only'
+
 import crypto, { randomBytes } from 'crypto'
 
 import { createServiceClient } from '@/lib/supabase/server'

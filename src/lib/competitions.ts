@@ -10,6 +10,8 @@
 
 export type CompetitionSummary = {
   _id: string
+  /** Same code as src/features/competition/data.ts; drives the REGISTER_OPEN_<code> switch. */
+  code: 'SAR' | 'MOR' | 'BPC' | 'OE'
   title: string
   slug: { current: string }
   description?: unknown
@@ -28,6 +30,7 @@ export type CompetitionSummary = {
 const competitions: CompetitionSummary[] = [
   {
     _id: 'safety-and-rescue-robot-competition',
+    code: 'SAR',
     title: 'Safety and Rescue Robot Competition',
     slug: { current: 'safety-and-rescue-robot-competition' },
     description: 'Lomba robot Search and Rescue (SAR) nasional bagi mahasiswa/i di Indonesia.',
@@ -41,6 +44,7 @@ const competitions: CompetitionSummary[] = [
   },
   {
     _id: 'microdrone-obstacle-race',
+    code: 'MOR',
     title: 'Drone Soccer Competition', // dulu Microdrone Obstacle Race; slug tetap
     slug: { current: 'microdrone-obstacle-race' },
     description: 'Lomba drone nasional bagi peserta berusia di atas 10 tahun.',
@@ -54,6 +58,7 @@ const competitions: CompetitionSummary[] = [
   },
   {
     _id: 'business-plan-competition',
+    code: 'BPC',
     title: 'Business Plan Competition',
     slug: { current: 'business-plan-competition' },
     description: 'Kompetisi inovasi bisnis nasional bertema Artificial Intelligence.',
@@ -67,6 +72,7 @@ const competitions: CompetitionSummary[] = [
   },
   {
     _id: 'olimpiade-engineering',
+    code: 'OE',
     title: 'Olimpiade Engineering',
     slug: { current: 'olimpiade-engineering' },
     description: 'Olimpiade engineering nasional untuk siswa SMA/SMK/MA sederajat.',
@@ -105,4 +111,14 @@ export async function getCompetitionFee(slug: string): Promise<number | null> {
   const competition = await getCompetitionBySlug(slug)
   const fee = competition?.registrationFee
   return typeof fee === 'number' && Number.isInteger(fee) && fee > 0 ? fee : null
+}
+
+/**
+ * The same switch as the "Register Now" button (src/features/competition/status.ts): closed unless
+ * REGISTER_OPEN_<code>=true on the server. Every registration/team API checks it, so a closed
+ * competition cannot be registered for by calling the API directly.
+ */
+export function isRegistrationSwitchOn(slug: string): boolean {
+  const competition = competitions.find((entry) => entry.slug.current === slug)
+  return Boolean(competition) && process.env[`REGISTER_OPEN_${competition!.code}`] === 'true'
 }

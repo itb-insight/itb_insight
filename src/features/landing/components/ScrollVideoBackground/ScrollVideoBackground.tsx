@@ -17,14 +17,21 @@ import styles from "./ScrollVideoBackground.module.css"
  * plays at normal speed and loops. Inside a transition's scroll range, playback
  * pauses and the transition segment follows the scroll position (both directions).
  *
- * Both videos (16:9 and 9:16) share these timestamps. They are re-encodes of the
- * originals in public/itb-model/fallback/ with a keyframe every 10 frames, which
- * is what makes seeking smooth.
+ * Both videos (16:9 and 9:16) share these timestamps. They are H.264 re-encodes of
+ * the renders in design-sources/itb-model/fallback/ with a keyframe every 10 frames,
+ * which is what makes seeking smooth. H.264 only: phones decode it in hardware, while
+ * VP9 often falls back to software decoding and costs scroll smoothness. Encoding
+ * recipe: design-sources/README.md. Bump the -vN suffix when the content changes
+ * (the files are cached as immutable).
+ *
+ * Loading: nothing is downloaded with prefers-reduced-motion or Save-Data, and the
+ * download starts only after the page has loaded and the main thread is idle, so
+ * the video never competes with the page's own content.
  */
 
 const SOURCES = {
-  landscape: { webm: "/itb-model/fallback/scrub-16x9.webm", mp4: "/itb-model/fallback/scrub-16x9.mp4" },
-  portrait: { webm: "/itb-model/fallback/scrub-9x16.webm", mp4: "/itb-model/fallback/scrub-9x16.mp4" },
+  landscape: "/itb-model/fallback/scrub-16x9-v2.mp4", // 1280x720, ~6 MB
+  portrait: "/itb-model/fallback/scrub-9x16-v2.mp4", // 540x960, ~3.4 MB
 } as const
 
 /** Viewports narrower than square get the 9:16 video. */
@@ -115,10 +122,21 @@ function regionFor(transitions: ResolvedTransition[], scroll: number): Region {
   return { kind: "section", index: transitions.length }
 }
 
-function pickSource(orientation: keyof typeof SOURCES): string {
-  const probe = document.createElement("video")
-  const src = SOURCES[orientation]
-  return probe.canPlayType('video/webm; codecs="vp9"') ? src.webm : src.mp4
+/** Runs `fn` once the page has finished loading and the main thread is idle. */
+function afterPageLoad(fn: () => void): () => void {
+  let idleId: number | null = null
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
+  const schedule = () => {
+    if ("requestIdleCallback" in window) idleId = window.requestIdleCallback(fn, { timeout: 3000 })
+    else timeoutId = setTimeout(fn, 1000)
+  }
+  if (document.readyState === "complete") schedule()
+  else window.addEventListener("load", schedule, { once: true })
+  return () => {
+    window.removeEventListener("load", schedule)
+    if (idleId !== null) window.cancelIdleCallback(idleId)
+    if (timeoutId !== null) clearTimeout(timeoutId)
+  }
 }
 
 /**
@@ -169,6 +187,8 @@ export default function ScrollVideoBackground() {
   useEffect(() => {
     const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
     if (conn?.saveData) return // Respect data saver: keep the plain background.
+    // Reduced motion: the video would only ever show a still frame. Skip the download.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
     const mql = window.matchMedia(PORTRAIT_QUERY)
     const update = () => setOrientation(mql.matches ? "portrait" : "landscape")
@@ -181,26 +201,29 @@ export default function ScrollVideoBackground() {
   // round-trip per seek (notably on Safari). Falls back to streaming the URL.
   useEffect(() => {
     if (!orientation) return
-    const url = pickSource(orientation)
+    const url = SOURCES[orientation]
     const controller = new AbortController()
     let objectUrl: string | null = null
 
-    fetch(url, { signal: controller.signal })
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.blob()
-      })
-      .then((blob) => {
-        objectUrl = URL.createObjectURL(blob)
-        setSrc(objectUrl)
-      })
-      .catch((err) => {
-        if (controller.signal.aborted) return
-        console.warn("ScrollVideoBackground: blob preload failed, streaming instead", err)
-        setSrc(url)
-      })
+    const cancelStart = afterPageLoad(() => {
+      fetch(url, { signal: controller.signal })
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`)
+          return res.blob()
+        })
+        .then((blob) => {
+          objectUrl = URL.createObjectURL(blob)
+          setSrc(objectUrl)
+        })
+        .catch((err) => {
+          if (controller.signal.aborted) return
+          console.warn("ScrollVideoBackground: blob preload failed, streaming instead", err)
+          setSrc(url)
+        })
+    })
 
     return () => {
+      cancelStart()
       controller.abort()
       if (objectUrl) URL.revokeObjectURL(objectUrl)
     }

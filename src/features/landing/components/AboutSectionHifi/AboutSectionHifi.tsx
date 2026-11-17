@@ -10,17 +10,25 @@ export default function AboutSectionHifi() {
   const maxProgress = useRef(0)
 
   useEffect(() => {
-    const handleScroll = () => {
+    // At most one update per frame; quantized so React skips renders when nothing visible changes
+    // (progress is clamped to 0..1, so it stops changing above and below the section).
+    let frame = 0
+    const update = () => {
+      frame = 0
       if (!sectionRef.current) return
       const rect = sectionRef.current.getBoundingClientRect()
-      const scrollY = -rect.top
-      const sectionHeight = rect.height
-      const progress = Math.min(Math.max(scrollY / (sectionHeight * 0.3), 0), 1)
-      setScrollProgress(progress)
+      const progress = Math.min(Math.max(-rect.top / (rect.height * 0.3), 0), 1)
+      setScrollProgress(Math.round(progress * 1000) / 1000)
     }
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    handleScroll()
-    return () => window.removeEventListener("scroll", handleScroll)
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+    window.addEventListener("scroll", schedule, { passive: true })
+    schedule()
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener("scroll", schedule)
+    }
   }, [])
 
   const illustrationOpacity = Math.min(1, scrollProgress / 0.15)

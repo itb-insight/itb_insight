@@ -7,8 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:prune": "eslint --prune-suppressions",
     "test": "vitest run",
-    "typecheck": "next typegen && tsc --noEmit"
+    "test:guardrails": "vitest run tests/guardrails",
+    "typecheck": "next typegen && tsc --noEmit",
+    "audit:prod": "node scripts/audit-prod.mjs",
+    "check": "npm run typecheck && npm run lint && npm test"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.3",
@@ -19,7 +23,7 @@
     "lottie-react": "^2.4.1",
     "lucide-react": "^1.23.0",
     "maplibre-gl": "^5.24.0",
-    "next": "^16.4.2",
+    "next": "^16.4.6",
     "qrcode.react": "^4.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -35,7 +39,7 @@
     "@types/react-dom": "^19.2.7",
     "@types/three": "^0.185.1",
     "eslint": "^9",
-    "eslint-config-next": "^16.4.2",
+    "eslint-config-next": "^16.4.6",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^3.2.7"

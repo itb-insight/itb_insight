@@ -16,42 +16,35 @@ export async function GET(request: NextRequest) {
   try {
     const supabase = createServiceClient()
 
-    // 1. Visitor Tickets & Gate Check-ins
-    const { count: totalTickets } = await supabase
-      .from('visitor_tickets')
-      .select('*', { count: 'exact', head: true })
+    const count = (table: string, filter?: [string, unknown]) => {
+      const query = supabase.from(table).select('*', { count: 'exact', head: true })
+      return filter ? query.eq(filter[0], filter[1]) : query
+    }
 
-    const { count: checkedInTickets } = await supabase
-      .from('visitor_tickets')
-      .select('*', { count: 'exact', head: true })
-      .eq('checked_in', true)
+    // Independent queries: run them together instead of one round trip after another.
+    const [
+      { count: totalTickets },
+      { count: checkedInTickets },
+      { count: totalBoothScans },
+      { count: totalRegistrations },
+      { count: verifiedRegistrations },
+      { count: totalInquiries },
+      feedbackSummaries,
+    ] = await Promise.all([
+      count('visitor_tickets'),
+      count('visitor_tickets', ['checked_in', true]),
+      count('booth_scan_events'),
+      count('competition_registrations'),
+      count('competition_registrations', ['status', 'verified']),
+      count('partnership_inquiries'),
+      getFeedbackSummaries(),
+    ])
 
-    // 2. Booth Scans
-    const { count: totalBoothScans } = await supabase
-      .from('booth_scan_events')
-      .select('*', { count: 'exact', head: true })
-
-    // 3. Competition Registrations
-    const { count: totalRegistrations } = await supabase
-      .from('competition_registrations')
-      .select('*', { count: 'exact', head: true })
-
-    const { count: verifiedRegistrations } = await supabase
-      .from('competition_registrations')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'verified')
-
-    // 4. Feedback (weighted across forms by number of overall ratings)
-    const feedbackSummaries = await getFeedbackSummaries()
+    // Feedback, weighted across forms by number of overall ratings
     const totalFeedback = feedbackSummaries.reduce((acc, f) => acc + f.total, 0)
     const ratedCount = feedbackSummaries.reduce((acc, f) => acc + f.ratedCount, 0)
     const ratedSum = feedbackSummaries.reduce((acc, f) => acc + (f.averageRating ?? 0) * f.ratedCount, 0)
     const averageRating = ratedCount > 0 ? Number((ratedSum / ratedCount).toFixed(2)) : 0
-
-    // 5. Inquiries
-    const { count: totalInquiries } = await supabase
-      .from('partnership_inquiries')
-      .select('*', { count: 'exact', head: true })
 
     return apiSuccess({
       visitors: {

@@ -1,6 +1,8 @@
 // Server-side data layer for booths. Points are awarded by booth staff scanning the
 // visitor's personal QR (docs/QR-FEATURES.md).
 
+import 'server-only'
+
 import { recordAuditLog } from '@/lib/audit'
 import { processGateCheckIn } from '@/lib/check-in'
 import { parseVisitorQr } from '@/lib/qr'

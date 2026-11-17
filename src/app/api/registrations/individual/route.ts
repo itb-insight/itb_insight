@@ -3,6 +3,8 @@ import { type NextRequest } from 'next/server'
 import { apiError, apiSuccess, unauthorizedResponse, type ApiErrorCode } from '@/lib/api-response'
 import { getAuthenticatedUser } from '@/lib/auth'
 import { checkRateLimit, rateLimitResponse, sensitiveMutationRateLimit } from '@/lib/rate-limit'
+import { isRegistrationSwitchOn } from '@/lib/competitions'
+import { parseTextFields, PROFILE_LIMITS } from '@/lib/input'
 import { findOrCreateCompetitionRow } from '@/lib/registrations'
 import { createServiceClient } from '@/lib/supabase/server'
 import { isRegistrationOpen } from '@/lib/team-registration'
@@ -59,11 +61,16 @@ export async function POST(request: NextRequest) {
     return apiError('INVALID_JSON', 'Format request tidak valid.', 400)
   }
 
-  const competitionSlug = payload.competitionSlug?.trim()
-  const phoneNumber = payload.phoneNumber?.trim()
+  const fields = parseTextFields(payload, { competitionSlug: 100, phoneNumber: PROFILE_LIMITS.phoneNumber })
+  if (!fields.ok) return apiError('INVALID_INPUT', `Kolom ${fields.field} tidak valid.`, 400)
+  const { competitionSlug, phoneNumber } = fields.values
 
   if (!competitionSlug) {
     return apiError('COMPETITION_REQUIRED', 'Kompetisi wajib dipilih.', 400)
+  }
+
+  if (!isRegistrationSwitchOn(competitionSlug)) {
+    return apiError('REGISTRATION_CLOSED', 'Registrasi kompetisi sedang tidak dibuka.', 400)
   }
 
   const competitionResult = await findOrCreateCompetitionRow(competitionSlug)

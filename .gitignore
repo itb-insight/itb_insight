@@ -49,3 +49,7 @@ next-env.d.ts
 /.agents/
 /.claude/
 /tools/codebase-memory-mcp.cmd
+
+# Supabase CLI state (project ref, pooler URL) and personal notes: local only.
+/supabase/.temp/
+/notes.md

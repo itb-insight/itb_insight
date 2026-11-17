@@ -1,5 +1,6 @@
 "use client";
 
+import { inter } from "@/shared/fonts/inter"
 import React, { useState } from "react";
 import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
 
@@ -7,7 +8,7 @@ export default function RegistrationPage() {
   const [isTeam, setIsTeam] = useState(false);
 
   return (
-    <div style={{
+    <div className={inter.variable} style={{
       /* Background Utama Diperbaiki: Gelap di atas (#091B3F) ke terang di bawah (#294D97) */
       background: "linear-gradient(180deg, #091B3F 0%, #294D97 100%)",
       minHeight: "100svh",
@@ -20,8 +21,6 @@ export default function RegistrationPage() {
       paddingBottom: "100px"
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;700;900&family=Inter:wght@400;500;600&display=swap');
-
         @font-face {
           font-family: 'EXCRATCH';
           src: url('/fonts/EXCRATCH.otf') format('opentype');

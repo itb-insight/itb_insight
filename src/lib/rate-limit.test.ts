@@ -6,17 +6,26 @@ import { checkRateLimit, getClientIp } from './rate-limit'
 const request = (headers: Record<string, string>) => new NextRequest('http://localhost/api/x', { headers })
 
 describe('getClientIp', () => {
-  it('prefers the Cloudflare client IP over x-forwarded-for', () => {
-    expect(getClientIp(request({ 'cf-connecting-ip': '9.9.9.9', 'x-forwarded-for': '1.1.1.1, 2.2.2.2' }))).toBe('9.9.9.9')
+  it('uses the platform-set address when the request did not come through Cloudflare', () => {
+    expect(getClientIp(request({ 'x-real-ip': '1.1.1.1' }))).toBe('1.1.1.1')
     expect(getClientIp(request({ 'x-forwarded-for': '1.1.1.1, 2.2.2.2' }))).toBe('1.1.1.1')
     expect(getClientIp(request({}))).toBeNull()
+  })
+
+  it('ignores a spoofed cf-connecting-ip sent straight to the origin', () => {
+    expect(getClientIp(request({ 'cf-connecting-ip': '9.9.9.9', 'x-real-ip': '1.1.1.1' }))).toBe('1.1.1.1')
+  })
+
+  it('trusts cf-connecting-ip when the connection comes from a Cloudflare edge', () => {
+    expect(getClientIp(request({ 'cf-connecting-ip': '9.9.9.9', 'x-real-ip': '172.68.10.20' }))).toBe('9.9.9.9')
+    expect(getClientIp(request({ 'cf-connecting-ip': '2001:db8::1', 'x-real-ip': '2606:4700:10::6816:1' }))).toBe('2001:db8::1')
   })
 })
 
 describe('checkRateLimit', () => {
   it('limits each identity separately from the shared IP limit', () => {
     // One school NAT IP, identity limit 2, IP limit 5.
-    const req = request({ 'cf-connecting-ip': '10.0.0.1' })
+    const req = request({ 'x-real-ip': '10.0.0.1' })
     const opts = { scope: 'feedback-submit' as const, limit: 2, ipLimit: 5, windowMs: 60_000 }
 
     expect(checkRateLimit(req, { ...opts, identity: 'a' }).allowed).toBe(true)

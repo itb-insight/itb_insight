@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { jsonLd } from "@/lib/json-ld";
 import type { Metadata } from "next";
 import EventDetailPage from "@/features/events/detail/EventDetailPage";
 import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
@@ -55,7 +56,7 @@ export default async function EventDetailRoute({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventDetailJsonLd(detail)) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(eventDetailJsonLd(detail)) }}
       />
       <NavbarHifi />
       <EventDetailPage detail={detail} others={others} today={todayInJakarta()} />

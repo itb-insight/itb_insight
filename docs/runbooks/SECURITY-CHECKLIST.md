@@ -5,8 +5,9 @@ schema_version: 2
 ## Current controls and gaps
 
 - Keep `SUPABASE_SERVICE_ROLE_KEY` server-only; do not expose it in browser code, `NEXT_PUBLIC_*`, docs, logs, or evidence.
-- `/dashboard*` is protected by current session middleware. `/admin*` is **not** protected and is public/demo/mock state.
-- The existing admin helper checks `admin_roles` then `ADMIN_EMAILS`, but it is not wired to current admin pages/events.
+- `/dashboard*` and `/admin*` require a session (proxy). `/admin*` also requires the admin role (`src/app/admin/layout.tsx`); every admin API checks the role with `getScopedUser`.
+- Admin role: `admin_roles`, `profiles.role_a = 'admin'`, or a *confirmed* email in `ADMIN_EMAILS`.
+- Guardrail tests (`tests/guardrails/`) enforce API auth, RLS, server-only secrets, filter escaping and secret scanning in CI.
 - QR ticket values must remain opaque; use `visitor_tickets`, not legacy `rsvp`.
 - The analytics endpoint is public, rate-limited per process, and volatile; it must not be used as an authoritative store.
 

@@ -2,6 +2,7 @@ import { type NextRequest } from 'next/server'
 
 import { apiError, apiSuccess, unauthorizedResponse } from '@/lib/api-response'
 import { getAuthenticatedUser } from '@/lib/auth'
+import { parseTextFields, PROFILE_LIMITS } from '@/lib/input'
 import { checkRateLimit, rateLimitResponse, sensitiveMutationRateLimit } from '@/lib/rate-limit'
 import { ensureTeamProfile, findUserTeamForCompetition, getTeamCompetition } from '@/lib/team-registration'
 import { createServiceClient } from '@/lib/supabase/server'
@@ -36,8 +37,9 @@ export async function POST(request: NextRequest) {
     return apiError('INVALID_JSON', 'Format request tidak valid.', 400)
   }
 
-  const competitionSlug = payload.competitionSlug?.trim()
-  const teamName = payload.teamName?.trim()
+  const fields = parseTextFields(payload, { competitionSlug: 100, teamName: 80, ...PROFILE_LIMITS })
+  if (!fields.ok) return apiError('INVALID_INPUT', `Kolom ${fields.field} tidak valid.`, 400)
+  const { competitionSlug, teamName } = fields.values
 
   if (!competitionSlug) return apiError('COMPETITION_REQUIRED', 'Kompetisi wajib dipilih.', 400)
   if (!teamName) return apiError('TEAM_NAME_REQUIRED', 'Nama tim wajib diisi.', 400)
@@ -47,7 +49,7 @@ export async function POST(request: NextRequest) {
 
   const { competition } = competitionResult
   const supabase = createServiceClient()
-  const profileResult = await ensureTeamProfile(supabase, auth.user, payload)
+  const profileResult = await ensureTeamProfile(supabase, auth.user, fields.values)
 
   if (!profileResult.ok) return profileResult.response
 

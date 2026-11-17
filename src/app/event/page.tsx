@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { jsonLd } from "@/lib/json-ld";
 import EventsHero from "@/features/events/EventsHero";
 import EventSection from "@/features/events/EventSection";
 import EventsHeroMobile from "@/features/events/EventsHeroMobile";
@@ -30,7 +31,7 @@ export default async function EventsPage() {
     <main style={{ background: "#091b3f" }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventsJsonLd(events)) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(eventsJsonLd(events)) }}
       />
 
       <NavbarHifi />

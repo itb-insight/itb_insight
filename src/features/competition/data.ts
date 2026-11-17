@@ -182,7 +182,7 @@ const DATA: Competition[] = [
       ],
     },
     desktop: {
-      logoSrc: "/images/mor.png",
+      logoSrc: "/images/mor.webp",
       logoWidth: 350,
       heroMaxWidth: 1400,
       titleFrom: "#ACC7FF",
@@ -288,7 +288,7 @@ const DATA: Competition[] = [
       ],
     },
     desktop: {
-      logoSrc: "/images/bpc.png",
+      logoSrc: "/images/bpc.webp",
       logoWidth: 350,
       heroMaxWidth: 1400,
       titleFrom: "#DEE8FB",
@@ -390,7 +390,7 @@ const DATA: Competition[] = [
       ],
     },
     desktop: {
-      logoSrc: "/images/oe.png",
+      logoSrc: "/images/oe.webp",
       logoWidth: 350,
       heroMaxWidth: 1400,
       titleFrom: "#DEE8FB",

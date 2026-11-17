@@ -29,11 +29,33 @@ function clearSupabaseAuthCookies(request: NextRequest, response: NextResponse) 
     })
 }
 
+const PROTECTED_PREFIXES = ['/dashboard', '/admin']
+
+export function isProtectedPath(pathname: string) {
+  return PROTECTED_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))
+}
+
+const hasAuthCookie = (request: NextRequest) =>
+  request.cookies.getAll().some(({ name }) => name.startsWith('sb-') && name.includes('auth-token'))
+
+function redirectToLogin(request: NextRequest) {
+  const url = request.nextUrl.clone()
+  url.pathname = '/login'
+  url.search = ''
+  url.searchParams.set('next', request.nextUrl.pathname + request.nextUrl.search)
+  return NextResponse.redirect(url)
+}
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = createSupabaseResponse(request)
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return supabaseResponse
+  }
+
+  // No session cookie: nothing to refresh, so skip Supabase entirely (most public traffic).
+  if (!hasAuthCookie(request)) {
+    return isProtectedPath(request.nextUrl.pathname) ? redirectToLogin(request) : supabaseResponse
   }
 
   const supabase = createServerClient(
@@ -53,12 +75,15 @@ export async function updateSession(request: NextRequest) {
     },
   )
 
-  let user: unknown = null
+  let signedIn = false
   let error: unknown = null
 
   try {
-    const result = await supabase.auth.getUser()
-    user = result.data.user
+    // getClaims() refreshes an expired session and verifies the JWT. With asymmetric JWT signing
+    // keys (Supabase → Settings → JWT Keys) it verifies locally, without a round trip to Supabase
+    // Auth on every request; with the legacy shared secret it falls back to asking the server.
+    const result = await supabase.auth.getClaims()
+    signedIn = Boolean(result.data?.claims?.sub)
     error = result.error
   } catch (caughtError) {
     if (!isMissingRefreshTokenError(caughtError)) {
@@ -71,12 +96,10 @@ export async function updateSession(request: NextRequest) {
     clearSupabaseAuthCookies(request, supabaseResponse)
   }
 
-  // Protect the participant dashboard. Everything else (landing, competitions, auth) is public.
-  if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    url.searchParams.set('next', request.nextUrl.pathname + request.nextUrl.search)
-    const redirectResponse = NextResponse.redirect(url)
+  // Signed-out visitors to the dashboard or admin go to /login. The admin role itself is checked
+  // in src/app/admin/layout.tsx and in every admin API route.
+  if (!signedIn && isProtectedPath(request.nextUrl.pathname)) {
+    const redirectResponse = redirectToLogin(request)
     if (isMissingRefreshTokenError(error)) {
       clearSupabaseAuthCookies(request, redirectResponse)
     }

@@ -1,0 +1,5 @@
+# Not needed to build or serve the site.
+design-sources/
+docs/
+context/
+old_pages/

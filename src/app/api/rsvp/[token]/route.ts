@@ -1,6 +1,7 @@
 import { type NextRequest } from 'next/server'
 
 import { apiError, apiSuccess } from '@/lib/api-response'
+import { parseTextFields } from '@/lib/input'
 import { getRsvpInviteByToken, submitRsvpResponse } from '@/lib/rsvp'
 
 export const dynamic = 'force-dynamic'
@@ -12,7 +13,7 @@ export async function GET(
   try {
     const { token } = await params
 
-    if (!token) {
+    if (!token || !/^[A-Za-z0-9_-]{16,128}$/.test(token)) {
       return apiError('INVALID_TOKEN', 'Token undangan tidak valid.', 400)
     }
 
@@ -45,10 +46,15 @@ export async function POST(
 ) {
   try {
     const { token } = await params
-    const body = await request.json()
-    const { attendanceStatus, substituteName, phone } = body
+    const body = await request.json().catch(() => null)
+    const attendanceStatus = (body as { attendanceStatus?: unknown } | null)?.attendanceStatus
+    const fields = parseTextFields(body, { substituteName: 120, phone: 32 })
+    if (!fields.ok) {
+      return apiError('INVALID_INPUT', `Kolom ${fields.field} tidak valid.`, 400)
+    }
+    const { substituteName, phone } = fields.values
 
-    if (!['attending', 'not_attending', 'represented'].includes(attendanceStatus)) {
+    if (attendanceStatus !== 'attending' && attendanceStatus !== 'not_attending' && attendanceStatus !== 'represented') {
       return apiError('INVALID_INPUT', 'Status kehadiran harus "attending", "not_attending", atau "represented".', 400)
     }
 

@@ -1,6 +1,9 @@
+import 'server-only'
+
 import { createServiceClient } from '@/lib/supabase/server'
 import { type GateCheckIn, type VisitorTicket } from '@/lib/types/database'
 import { recordAuditLog } from '@/lib/audit'
+import { ilikeAnyFilter, stripFilterSyntax } from '@/lib/postgrest'
 import { parseVisitorQr } from '@/lib/qr'
 
 export type CheckInResult =
@@ -17,16 +20,22 @@ export type CheckInResult =
       message: string
     }
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
 export async function processGateCheckIn(params: {
-  qrCode: string
+  /** The visitor's QR payload (scans). Exactly one of qrCode / ticketId. */
+  qrCode?: string
+  /** visitor_tickets.id, for manual desk check-in after a name/email search. */
+  ticketId?: string
   staffUserId?: string
   gateName?: string
   checkInType?: GateCheckIn['check_in_type']
 }): Promise<CheckInResult> {
-  const { qrCode, staffUserId, gateName = 'main_gate', checkInType = 'staff_scan' } = params
+  const { qrCode, ticketId, staffUserId, gateName = 'main_gate', checkInType = 'staff_scan' } = params
 
-  const token = parseVisitorQr(qrCode)
-  if (!token) {
+  const lookup = ticketId !== undefined ? (UUID.test(ticketId) ? { column: 'id', value: ticketId } : null) : null
+  const token = lookup ? null : parseVisitorQr(qrCode)
+  if (!lookup && !token) {
     return { ok: false, code: 'INVALID_INPUT', message: 'Kode QR tidak valid.' }
   }
 
@@ -36,7 +45,7 @@ export async function processGateCheckIn(params: {
   const { data: ticket, error: ticketError } = await supabase
     .from('visitor_tickets')
     .select('id, user_id, qr_code, ticket_type, checked_in, checked_in_at, checked_in_by, profiles!visitor_tickets_user_id_fkey(full_name, email, institution)')
-    .eq('qr_code', token)
+    .eq(lookup ? lookup.column : 'qr_code', lookup ? lookup.value : token)
     .maybeSingle()
 
   if (ticketError || !ticket) {
@@ -73,8 +82,9 @@ export async function processGateCheckIn(params: {
 
   const now = new Date().toISOString()
 
-  // 3. Atomically update ticket
-  const { error: updateError } = await supabase
+  // 3. Atomically update ticket. Only the request whose update flips the row counts as the
+  // check-in; a concurrent scan that loses the race reports "already checked in".
+  const { data: flipped, error: updateError } = await supabase
     .from('visitor_tickets')
     .update({
       checked_in: true,
@@ -83,9 +93,30 @@ export async function processGateCheckIn(params: {
     })
     .eq('id', ticket.id)
     .eq('checked_in', false)
+    .select('id')
 
   if (updateError) {
     return { ok: false, code: 'DATABASE_ERROR', message: 'Gagal memperbarui status kehadiran.' }
+  }
+
+  if (!Array.isArray(flipped) || flipped.length === 0) {
+    return {
+      ok: true,
+      ticket: {
+        id: ticket.id,
+        user_id: ticket.user_id,
+        qr_code: ticket.qr_code,
+        ticket_type: ticket.ticket_type,
+        checked_in: true,
+        checked_in_at: now,
+        checked_in_by: null,
+        created_at: '',
+        updated_at: '',
+      },
+      profile: profileData,
+      alreadyCheckedIn: true,
+      checkInTime: now,
+    }
   }
 
   // 4. Record gate check-in entry
@@ -126,18 +157,26 @@ export async function processGateCheckIn(params: {
   }
 }
 
+/** Shows only the last 4 digits, enough for staff to confirm "is this your number?". */
+export function maskPhone(phone: string | null | undefined): string {
+  const digits = (phone ?? '').replace(/\D/g, '')
+  return digits.length >= 4 ? `•••• ${digits.slice(-4)}` : ''
+}
+
+// Manual desk lookup by name or email. Returns the ticket id for check-in, never the QR token
+// (which would let staff award booth points without the visitor present) or the full phone.
 export async function searchVisitorsManual(query: string) {
-  if (!query || query.trim().length < 2) {
+  const term = stripFilterSyntax(query ?? '').slice(0, 64)
+  if (term.length < 2) {
     return []
   }
 
   const supabase = createServiceClient()
-  const cleanQuery = query.trim().toLowerCase()
 
   const { data, error } = await supabase
     .from('visitor_tickets')
-    .select('id, user_id, qr_code, ticket_type, checked_in, checked_in_at, checked_in_by, profiles!visitor_tickets_user_id_fkey!inner(id, full_name, email, institution, phone)')
-    .or(`email.ilike.%${cleanQuery}%,full_name.ilike.%${cleanQuery}%`, { referencedTable: 'profiles' })
+    .select('id, user_id, checked_in, checked_in_at, profiles!visitor_tickets_user_id_fkey!inner(id, full_name, email, institution, phone)')
+    .or(ilikeAnyFilter(['email', 'full_name'], term), { referencedTable: 'profiles' })
     .limit(20)
 
   if (error || !data) {
@@ -149,13 +188,12 @@ export async function searchVisitorsManual(query: string) {
     return {
       ticketId: row.id,
       userId: row.user_id,
-      qrCode: row.qr_code,
       checkedIn: row.checked_in,
       checkedInAt: row.checked_in_at,
       fullName: profile?.full_name || '',
       email: profile?.email || '',
       institution: profile?.institution || '',
-      phone: profile?.phone || '',
+      phoneHint: maskPhone(profile?.phone),
     }
   })
 }

@@ -100,7 +100,7 @@ export default function SeminarLandingPage({ onLearnMore }: { onLearnMore: () =>
 
   return (
     <div style={{ width: '100%', minHeight: '100vh', background: 'rgba(76, 76, 76, 1)', overflowX: 'hidden' }}>
-      <style dangerouslySetInnerHTML={{ __html: `@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap'); body { margin: 0; padding: 0; overflow-x: hidden; }` }} />
+      <style dangerouslySetInnerHTML={{ __html: ` body { margin: 0; padding: 0; overflow-x: hidden; }` }} />
       
       <div style={{ width: '100%', height: `${TOTAL_HEIGHT * scale}px`, position: 'relative' }}>
         <div style={{ 

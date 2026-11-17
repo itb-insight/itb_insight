@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import Link from "next/link"
 import styles from "./HeroSectionHifi.module.css"
 import { useIsMobile } from "@/features/landing/hooks/useIsMobile"
@@ -17,38 +17,57 @@ interface TimeLeft {
   seconds: number
 }
 
-function useCountdown(targetDate: string): TimeLeft {
-  const calculate = (): TimeLeft => {
-    const diff = new Date(targetDate).getTime() - Date.now()
-    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
-    return {
-      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((diff / (1000 * 60)) % 60),
-      seconds: Math.floor((diff / 1000) % 60),
-    }
+// One shared 1 s clock. Only <Countdown> subscribes, so the rest of the hero (scroll-driven
+// transforms, images) does not re-render every second.
+function subscribeToSeconds(onTick: () => void) {
+  const timer = setInterval(onTick, 1000)
+  return () => clearInterval(timer)
+}
+const currentSecond = () => Math.floor(Date.now() / 1000)
+const noSecondOnServer = () => null
+
+function timeLeftUntil(targetDate: string, nowSeconds: number): TimeLeft {
+  const diff = new Date(targetDate).getTime() - nowSeconds * 1000
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+  return {
+    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / (1000 * 60)) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
   }
-
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
-
-  useEffect(() => {
-    setTimeLeft(calculate())
-    const timer = setInterval(() => setTimeLeft(calculate()), 1000)
-    return () => clearInterval(timer)
-  }, [targetDate])
-
-  return timeLeft
 }
 
 function pad(n: number): string {
   return String(n).padStart(2, "0")
 }
 
+function Countdown() {
+  // null on the server and during hydration: render "00" until the client clock is known.
+  const nowSeconds = useSyncExternalStore(subscribeToSeconds, currentSecond, noSecondOnServer)
+  const { days, hours, minutes, seconds } = nowSeconds === null
+    ? { days: 0, hours: 0, minutes: 0, seconds: 0 }
+    : timeLeftUntil(COUNTDOWN_TARGET, nowSeconds)
+
+  return (
+    <div className={styles.countdown}>
+      {[
+        { value: days, label: "d" },
+        { value: hours, label: "h" },
+        { value: minutes, label: "m" },
+        { value: seconds, label: "s" },
+      ].map(({ value, label }) => (
+        <div key={label} className={styles.countdownUnit}>
+          <span className={styles.countdownNumber}>{pad(value)}</span>
+          <span className={styles.countdownLabel}>{label}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function HeroSectionHifi() {
-  const [mounted, setMounted] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
   const sectionRef = useRef<HTMLElement>(null)
-  const { days, hours, minutes, seconds } = useCountdown(COUNTDOWN_TARGET)
   const isMobile = useIsMobile(768)
   const signedIn = useIsSignedIn()
 
@@ -70,18 +89,25 @@ export default function HeroSectionHifi() {
     window.scrollTo({ top, behavior: "smooth" })
   }
 
-  useEffect(() => { setMounted(true) }, [])
-
   useEffect(() => {
-    const handleScroll = () => {
+    // At most one update per frame, and none once the value stops changing (e.g. far below the
+    // hero): scroll events fire far more often than frames on high-refresh screens.
+    let frame = 0
+    const update = () => {
+      frame = 0
       if (!sectionRef.current) return
-      const scrollY = window.scrollY
       const sectionHeight = sectionRef.current.getBoundingClientRect().height
-      const progress = Math.min(Math.max(scrollY / (sectionHeight * 0.6), 0), 1)
-      setScrollProgress(progress)
+      const progress = Math.min(Math.max(window.scrollY / (sectionHeight * 0.6), 0), 1)
+      setScrollProgress(Math.round(progress * 1000) / 1000)
     }
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+    window.addEventListener("scroll", schedule, { passive: true })
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener("scroll", schedule)
+    }
   }, [])
 
   // Title scale: besar → kecil
@@ -154,21 +180,7 @@ export default function HeroSectionHifi() {
             ITB INSIGHT
           </h1>
 
-          <div className={styles.countdown}>
-            {[
-              { value: days, label: "d" },
-              { value: hours, label: "h" },
-              { value: minutes, label: "m" },
-              { value: seconds, label: "s" },
-            ].map(({ value, label }) => (
-              <div key={label} className={styles.countdownUnit}>
-                <span className={styles.countdownNumber}>
-                  {mounted ? pad(value) : "00"}
-                </span>
-                <span className={styles.countdownLabel}>{label}</span>
-              </div>
-            ))}
-          </div>
+          <Countdown />
         </div>
 
         {/* Description + Button */}

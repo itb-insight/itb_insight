@@ -1,11 +1,12 @@
 "use client";
 
+import { inter } from "@/shared/fonts/inter"
 import React from "react";
 import NavbarHifi from "@/shared/components/Navbar/NavbarHifi/NavbarHifi";
 
 export default function RegisterIndividuPage() {
   return (
-    <div style={{
+    <div className={inter.variable} style={{
       background: "linear-gradient(180deg, #091B3F 0%, #294D97 100%)",
       minHeight: "100svh",
       width: "100%",
@@ -17,8 +18,6 @@ export default function RegisterIndividuPage() {
       paddingBottom: "100px"
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;700;900&family=Inter:wght@400;500;600&display=swap');
-
         @font-face {
           font-family: 'EXCRATCH';
           src: url('/fonts/EXCRATCH.otf') format('opentype');

@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { createServiceClient } from '@/lib/supabase/server'
 
 import { FORM_COLUMNS, parseFormRow, type FeedbackForm } from './forms'

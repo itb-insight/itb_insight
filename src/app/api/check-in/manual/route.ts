@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const { action = 'search', query, qrCode, gateName } = body
+    const { action = 'search', query, ticketId } = body
 
     if (action === 'search') {
       if (!query || typeof query !== 'string' || query.trim().length < 2) {
@@ -24,14 +24,14 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === 'check_in') {
-      if (!qrCode || typeof qrCode !== 'string') {
-        return apiError('INVALID_INPUT', 'Parameter qrCode wajib disertakan untuk check-in manual.', 400)
+      if (!ticketId || typeof ticketId !== 'string') {
+        return apiError('INVALID_INPUT', 'Parameter ticketId (dari hasil pencarian) wajib disertakan.', 400)
       }
 
       const result = await processGateCheckIn({
-        qrCode,
+        ticketId,
         staffUserId: auth.user.id,
-        gateName: gateName || 'manual_desk',
+        gateName: 'manual_desk',
         checkInType: 'manual_lookup',
       })
 

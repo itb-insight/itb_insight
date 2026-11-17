@@ -2,7 +2,7 @@ import Image from "next/image"
 import styles from "./DashboardBackground.module.css"
 
 const DECOR_1 = "/deco/decor1.png"
-const DECOR_2 = "/deco/decor2.png"
+const DECOR_2 = "/deco/decor2.webp"
 const DECOR_3 = "/deco/decor3.png"
 const DECOR_4 = "/deco/decor4.png"
 

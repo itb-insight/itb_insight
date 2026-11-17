@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation"
 import Link from "next/link"
 
 import TeamCreateForm from "@/features/dashboard/TeamCreateForm"
@@ -9,6 +10,8 @@ type TeamCreatePageProps = {
 }
 
 export default async function TeamCreatePage({ searchParams }: TeamCreatePageProps) {
+  // Preview/dev page: not served in production (tests/guardrails/dev-routes.test.ts).
+  if (process.env.NODE_ENV === "production") notFound()
   const { comp } = await searchParams
   const competition = comp ? await getCompetitionBySlug(comp) : null
 

@@ -3,15 +3,22 @@
 import Link from "next/link"
 import { useState } from "react"
 
+import Turnstile from "@/features/feedback/Turnstile"
 import { createClient } from "@/lib/supabase/client"
 import useFunnelStep from "@/lib/analytics/hooks/useFunnelStep"
 import styles from "./SignUpHifi.module.css"
+
+// When set, magic links carry a Turnstile token so Supabase Auth captcha protection can be turned
+// on (Supabase → Authentication → Attack Protection, same Turnstile secret).
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ""
 
 export default function SignUpHifi() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle")
   const [message, setMessage] = useState("")
+  const [captchaToken, setCaptchaToken] = useState("")
+  const [captchaReset, setCaptchaReset] = useState(0)
   const [isError, setIsError] = useState(false)
 
   // Entering the form is step 1 of the registration funnel. If the visitor
@@ -42,9 +49,13 @@ export default function SignUpHifi() {
       email: email.trim(),
       options: {
         emailRedirectTo: redirectTo,
+        captchaToken: captchaToken || undefined,
         data: name.trim() ? { full_name: name.trim() } : undefined,
       },
     })
+
+    // Turnstile tokens are single-use.
+    if (TURNSTILE_SITE_KEY) setCaptchaReset((n) => n + 1)
 
     if (error) {
       setStatus("idle")
@@ -117,7 +128,15 @@ export default function SignUpHifi() {
               />
             </div>
 
-            <button className={styles.loginBtn} type="submit" disabled={status === "sending"}>
+            {TURNSTILE_SITE_KEY ? (
+              <Turnstile siteKey={TURNSTILE_SITE_KEY} onToken={setCaptchaToken} resetKey={captchaReset} />
+            ) : null}
+
+            <button
+              className={styles.loginBtn}
+              type="submit"
+              disabled={status === "sending" || (Boolean(TURNSTILE_SITE_KEY) && !captchaToken)}
+            >
               {status === "sending" ? "Mengirim..." : "Sign up with email"}
             </button>
 

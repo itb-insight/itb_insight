@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { type User } from '@supabase/supabase-js'
 import { type NextRequest } from 'next/server'
 
@@ -15,8 +17,12 @@ export function isAdminEmail(email?: string | null) {
   )
 }
 
-export async function getUserRole(user: Pick<User, 'id' | 'email'>): Promise<UserRole | null> {
-  if (isAdminEmail(user.email)) {
+type RoleSubject = Pick<User, 'id' | 'email' | 'email_confirmed_at'>
+
+export async function getUserRole(user: RoleSubject): Promise<UserRole | null> {
+  // The allowlist only counts a confirmed email: anyone holding the public anon key can call
+  // auth.signUp() with an arbitrary address, and that address stays unconfirmed.
+  if (user.email_confirmed_at && isAdminEmail(user.email)) {
     return 'admin'
   }
 
@@ -45,7 +51,7 @@ export async function getUserRole(user: Pick<User, 'id' | 'email'>): Promise<Use
 }
 
 export async function hasUserRole(
-  user: Pick<User, 'id' | 'email'>,
+  user: RoleSubject,
   allowedRoles: UserRole[],
 ): Promise<boolean> {
   const role = await getUserRole(user)
@@ -55,7 +61,7 @@ export async function hasUserRole(
 }
 
 // Admin = row in `admin_roles` with role 'admin', falling back to the ADMIN_EMAILS allowlist.
-export async function isAdminUser(user: Pick<User, 'id' | 'email'>): Promise<boolean> {
+export async function isAdminUser(user: RoleSubject): Promise<boolean> {
   return hasUserRole(user, ['admin'])
 }
 

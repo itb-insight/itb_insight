@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation"
 import GatePreview from "./GatePreview"
 
 export const metadata = {
@@ -6,5 +7,7 @@ export const metadata = {
 }
 
 export default function GateHifiPage() {
+  // Preview/dev page: not served in production (tests/guardrails/dev-routes.test.ts).
+  if (process.env.NODE_ENV === "production") notFound()
   return <GatePreview />
 }

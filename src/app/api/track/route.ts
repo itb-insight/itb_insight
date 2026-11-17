@@ -1,4 +1,5 @@
 import { headers } from "next/headers"
+import { after } from "next/server"
 import { MAX_BODY_BYTES } from "@/lib/analytics/config"
 import { appendBatch } from "@/lib/analytics/server/eventStore"
 import checkRateLimit, { clientKey } from "@/lib/analytics/server/rateLimit"
@@ -49,25 +50,20 @@ export async function POST(request: Request) {
 
   const accepted = appendBatch(result.batch)
 
-  // Persist to Supabase analytics_events table if service client is available
+  // Persist to Supabase after the response is sent. after() keeps the function alive until the
+  // insert finishes; a bare promise could be dropped when the instance is frozen.
   if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    import('@/lib/supabase/server').then(({ createServiceClient }) => {
-      try {
-        const supabase = createServiceClient()
-        const rows = result.batch.events.map((event) => ({
-          session_id: result.batch.sessionId,
-          event_name: event.name,
-          path: event.pagePath,
-          props: {
-            ...event.metadata,
-            division: event.division,
-            device: result.batch.device,
-          },
-        }))
-        supabase.from('analytics_events').insert(rows).then()
-      } catch (err) {
-        console.warn('[Analytics Persist Error]', err)
-      }
+    const { sessionId, device, events } = result.batch
+    after(async () => {
+      const { createServiceClient } = await import("@/lib/supabase/server")
+      const rows = events.map((event) => ({
+        session_id: sessionId,
+        event_name: event.name,
+        path: event.pagePath,
+        props: { ...event.metadata, division: event.division, device },
+      }))
+      const { error } = await createServiceClient().from("analytics_events").insert(rows)
+      if (error) console.warn("[Analytics Persist Error]", error.message)
     })
   }
 

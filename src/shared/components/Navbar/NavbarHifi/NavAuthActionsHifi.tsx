@@ -2,14 +2,15 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
-import { createClient } from "@/lib/supabase/client"
+import { notifySessionChanged, useHasSession } from "@/shared/hooks/useHasSession"
 import LogOutModal from "@/shared/components/modals/LogOutModal"
 import styles from "./NavbarHifi.module.css"
 
 // Client-side auth affordance for the navbar: shows Log In / Sign up when signed out,
-// and Dashboard / Sign out once a Supabase session exists.
+// and Dashboard / Sign out once a Supabase session cookie exists. The Supabase SDK is loaded
+// only when someone signs out, so public pages don't ship it (see useHasSession).
 export default function NavAuthActionsHifi({
   variant = "desktop",
   onAction,
@@ -21,30 +22,12 @@ export default function NavAuthActionsHifi({
   hideDashboard?: boolean
 }) {
   const router = useRouter()
-  const [signedIn, setSignedIn] = useState<boolean | null>(null)
+  const signedIn = useHasSession()
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
 
   const primaryClass = variant === "mobile" ? styles.mobilePrimaryBtn : styles.logInBtn
   const secondaryClass = variant === "mobile" ? styles.mobileSecondaryBtn : styles.signUpBtn
-
-  useEffect(() => {
-    // Supabase not configured yet (e.g. env not filled) — stay in the signed-out layout.
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-      setSignedIn(false)
-      return
-    }
-
-    const supabase = createClient()
-
-    supabase.auth.getUser().then(({ data }) => setSignedIn(Boolean(data.user)))
-
-    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSignedIn(Boolean(session?.user))
-    })
-
-    return () => subscription.subscription.unsubscribe()
-  }, [])
 
   // Signing out is now confirmed first. Note this deliberately does NOT call onAction:
   // on mobile that closes the menu, and this component lives inside it, so the dialog
@@ -55,12 +38,12 @@ export default function NavAuthActionsHifi({
     if (signingOut) return // a second click would fire two navigations
     setSigningOut(true)
 
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    const { createClient } = await import("@/lib/supabase/client")
+    await createClient().auth.signOut()
 
     setConfirmOpen(false)
     setSigningOut(false)
-    setSignedIn(false)
+    notifySessionChanged()
     router.push("/")
     router.refresh()
     // Last, because on mobile it unmounts this component along with the menu.

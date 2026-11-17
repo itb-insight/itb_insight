@@ -5,8 +5,13 @@ import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 
 import { safeNext } from "@/lib/safe-next"
+import Turnstile from "@/features/feedback/Turnstile"
 import { createClient } from "@/lib/supabase/client"
 import styles from "./LoginHifi.module.css"
+
+// When set, magic links carry a Turnstile token so Supabase Auth captcha protection can be turned
+// on (Supabase → Authentication → Attack Protection, same Turnstile secret).
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ""
 
 export default function LoginHifi() {
   const searchParams = useSearchParams()
@@ -16,6 +21,8 @@ export default function LoginHifi() {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle")
   const [message, setMessage] = useState(hadAuthError ? "Tautan masuk tidak valid atau kedaluwarsa. Coba lagi." : "")
+  const [captchaToken, setCaptchaToken] = useState("")
+  const [captchaReset, setCaptchaReset] = useState(0)
   const [isError, setIsError] = useState(hadAuthError)
 
   const redirectTo =
@@ -34,8 +41,11 @@ export default function LoginHifi() {
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: { emailRedirectTo: redirectTo },
+      options: { emailRedirectTo: redirectTo, captchaToken: captchaToken || undefined },
     })
+
+    // Turnstile tokens are single-use.
+    if (TURNSTILE_SITE_KEY) setCaptchaReset((n) => n + 1)
 
     if (error) {
       setStatus("idle")
@@ -90,7 +100,15 @@ export default function LoginHifi() {
               />
             </div>
 
-            <button className={styles.loginBtn} type="submit" disabled={status === "sending"}>
+            {TURNSTILE_SITE_KEY ? (
+              <Turnstile siteKey={TURNSTILE_SITE_KEY} onToken={setCaptchaToken} resetKey={captchaReset} />
+            ) : null}
+
+            <button
+              className={styles.loginBtn}
+              type="submit"
+              disabled={status === "sending" || (Boolean(TURNSTILE_SITE_KEY) && !captchaToken)}
+            >
               {status === "sending" ? "Mengirim..." : "Send Magic Link"}
             </button>
 

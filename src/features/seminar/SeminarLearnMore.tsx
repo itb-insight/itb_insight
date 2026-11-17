@@ -17,7 +17,7 @@ export default function SeminarLearnMorePage({ onBack }: { onBack?: () => void }
         cursor: onBack ? 'pointer' : 'default' 
       }}
     >
-      <style dangerouslySetInnerHTML={{ __html: `@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap'); body { margin: 0; padding: 0; }` }} />
+      <style dangerouslySetInnerHTML={{ __html: ` body { margin: 0; padding: 0; }` }} />
 
       <div 
         onClick={(e) => e.stopPropagation()}

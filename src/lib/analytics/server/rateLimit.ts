@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto"
+import { clientIpFromHeaders } from "@/lib/client-ip"
 import { RATE_LIMIT_MAX_REQUESTS, RATE_LIMIT_WINDOW_MS } from "../config"
 
 /**
@@ -41,17 +42,13 @@ function sweep(windows: Map<string, Window>, now: number): void {
 }
 
 /**
- * Derives a limiter key from request headers.
- *
- * Next 16 has no `request.ip`, so this reads x-forwarded-for. The result is
- * hashed rather than stored raw: an IP address is PII, and this module has no
- * business holding one in memory.
+ * Limiter key: the client IP only (src/lib/client-ip.ts). The user agent is deliberately not part
+ * of the key: a client controls it, so including it let a loop rotate UAs to get a fresh budget.
+ * Hashed rather than stored raw, because an IP address is PII.
  */
 export function clientKey(headers: Headers): string {
-  const forwarded = headers.get("x-forwarded-for")
-  const ip = forwarded?.split(",")[0]?.trim() || headers.get("x-real-ip") || "unknown"
-  const ua = headers.get("user-agent") ?? ""
-  return createHash("sha256").update(`${ip}:${ua}`).digest("hex").slice(0, 32)
+  const ip = clientIpFromHeaders(headers) ?? "unknown"
+  return createHash("sha256").update(ip).digest("hex").slice(0, 32)
 }
 
 export interface RateLimitResult {
