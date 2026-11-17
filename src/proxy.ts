@@ -35,6 +35,10 @@ export async function proxy(request: NextRequest) {
 }
 
 
+function isAlwaysOpenPage(pathname: string) {
+  return /^\/(privacy|terms)\/?$/.test(pathname)
+}
+
 function isApiRoute(pathname: string) {
   return pathname === '/api' || pathname.startsWith('/api/')
 }
@@ -70,6 +74,9 @@ function handleMaintenance(request: NextRequest): NextResponse | null {
   const { site, pages } = getMaintenanceState()
 
   if (!site && pages.length === 0) return null
+
+  // Legal pages are linked from Google's OAuth consent screen and stay up during maintenance.
+  if (isAlwaysOpenPage(pathname)) return null
 
   // Let team through: Visit any page with ?bypass=<secret> once to get a cookie
   const secret = process.env.MAINTENANCE_BYPASS_SECRET

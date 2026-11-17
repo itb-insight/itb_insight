@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-import { notifySessionChanged, useHasSession } from "@/shared/hooks/useHasSession"
+import { clearSessionCookies, notifySessionChanged, useHasSession } from "@/shared/hooks/useHasSession"
 import LogOutModal from "@/shared/components/modals/LogOutModal"
 import styles from "./NavbarHifi.module.css"
 
@@ -38,8 +38,17 @@ export default function NavAuthActionsHifi({
     if (signingOut) return // a second click would fire two navigations
     setSigningOut(true)
 
-    const { createClient } = await import("@/lib/supabase/client")
-    await createClient().auth.signOut()
+    try {
+      const { createClient } = await import("@/lib/supabase/client")
+      const { error } = await createClient().auth.signOut()
+      if (error) console.warn("Sign-out did not complete on the server:", error.message)
+    } catch (error) {
+      console.warn("Sign-out failed:", error)
+    } finally {
+      // signOut() keeps the session cookie when it fails; drop it here so this browser is signed
+      // out either way (the server rejects a revoked session regardless).
+      clearSessionCookies()
+    }
 
     setConfirmOpen(false)
     setSigningOut(false)

@@ -132,6 +132,18 @@ export default function LoginHifi() {
                 Sign up
               </Link>
             </p>
+
+            <p className={styles.signupText}>
+              By continuing, you agree to our{" "}
+              <Link href="/terms" className={styles.signupLink}>
+                Terms of Service
+              </Link>{" "}
+              and{" "}
+              <Link href="/privacy" className={styles.signupLink}>
+                Privacy Policy
+              </Link>
+              .
+            </p>
           </form>
         </div>
       </div>

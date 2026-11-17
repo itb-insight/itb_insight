@@ -96,10 +96,15 @@
   text-align: center;
   letter-spacing: 0;
   width: calc(var(--u) * 286);
-  min-height: calc(var(--u) * 48);
+  /* Full description from the competition data, clamped to 3 lines to fit the card. */
+  height: calc(var(--u) * 72);
   margin: calc(var(--u) * 12) 0 0;
   flex-shrink: 0;
-  
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
 }
 
 .registrationUntil {
@@ -126,7 +131,7 @@
   justify-content: center;
   width: calc(var(--u) * 160);
   height: calc(var(--u) * 56);
-  margin-top: calc(var(--u) * 42);
+  margin-top: calc(var(--u) * 18);
   padding: 0 calc(var(--u) * 24);
   flex-shrink: 0;
 

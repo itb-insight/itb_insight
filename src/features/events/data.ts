@@ -1,6 +1,7 @@
 import "server-only";
 import type { Box, EventCopy, EventItem, EventSlot } from "@/features/events/types";
 import { LAYOUT_SLOTS } from "@/features/events/layoutSlots";
+import { displayLocation } from "@/lib/event-location";
 
 /**
  * Data halaman Events (desktop).
@@ -216,5 +217,7 @@ export async function getEvents(): Promise<EventItem[]> {
   if (EVENT_COPY.length > LAYOUT_SLOTS.length) {
     throw new Error("Event lebih banyak dari slot tata letak. Tambah slot di layoutSlots.ts.");
   }
-  return EVENT_COPY.map((copy, i) => compose(LAYOUT_SLOTS[i], copy));
+  return EVENT_COPY.map((copy, i) =>
+    compose(LAYOUT_SLOTS[i], { ...copy, location: displayLocation(copy.location) }),
+  );
 }

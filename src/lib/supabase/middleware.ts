@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
+import { isAuthRetryableFetchError } from '@supabase/supabase-js'
 import { NextResponse, type NextRequest } from 'next/server'
 
 // Session refresh + route protection, called from the root `proxy.ts` (Next 16 renamed
@@ -92,7 +93,13 @@ export async function updateSession(request: NextRequest) {
     error = caughtError
   }
 
-  if (isMissingRefreshTokenError(error)) {
+  // A session cookie whose session is dead (revoked, refresh token already used, corrupt or
+  // unreadable chunks) is deleted, so the browser stops looking signed in: the navbar and hero
+  // read the cookie, not Supabase (src/shared/hooks/useHasSession.ts). Network errors and
+  // Supabase 5xx are transient, so those cookies are kept for the next request to retry.
+  const sessionIsDead = !signedIn && !isAuthRetryableFetchError(error)
+
+  if (sessionIsDead) {
     clearSupabaseAuthCookies(request, supabaseResponse)
   }
 
@@ -100,7 +107,7 @@ export async function updateSession(request: NextRequest) {
   // in src/app/admin/layout.tsx and in every admin API route.
   if (!signedIn && isProtectedPath(request.nextUrl.pathname)) {
     const redirectResponse = redirectToLogin(request)
-    if (isMissingRefreshTokenError(error)) {
+    if (sessionIsDead) {
       clearSupabaseAuthCookies(request, redirectResponse)
     }
     return redirectResponse

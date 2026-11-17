@@ -1,5 +1,6 @@
 import "server-only";
 import type { EventDetail } from "@/features/events/types";
+import { displayLocation, isEventLocationTba } from "@/lib/event-location";
 
 /**
  * Isi halaman detail /event/[slug].
@@ -615,8 +616,19 @@ const DETAILS: EventDetail[] = [
   },
 ];
 
+/** Applies EVENTS_LOCATION_TBA to the venue shown on the detail page and on "other events" cards. */
+function withLocation(d: EventDetail): EventDetail {
+  if (!isEventLocationTba()) return d;
+  return {
+    ...d,
+    facts: { ...d.facts, venue: displayLocation(d.facts.venue) },
+    card: { ...d.card, where: displayLocation(d.card.where) },
+  };
+}
+
 export async function getEventDetail(slug: string): Promise<EventDetail | null> {
-  return DETAILS.find((d) => d.slug === slug) ?? null;
+  const d = DETAILS.find((d) => d.slug === slug);
+  return d ? withLocation(d) : null;
 }
 
 export async function getEventDetailSlugs(): Promise<string[]> {
@@ -624,5 +636,5 @@ export async function getEventDetailSlugs(): Promise<string[]> {
 }
 
 export async function getAllEventDetails(): Promise<EventDetail[]> {
-  return DETAILS;
+  return DETAILS.map(withLocation);
 }

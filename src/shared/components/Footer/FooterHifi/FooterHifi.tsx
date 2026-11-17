@@ -133,6 +133,15 @@ export default function FooterHifi() {
           ))}
         </div>
       </div>
+
+      <nav className={styles.legal} aria-label="Legal">
+        <Link href="/privacy" className={styles.legalLink}>
+          Privacy Policy
+        </Link>
+        <Link href="/terms" className={styles.legalLink}>
+          Terms of Service
+        </Link>
+      </nav>
     </footer>
   )
 }

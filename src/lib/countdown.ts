@@ -18,7 +18,15 @@ const COUNTDOWN_ASSETS = [
 ]
 
 // Pages that stay reachable during the countdown. /auth/callback is the OAuth / magic-link landing.
-const COUNTDOWN_OPEN_PAGES = [/^\/login\/?$/, /^\/signup\/?$/, /^\/auth\/callback\/?$/, /^\/feedback\/[a-z0-9-]+\/?$/]
+// /privacy and /terms are linked from Google's OAuth consent screen, so they must always load.
+const COUNTDOWN_OPEN_PAGES = [
+    /^\/login\/?$/,
+    /^\/signup\/?$/,
+    /^\/auth\/callback\/?$/,
+    /^\/feedback\/[a-z0-9-]+\/?$/,
+    /^\/privacy\/?$/,
+    /^\/terms\/?$/,
+]
 
 // API routes that stay reachable: the public feedback form (GET) and its submission (POST).
 // The staff summary (/api/feedback) stays blocked.

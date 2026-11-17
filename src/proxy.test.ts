@@ -1,14 +1,15 @@
+import { AuthRetryableFetchError } from '@supabase/supabase-js'
 import { NextRequest } from 'next/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const auth = vi.hoisted(() => ({ user: null as null | { id: string }, clientsCreated: 0 }))
+const auth = vi.hoisted(() => ({ user: null as null | { id: string }, error: null as unknown, clientsCreated: 0 }))
 
 vi.mock('@supabase/ssr', () => ({
   createServerClient: () => {
     auth.clientsCreated += 1
     return {
       auth: {
-        getClaims: async () => ({ data: auth.user ? { claims: { sub: auth.user.id } } : null, error: null }),
+        getClaims: async () => ({ data: auth.user ? { claims: { sub: auth.user.id } } : null, error: auth.error }),
       },
     }
   },
@@ -28,6 +29,7 @@ const SESSION_COOKIE = { cookie: 'sb-otdy-auth-token=base64-session' }
 afterEach(() => {
   vi.unstubAllEnvs()
   auth.user = null
+  auth.error = null
   auth.clientsCreated = 0
 })
 
@@ -55,6 +57,11 @@ describe('proxy: countdown-only mode', () => {
     expect(passedThrough(await proxy(request('/login')))).toBe(true)
     expect(passedThrough(await proxy(request('/feedback/inspirates-2026')))).toBe(true)
   })
+
+  it('serves the privacy policy and terms (linked from the Google OAuth consent screen)', async () => {
+    expect(passedThrough(await proxy(request('/privacy')))).toBe(true)
+    expect(passedThrough(await proxy(request('/terms')))).toBe(true)
+  })
 })
 
 describe('proxy: maintenance mode', () => {
@@ -73,6 +80,15 @@ describe('proxy: maintenance mode', () => {
   it('takes the whole site down with MAINTENANCE_SITE', async () => {
     vi.stubEnv('MAINTENANCE_SITE', 'true')
     expect(rewriteTarget(await proxy(request('/')))).toContain('/maintenance/site')
+  })
+
+  it('keeps the privacy policy and terms up during site maintenance', async () => {
+    vi.stubEnv('MAINTENANCE_SITE', 'true')
+    for (const path of ['/privacy', '/terms']) {
+      const res = await proxy(request(path))
+      expect(res.status).not.toBe(503)
+      expect(rewriteTarget(res)).toBeNull()
+    }
   })
 
   it('closes the map when NEXT_PUBLIC_MAPS_DISABLED=true', async () => {
@@ -124,6 +140,20 @@ describe('proxy: session guard for /dashboard and /admin', () => {
   it('lets signed-in users through', async () => {
     auth.user = { id: 'user-1' }
     expect(passedThrough(await proxy(request('/dashboard', { headers: SESSION_COOKIE })))).toBe(true)
+  })
+
+  it('deletes the cookie of a dead session, so public pages stop showing "Sign out"', async () => {
+    const res = await proxy(request('/', { headers: SESSION_COOKIE }))
+    expect(passedThrough(res)).toBe(true)
+    const cleared = res.cookies.get('sb-otdy-auth-token')
+    expect(cleared?.value).toBe('')
+    expect(cleared?.maxAge).toBe(0)
+  })
+
+  it('keeps the cookie when Supabase is unreachable (the next request retries)', async () => {
+    auth.error = new AuthRetryableFetchError('fetch failed', 0)
+    const res = await proxy(request('/', { headers: SESSION_COOKIE }))
+    expect(res.cookies.get('sb-otdy-auth-token')).toBeUndefined()
   })
 
   it('does not touch Supabase for visitors without a session cookie on public pages', async () => {

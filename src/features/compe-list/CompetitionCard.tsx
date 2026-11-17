@@ -1,38 +1,40 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './CompetitionCard.module.css';
+import { externalLinkProps } from '@/features/competition/format';
 
-interface CompetitionCardProps {
-  id: string;
+const OPEN_CARD_BG =
+  'linear-gradient(0deg, rgba(172, 199, 255, 0.5) 0%, rgba(81, 126, 218, 0.5) 99.04%)';
+const CLOSED_CARD_BG = 'rgba(255, 255, 255, 0.2)';
+
+export interface CompetitionCardProps {
+  slug: string;
   title: string;
   description: string;
   registrationDeadline: string;
   iconPath: string;
   iconAlt: string;
-  buttonText: string;
-  buttonDisabled?: boolean;
-  gradientBackground: string;
+  /** Registration form, set only while registration is open (see status.ts registerEnabled). */
+  registerUrl: string | null;
   titleGradient: string;
 }
 
 export default function CompetitionCard({
-  id,
+  slug,
   title,
   description,
   registrationDeadline,
   iconPath,
   iconAlt,
-  buttonText,
-  buttonDisabled = false,
-  gradientBackground,
+  registerUrl,
   titleGradient,
 }: CompetitionCardProps) {
+  const closed = registerUrl === null;
+
   return (
     <div
-      className={`${styles.card} ${buttonDisabled ? styles.cardDisabled : ''}`}
-      style={{ background: gradientBackground }}
+      className={`${styles.card} ${closed ? styles.cardDisabled : ''}`}
+      style={{ background: closed ? CLOSED_CARD_BG : OPEN_CARD_BG }}
     >
       <div className={styles.iconContainer}>
         <Image
@@ -49,25 +51,29 @@ export default function CompetitionCard({
         {title}
       </h3>
 
-      <p className={styles.description}>{description}</p>
+      <p className={styles.description} title={description}>
+        {description}
+      </p>
 
       <div className={styles.registrationUntil}>
-        <span>Registration Until:</span>
-        <span>{registrationDeadline}</span>
+        {closed ? (
+          <span>Pendaftaran Ditutup</span>
+        ) : (
+          <>
+            <span>Registration Until:</span>
+            <span>{registrationDeadline}</span>
+          </>
+        )}
       </div>
 
-      {buttonDisabled ? (
-        <button
-          type="button"
-          className={`${styles.button} ${styles.buttonDisabled}`}
-          disabled
-        >
-          {buttonText}
-        </button>
-      ) : (
-        <Link href={`/competition/${id}`} className={styles.button}>
-          {buttonText}
+      {closed ? (
+        <Link href={`/competition/${slug}`} className={styles.button}>
+          Lihat Detail
         </Link>
+      ) : (
+        <a href={registerUrl} {...externalLinkProps(registerUrl)} className={styles.button}>
+          Registrasi
+        </a>
       )}
     </div>
   );

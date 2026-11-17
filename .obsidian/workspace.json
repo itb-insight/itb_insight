@@ -14,15 +14,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "public/itb-model/ITB-MODEL.md",
+                "file": "docs/RELEASE-CHECKLIST.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ITB-MODEL"
+              "title": "RELEASE-CHECKLIST"
+            }
+          },
+          {
+            "id": "28583da7a86a582b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "docs/MAPS-NOTES.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "MAPS-NOTES"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       },
       {
         "id": "644bd59d96feb685",
@@ -206,34 +221,36 @@
       "bases:Create new base": false
     }
   },
-  "active": "696c6d32523082a1",
+  "active": "28583da7a86a582b",
   "lastOpenFiles": [
-    "public/itb-model/ITB-MODEL.md.tmp.194785.737ce398e45b",
-    "src/features/landing/LandingPage.module.css.tmp.194785.7f2969b7e648",
-    "src/features/landing/LandingPage.module.css.tmp.194785.55afdfaa120c",
-    "src/features/landing/components/ScrollVideoBackground/ScrollVideoBackground.tsx.tmp.194785.c0ce77ef047d",
-    "src/features/landing/components/HeroSectionHifi/HeroSectionHifi.module.css.tmp.194785.ec8ce486efdf",
-    "src/features/landing/components/LandingBackground/LandingBackground.module.css.tmp.194785.6b5c9c48f0c7",
-    "src/features/landing/LandingPage.module.css.tmp.194785.3a0debaaa3bd",
-    "src/features/landing/components/LandingPageHifi/LandingPageHifi.tsx.tmp.194785.591da8e2bfa8",
-    "src/features/landing/components/LandingPageHifi/LandingPageHifi.tsx.tmp.194785.f5c0df49a0d0",
-    "src/features/landing/components/LandingPageHifi/LandingPageHifi.tsx.tmp.194785.20573890c2f9",
-    "src/features/landing/components/ScrollVideoBackground/ScrollVideoBackground.module.css",
+    "src/shared/hooks/useHasSession.test.ts",
+    "src/shared/hooks/useHasSession.ts.tmp.180708.ce88377eaaf6",
+    "src/features/events/location-tba.test.ts",
+    "src/lib/event-location.ts",
+    "src/lib/event-location.ts.tmp.165559.6093f37f9ba9",
+    "src/proxy.test.ts.tmp.130913.aa862de9a703",
+    "src/proxy.test.ts.tmp.130913.c7bde2c5c85e",
+    "src/proxy.ts.tmp.130913.5722b1baa188",
+    "src/features/auth/SignUpHifi/SignUpHifi.tsx.tmp.130913.3f9a70d9efb0",
+    "src/features/auth/LoginHifi/LoginHifi.tsx.tmp.130913.e357add9f1fc",
+    "src/shared/components/Footer/FooterHifi/FooterHifi.module.css.tmp.130913.afd28ce7af69",
+    "design-sources/README.md",
+    "design-sources/images/dashboard-bg.png",
+    "design-sources/images/gallery/mirror_logo.JPG",
+    "design-sources/images/gallery/topo.JPG",
+    "design-sources/images/gallery/y2017.JPG",
+    "design-sources/images/gallery/stage.JPG",
+    "design-sources/images/gallery/laser_show.JPG",
+    "design-sources/images/gallery/fountain.JPG",
+    "design-sources/deco/decor2.png",
+    "design-sources/images/shape10.png",
+    "design-sources/images/shape9.png",
     "docs/RELEASE-CHECKLIST.md",
+    "docs/MAPS-NOTES.md",
     "public/itb-model/ITB-MODEL.md",
-    "public/images/fallbacks/0430_Gerbang_ITB1.webp",
-    "public/images/fallbacks/0430_Gerbang_ITB1.JPG",
-    "public/images/qr-logo.png",
     "node_modules/jsqr/README.md",
     "node_modules/@img/sharp-wasm32/README.md",
     "public/images/timeline/REF.md",
-    "public/images/timeline/v1/circle-c4.svg",
-    "public/images/timeline/v1/circle-c5.svg",
-    "public/images/timeline/v1/circle-a2.svg",
-    "public/images/timeline/v1/circle-a3.svg",
-    "public/images/timeline/v1/circle-a4.svg",
-    "public/images/timeline/v1/circle-a5.svg",
-    "public/images/timeline/v1/circle-c1.svg",
     "notes.md",
     "docs/REGISTRATION-FLOWS.md",
     "docs/RELEASES.md",

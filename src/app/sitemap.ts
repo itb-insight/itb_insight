@@ -4,7 +4,7 @@ import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
 
-const routes = ["", "/event", MAP_PATH, "/login", "/register", "/signup"].filter(
+const routes = ["", "/event", MAP_PATH, "/login", "/register", "/signup", "/privacy", "/terms"].filter(
   (route) => route !== MAP_PATH || !isMapsDisabled(),
 )
 
