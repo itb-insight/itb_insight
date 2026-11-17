@@ -6,7 +6,7 @@
 	- [x] d. Headers and Footers
 2. [x] Set interactive map into coming soon.
 3. [ ] Secure account creation and signing in
-4. [ ] Personal QR-code
+4. [x] Personal QR-code
 5. [ ] Feedback (and config)
 6. [ ] Optimized location tracking & permissions
 7. [ ] The RSVP flow
