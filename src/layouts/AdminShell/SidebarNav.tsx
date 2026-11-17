@@ -11,6 +11,7 @@ import {
   Trophy,
   Users,
   CalendarDays,
+  ScanLine,
 } from "lucide-react"
 import styles from "./SidebarNav.module.css"
 
@@ -30,6 +31,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/admin/content", label: "Content", icon: FileText, live: false },
   { href: "/admin/partners", label: "Partners", icon: Handshake, live: false },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3, live: true },
+  { href: "/admin/qr-points", label: "QR Points (test)", icon: ScanLine, live: true },
   { href: "/admin/settings", label: "Settings", icon: Settings, live: false },
 ]
 

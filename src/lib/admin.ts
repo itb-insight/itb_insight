@@ -23,11 +23,15 @@ export async function getUserRole(user: Pick<User, 'id' | 'email'>): Promise<Use
   if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
     try {
       const supabase = createServiceClient()
-      const { data, error } = await supabase
-        .from('admin_roles')
-        .select('role')
-        .eq('user_id', user.id)
-        .maybeSingle()
+      const [{ data, error }, { data: profile }] = await Promise.all([
+        supabase.from('admin_roles').select('role').eq('user_id', user.id).maybeSingle(),
+        // profiles.role_a (0011) — not user-writable, so it is safe to trust here.
+        supabase.from('profiles').select('role_a').eq('id', user.id).maybeSingle(),
+      ])
+
+      if (profile?.role_a === 'admin') {
+        return 'admin'
+      }
 
       if (!error && data?.role) {
         return data.role as UserRole

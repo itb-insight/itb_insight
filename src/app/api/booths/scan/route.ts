@@ -2,10 +2,11 @@ import { type NextRequest } from 'next/server'
 
 import { getScopedUser } from '@/lib/admin'
 import { apiError, apiSuccess } from '@/lib/api-response'
-import { awardBoothPoints } from '@/lib/booths'
+import { awardBoothPoints, previewBoothAward, type BoothAwardParams } from '@/lib/booths'
 
 // Booth staff scan a visitor's personal QR to award points.
-// Body: { qrCode, boothId?, bonusPoints?, confirmSkippedGate? }
+// Body: { qrCode, boothId?, bonusPoints?, points? (admin only), confirmSkippedGate?, dryRun? }
+// dryRun: resolve the visitor and report what would happen, without writing anything.
 export async function POST(request: NextRequest) {
   const auth = await getScopedUser(request, ['booth_staff', 'exhibitor', 'admin'])
   if (!auth.ok) {
@@ -18,16 +19,19 @@ export async function POST(request: NextRequest) {
       return apiError('INVALID_INPUT', 'Body permintaan tidak valid.', 400)
     }
 
-    const { qrCode, boothId, bonusPoints, confirmSkippedGate } = body as Record<string, unknown>
+    const { qrCode, boothId, bonusPoints, points, confirmSkippedGate, dryRun } = body as Record<string, unknown>
 
-    const result = await awardBoothPoints({
+    const params: BoothAwardParams = {
       staffUserId: auth.user.id,
       staffRole: auth.role,
       visitorQr: qrCode,
       boothId: typeof boothId === 'string' && boothId ? boothId : undefined,
       bonusPoints: bonusPoints === undefined || bonusPoints === null ? 0 : Number(bonusPoints),
+      points: points === undefined || points === null || points === '' ? undefined : Number(points),
       confirmSkippedGate: confirmSkippedGate === true,
-    })
+    }
+
+    const result = dryRun === true ? await previewBoothAward(params) : await awardBoothPoints(params)
 
     if (!result.ok) {
       if (result.code === 'GATE_CHECKIN_REQUIRED') {
@@ -53,16 +57,7 @@ export async function POST(request: NextRequest) {
       return apiError(result.code, result.message, status)
     }
 
-    return apiSuccess({
-      booth: result.booth,
-      visitor: result.visitor,
-      pointsAwarded: result.pointsAwarded,
-      bonusPoints: result.bonusPoints,
-      alreadyVisited: result.alreadyVisited,
-      skippedGate: result.skippedGate,
-      totalPoints: result.totalPoints,
-      totalVisited: result.totalVisited,
-    })
+    return apiSuccess(result)
   } catch (err) {
     console.error('[API Booth Award Error]', err)
     return apiError('SERVER_ERROR', 'Terjadi kesalahan internal saat memberi poin.', 500)
