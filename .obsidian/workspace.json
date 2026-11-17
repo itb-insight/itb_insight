@@ -14,12 +14,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/RELEASE-CHECKLIST.md",
+                "file": "public/itb-model/ITB-MODEL.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "RELEASE-CHECKLIST"
+              "title": "ITB-MODEL"
             }
           }
         ]
@@ -208,18 +208,21 @@
   },
   "active": "696c6d32523082a1",
   "lastOpenFiles": [
+    "public/itb-model/ITB-MODEL.md.tmp.194785.737ce398e45b",
+    "src/features/landing/LandingPage.module.css.tmp.194785.7f2969b7e648",
+    "src/features/landing/LandingPage.module.css.tmp.194785.55afdfaa120c",
+    "src/features/landing/components/ScrollVideoBackground/ScrollVideoBackground.tsx.tmp.194785.c0ce77ef047d",
+    "src/features/landing/components/HeroSectionHifi/HeroSectionHifi.module.css.tmp.194785.ec8ce486efdf",
+    "src/features/landing/components/LandingBackground/LandingBackground.module.css.tmp.194785.6b5c9c48f0c7",
+    "src/features/landing/LandingPage.module.css.tmp.194785.3a0debaaa3bd",
+    "src/features/landing/components/LandingPageHifi/LandingPageHifi.tsx.tmp.194785.591da8e2bfa8",
+    "src/features/landing/components/LandingPageHifi/LandingPageHifi.tsx.tmp.194785.f5c0df49a0d0",
+    "src/features/landing/components/LandingPageHifi/LandingPageHifi.tsx.tmp.194785.20573890c2f9",
+    "src/features/landing/components/ScrollVideoBackground/ScrollVideoBackground.module.css",
+    "docs/RELEASE-CHECKLIST.md",
+    "public/itb-model/ITB-MODEL.md",
     "public/images/fallbacks/0430_Gerbang_ITB1.webp",
     "public/images/fallbacks/0430_Gerbang_ITB1.JPG",
-    "public/images/fallbacks",
-    "supabase/migrations/0012_admin_manual_points.sql",
-    "supabase/migrations/0011_profile_roles.sql",
-    "supabase/migrations/0010_booth_staff_scan.sql",
-    "src/shared/components/PersonalQr/PersonalQr.tsx",
-    "src/shared/components/PersonalQr",
-    "src/lib/qr.ts",
-    "src/lib/qr.test.ts",
-    "src/features/admin/qr-points/QrPointsTester.tsx",
-    "src/features/admin/qr-points/QrPointsTester.module.css",
     "public/images/qr-logo.png",
     "node_modules/jsqr/README.md",
     "node_modules/@img/sharp-wasm32/README.md",
@@ -231,8 +234,6 @@
     "public/images/timeline/v1/circle-a4.svg",
     "public/images/timeline/v1/circle-a5.svg",
     "public/images/timeline/v1/circle-c1.svg",
-    "public/images/timeline/v1/circle-c2.svg",
-    "docs/RELEASE-CHECKLIST.md",
     "notes.md",
     "docs/REGISTRATION-FLOWS.md",
     "docs/RELEASES.md",

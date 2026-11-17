@@ -1,9 +1,31 @@
 .landingContainer {
+  /* BACKGROUND OPACITY — the video (ScrollVideoBackground) sits behind this page, so
+     every background layer (the page gradient below, the LandingBackground objects
+     and the hero's left/right patterns) is drawn at this opacity.
+     0 = invisible (pure video) … 1 = solid (video hidden). */
+  --landing-bg-opacity: 0.55;
+
+  /* Same, but while the countdown (hero) is on screen — lower = more video showing.
+     As you scroll out of the hero it fades to --landing-bg-opacity
+     (fade range: FADE_START / FADE_END in ScrollVideoBackground.tsx). */
+  --landing-bg-opacity-countdown: 0.85;
+
+  /* Derived — don't edit. --landing-bg-fade (0 → 1) is set on <html> by
+     ScrollVideoBackground; layers should use --landing-bg-opacity-current. */
+  --landing-bg-opacity-current: calc(
+    var(--landing-bg-opacity-countdown)
+    + (var(--landing-bg-opacity) - var(--landing-bg-opacity-countdown)) * var(--landing-bg-fade, 0)
+  );
+
   position: relative;
   display: flow-root;
   overflow-x: clip;
   zoom: var(--page-scale, 1);
-  background: linear-gradient(to bottom, #091B3F 0%, #294D97 100%);
+  background: linear-gradient(
+    to bottom,
+    rgb(9 27 63 / var(--landing-bg-opacity-current)) 0%,
+    rgb(41 77 151 / var(--landing-bg-opacity-current)) 100%
+  );
   /* Backup — the old full-page raster background. Revert to this (and remove
      the `background` line above) if the per-section SVG objects don't pan out:
   background-image: url("/images/bg-main.png");

@@ -8,6 +8,7 @@ import SponsorsSectionHifi from "@/features/landing/components/SponsorsSectionHi
 import MediaPartnersSectionHifi from "@/features/landing/components/MediaPartnersSectionHifi/MediaPartnersSectionHifi"
 import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi"
 import LandingBackground from "@/features/landing/components/LandingBackground/LandingBackground"
+import ScrollVideoBackground from "@/features/landing/components/ScrollVideoBackground/ScrollVideoBackground"
 import styles from "@/features/landing/LandingPage.module.css"
 
 /**
@@ -15,6 +16,10 @@ import styles from "@/features/landing/LandingPage.module.css"
  */
 export default function LandingPageHifi({ children }: { children?: React.ReactNode }) {
   return (
+    <>
+    {/* Fixed scroll-scrubbed video behind the page (Blender-model fallback). Must come before
+        <main> so it paints underneath it. */}
+    <ScrollVideoBackground />
     <main className={styles.landingContainer}>
       {children}
       <LandingBackground />
@@ -28,5 +33,6 @@ export default function LandingPageHifi({ children }: { children?: React.ReactNo
       <MediaPartnersSectionHifi />
       <FooterHifi />
     </main>
+    </>
   )
 }

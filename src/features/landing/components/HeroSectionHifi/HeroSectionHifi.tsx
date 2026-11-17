@@ -116,7 +116,7 @@ export default function HeroSectionHifi() {
       : 0
 
   return (
-    <section ref={sectionRef} className={styles.hero}>
+    <section ref={sectionRef} id="hero" className={styles.hero}>
       <div className={styles.sticky}>
 
         <div className={styles.patternWrapper}>

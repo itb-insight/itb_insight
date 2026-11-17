@@ -132,6 +132,8 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  /* Multiplies with the per-pattern scroll opacity set inline in the TSX. */
+  opacity: var(--landing-bg-opacity-current, 1);
 }
 
 .patternLeft {

@@ -10,6 +10,8 @@
   overflow: hidden;
   pointer-events: none;
   container-type: inline-size;
+  /* Semi-transparent so the scroll video behind the page shows through. */
+  opacity: var(--landing-bg-opacity-current, 1);
 }
 
 /* Bleeds up from the About section into the tail end of Hero (Hero = 300vh) */

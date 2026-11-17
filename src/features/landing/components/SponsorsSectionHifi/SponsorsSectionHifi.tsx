@@ -22,7 +22,7 @@ const sponsors: Sponsor[] = [
 
 export default function SponsorsSectionHifi() {
   return (
-    <section className={styles.section}>
+    <section id="sponsors" className={styles.section}>
       <h2 className={styles.title}>OUR SPONSORS</h2>
 
       <ul className={styles.grid}>

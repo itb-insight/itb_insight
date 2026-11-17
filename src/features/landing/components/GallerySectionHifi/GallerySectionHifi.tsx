@@ -76,7 +76,7 @@ export default function GallerySectionHifi() {
   }
 
   return (
-    <section className={styles.gallery}>
+    <section id="gallery" className={styles.gallery}>
       <h2 className={styles.title}>GALLERY</h2>
 
       <div
