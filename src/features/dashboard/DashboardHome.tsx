@@ -6,7 +6,7 @@ import PayButton from "./PayButton"
 import TeamSubmitButton from "./TeamSubmitButton"
 import styles from "./Dashboard.module.css"
 
-type Account = { id: string; email: string | null }
+type Account = { id: string; email: string | null; qrToken: string | null }
 
 const statusBadge: Record<string, { className: string; label: string }> = {
   draft: { className: styles.badgeDraft, label: "Draft" },
@@ -79,7 +79,7 @@ export default function DashboardHome({
           </div>
         </section>
 
-        {account ? <AccountQrCard accountId={account.id} email={account.email} /> : null}
+        {account ? <AccountQrCard accountId={account.id} email={account.email} qrToken={account.qrToken} /> : null}
 
         <section className={styles.section}>
           <h2 className={styles.sectionHeading}>Registrasi Terbaru</h2>

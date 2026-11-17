@@ -13,8 +13,10 @@ export type VisitorTicket = {
   checked_in_by?: string | null
 }
 
+// 128 random bits as base64url (22 chars): unguessable, but short enough that the QR stays
+// sparse with a center logo. Older 64-hex tokens remain valid; see src/lib/qr.ts.
 export function generateQrToken() {
-  return randomBytes(32).toString('hex')
+  return randomBytes(16).toString('base64url')
 }
 
 // Idempotently creates the visitor's QR ticket, tolerating races (unique on user_id).

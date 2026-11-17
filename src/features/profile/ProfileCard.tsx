@@ -5,6 +5,7 @@ import { useActionState, useRef, useState } from 'react';
 import styles from './ProfileCard.module.css'
 import { updateProfile, type ProfileState } from './action'
 import Image from 'next/image';
+import PersonalQr from '@/shared/components/PersonalQr/PersonalQr'
 
 type Initial = { 
     full_name: string;
@@ -19,10 +20,10 @@ const FIELDS = [
   { name: 'institution', label: 'Institusi',   type: 'text', placeholder: 'Asal institusi' },
 ] as const
 
-export default function ProfileCard({ initial }: { initial: Initial }) {
+export default function ProfileCard({ initial, qrToken }: { initial: Initial; qrToken: string | null }) {
   const [isEditing, setIsEditing] = useState(false)
   const [iconFailed, setIconFailed] = useState(false) // pencil icon missing -> show text only
-  const [qrFailed, setQrFailed] = useState(false)       // QR image missing -> show fallback text
+  const qrFailed = !qrToken                              // ticket could not be issued -> show fallback text
   const formRef = useRef<HTMLFormElement>(null)
   const [state, formAction, pending] = useActionState<ProfileState, FormData>(
     async (prev, formData) => {
@@ -119,16 +120,7 @@ export default function ProfileCard({ initial }: { initial: Initial }) {
                     <p className={styles.qrHint}>Hmm.. QRnya belum muncul...</p>
                   </div>
                 ) : (
-                  <>
-                    <Image
-                      src="/images/qr-placeholder.png"
-                      alt="Personal QR"
-                      width={240}
-                      height={240}
-                      className={styles.qrImage}
-                      onError={() => setQrFailed(true)}
-                    />
-                  </>
+                  <PersonalQr token={qrToken} size={304} className={styles.qrImage} />
                 )}
               </div>
             </section>

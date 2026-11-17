@@ -257,13 +257,14 @@
   padding: 16px;
 }
 
-.qrImage {
+.qrImage {                       /* personal QR (SVG); white quiet zone is part of the code */
+  display: block;
   width: 304px;
-  height: 304px;
+  height: auto;
+  aspect-ratio: 1;
   max-width: 100%;
-  object-fit: cover;
   border-radius: 16px;
-  background: lightgray;
+  background: #fff;
 }
 
 

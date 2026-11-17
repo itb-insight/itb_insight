@@ -103,7 +103,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 307.5
+    "width": 200
   },
   "right": {
     "id": "034e7f8a9a76fa28",
@@ -208,10 +208,21 @@
   },
   "active": "696c6d32523082a1",
   "lastOpenFiles": [
+    "src/lib/booths.ts.tmp.21650.e74c9afa635c",
+    "src/lib/sedmOtLkA",
+    "supabase/migrations/0012_admin_manual_points.sql",
+    "src/features/admin/qr-points/QrPointsTester.module.css",
+    "src/features/admin/qr-points/QrPointsTester.module.css.tmp.21650.bd4153bd1b5b",
+    "src/features/admin/qr-points/QrPointsTester.tsx",
+    "src/features/admin/qr-points/QrPointsTester.tsx.tmp.21650.32420bc57557",
+    "src/features/admin/qr-points/QrCameraScanner.tsx",
+    "src/features/admin/qr-points/QrCameraScanner.tsx.tmp.21650.dcbf46bfd5b3",
+    "src/features/admin/qr-points",
+    "src/app/admin/qr-points/page.tsx",
+    "node_modules/jsqr/README.md",
+    "node_modules/@img/sharp-wasm32/README.md",
+    "public/images/qr-logo.png",
     "public/images/timeline/REF.md",
-    "src/features/landing/components/TimelineSectionHifi/TimelineSectionHifi.module.css.tmp.53520.3ddc45c81db0",
-    "src/features/landing/components/TimelineSectionHifi/TimelineSectionHifi.module.css.tmp.53520.36d94f05c9be",
-    "src/features/landing/components/TimelineSectionHifi/TimelineSectionHifi.tsx.tmp.53520.0c8a39fab582",
     "public/images/timeline/v1/circle-c4.svg",
     "public/images/timeline/v1/circle-c5.svg",
     "public/images/timeline/v1/circle-a2.svg",
@@ -221,21 +232,12 @@
     "public/images/timeline/v1/circle-c1.svg",
     "public/images/timeline/v1/circle-c2.svg",
     "public/images/timeline/v2/purple.png",
-    "public/images/timeline/v2/red.png",
-    "public/images/timeline/v2",
-    "public/images/timeline/v1",
     "docs/RELEASE-CHECKLIST.md",
     "notes.md",
-    "src/shared/components/Navbar/NavbarHifi/NavbarShell.tsx",
-    "src/features/landing/hooks/useIsSignedIn.ts",
-    "src/features/events/layoutSlots.ts",
-    "src/features/events/details.ts",
-    "src/features/events/detail/SeminarInfo.tsx",
     "docs/REGISTRATION-FLOWS.md",
     "docs/RELEASES.md",
     "docs/analytics/00-overview.md",
     "docs/analytics/01-tracking-library.md",
-    "node_modules/@img/sharp-wasm32/README.md",
     "qr-notes.md"
   ]
 }
