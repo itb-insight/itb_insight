@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
           ticket_type,
           checked_in,
           checked_in_at,
-          profiles(full_name, email, phone, institution)
+          profiles!visitor_tickets_user_id_fkey(full_name, email, phone, institution)
         `)
         .order('created_at', { ascending: false })
 

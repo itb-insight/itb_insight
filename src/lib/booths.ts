@@ -187,11 +187,15 @@ async function loadAwardContext(params: BoothAwardParams): Promise<AwardContext 
 
   const { data: ticket, error: ticketError } = await supabase
     .from('visitor_tickets')
-    .select('id, user_id, checked_in, profiles(full_name, institution)')
+    .select('id, user_id, checked_in, profiles!visitor_tickets_user_id_fkey(full_name, institution)')
     .eq('qr_code', token)
     .maybeSingle()
 
-  if (ticketError || !ticket) {
+  if (ticketError) {
+    console.error('[booths] ticket lookup failed', ticketError)
+    return { ok: false, code: 'DATABASE_ERROR', message: 'Gagal mencari data pengunjung.' }
+  }
+  if (!ticket) {
     return { ok: false, code: 'TICKET_NOT_FOUND', message: 'Pengunjung tidak ditemukan. Minta pengunjung memuat ulang QR-nya.' }
   }
 

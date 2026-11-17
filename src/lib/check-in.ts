@@ -35,7 +35,7 @@ export async function processGateCheckIn(params: {
   // 1. Fetch ticket and user profile
   const { data: ticket, error: ticketError } = await supabase
     .from('visitor_tickets')
-    .select('id, user_id, qr_code, ticket_type, checked_in, checked_in_at, checked_in_by, profiles(full_name, email, institution)')
+    .select('id, user_id, qr_code, ticket_type, checked_in, checked_in_at, checked_in_by, profiles!visitor_tickets_user_id_fkey(full_name, email, institution)')
     .eq('qr_code', token)
     .maybeSingle()
 
@@ -136,7 +136,7 @@ export async function searchVisitorsManual(query: string) {
 
   const { data, error } = await supabase
     .from('visitor_tickets')
-    .select('id, user_id, qr_code, ticket_type, checked_in, checked_in_at, checked_in_by, profiles!inner(id, full_name, email, institution, phone)')
+    .select('id, user_id, qr_code, ticket_type, checked_in, checked_in_at, checked_in_by, profiles!visitor_tickets_user_id_fkey!inner(id, full_name, email, institution, phone)')
     .or(`email.ilike.%${cleanQuery}%,full_name.ilike.%${cleanQuery}%`, { referencedTable: 'profiles' })
     .limit(20)
 
