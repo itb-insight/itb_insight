@@ -1,0 +1,80 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--admin-panel-gap);
+}
+
+.average {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 56px;
+  text-align: right;
+  color: var(--admin-text);
+}
+
+/* ---- tabel ---------------------------------------------------------------- */
+
+.table {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) 57px;
+  column-gap: 32px;
+  row-gap: 16px;
+  align-items: start;
+}
+
+.stars {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.star {
+  display: block;
+  flex: none;
+}
+
+.comment {
+  margin: 0;
+  font-size: var(--admin-body-size);
+  font-weight: 400;
+  line-height: var(--admin-body-line);
+  color: var(--admin-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.time {
+  margin: 0;
+  font-size: var(--admin-subtitle-size);
+  font-weight: 400;
+  line-height: var(--admin-subtitle-line);
+  text-align: right;
+  white-space: nowrap;
+  color: var(--admin-text);
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--admin-body-size);
+  line-height: var(--admin-body-line);
+  color: var(--admin-text-muted);
+}
+
+/* ---- kaki ----------------------------------------------------------------- */
+
+.more {
+  align-self: flex-start;
+  font-size: var(--admin-body-size);
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--admin-link-more);
+  text-decoration: none;
+}
+
+.more:hover,
+.more:focus-visible {
+  text-decoration: underline;
+}

@@ -1,0 +1,116 @@
+.body {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+/* ---- cincin --------------------------------------------------------------- */
+
+.ringWrap {
+  position: relative;
+  flex: none;
+  width: var(--ring-size, 320px);
+  height: var(--ring-size, 320px);
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--admin-deep);
+  -webkit-mask: radial-gradient(
+    circle at center,
+    transparent var(--ring-hole, 100px),
+    #000 var(--ring-hole, 100px)
+  );
+  mask: radial-gradient(
+    circle at center,
+    transparent var(--ring-hole, 100px),
+    #000 var(--ring-hole, 100px)
+  );
+}
+
+.arc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--admin-ice);
+  -webkit-mask: conic-gradient(#000 0turn var(--sweep, 0turn), transparent var(--sweep, 0turn) 1turn);
+  mask: conic-gradient(#000 0turn var(--sweep, 0turn), transparent var(--sweep, 0turn) 1turn);
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+}
+
+.value {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 80px;
+  color: var(--admin-text);
+}
+
+.centerLabel {
+  margin: 0;
+  font-size: var(--admin-body-size);
+  font-weight: 400;
+  line-height: var(--admin-body-line);
+  color: var(--admin-text);
+}
+
+/* ---- legenda -------------------------------------------------------------- */
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: var(--admin-subtitle-size);
+  font-weight: 400;
+  line-height: var(--admin-subtitle-line);
+  color: var(--admin-text-strong);
+  white-space: nowrap;
+}
+
+.swatch {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.swatchOn {
+  background: var(--admin-ice);
+}
+
+.swatchOff {
+  background: var(--admin-deep);
+}
+
+/* Baris total: tanpa swatch, sejajar dengan swatch di atasnya. */
+.total {
+  margin: 0;
+  font-size: var(--admin-subtitle-size);
+  font-weight: 400;
+  line-height: var(--admin-subtitle-line);
+  color: var(--admin-text-strong);
+  white-space: nowrap;
+}

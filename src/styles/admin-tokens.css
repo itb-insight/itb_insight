@@ -1,0 +1,54 @@
+:root {
+  /* ---- warna ---- */
+
+  --admin-bg: linear-gradient(180deg, #091b3f 0%, #294d97 100%), #091b3f;
+
+  --admin-panel-fill: linear-gradient(
+    0deg,
+    rgba(172, 199, 255, 0.5) 0%,
+    rgba(27, 59, 125, 0.5) 100%
+  );
+  --admin-panel-stroke: linear-gradient(0deg, #517eda 1%, #acc7ff 100%);
+
+  /* permukaan terang: tombol, swatch, tab aktif */
+  --admin-ice: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  --admin-ice-stroke: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+
+  /* latar gelap: track ring chart, segmen bar yang kosong */
+  --admin-deep: linear-gradient(180deg, #091b3f 0%, #294d97 100%);
+
+  /* ---- teks ---- */
+  --admin-text: #dee8fb; /* judul panel */
+  --admin-text-muted: #ccddff; /* subjudul, keterangan */
+  --admin-text-strong: #ffffff; /* label di dalam widget */
+  --admin-text-on-ice: #1b3b7d; /* teks di atas permukaan terang */
+  --admin-link: #7fa9f6; /* pil, chevron */
+
+  --admin-active: #1b3b7d; /* baris sidebar terpilih */
+  --admin-success: #6ccb59;
+  --admin-link-more: #8aceff; /* tautan "Lihat ... lainnya" di kaki widget */
+
+  /* bintang rating; yang kosong emas gelap, bukan abu-abu */
+  --admin-star-on: #fad500;
+  --admin-star-off: #89590a;
+
+  /* ---- bentuk ---- */
+  --admin-radius-panel: 16px;
+  --admin-radius-sm: 8px;
+  --admin-radius-pill: 24px;
+  --admin-border-w: 4px;
+
+  /* ---- jarak ---- */
+  --admin-gap: 32px; /* antar widget di kolom isi */
+  --admin-panel-gap: 24px; /* antar bagian di dalam panel */
+  --admin-panel-pad-y: 32px;
+  --admin-panel-pad-x: 40px;
+
+  /* ---- tipografi ---- */
+  --admin-title-size: 28px;
+  --admin-title-line: 34px;
+  --admin-subtitle-size: 20px;
+  --admin-subtitle-line: 24px;
+  --admin-body-size: 16px;
+  --admin-body-line: 24px;
+}
