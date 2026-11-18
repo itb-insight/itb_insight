@@ -1,0 +1,21 @@
+/*
+ * Baris berisi beberapa widget berdampingan, misalnya Asal Traffic dan
+ * Di mana visitor berhenti di halaman Web (Figma: Frame 48096501, jarak 24).
+ *
+ * Kedua widget itu di Figma tingginya beda (394 dan 398) dan diletakkan di
+ * tengah secara vertikal, jadi baris ini memakai align-items: center,
+ * bukan stretch.
+ */
+
+.row {
+  display: grid;
+  grid-template-columns: var(--columns, repeat(2, minmax(0, 1fr)));
+  align-items: center;
+  gap: 24px;
+}
+
+@media (max-width: 1099px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

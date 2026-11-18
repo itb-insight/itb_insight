@@ -1,0 +1,55 @@
+/*
+ * Figma: komponen "Progress Bar" (620:1566), dipakai Bar Chart 1 dan 2.
+ *
+ *   bingkai   tinggi 12, radius 8, tepi 2px ke dalam, gradient terang
+ *             #dee8fb (atas) -> #acc7ff (bawah)
+ *   isi       5 segmen @20% setinggi 8px (y=2). Segmen terisi pakai gradient
+ *             yang sama dengan tepi; segmen kosong pakai --admin-deep.
+ *
+ * Di sini lima segmen itu digambar sebagai satu isian selebar --value.
+ * Untuk nilai kelipatan 20% hasilnya identik dengan Figma; nilai lain
+ * (misalnya 73%) tetap tergambar proporsional.
+ */
+
+.track {
+  position: relative;
+  height: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* bagian kosong */
+.track::before {
+  content: "";
+  position: absolute;
+  inset: 2px 0;
+  background: var(--admin-deep);
+}
+
+.fill {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+  width: var(--value, 0%);
+  background: var(--admin-ice-stroke);
+}
+
+/* tepi 2px, digambar di atas isian seperti stroke INSIDE di Figma */
+.track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: var(--admin-ice-stroke);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
