@@ -1,0 +1,72 @@
+.group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 0;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #dee8fb;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+.chip:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.light .chip {
+  height: 40px;
+  padding: 0 20.5px;
+  border-radius: 9999px;
+  background: transparent;
+}
+
+.light .chip::before {
+  display: none;
+}
+
+.light .chip:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.light .chip.active {
+  background: linear-gradient(180deg, #acc7ff 0%, #dee8fb 100%);
+  color: #1b3b7d;
+}
+
+.light .chip.active::before {
+  --gb-width: 2px;
+  --gb-gradient: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+
+  display: block;
+}
+
+.dark {
+  gap: 15px;
+}
+
+.dark .chip {
+  height: 30.67px;
+  padding: 0 14px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark .chip:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.dark .chip.active {
+  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%);
+}

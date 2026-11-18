@@ -1,0 +1,11 @@
+.table th,
+.table td {
+  padding: 0 8px 0 6px;
+}
+
+.groupRow th,
+.groupRow td {
+  height: 31px;
+  background: rgba(9, 27, 63, 0.5);
+  font-size: 12px;
+}
