@@ -1,0 +1,63 @@
+/* Shell widget admin hi-fi (Figma "Page Admin" → section Widgets).
+   Token warna lokal dari design system Figma: blue/50, blue/100, blue/200, blue/700. */
+.card {
+  --w-blue-50: #dee8fb;
+  --w-blue-100: #ccddff;
+  --w-blue-200: #acc7ff;
+  --w-blue-700: #1b3b7d;
+  --w-stroke: #517eda;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+  padding: var(--space-8) 40px;
+  border: 4px solid var(--w-stroke);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(to top, rgba(172, 199, 255, 0.5), rgba(27, 59, 125, 0.5));
+  color: var(--w-blue-50);
+  font-family: var(--font-primary);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 400;
+  color: var(--w-blue-50);
+}
+
+.description {
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--w-blue-100);
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: var(--space-6) var(--space-4);
+    border-width: 2px;
+  }
+  .title {
+    font-size: 22px;
+    line-height: 28px;
+  }
+  .description {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}

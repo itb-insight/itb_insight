@@ -1,0 +1,131 @@
+.mapBox {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: #030303;
+  isolation: isolate;
+}
+
+.legend {
+  position: absolute;
+  left: 36px;
+  bottom: 28px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 155px;
+  pointer-events: none;
+}
+
+.legendBar {
+  height: 17px;
+  border-radius: 100px;
+  background: linear-gradient(to right, #ff6767, #fff341, #33aaff);
+}
+
+.legendText {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  line-height: 14px;
+  color: #dee8fb;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.stepper {
+  position: absolute;
+  right: var(--space-8);
+  bottom: 44px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-1);
+  border: 2px solid #dee8fb;
+  border-radius: var(--radius-md);
+  background: linear-gradient(to top, #dee8fb, #acc7ff);
+}
+
+.stepper button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 24px;
+  border: 0;
+  background: transparent;
+  color: #1b3b7d;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.stepper button:hover {
+  background: rgba(27, 59, 125, 0.12);
+}
+
+.stepper button:focus-visible {
+  outline: 2px solid #1b3b7d;
+  outline-offset: 1px;
+}
+
+.divider {
+  width: 28px;
+  height: 1.5px;
+  background: #1b3b7d;
+  opacity: 0.35;
+}
+
+.empty {
+  position: absolute;
+  top: var(--space-4);
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  background: rgba(16, 32, 70, 0.85);
+  font-size: 14px;
+  color: #ccddff;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Popup maplibre: override skin bawaan (putih) jadi tema admin */
+.popup :global(.maplibregl-popup-content) {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid #517eda;
+  border-radius: var(--radius-md);
+  background: rgba(16, 32, 70, 0.95);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  font-family: var(--font-primary);
+}
+
+.popup :global(.maplibregl-popup-tip) {
+  display: none;
+}
+
+.popupName {
+  font-size: 14px;
+  line-height: 18px;
+  color: #ccddff;
+}
+
+.popupValue {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 700;
+  color: #dee8fb;
+}
+
+@media (max-width: 640px) {
+  .legend {
+    left: var(--space-4);
+    bottom: var(--space-6);
+    width: 120px;
+  }
+  .stepper {
+    right: var(--space-4);
+  }
+}

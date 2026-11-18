@@ -1,0 +1,171 @@
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-8);
+  padding: var(--space-2) 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.statLabel {
+  font-size: 20px;
+  line-height: 24px;
+  color: #ccddff;
+}
+
+.statValue {
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.17;
+  font-weight: 700;
+  color: #dee8fb;
+  font-variant-numeric: tabular-nums;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  list-style: none;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 16px;
+  line-height: 20px;
+  color: #ccddff;
+}
+
+.legendDot {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+}
+
+.legendItem .legendDot {
+  width: 20px;
+  height: 20px;
+}
+
+.chart {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  touch-action: pan-y;
+  border-radius: var(--radius-md);
+}
+
+.chart:focus-visible {
+  outline: 2px solid #dee8fb;
+  outline-offset: 4px;
+}
+
+.svg {
+  display: block;
+  overflow: visible;
+}
+
+.grid {
+  stroke: rgba(222, 232, 251, 0.35);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.axis {
+  stroke: rgba(222, 232, 251, 0.6);
+  stroke-width: 1;
+}
+
+.cursor {
+  stroke: #dee8fb;
+  stroke-width: 1;
+  opacity: 0.7;
+}
+
+.yLabel,
+.xLabel {
+  fill: #ffffff;
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.yLabel {
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+
+.xLabel {
+  text-anchor: middle;
+}
+
+.line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.empty {
+  position: absolute;
+  inset: 0 0 28px 40px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  color: #ccddff;
+  pointer-events: none;
+}
+
+.tooltip {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  min-width: 160px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid #517eda;
+  border-radius: var(--radius-md);
+  background: rgba(16, 32, 70, 0.95);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  font-size: 14px;
+  line-height: 20px;
+  color: #dee8fb;
+}
+
+.tooltipTitle {
+  margin-bottom: var(--space-1);
+  color: #ccddff;
+  font-size: 13px;
+}
+
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tooltipRow .legendDot {
+  width: 10px;
+  height: 10px;
+}
+
+.tooltipName {
+  flex: 1;
+}
+
+.tooltipRow strong {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .statLabel {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
