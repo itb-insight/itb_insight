@@ -1,0 +1,93 @@
+/*
+ * Figma: widget "Error Monitor" (1925:5693) di halaman Web.
+ * Kepala panel, padding, dan tepi datang dari PanelHifi.
+ *
+ *   isi panel  dua baris berjarak 24: tiga kotak angka, lalu tiga tombol
+ *   kolom      tiga sama lebar, jarak 17
+ *
+ * Kotak angka (420 x 138):
+ *   isi        #acc7ff (bawah) -> #517eda (atas), opacity 50%
+ *   tepi       4px ke dalam, --admin-ice-stroke
+ *   radius     16, padding 16 / 20 ditambah tebal tepi, jarak 8
+ *   teks       label  Gabarito 400 20/24
+ *              angka  EXCRATCH 700 36/34
+ *              catatan Gabarito 400 16/24
+ *              semuanya putih, rata kiri
+ */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 17px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stat {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: calc(var(--admin-border-w) + 16px) calc(var(--admin-border-w) + 20px);
+  border-radius: var(--admin-radius-panel);
+  background: linear-gradient(0deg, rgba(172, 199, 255, 0.5) 0%, rgba(81, 126, 218, 0.5) 99%);
+  color: var(--admin-text-strong);
+}
+
+.stat::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: var(--admin-border-w);
+  border-radius: inherit;
+  background: var(--admin-ice-stroke);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Warna ditulis di tiap teks, bukan hanya di .stat: globals.css punya
+   `p { color: var(--color-text-secondary) }` (#a0a0a0) yang mengalahkan
+   warna warisan dari induk. */
+.label,
+.value,
+.note {
+  margin: 0;
+  font-weight: 400;
+  color: var(--admin-text-strong);
+}
+
+.label {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.value {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 34px;
+  /* Browser menaruh huruf EXCRATCH ~0.037em lebih rendah daripada Figma.
+     Digeser tanpa mengubah tinggi baris supaya isi kotak tidak ikut naik. */
+  position: relative;
+  top: -0.037em;
+}
+
+.note {
+  font-size: 16px;
+  line-height: 24px;
+}

@@ -1,0 +1,95 @@
+/*
+ * Figma: komponen "Tombol" (1926:5768), dua varian.
+ *
+ *   ukuran   tinggi 96, radius 16, tepi 4px ke dalam (--admin-ice-stroke)
+ *   padding  16 / 20, ditambah tebal tepi (sama seperti PanelHifi)
+ *   Default  isi --admin-ice                    (#dee8fb bawah -> #acc7ff atas)
+ *   Hover    isi #acc7ff (bawah) -> #517eda (atas)
+ *   teks     judul Gabarito 400 28/34, keterangan 12/14, keduanya #091b3f,
+ *            rata tengah, jarak 8
+ *
+ * Di Figma ketiga tombol punya interaksi ON_HOVER -> CHANGE_TO "Hover".
+ * Gradient CSS tidak bisa dianimasikan langsung, jadi isi Hover ada di
+ * lapisan ::before yang opacity-nya naik 0 -> 1. Figma sendiri berganti
+ * seketika (transition: null); ganti 150ms jadi 0ms kalau mau sama persis.
+ */
+
+.button {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 96px;
+  padding: calc(var(--admin-border-w) + 16px) calc(var(--admin-border-w) + 20px);
+  border-radius: var(--admin-radius-panel);
+  background: var(--admin-ice);
+  color: #091b3f;
+  text-align: center;
+  text-decoration: none;
+  isolation: isolate;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+/* isi Hover */
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(0deg, #acc7ff 0%, #517eda 99%);
+  opacity: 0;
+  transition: opacity 150ms ease;
+  z-index: -1;
+}
+
+/* tepi, di atas isi seperti stroke INSIDE di Figma */
+.button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: var(--admin-border-w);
+  border-radius: inherit;
+  background: var(--admin-ice-stroke);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.button:hover::before,
+.button:focus-visible::before {
+  opacity: 1;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--admin-text);
+  outline-offset: 3px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 34px;
+}
+
+.description {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button::before {
+    transition: none;
+  }
+}
