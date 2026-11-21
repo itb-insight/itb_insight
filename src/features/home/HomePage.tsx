@@ -3,19 +3,24 @@ import CalendarCard from "./CalendarCard"
 import CountdownCard from "./CountdownCard"
 import HomeBackground from "./HomeBackground"
 import styles from "./HomePage.module.css"
+import type { ActivityEntry } from "./activityTypes"
 
 interface HomePageProps {
   serverNow?: number
+  /** First name for the greeting; "User" when unknown. */
+  userName?: string
+  /** null = the activity could not be loaded. */
+  activity: ActivityEntry[] | null
 }
 
-export default function HomePage({ serverNow }: HomePageProps) {
+export default function HomePage({ serverNow, userName, activity }: HomePageProps) {
   return (
     <div className={styles.page}>
       <HomeBackground />
 
       <main className={styles.main}>
-        <h1 className={styles.welcome}>Welcome User!</h1>
-        <ActivityCard />
+        <h1 className={styles.welcome}>Welcome {userName || "User"}!</h1>
+        <ActivityCard entries={activity} />
       </main>
 
       <aside className={styles.rail}>

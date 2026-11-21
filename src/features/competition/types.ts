@@ -103,6 +103,11 @@ export interface Competition {
   guidebookUrl: string | null;
   contactUrl: string | null;
   /**
+   * Tautan komunitas peserta, tampil di kartu "My Activity" (/dashboard) untuk tim lomba ini.
+   * Kosong = tombolnya tidak ditampilkan.
+   */
+  community?: { whatsappGroupUrl?: string; discordUrl?: string };
+  /**
    * Formulir pendaftaran eksternal (Google Form). Pendaftaran lomba tidak
    * lagi lewat website. null = belum ada tautan: tombol daftar selalu ditutup.
    */
