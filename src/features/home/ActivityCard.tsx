@@ -2,13 +2,14 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Crown, Plus, Trophy, User } from "lucide-react"
+import { Crown, Pencil, Plus, SquarePen, Trophy, User } from "lucide-react"
 
 import PilihKegiatanModal from "@/shared/components/modals/PilihKegiatanModal"
 
 import cardStyles from "./HomeCard.module.css"
 import styles from "./ActivityCard.module.css"
 import type { ActivityEntry, ActivityMember } from "./activityTypes"
+import TeamDialogs, { type TeamDialog } from "./TeamDialogs"
 
 interface ActivityCardProps {
   /** null = the activity could not be loaded. */
@@ -66,7 +67,7 @@ export default function ActivityCard({ entries, preview = false }: ActivityCardP
       </div>
 
       {entry ? (
-        <ActivityPanel entry={entry} />
+        <ActivityPanel key={entry.teamId} entry={entry} preview={preview} />
       ) : (
         <div className={`${styles.panel} ${styles.panelEmpty}`}>
           <p className={styles.emptyText}>
@@ -84,7 +85,13 @@ export default function ActivityCard({ entries, preview = false }: ActivityCardP
   )
 }
 
-function ActivityPanel({ entry }: { entry: ActivityEntry }) {
+function ActivityPanel({ entry, preview }: { entry: ActivityEntry; preview: boolean }) {
+  const [dialog, setDialog] = useState<TeamDialog>(null)
+  // Team actions: not in the admin preview, and nothing to manage once the team has withdrawn.
+  const canAct = !preview && !entry.withdrawn
+  const leads = canAct && entry.viewerIsLeader
+  const hasOpenSlots = entry.members.some((m) => !m.isLeader && m.state !== "active")
+
   return (
     <div className={`${styles.panel} ${entry.withdrawn ? styles.panelWithdrawn : ""}`}>
       <div className={styles.headingRow}>
@@ -99,6 +106,12 @@ function ActivityPanel({ entry }: { entry: ActivityEntry }) {
 
       <div className={styles.universityRow}>
         <p className={styles.university}>{entry.institution}</p>
+        {canAct && (
+          <button type="button" className={styles.editData} onClick={() => setDialog("manage")} aria-haspopup="dialog">
+            Edit Data
+            <Pencil size={16} aria-hidden="true" />
+          </button>
+        )}
       </div>
 
       <div className={styles.members}>
@@ -123,10 +136,29 @@ function ActivityPanel({ entry }: { entry: ActivityEntry }) {
                 </span>
                 {tag && <span className={styles.memberTag}>{tag}</span>}
               </span>
+
+              {member.isLeader && leads && (
+                <button
+                  type="button"
+                  className={styles.memberEdit}
+                  onClick={() => setDialog("leader")}
+                  aria-haspopup="dialog"
+                  aria-label="Ubah ketua"
+                >
+                  <SquarePen size={24} aria-hidden="true" />
+                </button>
+              )}
             </div>
           )
         })}
       </div>
+
+      {leads && hasOpenSlots && (
+        <button type="button" className={styles.inviteRow} onClick={() => setDialog("invite")} aria-haspopup="dialog">
+          <span className={styles.invitePlus}>+</span>
+          <span className={styles.inviteLabel}>Invite Anggota</span>
+        </button>
+      )}
 
       {entry.nextStage && (
         <>
@@ -156,6 +188,8 @@ function ActivityPanel({ entry }: { entry: ActivityEntry }) {
           ))}
         </div>
       )}
+
+      {canAct && <TeamDialogs entry={entry} open={dialog} onClose={() => setDialog(null)} />}
     </div>
   )
 }

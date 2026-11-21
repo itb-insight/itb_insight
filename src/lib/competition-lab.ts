@@ -203,3 +203,24 @@ export async function findTeamIds(supabase: ServiceClient, query: string): Promi
   const { data } = await supabase.from('competition_teams').select('id').eq('team_uid', value.toUpperCase().replace(/\s+/g, '')).limit(1)
   return (data ?? []).map((row) => row.id as string)
 }
+
+/** Undoes withdrawals on a test team (team, registration and members), to test them again. */
+export async function restoreLabTeam(supabase: ServiceClient, teamId: string): Promise<LabResult<{ restored: boolean }>> {
+  const { data: team, error } = await supabase
+    .from('competition_teams')
+    .update({ status: 'verified', withdrawn_at: null })
+    .eq('id', teamId)
+    .eq('source', 'test')
+    .select('id')
+    .maybeSingle()
+  if (error) return fail('RESTORE_FAILED', error.message, 500)
+  if (!team) return fail('TEAM_NOT_FOUND', 'Tim uji tidak ditemukan.', 404)
+
+  const [registrations, members] = await Promise.all([
+    supabase.from('competition_registrations').update({ status: 'verified' }).eq('team_id', teamId),
+    supabase.from('competition_team_members').update({ status: 'active', withdrawn_at: null }).eq('team_id', teamId).eq('status', 'withdrawn'),
+  ])
+  if (registrations.error || members.error) return fail('RESTORE_FAILED', (registrations.error ?? members.error)!.message, 500)
+
+  return { ok: true, data: { restored: true } }
+}

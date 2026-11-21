@@ -175,6 +175,17 @@ export default function CompetitionLab({ competitions, defaults, teams, adminEma
           </a>
         </div>
 
+        <h2 className={styles.panelTitle}>Kasus uji aksi tim</h2>
+        <ol className={styles.steps}>
+          <li>Invite: di /dashboard klik &quot;Invite Anggota&quot;, isi email Anggota 2, simpan; tabel di bawah menampilkan &quot;diundang&quot;.</li>
+          <li>
+            Ubah ketua: masuk dengan alias Anggota 1 di browser lain (kode masuk terkirim ke inbox yang sama), buka
+            /dashboard agar slotnya terklaim, lalu kembali sebagai dirimu dan pakai ikon di baris Ketua.
+          </li>
+          <li>Mundur: &quot;Edit Data&quot; → ketik MUNDUR. Sebagai ketua seluruh tim mundur; sebagai anggota hanya kamu.</li>
+          <li>&quot;Pulihkan&quot; di tabel membatalkan pengunduran diri tim uji; &quot;Lepas slot saya&quot; mengulang klaim.</li>
+        </ol>
+
         <h2 className={styles.panelTitle}>Log</h2>
         {log.length ? (
           <ul className={styles.log}>
@@ -240,6 +251,16 @@ export default function CompetitionLab({ competitions, defaults, teams, adminEma
                       <a className={styles.link} href={`?preview=${encodeURIComponent(team.teamUid)}#preview`}>
                         Pratinjau
                       </a>
+                      {(team.status === "withdrawn" || team.members.some((m) => m.status === "withdrawn")) && (
+                        <button
+                          type="button"
+                          className={styles.link}
+                          disabled={Boolean(busy)}
+                          onClick={() => run("Pulihkan", { action: "restore", teamId: team.id }, () => `${team.teamUid} dipulihkan`)}
+                        >
+                          Pulihkan
+                        </button>
+                      )}
                       <button
                         type="button"
                         className={styles.linkDanger}

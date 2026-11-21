@@ -13,6 +13,7 @@ type RateLimitScope =
   | 'team-member-remove'
   | 'team-leave'
   | 'team-join'
+  | 'team-manage'
   | 'feedback-submit'
   | 'self-check-in'
 

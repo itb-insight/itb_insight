@@ -3,7 +3,7 @@ import { type NextRequest } from 'next/server'
 import { apiError, apiSuccess } from '@/lib/api-response'
 import { getScopedUser } from '@/lib/admin'
 import { claimPendingSlots } from '@/lib/competition-claims'
-import { deleteLabTeams, releaseLabSlots, seedLabTeam } from '@/lib/competition-lab'
+import { deleteLabTeams, releaseLabSlots, restoreLabTeam, seedLabTeam } from '@/lib/competition-lab'
 import { parseTextFields, UUID_PATTERN } from '@/lib/input'
 import { createServiceClient } from '@/lib/supabase/server'
 
@@ -14,6 +14,7 @@ import { createServiceClient } from '@/lib/supabase/server'
   POST { action: 'seed', competitionSlug, teamName, school, member1Name, member1Email, … member3* }
   POST { action: 'claim' }      run the sign-in claim for the calling admin now
   POST { action: 'release' }    give back the admin's test-team slots, to claim again
+  POST { action: 'restore', teamId }  undo withdrawals on a test team
   POST { action: 'delete', teamId } | { action: 'reset' }
 */
 
@@ -72,6 +73,12 @@ export async function POST(request: NextRequest) {
 
     case 'release': {
       const result = await releaseLabSlots(supabase, auth.user)
+      return result.ok ? apiSuccess(result.data) : apiError(result.code, result.message, result.status)
+    }
+
+    case 'restore': {
+      if (!values.teamId || !UUID_PATTERN.test(values.teamId)) return apiError('INVALID_INPUT', 'Tim tidak valid.', 400)
+      const result = await restoreLabTeam(supabase, values.teamId)
       return result.ok ? apiSuccess(result.data) : apiError(result.code, result.message, result.status)
     }
 
