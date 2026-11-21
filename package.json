@@ -12,6 +12,7 @@
     "test:guardrails": "vitest run tests/guardrails",
     "typecheck": "next typegen && tsc --noEmit",
     "audit:prod": "node scripts/audit-prod.mjs",
+    "import:oe": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env.local scripts/import-oe-registrations.ts",
     "check": "npm run typecheck && npm run lint && npm test"
   },
   "dependencies": {
