@@ -256,17 +256,18 @@ function LeaderDialog({ entry, open, onClose }: { entry: ActivityEntry; open: bo
               bisa dipilih.
             </p>
             <div className={styles.choices} role="radiogroup" aria-label="Ketua baru">
+              {/* Whole-row buttons (no radio dot); role="radio" keeps them announced as one choice. */}
               {candidates.map((member) => (
-                <label key={member.id} className={`${styles.choice} ${selected === member.id ? styles.choiceActive : ""}`}>
-                  <input
-                    type="radio"
-                    name="new-leader"
-                    value={member.id}
-                    checked={selected === member.id}
-                    onChange={() => setSelected(member.id)}
-                  />
-                  <span>{member.name}</span>
-                </label>
+                <button
+                  key={member.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected === member.id}
+                  className={`${styles.choice} ${selected === member.id ? styles.choiceActive : ""}`}
+                  onClick={() => setSelected(member.id)}
+                >
+                  {member.name}
+                </button>
               ))}
             </div>
             {chosen && (

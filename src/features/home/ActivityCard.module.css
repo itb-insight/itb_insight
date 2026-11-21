@@ -106,8 +106,9 @@
 
 .headingRow {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
+  gap: 8px 14px;
 }
 
 .competitionName {
@@ -119,9 +120,12 @@
   color: #1b3b7d;
 }
 
+/* Grows with its text: a long status ("Menunggu verifikasi") wraps inside the pill on a narrow
+   card instead of spilling past it, and the heading row wraps the pills onto the next line. */
 .statusChip {
   min-width: 58px;
-  height: 24px;
+  max-width: 100%;
+  min-height: 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -133,7 +137,8 @@
   font-size: 12px;
   line-height: 14px;
   color: #1b3b7d;
-  white-space: nowrap;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .teamName {
@@ -433,4 +438,12 @@
 
 a.actionButton {
   text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .competitionName {
+    font-size: 26px;
+    line-height: 30px;
+    overflow-wrap: anywhere;
+  }
 }

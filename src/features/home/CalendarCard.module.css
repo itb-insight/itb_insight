@@ -75,17 +75,48 @@
   color: #ffffff;
 }
 
-.today {
+.dayWrap {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 29.61px;
+  width: 30px;
   height: 30px;
   border: 2px solid transparent;
   border-radius: 50%;
+}
+
+.today {
   background:
     linear-gradient(0deg, #517eda 0%, #294d97 100%) padding-box,
     linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%) border-box;
+}
+
+/* A day with something on the agenda: a dot under the number. */
+.marked::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  border-radius: 50%;
+  background: #ffe133;
+}
+
+.year {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .week {
@@ -101,13 +132,26 @@
   color: #ffffff;
 }
 
-.agendaRow {
+/* Every agenda item, scrolled to the next upcoming one; about four rows tall. */
+.agendaList {
+  position: relative;
   margin-top: 14px;
-  height: 71px;
+  max-height: 360px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 4px;
+  scrollbar-width: thin;
+}
+
+.agendaRow {
+  flex-shrink: 0;
+  min-height: 71px;
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 0 20px;
+  padding: 10px 20px;
   border-radius: 8px;
   background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
 }
@@ -136,8 +180,41 @@
 }
 
 .agendaMeta {
-  font-size: 16px;
+  font-size: 15px;
+  line-height: 20px;
   color: #0088e8;
+}
+
+.agendaTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  line-height: 24px;
+}
+
+.agendaDetail {
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  color: #1b3b7d;
+}
+
+.agendaDDay {
+  background: linear-gradient(0deg, #fff3a8 0%, #ffe133 100%);
+}
+
+.agendaPast {
+  opacity: 0.55;
+}
+
+.todayChip {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #1b3b7d;
+  color: #ffffff;
+  font-size: 12px;
+  line-height: 18px;
 }
 
 .agendaEmpty {

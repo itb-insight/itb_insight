@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 import type { ActivityEntry } from "@/features/home/activityTypes"
 import HomePage from "@/features/home/HomePage"
 import { claimPendingSlots } from "@/lib/competition-claims"
+import { buildAgenda } from "@/lib/dashboard-agenda"
 import { getActivityForUser } from "@/lib/dashboard-activity"
 import { createClient, createServiceClient } from "@/lib/supabase/server"
 
@@ -40,6 +41,8 @@ export default async function DashboardPage() {
     service.from("profiles").select("full_name").eq("id", user.id).maybeSingle(),
   ])
   const name = firstName(profile?.full_name ?? (user.user_metadata?.full_name as string | undefined))
+  // A withdrawn team's competition dates no longer concern the user.
+  const agenda = await buildAgenda((activity ?? []).filter((entry) => !entry.withdrawn).map((entry) => entry.competitionSlug))
 
-  return <HomePage serverNow={now} userName={name} activity={activity} />
+  return <HomePage serverNow={now} userName={name} activity={activity} agenda={agenda} />
 }

@@ -4,6 +4,7 @@ import CountdownCard from "./CountdownCard"
 import HomeBackground from "./HomeBackground"
 import styles from "./HomePage.module.css"
 import type { ActivityEntry } from "./activityTypes"
+import type { AgendaItem } from "./agendaData"
 
 interface HomePageProps {
   serverNow?: number
@@ -11,9 +12,11 @@ interface HomePageProps {
   userName?: string
   /** null = the activity could not be loaded. */
   activity: ActivityEntry[] | null
+  /** Calendar agenda: D-Day, events, and the user's competition timelines. */
+  agenda: AgendaItem[]
 }
 
-export default function HomePage({ serverNow, userName, activity }: HomePageProps) {
+export default function HomePage({ serverNow, userName, activity, agenda }: HomePageProps) {
   return (
     <div className={styles.page}>
       <HomeBackground />
@@ -25,7 +28,7 @@ export default function HomePage({ serverNow, userName, activity }: HomePageProp
 
       <aside className={styles.rail}>
         <CountdownCard serverNow={serverNow} />
-        <CalendarCard serverNow={serverNow} />
+        <CalendarCard serverNow={serverNow} agenda={agenda} />
       </aside>
     </div>
   )
