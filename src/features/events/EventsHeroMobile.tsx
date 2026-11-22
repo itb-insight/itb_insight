@@ -1,5 +1,8 @@
 import Image from "next/image";
-import { HERO_CURTAIN } from "@/features/events/EventsHero";
+import type { CSSProperties } from "react";
+import { HERO_CURTAIN, HERO_CURTAIN_OPACITY, HERO_PANEL_HEIGHT } from "@/features/events/EventsHero";
+import { DESIGN_WIDTH } from "@/features/events/scale";
+import EventsHeroCollage from "@/features/events/EventsHeroCollage";
 import styles from "@/features/events/EventMobile.module.css";
 
 /**
@@ -14,9 +17,21 @@ import styles from "@/features/events/EventMobile.module.css";
 export default function EventsHeroMobile({ className }: { className?: string }) {
   return (
     <section aria-labelledby="events-hero-title-m" className={className}>
-      <div className={styles.hero}>
+      <div
+        className={styles.hero}
+        // tebal panel dalam satuan --u (1u = 1% lebar), dari HERO_PANEL_HEIGHT
+        style={{ "--panel": (HERO_PANEL_HEIGHT / DESIGN_WIDTH) * 100 } as CSSProperties}
+      >
         <div className={styles.curtain}>
-          <Image src={HERO_CURTAIN} alt="" aria-hidden="true" fill sizes="100vw" style={{ objectFit: "cover" }} />
+          <EventsHeroCollage />
+          <Image
+            src={HERO_CURTAIN}
+            alt=""
+            aria-hidden="true"
+            fill
+            sizes="100vw"
+            style={{ objectFit: "cover", opacity: HERO_CURTAIN_OPACITY }}
+          />
         </div>
         <div className={styles.heroInner}>
           <h1 id="events-hero-title-m" className={styles.heroTitle}>

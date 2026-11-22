@@ -1,15 +1,9 @@
 /**
- * Connects `agendaData.ts` to the Home calendar: owns how dates are named, where a
- * week starts and ends, and which agenda items belong to the current one.
- *
- * Kept apart from CalendarCard so the card stays presentational — this file holds the
- * logic and is the only place that needs changing if "this week" ever means something
- * different (e.g. a Monday-start week).
+ * Date helpers for the Home calendar: month names, today in Jakarta, and which months the
+ * calendar can page through (every month that has an agenda item, plus the current one).
  */
 
-import { useEffect, useState } from "react"
-
-import { AGENDA, type AgendaIcon } from "./agendaData"
+import type { AgendaItem } from "./agendaData"
 
 export const MONTH_NAMES = [
   "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -22,21 +16,15 @@ const TIME_ZONE = "Asia/Jakarta"
 
 export interface CalendarDate {
   year: number
+  /** 0-based */
   month: number
   day: number
 }
 
-export interface AgendaRow {
-  name: string
-  icon: AgendaIcon
-  date: string
-}
-
 const pad2 = (value: number) => String(value).padStart(2, "0")
 
-/** Local calendar date as "YYYY-MM-DD". Not toISOString(), which shifts to UTC. */
-const toIso = (date: Date) =>
-  `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`
+/** "YYYY-MM-DD" for a calendar cell. */
+export const isoDate = (year: number, month: number, day: number) => `${year}-${pad2(month + 1)}-${pad2(day)}`
 
 /** Today's date as WIB sees it, whatever timezone the viewer is in. */
 export function jakartaToday(now: Date = new Date()): CalendarDate {
@@ -52,53 +40,21 @@ export function jakartaToday(now: Date = new Date()): CalendarDate {
   return { year, month: month - 1, day }
 }
 
-export function formatAgendaDate(iso: string): string {
-  const [year, month, day] = iso.split("-").map(Number)
-  return `${day} ${MONTH_NAMES[month - 1]} ${year}`
+/** Month as a single number (year * 12 + month) so ranges are plain comparisons. */
+export const monthIndex = (year: number, month: number) => year * 12 + month
+
+const indexOfIso = (iso: string) => {
+  const [year, month] = iso.split("-").map(Number)
+  return monthIndex(year, month - 1)
 }
 
-/**
- * The Sunday-to-Saturday week containing `today` — the same span the calendar grid
- * lays out as a row, so "This Week" matches the row the highlighted day sits in.
- */
-export function weekRange(today: CalendarDate): { start: string; end: string } {
-  const date = new Date(today.year, today.month, today.day)
-
-  const start = new Date(date)
-  start.setDate(date.getDate() - date.getDay())
-
-  const end = new Date(start)
-  end.setDate(start.getDate() + 6)
-
-  return { start: toIso(start), end: toIso(end) }
-}
-
-export function selectWeekAgenda(today: CalendarDate): AgendaRow[] {
-  const { start, end } = weekRange(today)
-
-  return AGENDA.filter((item) => item.date >= start && item.date <= end)
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .map((item) => ({
-      name: item.name,
-      icon: item.icon ?? "page",
-      date: formatAgendaDate(item.date),
-    }))
-}
-
-/**
- * Resolved on mount rather than during render: the server has no clock the client
- * agrees with, and guessing would risk a hydration mismatch. `null` means "not known
- * yet", which is distinct from "no agenda this week".
- *
- * `now` defaults to the device clock. Pass the server-corrected one from
- * `useServerClock` so a badly-set device cannot land the visitor on the wrong week.
- */
-export function useWeekAgenda(now: () => number = Date.now): AgendaRow[] | null {
-  const [rows, setRows] = useState<AgendaRow[] | null>(null)
-
-  useEffect(() => {
-    setRows(selectWeekAgenda(jakartaToday(new Date(now()))))
-  }, [now])
-
-  return rows
+/** First and last month the calendar can show: the agenda's span, widened to include today. */
+export function monthRange(agenda: AgendaItem[], today: CalendarDate | null) {
+  const indexes = agenda.map((item) => indexOfIso(item.date))
+  if (today) indexes.push(monthIndex(today.year, today.month))
+  if (!indexes.length) {
+    const now = jakartaToday()
+    indexes.push(monthIndex(now.year, now.month))
+  }
+  return { min: Math.min(...indexes), max: Math.max(...indexes) }
 }

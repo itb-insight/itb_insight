@@ -19,11 +19,6 @@
       "count": 1
     }
   },
-  "src/features/home/agendaSchedule.ts": {
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "src/features/landing/components/HeroSection/HeroSection.tsx": {
     "react-hooks/set-state-in-effect": {
       "count": 2

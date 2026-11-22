@@ -17,7 +17,7 @@
 }
 
 .value {
-  margin: 28px 0 0;
+  margin: 20px 0 0;
   font-family: var(--font-primary), "Gabarito", sans-serif;
   font-weight: 700;
   font-size: 48px;
@@ -28,4 +28,42 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/* Days : hours : minutes, each with its unit underneath so it cannot be read as h:m:s. */
+.units {
+  margin-top: 14px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.unitGroup {
+  display: flex;
+  align-items: flex-start;
+}
+
+.unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 64px;
+}
+
+.units .value {
+  margin: 0;
+}
+
+.separator {
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 52px;
+  color: #acc7ff;
+}
+
+.unitLabel {
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-size: 14px;
+  line-height: 16px;
+  color: #ccddff;
 }

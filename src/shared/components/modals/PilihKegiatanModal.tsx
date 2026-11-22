@@ -1,6 +1,7 @@
 "use client"
 
 import { X } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 import Modal from "./Modal"
 import ModalButton from "./ModalButton"
@@ -10,6 +11,8 @@ export interface KegiatanChoice {
   heading: string
   description: string
   buttonLabel: string
+  /** Page the button opens (the modal closes first). */
+  href?: string
   onSelect?: () => void
 }
 
@@ -20,12 +23,19 @@ interface PilihKegiatanModalProps {
   choices?: KegiatanChoice[]
 }
 
-const PLACEHOLDER =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vehicula a turpis nec porttitor."
-
 const DEFAULT_CHOICES: KegiatanChoice[] = [
-  { heading: "Competition", description: PLACEHOLDER, buttonLabel: "Daftar Lomba" },
-  { heading: "Event", description: PLACEHOLDER, buttonLabel: "Daftar Event" },
+  {
+    heading: "Competition",
+    description: "Lihat semua lomba ITB Insight 2026, detail tiap lomba, dan tautan pendaftarannya selagi dibuka.",
+    buttonLabel: "Lihat Lomba",
+    href: "/dashboard/compe-list",
+  },
+  {
+    heading: "Event",
+    description: "Lihat rangkaian acara ITB Insight 2026, jadwal dan lokasinya, lalu daftar untuk hadir.",
+    buttonLabel: "Lihat Event",
+    href: "/dashboard/event-list",
+  },
 ]
 
 export default function PilihKegiatanModal({
@@ -34,6 +44,16 @@ export default function PilihKegiatanModal({
   title = "Pilih Kegiatan",
   choices = DEFAULT_CHOICES,
 }: PilihKegiatanModalProps) {
+  const router = useRouter()
+
+  const select = (choice: KegiatanChoice) => {
+    choice.onSelect?.()
+    if (choice.href) {
+      onClose()
+      router.push(choice.href)
+    }
+  }
+
   return (
     <Modal open={open} onClose={onClose} label={title} width={800} radius={16} minHeight={400}>
       <div className={styles.body}>
@@ -52,7 +72,7 @@ export default function PilihKegiatanModal({
                 <p className={styles.choiceDescription}>{choice.description}</p>
               </div>
 
-              <ModalButton className={styles.choiceButton} onClick={choice.onSelect}>
+              <ModalButton className={styles.choiceButton} onClick={() => select(choice)}>
                 {choice.buttonLabel}
               </ModalButton>
             </section>

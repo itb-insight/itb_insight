@@ -17,7 +17,9 @@
 
   position: relative;
   width: 100%;
-  height: calc(var(--u) * 88);
+  /* 52 = tirai; --panel = tebal panel terang, diisi dari HERO_PANEL_HEIGHT
+     (EventsHero.tsx) oleh EventsHeroMobile. */
+  height: calc(var(--u) * (52 + var(--panel, 36)));
   background: linear-gradient(180deg, #091b3f 0%, #294d97 100%);
   overflow: hidden;
 }
@@ -65,7 +67,8 @@
 
 .section {
   position: relative;
-  overflow: hidden;
+  /* clip, bukan hidden: lihat catatan overflow di scale.ts */
+  overflow: clip;
   /* Lebih besar dari BLEND_HEIGHT_MOBILE (64px) di blend.ts, supaya teks tidak
      ikut memudar di tepi atas yang dibaurkan, dan jarak antar event lega. */
   padding: 92px 24px;

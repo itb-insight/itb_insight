@@ -4,6 +4,7 @@ import { DESIGN_HEIGHT, DESIGN_WIDTH } from "@/features/events/scale";
 import { blendStyleMobile } from "@/features/events/blend";
 import EventButton from "@/features/events/EventButton";
 import styles from "@/features/events/EventMobile.module.css";
+import reveal from "@/features/events/EventReveal.module.css";
 
 /**
  * Satu section event untuk layar < 900px: satu kolom, foto di atas.
@@ -71,7 +72,9 @@ export default function EventSectionMobile({
       </div>
 
       <div className={styles.inner}>
-        <div className={styles.photo}>
+        <div
+          className={`${styles.photo} ${event.photoSide === "right" ? reveal.fromRight : reveal.fromLeft}`}
+        >
           <Image
             src={event.photo.src}
             alt={event.photo.alt}
@@ -81,11 +84,11 @@ export default function EventSectionMobile({
           />
         </div>
 
-        <h2 id={titleId} className={styles.title}>
+        <h2 id={titleId} className={`${styles.title} ${reveal.rise}`}>
           {event.title}
         </h2>
 
-        <div className={styles.row}>
+        <div className={`${styles.row} ${reveal.rise}`}>
           <div className={styles.rowGroup}>
             {/* SVG: <img> biasa sudah tepat */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -111,14 +114,16 @@ export default function EventSectionMobile({
           </div>
         </div>
 
-        <p className={styles.desc}>{event.description}</p>
+        <p className={`${styles.desc} ${reveal.rise}`}>{event.description}</p>
 
-        <EventButton
-          flow
-          href={event.buttonHref}
-          label={event.buttonLabel}
-          ariaLabel={`${event.buttonLabel} ${plainTitle}`}
-        />
+        <div className={reveal.rise}>
+          <EventButton
+            flow
+            href={event.buttonHref}
+            label={event.buttonLabel}
+            ariaLabel={`${event.buttonLabel} ${plainTitle}`}
+          />
+        </div>
       </div>
     </section>
   );

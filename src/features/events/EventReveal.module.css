@@ -1,0 +1,69 @@
+/*
+ * Animasi muncul saat di-scroll untuk section /event (desktop dan mobile).
+ *
+ *   .fromLeft / .fromRight  foto masuk dari sisinya sendiri (event.photoSide)
+ *   .rise                   judul / teks: memudar masuk sambil naik sedikit
+ *
+ * Murni CSS (scroll-driven animation, animation-timeline: view()), tanpa
+ * JavaScript, sejalan dengan halaman ini yang tidak mengirim JS. Browser yang
+ * belum mendukungnya (mis. Firefox saat ini) dan pengguna dengan
+ * prefers-reduced-motion langsung melihat keadaan akhir, tanpa animasi.
+ *
+ * Section memakai overflow: clip (BUKAN hidden, lihat scale.ts), jadi foto yang masih di luar kotak saat
+ * mulai bergeser tidak menimbulkan scroll horizontal.
+ *
+ * Mengatur rasa animasinya:
+ *   --reveal-distance  jarak geser awal foto
+ *   animation-range    kapan animasi mulai / selesai, relatif terhadap
+ *                      elemen memasuki layar ("entry 0%" = tepi atasnya baru
+ *                      muncul di bawah layar)
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .fromLeft,
+    .fromRight,
+    .rise {
+      animation-timeline: view();
+      animation-range: entry 60% cover 35%;
+      animation-fill-mode: both;
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .fromLeft {
+      --reveal-distance: -60%;
+      animation-name: slideIn;
+    }
+
+    .fromRight {
+      --reveal-distance: 60%;
+      animation-name: slideIn;
+    }
+
+    .rise {
+      animation-name: rise;
+      animation-range: entry 10% cover 35%;
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(var(--reveal-distance));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

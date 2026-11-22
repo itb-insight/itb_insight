@@ -25,7 +25,11 @@ export type CompetitionSummary = {
   requirements?: string[]
   guideBookUrl?: string
   registrationFee?: number | null
+  /** Fee tiers of an off-site (Google Form) registration, used when importing its teams. */
+  formFeeTiers?: FormFeeTier[]
 }
+
+export type FormFeeTier = { key: string; label: string; amount: number }
 
 const competitions: CompetitionSummary[] = [
   {
@@ -77,11 +81,21 @@ const competitions: CompetitionSummary[] = [
     slug: { current: 'olimpiade-engineering' },
     description: 'Olimpiade engineering nasional untuk siswa SMA/SMK/MA sederajat.',
     category: 'olimpiade',
-    registrationType: 'individual', // TODO confirm
-    teamMin: 1,
-    teamMax: 1,
+    // Teams of exactly 3 students. Registration ran on Google Forms; the teams were imported
+    // (scripts/import-oe-registrations.ts), so the site only shows them.
+    registrationType: 'team',
+    teamUidPrefix: 'OE',
+    teamMin: 3,
+    teamMax: 3,
     requirements: ['Kartu pelajar', 'Bukti follow Instagram', 'Bukti share broadcast'],
-    registrationFee: null, // TODO confirm (IDR)
+    registrationFee: null, // Paid outside the site; see formFeeTiers.
+    // The "Gelombang pendaftaran" options on the registration form, as the teams paid them.
+    // NOTE: the public page (src/features/competition/data.ts) lists different amounts.
+    formFeeTiers: [
+      { key: 'early', label: 'Early Bird Registration', amount: 150000 },
+      { key: 'normal', label: 'Normal Registration', amount: 160000 },
+      { key: 'late', label: 'Late Registration', amount: 175000 },
+    ],
   },
 ]
 
