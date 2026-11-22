@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { EventItem } from "@/features/events/types";
 import { u } from "@/features/events/scale";
+import reveal from "@/features/events/EventReveal.module.css";
 
 /**
  * Foto kegiatan (event.photo, dari data.ts). Figma: 655x480, radius 25, scaleMode FILL (dipotong untuk
@@ -15,6 +16,7 @@ export default function EventPhoto({ event }: { event: EventItem }) {
 
   return (
     <div
+      className={event.photoSide === "right" ? reveal.fromRight : reveal.fromLeft}
       style={{
         position: "absolute",
         left: u(p.x),
