@@ -75,7 +75,10 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
   const n = COMPETITIONS.length;
   const touchX = useRef<number | null>(null);
 
-  const goto = (i: number) => setActive(((i % n) + n) % n);
+  // Petunjuk "Geser ke kanan" hanya untuk kesan pertama: hilang setelah kartu
+  // pertama kali berganti (lewat geser, klik kartu, atau klik petunjuknya).
+  const [swiped, setSwiped] = useState(false);
+  const goto = (i: number) => { setActive(((i % n) + n) % n); setSwiped(true); };
   const onTouchStart = (e: React.TouchEvent) => { touchX.current = e.touches[0].clientX; };
   const onTouchEnd   = (e: React.TouchEvent) => {
     if (touchX.current === null) return;
@@ -130,6 +133,26 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
         }
         .bg-union-right {
           position: absolute; top: 0%; right: -5vw; width: 35vw; max-width: 450px; opacity: 0.25; z-index: 1; pointer-events: none; transform: scaleX(-1);
+        }
+
+        /* PETUNJUK GESER CAROUSEL */
+        .swipe-hint {
+          position: relative; z-index: 10;
+          display: flex; align-items: center; justify-content: center; gap: 4px;
+          margin: 0 auto 40px; padding: 8px 12px;
+          background: none; border: none; cursor: pointer;
+          color: #E9E9E9; font-family: 'Gabarito', sans-serif;
+          transition: opacity 0.4s ease;
+        }
+        .swipe-hint-text { font-size: 1.2rem; font-weight: 300; letter-spacing: 0.04em; }
+        .swipe-hint-chevron { animation: swipeHintNudge 1.6s ease-in-out infinite; }
+        .swipe-hint:hover .swipe-hint-chevron { color: #fff; }
+        @keyframes swipeHintNudge {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(6px); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .swipe-hint-chevron { animation: none; }
         }
 
         /* ANIMASI MARQUEE SLIDING TEXT */
@@ -250,7 +273,7 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
 
       {/* CARD CAROUSEL */}
       <div
-        style={{ position: "relative", height: CAROUSEL_H, overflow: "hidden", zIndex: 10, marginBottom: "40px" }}
+        style={{ position: "relative", height: CAROUSEL_H, overflow: "hidden", zIndex: 10 }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
@@ -320,6 +343,21 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
           );
         })}
       </div>
+
+      {/* Petunjuk geser (gaya sama dengan "Scroll ke bawah" di landing page) */}
+      <button
+        type="button"
+        className="swipe-hint"
+        onClick={() => goto(active + 1)}
+        aria-label="Lihat lomba berikutnya"
+        tabIndex={swiped ? -1 : 0}
+        style={{ opacity: swiped ? 0 : 1, pointerEvents: swiped ? "none" : "auto" }}
+      >
+        <span className="swipe-hint-text">Geser ke kanan</span>
+        <svg className="swipe-hint-chevron" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
+          <path d="M8 4l8 8-8 8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
 
       {/* ── TOTAL PRIZE ── */}
       <section style={{ padding: "0 24px", textAlign: "center", position: "relative", zIndex: 10 }}>
