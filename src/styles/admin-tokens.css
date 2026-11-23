@@ -28,6 +28,9 @@
   --admin-success: #6ccb59;
   --admin-link-more: #8aceff; /* tautan "Lihat ... lainnya" di kaki widget */
 
+  /* segmen bar rating yang mati, dan latar gelap lain yang senada */
+  --admin-bar-mati: linear-gradient(180deg, #091b3f 0%, #294d97 100%);
+
   /* bintang rating; yang kosong emas gelap, bukan abu-abu */
   --admin-star-on: #fad500;
   --admin-star-off: #89590a;

@@ -19,3 +19,20 @@
   color: #dee8fb;
   cursor: pointer;
 }
+
+/* Sementara: menampilkan isi QR mentah hasil pembacaan. */
+.hasil {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 50;
+  margin: 0;
+  max-width: calc(100vw - 32px);
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #091b3f;
+  color: #dee8fb;
+  font-size: 13px;
+  line-height: 18px;
+  word-break: break-all;
+}

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useId, useRef, useState } from "react"
-import RangeTabs from "@/features/admin/components/RangeTabs/RangeTabs"
+import RangeTabs, { type TabOption } from "@/features/admin/components/RangeTabs/RangeTabs"
 import WidgetCard from "@/features/admin/components/WidgetCard/WidgetCard"
 import type { RangeKey } from "@/features/admin/data/timeRange"
 import styles from "./LineChartWidget.module.css"
@@ -18,7 +18,7 @@ export interface LineStat {
   value: string
 }
 
-interface LineChartWidgetProps {
+interface LineChartWidgetProps<T extends string = RangeKey> {
   title: string
   description?: string
   /** label sumbu-x, satu per bucket (mis. "08.00") */
@@ -26,8 +26,21 @@ interface LineChartWidgetProps {
   series: LineSeries[]
   /** angka besar di atas grafik (varian "Line chart 1") */
   stats?: LineStat[]
-  range: RangeKey
-  onRangeChange: (range: RangeKey) => void
+  /**
+   * Gambar isinya saja, tanpa WidgetCard.
+   *
+   * Dipakai panel "Engagement" di /admin/sponsor, yang memuat DUA grafik di
+   * dalam satu kartu — jadi kartunya dipasang di luar, sekali saja.
+   */
+  bare?: boolean
+  /** Tanpa range + onRangeChange, tab rentang waktunya tidak digambar. */
+  range?: T
+  onRangeChange?: (range: T) => void
+  /**
+   * Pilihan tab. Tanpa ini dipakai rentang waktu D-Day (30 min sampai 12 jam).
+   * Grafik "Kunjungan" di /admin/web memakai 14 hari / 30 hari / Total.
+   */
+  rangeOptions?: readonly TabOption<T>[]
   /** area gradient di bawah garis; default true kalau cuma 1 series */
   area?: boolean
   /** satuan di tooltip, mis. "check-in" */
@@ -57,19 +70,21 @@ function niceStep(raw: number) {
 
 const fmt = (n: number) => n.toLocaleString("id-ID")
 
-export default function LineChartWidget({
+export default function LineChartWidget<T extends string = RangeKey>({
   title,
   description,
   labels,
   series,
   stats,
+  bare = false,
   range,
   onRangeChange,
+  rangeOptions,
   area,
   unit,
   height = 258,
   emptyText = "Belum ada data di rentang ini",
-}: LineChartWidgetProps) {
+}: LineChartWidgetProps<T>) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(0)
   const [hover, setHover] = useState<number | null>(null)
@@ -136,12 +151,12 @@ export default function LineChartWidget({
   const tooltipLeft = hover !== null ? xAt(hover) : 0
   const tooltipFlip = hover !== null && tooltipLeft > width - 180
 
-  return (
-    <WidgetCard
-      title={title}
-      description={description}
-      action={<RangeTabs value={range} onChange={onRangeChange} label={`Rentang waktu ${title}`} />}
-    >
+  /* Tanpa kartu, legenda tetap digambar walau cuma satu garis — di panel
+     Engagement justru legenda itulah yang menamai tiap grafiknya. */
+  const tampilkanLegenda = bare ? colored.some((s) => s.name) : !isSingle
+
+  const isi = (
+    <>
       {stats && stats.length > 0 && (
         <dl className={styles.stats}>
           {stats.map((s) => (
@@ -153,7 +168,7 @@ export default function LineChartWidget({
         </dl>
       )}
 
-      {!isSingle && (
+      {tampilkanLegenda && (
         <ul className={styles.legend}>
           {colored.map((s) => (
             <li key={s.name} className={styles.legendItem}>
@@ -215,7 +230,9 @@ export default function LineChartWidget({
 
             {labels.map((l, i) =>
               i % labelEvery === 0 ? (
-                <text key={l + i} x={xAt(i)} y={height - 8} className={styles.xLabel}>
+                /* key = indeks saja. `l + i` bertabrakan kalau panjang labelnya
+                   tidak seragam: "H-11" + 0 dan "H-1" + 10 sama-sama "H-110". */
+              <text key={i} x={xAt(i)} y={height - 8} className={styles.xLabel}>
                   {l}
                 </text>
               ) : null,
@@ -274,6 +291,27 @@ export default function LineChartWidget({
           </div>
         )}
       </div>
+    </>
+  )
+
+  if (bare) return <div className={styles.bare}>{isi}</div>
+
+  return (
+    <WidgetCard
+      title={title}
+      description={description}
+      action={
+        range && onRangeChange ? (
+          <RangeTabs
+            value={range}
+            onChange={onRangeChange}
+            options={rangeOptions}
+            label={`Rentang waktu ${title}`}
+          />
+        ) : undefined
+      }
+    >
+      {isi}
     </WidgetCard>
   )
 }

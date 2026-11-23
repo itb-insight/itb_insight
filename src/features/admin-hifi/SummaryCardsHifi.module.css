@@ -28,9 +28,20 @@
  * tetap ikut menyempit kalau kolomnya menyempit.
  */
 
+/*
+  JUMLAH KOLOM MENGIKUTI JUMLAH KARTU.
+
+  Dulu dipaku 4. Halaman Feedback cuma punya TIGA kartu, dan dengan 4 kolom
+  kartunya tetap selebar 329px sementara kolom keempat dibiarkan kosong —
+  padahal rancangannya kartu melebar jadi ~440px. Akibatnya catatan yang
+  panjang ("Booth 902, event 311, competition 73") meluber keluar kartu
+  (terukur 376px di kartu 329px) dan bertabrakan dengan kartu sebelahnya.
+
+  Lebih dari empat kartu tetap dibatasi 4 kolom dan turun ke baris berikutnya.
+*/
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--kolom, 4), minmax(0, 1fr));
   column-gap: 22.33px;
   width: calc(100% + 4px);
   margin: 0;
@@ -85,6 +96,36 @@
 
 .centered {
   transform: translateX(-50%);
+}
+
+/*
+  Catatan boleh melipat; judul dan angka tidak.
+
+  Teksnya diletakkan absolut dengan `white-space: nowrap`, jadi catatan yang
+  lebih panjang dari kartunya meluber keluar dan bertabrakan dengan kartu
+  sebelahnya — terlihat di halaman User pada "Tim dengan minimal 1 anggota
+  check in" (sekitar 420px di kartu 329px).
+
+  Dibatasi selebar kartu lalu dibiarkan turun ke baris kedua. Kartunya 223
+  tinggi dan catatan mulai di y 154, jadi dua baris (58px) masih muat.
+*/
+.caption {
+  /*
+    Lebar DITETAPKAN, bukan `max-width`.
+
+    Elemennya absolut dengan `left` sekitar 50%, jadi lebar layout otomatisnya
+    cuma dari titik itu ke tepi kanan kartu — sekitar 164px, bukan 305.
+    `translateX(-50%)` dari .centered itu transform visual: dia menggeser
+    tampilan setelah layout, tidak menambah ruang. Akibatnya teks melipat jauh
+    lebih awal dari yang terlihat.
+
+    Dengan left 50% + lebar tetap, kotaknya selebar kartu dikurangi 24 dan
+    tetap di tengah.
+  */
+  left: 50%;
+  width: calc(100% - 24px);
+  white-space: normal;
+  text-align: center;
 }
 
 .title,

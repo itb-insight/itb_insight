@@ -1,3 +1,5 @@
+import type { ReactNode } from "react"
+
 import PanelHifi from "./PanelHifi"
 import ProgressBarHifi from "./ProgressBarHifi"
 import styles from "./BarChartHifi.module.css"
@@ -21,6 +23,10 @@ interface BarChartHifiProps {
    * stacked = label & angka di atas, bar di bawah (Di mana visitor berhenti)
    */
   variant?: "inline" | "stacked"
+  /** Slot kanan atas, mis. tab Scan/Point. */
+  action?: ReactNode
+  /** Slot di bawah daftar, mis. tombol "Lihat semua booth" atau kartu ringkasan. */
+  footer?: ReactNode
 }
 
 export default function BarChartHifi({
@@ -28,9 +34,11 @@ export default function BarChartHifi({
   subtitle,
   items,
   variant = "inline",
+  action,
+  footer,
 }: BarChartHifiProps) {
   return (
-    <PanelHifi title={title} subtitle={subtitle}>
+    <PanelHifi title={title} subtitle={subtitle} action={action}>
       <ul className={styles.list}>
         {items.map((item) =>
           variant === "inline" ? (
@@ -58,6 +66,8 @@ export default function BarChartHifi({
           ),
         )}
       </ul>
+
+      {footer}
     </PanelHifi>
   )
 }

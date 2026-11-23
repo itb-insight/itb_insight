@@ -1,0 +1,41 @@
+/*
+  Kehadiran finalis — Figma node 1932:2391.
+
+  Dump-nya diperbesar ~1,245x (teks 19,92 = 16 x 1,245; judul 34,86 = 28).
+  Lebar kolomnya diambil sebagai persentase dari lebar isi, jadi skalanya
+  tidak jadi soal:
+
+    ID 4,1%   Comp/Event 18%   Nama tim 14,6%
+    Anggota 34,5%   Status 17,8%   Daftar pada 11%
+*/
+
+.table td {
+  vertical-align: top;
+}
+
+/* Satu anggota per baris; di dump mereka memang menumpuk, bukan satu kalimat. */
+.anggota {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.anggotaItem {
+  font-size: 16px;
+  line-height: 24px;
+  color: #aabae7;
+  overflow-wrap: anywhere;
+}
+
+/* Nama disorot sedikit supaya terbaca lebih dulu daripada jamnya. */
+.handle {
+  color: #dee8fb;
+}
+
+/* "belum" dan "skipped gate" — keterangan, bukan data utama. */
+.catatan {
+  opacity: 0.75;
+}

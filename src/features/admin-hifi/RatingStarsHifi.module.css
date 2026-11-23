@@ -1,0 +1,9 @@
+.stars {
+  display: flex;
+  gap: 4px;
+}
+
+.star {
+  display: block;
+  flex: none;
+}

@@ -169,3 +169,12 @@
     line-height: 20px;
   }
 }
+
+/* Mode `bare`: isi kartu tanpa kartunya. Jaraknya disamakan dengan WidgetCard
+   supaya dua grafik dalam satu panel terlihat seperti aslinya. */
+.bare {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}

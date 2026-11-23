@@ -1,0 +1,224 @@
+/*
+  Semua Feedback — Figma node 1939:3949, kartu 1383 x 353,05.
+
+  Panel memakai gap 20 (bukan 24 seperti kartu lain) dan TANPA subjudul.
+
+  Kolom, dari koordinat dump (isi 44..1339):
+    ID        x 44,27   ->  67
+    Objek     x 111     -> 254   (lencana 73 + jarak 8 + nama)
+    Bintang   x 365     -> 160
+    Komentar  x 525     -> 504   (yang melar)
+    Nama      x 1029    -> 192
+    Waktu     x 1221    -> 118
+
+  Baris: tinggi isi 24, jarak antar baris 40, garis pemisah 1px
+  rgba(255,255,255,.25) tepat di tengah jarak itu — jadi tiap baris = isi 24
+  dengan padding 8 atas-bawah dan garis di bawahnya. Kepala tabel juga bergaris.
+*/
+
+.isi {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---- kendali di kepala panel ---------------------------------------------- */
+
+.kendali {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cari,
+.pil {
+  box-sizing: border-box;
+  height: 30.67px;
+  border: none;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: var(--admin-body-size);
+  line-height: var(--admin-body-line);
+  color: var(--admin-text);
+}
+
+/* Garis tepi 1px bergradien; dipakai ring bertopeng karena isinya tembus
+   pandang (rgba putih .2) dan trik padding-box/border-box akan membocorkan
+   gradiennya ke seluruh kotak. */
+.cari,
+.pil {
+  position: relative;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cari::before,
+.pil::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: var(--admin-panel-stroke);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.cari {
+  width: 100%;
+  padding: 0 8.21px;
+  /* <input> tidak bisa punya ::before, jadi ring-nya dipasang di pembungkus. */
+}
+
+/*
+  Lebar TETAP 322,23 seperti di dump, bukan melar.
+
+  Sebelumnya `flex: 1 1 200px`, dan karena slot aksi di PanelHifi `flex: none`
+  (menyusut ke isinya), kolom cari ikut menarik seluruh kendali sampai melipat
+  jadi dua baris — kepala panel membengkak dari 34 jadi 81px.
+*/
+.cariWrap {
+  position: relative;
+  flex: none;
+  width: 322.23px;
+}
+
+.cari::placeholder {
+  color: var(--admin-text);
+  opacity: 1;
+}
+
+.cari:focus-visible {
+  outline: 2px solid var(--admin-link);
+  outline-offset: 2px;
+}
+
+.pil {
+  flex: none;
+  padding: 3px 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Pil terpilih: latar gelap, bukan putih tembus pandang. */
+.pilAktif {
+  background: var(--admin-bar-mati);
+}
+
+/* ---- tabel ---------------------------------------------------------------- */
+
+.tabel {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--admin-body-size);
+  font-weight: 400;
+  line-height: var(--admin-body-line);
+  color: var(--admin-text);
+  table-layout: fixed;
+}
+
+.tabel th,
+.tabel td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* Dump: judul kolom di y 93, garisnya di 117,05 -> baris kepala 27, bukan 40.
+   Jaraknya memang asimetris, 3 di atas dan 0 di bawah. */
+.tabel th {
+  padding: 3px 0 0;
+  font-weight: 400;
+}
+
+/* Dump: isi 24, garis 8px di bawahnya, baris berikutnya 8px setelah garis ->
+   pitch 40. Bawahnya 7 supaya garis 1px-nya ikut terhitung. */
+.tabel td {
+  padding: 8px 0 7px;
+}
+
+/* Lebar kolom dari dump; Komentar dibiarkan mengambil sisanya. */
+.kolomId {
+  width: 67px;
+}
+.kolomObjek {
+  width: 254px;
+}
+.kolomBintang {
+  width: 160px;
+}
+.kolomNama {
+  width: 192px;
+}
+.kolomWaktu {
+  width: 118px;
+}
+
+.objek {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.lencana {
+  box-sizing: border-box;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 73px;
+  height: 22px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.namaObjek,
+.komentar {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kosong {
+  padding: 24px 0;
+  color: var(--admin-text-muted);
+  text-align: center;
+}
+
+/* ---- layar sempit --------------------------------------------------------- */
+
+/*
+  Belum ada rancangan sempit. Tabelnya dibiarkan bisa digeser mendatar di dalam
+  panel daripada kolomnya saling remuk.
+*/
+@media (max-width: 1399px) {
+  /* Baru di sini kolom cari boleh menyusut, supaya kendalinya tidak melipat
+     di lebar yang masih muat. */
+  .cariWrap {
+    flex: 1 1 160px;
+    width: auto;
+    min-width: 0;
+    max-width: 322.23px;
+  }
+}
+
+@media (max-width: 1099px) {
+  .gulung {
+    overflow-x: auto;
+  }
+
+  .tabel {
+    min-width: 900px;
+  }
+}

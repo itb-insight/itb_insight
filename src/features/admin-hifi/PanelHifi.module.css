@@ -62,4 +62,9 @@
 
 .body {
   min-width: 0;
+  /* Kolom: widget yang punya slot kaki (mis. tombol "Lihat semua booth")
+     dapat jarak yang sama dengan jarak kepala -> isi. */
+  display: flex;
+  flex-direction: column;
+  gap: var(--admin-panel-gap);
 }

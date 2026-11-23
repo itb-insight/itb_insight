@@ -1,5 +1,6 @@
 
-import type { CompetitionOption, StaffScanGroup, TeamRegistrationRow } from "./types"
+import type {
+  FinalisRow, CompetitionOption, StaffScanGroup, TeamRegistrationRow } from "./types"
 
 export const mockStaffScanGroups: StaffScanGroup[] = [
   {
@@ -88,5 +89,50 @@ export const mockTeamRegistrations: TeamRegistrationRow[] = [
     members: ["raka", "dimasbantai"],
     status: "expired",
     registeredAt: "2026-09-02T05:00:00Z",
+  },
+]
+
+/* Figma 1932:2391. Statusnya TIDAK disimpan — dihitung dari anggotanya. */
+export const mockFinalisRows: FinalisRow[] = [
+  {
+    id: 0,
+    compEvent: "Business case",
+    teamName: "UI/UX gacor",
+    members: [
+      { handle: "izzah", checkedInAt: "08.41" },
+      { handle: "asiah", checkedInAt: "08.41" },
+      { handle: "sachitta", checkedInAt: null },
+    ],
+    registeredAt: "2026-08-12",
+  },
+  {
+    id: 1,
+    compEvent: "SAR drone",
+    teamName: "Elang biru",
+    members: [
+      { handle: "kejo", checkedInAt: "07.55" },
+      { handle: "syahroni", checkedInAt: "07.55" },
+    ],
+    registeredAt: "2026-08-18",
+  },
+  {
+    id: 2,
+    compEvent: "SAR drone",
+    teamName: "Testcase",
+    members: [
+      { handle: "Hakim", checkedInAt: "09.30", skippedGate: true },
+      { handle: "jikri", checkedInAt: null },
+    ],
+    registeredAt: "2026-09-20",
+  },
+  {
+    id: 3,
+    compEvent: "Robot competition",
+    teamName: "Rakitrususuh",
+    members: [
+      { handle: "prab", checkedInAt: null },
+      { handle: "ted", checkedInAt: null },
+    ],
+    registeredAt: "2026-08-22",
   },
 ]
