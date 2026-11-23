@@ -175,3 +175,38 @@ export type MidtransTransaction = {
   created_at: string
   updated_at: string
 }
+
+export type EmailCampaignStatus = 'queued' | 'sending' | 'completed' | 'partial' | 'failed'
+export type EmailOutboxStatus = 'pending' | 'sending' | 'sent' | 'failed'
+
+export type EmailCampaign = {
+  id: string
+  created_by?: string | null
+  subject: string
+  body: string
+  filter: Record<string, unknown>
+  status: EmailCampaignStatus
+  recipient_count: number
+  sent_count: number
+  failed_count: number
+  created_at: string
+  started_at?: string | null
+  completed_at?: string | null
+}
+
+export type EmailOutboxItem = {
+  id: string
+  campaign_id: string
+  user_id?: string | null
+  to_email: string
+  to_name?: string | null
+  status: EmailOutboxStatus
+  attempts: number
+  last_error?: string | null
+  next_attempt_at: string
+  provider_message_id?: string | null
+  idempotency_key: string
+  sent_at?: string | null
+  created_at: string
+  updated_at: string
+}
