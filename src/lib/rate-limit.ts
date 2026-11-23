@@ -16,6 +16,8 @@ type RateLimitScope =
   | 'team-manage'
   | 'feedback-submit'
   | 'self-check-in'
+  | 'admin-email-send'
+  | 'admin-email-preview'
 
 type RateLimitOptions = {
   readonly scope: RateLimitScope
