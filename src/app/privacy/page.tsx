@@ -78,10 +78,13 @@ export default function PrivacyPage() {
       <h3>Technical data</h3>
       <ul>
         <li>
-          <strong>Usage analytics:</strong> pages visited, interactions (such as scroll depth and
-          button clicks), and device type, linked to a random session ID kept in your
-          browser&apos;s session storage. The ID is deleted when you close the tab and is not
-          linked to your account.
+          <strong>Usage analytics:</strong> pages visited and how long you stay, interactions (such
+          as scroll depth, sign-up steps and clicks on partner logos), page-speed measurements, and
+          device type, browser and approximate location (country or city). These are linked to a random ID kept in your
+          browser&apos;s local storage until you clear it. The ID is not linked to your account,
+          name or email. We remove anything after the <code>?</code> or <code>#</code> in page
+          addresses before sending, and our analytics provider discards your IP address. We do not
+          record your screen or what you type.
         </li>
         <li>
           <strong>Security data:</strong> IP address (used in hashed form for rate limiting),
@@ -134,7 +137,8 @@ export default function PrivacyPage() {
         <li>
           <strong>Service providers</strong> that run the Service for us: Supabase (database and
           authentication), Vercel (hosting), Midtrans (payment processing), Cloudflare (bot
-          protection) and Google (sign-in). They process data on our instructions and may store it
+          protection), Google (sign-in) and PostHog (usage analytics, stored in the United
+          States). They process data on our instructions and may store it
           on servers outside Indonesia.
         </li>
         <li>
@@ -158,13 +162,20 @@ export default function PrivacyPage() {
           Feedback forms: names and contact details are deleted after the period stated on each
           form (180 days by default, at most 2 years); anonymous answers are kept for reporting.
         </li>
-        <li>Analytics data: stored without account identifiers and kept in aggregate form.</li>
+        <li>
+          Analytics data: stored without account identifiers for up to 12 months, then deleted;
+          reports we keep afterward contain only aggregate numbers.
+        </li>
       </ul>
 
       <h2>6. Cookies and browser storage</h2>
       <p>
         We use cookies that are necessary to keep you signed in and to secure the Service. Our
-        analytics use session storage, which is cleared when you close the tab. We do not use
+        analytics do not use cookies: they keep the random ID described in section 1 in your
+        browser&apos;s local storage, plus a short note of your progress through sign-up in session
+        storage, which is cleared when you close the tab. You can remove both at any time by
+        clearing this site&apos;s data in your browser settings, after which you are counted as a
+        new visitor. We do not use
         advertising or cross-site tracking cookies.
       </p>
 

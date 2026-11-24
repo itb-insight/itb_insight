@@ -201,8 +201,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "28583da7a86a582b",
+  "active": "c1af1a82bd18e5f3",
   "lastOpenFiles": [
+    "src/app/privacy/page.tsx.tmp.248697.ba9e54f7b906",
+    "docs/analytics/03-hooks-cookbook.md.tmp.248697.cae20fcbbdc7",
     "next.config.ts.tmp.248697.e11d82e43716",
     "docs/analytics/01-tracking-library.md",
     "docs/analytics/00-overview.md",
@@ -217,8 +219,6 @@
     "src/proxy.ts.tmp.10005.2cb2aa2464df",
     "public/images/timeline/v2/purple.png",
     "src/shared/hooks/useHasSession.test.ts",
-    "src/shared/hooks/useHasSession.ts.tmp.180708.ce88377eaaf6",
-    "src/features/events/location-tba.test.ts",
     "design-sources/README.md",
     "design-sources/images/dashboard-bg.png",
     "design-sources/images/gallery/mirror_logo.JPG",
