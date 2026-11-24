@@ -41,12 +41,16 @@ const DESIGN = {
 } as const;
 
 const TIMELINE_STEP = 88;
+/** Blok "In collaboration with" (Collaboration.module.css): label 18 + 12 + kartu 84. */
+const COLLAB_HEIGHT = 114;
 const TIMELINE_ITEM_HEIGHT = 48; // nama 24 + tanggal 24
 /** Kartu hadiah dengan baris tambahan ("+ laptop") lebih tinggi dari kotak desain. */
 const PRIZE_BOX_HEIGHT_WITH_EXTRAS = 72;
 
 /** Jarak antar blok (px). Di Figma jaraknya 357 / 482 / 86 / 165 / 136+. */
 const GAP = {
+  /** hero -> "In collaboration with", bila lombanya punya mitra */
+  heroToCollab: 44,
   heroToCountdown: 72,
   countdownToFee: 64,
   feeToPrize: 86,
@@ -57,6 +61,8 @@ const GAP = {
 } as const;
 
 export interface MobileLayout {
+  /** Y blok "In collaboration with"; null = lomba tanpa mitra. */
+  collabY: number | null;
   countdownTitleY: number;
   countdownCardY: number;
   feeY: number;
@@ -77,7 +83,10 @@ export function mobileLayout(c: Competition): MobileLayout {
   const hasButtons = c.syllabusUrl !== null || c.guidebookUrl !== null;
   const heroEnd = hasButtons ? DESIGN.heroEndWithButtons : DESIGN.heroEndNoButtons;
 
-  const countdownTitleY = heroEnd + GAP.heroToCountdown;
+  const collabY = c.collaboration ? heroEnd + GAP.heroToCollab : null;
+  const aboveCountdown = collabY === null ? heroEnd : collabY + COLLAB_HEIGHT;
+
+  const countdownTitleY = aboveCountdown + GAP.heroToCountdown;
   const countdownCardY = countdownTitleY + DESIGN.countdownCardOffset;
   const countdownBottom = countdownTitleY + DESIGN.countdownHeight;
 
@@ -130,6 +139,7 @@ export function mobileLayout(c: Competition): MobileLayout {
   };
 
   return {
+    collabY,
     countdownTitleY,
     countdownCardY,
     feeY,

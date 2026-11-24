@@ -17,6 +17,7 @@ import { competitionJsonLd, competitionMetadata } from "@/features/competition/s
 import { countdownFor } from "@/features/competition/status";
 import { mobileLayout } from "@/features/competition/mobileLayout";
 import CompetitionInfo from "@/features/competition/info/CompetitionInfo";
+import Collaboration from "@/features/competition/Collaboration";
 
 
 /** ISR: HTML dibangun saat build, lalu di-refresh tiap 1 jam. */
@@ -81,6 +82,9 @@ export default async function CompetitionPage({
 
               <main>
                 <CompetitionHero competition={competition} />
+                {layout.collabY !== null ? (
+                  <Collaboration competition={competition} variant="mobile" y={layout.collabY} />
+                ) : null}
                 <CountdownSection
                   target={countdown.target}
                   title={countdown.title}

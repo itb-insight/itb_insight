@@ -81,7 +81,7 @@ const buttonOutline: React.CSSProperties = {
 };
 
 const timelineItems = [
-  { title: "Pendaftaran", date: "14 Agustus - 20 November 2026", side: "right" },
+  { title: "Pendaftaran", date: "14 Agustus - 25 November 2026", side: "right" },
   { title: "Technical Meeting", date: "21 November 2026", side: "left" },
   { title: "Penyisihan", date: "2026", side: "right" },
   { title: "Pengumuman Penyisihan", date: "2026", side: "left" },
