@@ -13,7 +13,24 @@ import { updateSession } from '@/lib/supabase/middleware'
 
 const BYPASS_COOKIE = 'maintenance-bypass'
 
+/*
+next.config.ts sets skipTrailingSlashRedirect so PostHog's `/ingest/e/` paths are not redirected.
+That also turns off Next's default `/about/` → `/about` redirect, so restore it here for everything
+the proxy sees (the matcher excludes /ingest).
+*/
+function trailingSlashRedirect(request: NextRequest): NextResponse | null {
+  const { pathname } = request.nextUrl
+  if (pathname === '/' || !pathname.endsWith('/')) return null
+  // A plain URL: NextURL remembers the original trailing slash and would put it back.
+  const url = new URL(request.url)
+  url.pathname = pathname.replace(/\/+$/, '') || '/'
+  return NextResponse.redirect(url, 308)
+}
+
 export async function proxy(request: NextRequest) {
+  const trailing = trailingSlashRedirect(request)
+  if (trailing) return trailing
+
   if (isCountdownOnly()) {
     const { pathname } = request.nextUrl
     // Feedback API: GET loads the form, POST submits it. It does its own auth and rate limiting.
@@ -113,10 +130,12 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - ingest/ (PostHog, rewritten to posthog.com in next.config.ts: no session refresh, and
+     *   countdown/maintenance must not 503 analytics)
      * - (api IS matched so countdown mode can block it; it's passed through otherwise)
      * Feel free to modify this pattern to include more paths.
      */
     // Static files never need the session. Keep this list in sync with what public/ serves.
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|ttf|otf|woff|woff2|mp4|webm|glb|gltf|json|lottie|txt|xml|webmanifest)$).*)',
+    '/((?!_next/static|_next/image|ingest(?:/|$)|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|ttf|otf|woff|woff2|mp4|webm|glb|gltf|json|lottie|txt|xml|webmanifest)$).*)',
   ],
 }

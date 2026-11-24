@@ -1,10 +1,5 @@
 /** Tuning knobs for the tracking pipeline. Shared by client queue and server route. */
 
-export const ENDPOINT = "/api/track"
-
-/** How often the client drains its queue, in ms. */
-export const FLUSH_INTERVAL_MS = 5000
-
 /**
  * Batch caps. These are the real defence on a public write endpoint: a
  * batching client makes few requests, so an attacker's lever is batch size,

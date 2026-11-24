@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import useImpression from "@/lib/analytics/hooks/useImpression"
+import trackClick from "@/lib/analytics/trackClick"
 import styles from "./MediaPartnersSectionHifi.module.css"
 
 // Card width per size tier (the M/L/XL hint in each filename under public/media-partner).
@@ -32,14 +34,25 @@ const mediaPartners: MediaPartner[] = [
   { file: "11. M_Strativate.png", alt: "Strativate", tier: "M", instagram: "strativate.id" },
 ]
 
+/** Stable analytics id per partner: "Young on Top Bandung" → "young-on-top-bandung". */
+const sponsorId = (partner: MediaPartner) => partner.alt.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+
 // Duplicate untuk seamless loop
 const duplicated = [...mediaPartners, ...mediaPartners, ...mediaPartners]
 
 export default function MediaPartnersSectionHifi() {
   const [paused, setPaused] = useState(false)
+  // One impression for the whole marquee once it has been on screen for a second: logos scroll
+  // past, so per-logo impressions would mostly measure animation speed.
+  const impressionRef = useImpression({
+    sectionId: "media-partners",
+    division: "SP",
+    eventName: "sponsor_impression",
+    minVisibleMs: 1000, // Standard 1s of impression
+  })
 
   return (
-    <section className={styles.section}>
+    <section ref={impressionRef} className={styles.section}>
       <h2 className={styles.title}>MEDIA PARTNERS</h2>
 
       <div className={styles.marqueeWrapper}>
@@ -72,6 +85,7 @@ export default function MediaPartnersSectionHifi() {
                 className={`${styles.logoWrapper} ${styles.clickable}`}
                 style={style}
                 aria-label={`${partner.alt} on Instagram (opens in a new tab)`}
+                onClick={() => trackClick("sponsor_click", { sponsorId: sponsorId(partner), tier: partner.tier })}
                 // Only the first copy is exposed to assistive tech / keyboard
                 aria-hidden={isCopy || undefined}
                 tabIndex={isCopy ? -1 : undefined}

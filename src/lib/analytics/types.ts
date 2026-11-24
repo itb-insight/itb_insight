@@ -45,6 +45,8 @@ export interface TrackedEvent {
   pagePath: string
   metadata: EventMetadata
   ts: number
+  /** Send immediately with a beacon: the page is being hidden or closed. */
+  urgent?: boolean
 }
 
 export interface TrackBatch {

@@ -1,4 +1,13 @@
+import { setDefaultAutoSelectFamilyAttemptTimeout } from "node:net";
 import type { NextConfig } from "next";
+
+/*
+Local dev only. Node tries each address of a host for 250 ms before giving up on it. From Indonesia,
+without IPv6, connecting to PostHog's US servers takes ~260-320 ms, so `next dev` proxying /ingest
+sometimes failed every address ("Failed to proxy ... AggregateError", a 500 in the browser).
+On Vercel, external rewrites are proxied by the platform, not by this process.
+*/
+if (process.env.NODE_ENV !== "production") setDefaultAutoSelectFamilyAttemptTimeout(1000);
 
 /**
  * Security headers for every response. Checked by src/next-config.test.ts.
@@ -24,11 +33,30 @@ export const securityHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=63072000" },
 ];
 
+/**
+ * PostHog through our own domain (/ingest), so ad blockers that block posthog.com don't drop
+ * analytics. Hosts follow NEXT_PUBLIC_POSTHOG_REGION; without a region there is nothing to proxy.
+ * Must match INGEST_PATH in src/lib/analytics/posthog.ts, and src/proxy.ts skips these paths.
+ */
+export function posthogRewrites(region = process.env.NEXT_PUBLIC_POSTHOG_REGION) {
+  if (region !== "us" && region !== "eu") return [];
+  return [
+    { source: "/ingest/static/:path*", destination: `https://${region}-assets.i.posthog.com/static/:path*` },
+    { source: "/ingest/array/:path*", destination: `https://${region}-assets.i.posthog.com/array/:path*` },
+    { source: "/ingest/:path*", destination: `https://${region}.i.posthog.com/:path*` },
+  ];
+}
+
 const ONE_YEAR_IMMUTABLE = "public, max-age=31536000, immutable";
 const ONE_DAY_SWR = "public, max-age=86400, stale-while-revalidate=604800";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // PostHog's API paths end in a slash (/ingest/e/); redirecting them would break ingestion.
+  skipTrailingSlashRedirect: true,
+  async rewrites() {
+    return posthogRewrites();
+  },
   experimental: {
     authInterrupts: true, // unauthorized() in src/app/test-unauthorized (dev only)
   },
