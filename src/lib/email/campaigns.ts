@@ -40,6 +40,23 @@ function chunked<T>(items: T[], size: number): T[][] {
   return out
 }
 
+// Never persist plaintext passwords inside email_campaigns.filter audit trail; outbox row
+// variables hold the value needed to render the message and are cleared after delivery.
+function redactFilterForAudit(filter: AudienceFilter): AudienceFilter {
+  if (!filter.customRecipients?.length) return filter
+  return {
+    ...filter,
+    customRecipients: filter.customRecipients.map((item) => {
+      if (!item.variables) return item
+      const redacted: Record<string, string> = {}
+      for (const [k, v] of Object.entries(item.variables)) {
+        redacted[k] = /pass|secret|token|pwd/i.test(k) ? '[REDACTED]' : v
+      }
+      return { ...item, variables: redacted }
+    }),
+  }
+}
+
 export async function createCampaign(params: {
   createdBy: string
   content: CampaignContent
@@ -54,7 +71,7 @@ export async function createCampaign(params: {
       created_by: params.createdBy,
       subject: params.content.subject,
       body: params.content.body,
-      filter: params.filter,
+      filter: redactFilterForAudit(params.filter),
       status: 'queued',
       recipient_count: params.recipients.length,
     })
@@ -71,6 +88,7 @@ export async function createCampaign(params: {
         user_id: recipient.userId,
         to_email: recipient.email,
         to_name: recipient.name,
+        variables: recipient.variables ?? {},
         idempotency_key: `${campaignId}:${recipient.email}`,
       })),
     )
@@ -117,7 +135,13 @@ async function finalizeCampaign(campaignId: string): Promise<CampaignCounts> {
   return counts
 }
 
-type Claimed = { id: string; to_email: string; to_name: string | null; attempts: number }
+type Claimed = {
+  id: string
+  to_email: string
+  to_name: string | null
+  variables: Record<string, string> | null
+  attempts: number
+}
 
 async function claimRows(campaignId: string, limit: number): Promise<Claimed[]> {
   const db = createServiceClient()
@@ -139,7 +163,7 @@ async function claimRows(campaignId: string, limit: number): Promise<Claimed[]> 
     .update({ status: 'sending' })
     .in('id', ids)
     .eq('status', 'pending')
-    .select('id, to_email, to_name, attempts')
+    .select('id, to_email, to_name, variables, attempts')
 
   return ((claimed as Claimed[] | null) ?? []).map((row) => ({ ...row, attempts: Number(row.attempts) || 0 }))
 }
@@ -154,11 +178,26 @@ async function requeueStale(campaignId: string) {
     .lt('updated_at', new Date(Date.now() - STALE_SENDING_MS).toISOString())
 }
 
-async function markSent(id: string, providerId: string | null) {
+function scrubSentVariables(variables: Record<string, string> | null): Record<string, string> {
+  if (!variables) return {}
+  const cleaned: Record<string, string> = {}
+  for (const [k, v] of Object.entries(variables)) {
+    cleaned[k] = /pass|secret|token|pwd/i.test(k) ? '[REDACTED]' : v
+  }
+  return cleaned
+}
+
+async function markSent(row: Claimed, providerId: string | null) {
   await createServiceClient()
     .from('email_outbox')
-    .update({ status: 'sent', sent_at: new Date().toISOString(), provider_message_id: providerId, last_error: null })
-    .eq('id', id)
+    .update({
+      status: 'sent',
+      sent_at: new Date().toISOString(),
+      provider_message_id: providerId,
+      last_error: null,
+      variables: scrubSentVariables(row.variables),
+    })
+    .eq('id', row.id)
 }
 
 async function markFailure(rows: Claimed[], failure: Extract<BatchResult, { ok: false }>) {
@@ -190,12 +229,19 @@ async function deliver(rows: Claimed[], content: CampaignContent): Promise<void>
     .update(rows.map((row) => row.id).join(','))
     .digest('hex')}`
   const result = await sendBatch(
-    rows.map((row) => ({ to: row.to_email, ...renderEmail(content, { name: row.to_name }) })),
+    rows.map((row) => ({
+      to: row.to_email,
+      ...renderEmail(content, {
+        name: row.to_name,
+        email: row.to_email,
+        variables: row.variables ?? undefined,
+      }),
+    })),
     key,
   )
 
   if (result.ok) {
-    await Promise.all(rows.map((row, index) => markSent(row.id, result.ids[index] ?? null)))
+    await Promise.all(rows.map((row, index) => markSent(row, result.ids[index] ?? null)))
     return
   }
 
