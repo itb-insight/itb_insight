@@ -29,7 +29,7 @@ const mediaPartners: MediaPartner[] = [
   { file: "06. M_Para Pencari Event Bandung.png", alt: "Para Pencari Event Bandung", tier: "M", instagram: "papebandung" },
   { file: "07. M_ITB Receh.png", alt: "ITB Receh", tier: "M", instagram: "itb.receh" },
   { file: "08. M_ShARE ITB.png", alt: "ShARE ITB", tier: "M", instagram: "share_itb" },
-  { file: "09. L_TSA ITB.png", alt: "TSA ITB", tier: "L", instagram: "tsaitb" },
+  { file: "09. L_TSA ITB.jpg", alt: "TSA ITB", tier: "L", instagram: "tsaitb" },
   { file: "10. M_StudentsXCEOs International Summit.png", alt: "StudentsXCEOs International Summit", tier: "M", instagram: "studentsxceosbdg" },
   { file: "11. M_Strativate.png", alt: "Strativate", tier: "M", instagram: "strativate.id" },
 ]

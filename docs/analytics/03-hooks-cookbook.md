@@ -24,9 +24,7 @@ import TrackedSection from "@/lib/analytics/components/TrackedSection"
 ```
 
 `TrackedSection` is a client component but accepts **server-rendered children**, so wrapping a
-server component in it does not force the whole subtree to the client. See
-`src/features/landing/components/MediaPartnersSection/MediaPartnersSection.tsx` for a live example
-that stays a server component.
+server component in it does not force the whole subtree to the client.
 
 ### The hook
 
@@ -36,6 +34,9 @@ import useImpression from "@/lib/analytics/hooks/useImpression"
 const ref = useImpression({ sectionId: "sponsors-gold", division: "SP" })
 return <section ref={ref}>…</section>
 ```
+
+Live example: `src/features/landing/components/MediaPartnersSectionHifi/MediaPartnersSectionHifi.tsx`
+(one `sponsor_impression` for the partner marquee, plus `sponsor_click` per logo).
 
 ```ts
 useImpression(options: {

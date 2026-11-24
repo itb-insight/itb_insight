@@ -25,7 +25,7 @@ async function load(env: Record<string, string>): Promise<Modules> {
   }
 }
 
-/** Lets the idle callback, the dynamic import and the .then chain run. */
+/** Gives a load that should never happen time to show up (used for negative checks). */
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
 
 beforeEach(() => {
@@ -99,7 +99,7 @@ describe('queue → PostHog', () => {
   it('delivers events fired before the SDK loads, with division, path and app_env', async () => {
     const { logEvent } = await load({ NEXT_PUBLIC_POSTHOG_KEY: 'phc_test', NEXT_PUBLIC_VERCEL_ENV: 'preview' })
     logEvent('sponsor_click', { sponsorId: 'kai' }, { force: true })
-    await settle()
+    await vi.waitFor(() => expect(sdk.capture).toHaveBeenCalled())
 
     expect(sdk.init).toHaveBeenCalledTimes(1)
     expect(sdk.register).toHaveBeenCalledWith({ app_env: 'preview' })
@@ -123,7 +123,7 @@ describe('queue → PostHog', () => {
   it('sends urgent (page-hide) events with a beacon', async () => {
     const { logEvent } = await load({ NEXT_PUBLIC_POSTHOG_KEY: 'phc_test' })
     logEvent('funnel_dropoff', { funnelId: 'signup' }, { force: true, urgent: true })
-    await settle()
+    await vi.waitFor(() => expect(sdk.capture).toHaveBeenCalled())
     expect(sdk.capture).toHaveBeenCalledWith(
       'funnel_dropoff',
       expect.anything(),
