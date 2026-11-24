@@ -167,7 +167,11 @@ export async function POST(request: NextRequest) {
 
     if (dryRun) {
       const sample = resolved.recipients.slice(0, SAMPLE_RECIPIENTS)
-      const rendered = renderEmail({ subject, body: messageBody }, { name: sample[0]?.name })
+      const first = sample[0]
+      const rendered = renderEmail(
+        { subject, body: messageBody },
+        { name: first?.name, email: first?.email, variables: first?.variables },
+      )
       return apiSuccess({
         dryRun: true,
         configured: isEmailConfigured(),
