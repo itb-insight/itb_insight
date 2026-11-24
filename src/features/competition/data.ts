@@ -146,7 +146,7 @@ const DATA: Competition[] = [
     registerUrl:
       "https://docs.google.com/forms/d/e/1FAIpQLScBs4oDRG4cpPnsNYs1pRUcNY6hGmdjhrHN93Z2XDf4qz166A/viewform",
     timeline: [
-      { id: "pendaftaran", title: "Pendaftaran", dateLabel: "14 Agustus – 25 November 2026", date: "2026-08-14" },
+      { id: "pendaftaran", title: "Pendaftaran (Diperpanjang)", dateLabel: "14 Agustus – 25 November 2026", date: "2026-08-14" },
       { id: "technical-meeting", title: "Technical Meeting", dateLabel: "21 November 2026", date: "2026-11-21" },
       { id: "semifinal", title: "Semifinal", dateLabel: "27 November 2026", date: "2026-11-27" },
       { id: "final", title: "Final", dateLabel: "28 November 2026", date: "2026-11-28" },
@@ -195,7 +195,7 @@ const DATA: Competition[] = [
     seo: {
       metaTitle: "Drone Soccer Competition",
       metaDescription:
-        "Drone Soccer Competition ITB Insight 2026: lomba drone untuk peserta berusia di atas 10 tahun se-Indonesia, hadiah Rp3.500.000 dan drone. Daftar sampai 25 November 2026, final 28 November di Aula Barat ITB.",
+        "Drone Soccer Competition ITB Insight 2026: lomba drone untuk peserta berusia di atas 10 tahun se-Indonesia, hadiah Rp3.500.000 dan drone. Pendaftaran diperpanjang sampai 25 November 2026, final 28 November di Aula Barat ITB.",
       ogImage: "/assets/og-mo.png",
       keywords: ["lomba drone", "drone soccer", "DJI Tello", "ITB Insight 2026", "kompetisi drone"],
     },
