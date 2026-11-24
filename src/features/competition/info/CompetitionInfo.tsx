@@ -4,7 +4,8 @@ import { anchorId, formatRupiah, whatsappUrl } from "@/features/competition/form
 import styles from "@/features/competition/info/CompetitionInfo.module.css";
 
 /**
- * Detail lomba dari Form Informasi Competition: info singkat, tema/bidang,
+ * Detail lomba dari Form Informasi Competition: finalis (bila sudah
+ * diumumkan), info singkat, tema/bidang,
  * syarat peserta, dokumen pendaftaran, biaya per gelombang, berkas per tahap.
  *
  * Dipakai di dua tempat:
@@ -47,6 +48,19 @@ export default function CompetitionInfo({
       <h2 id={titleId} className={styles.title}>
         Detail Lomba
       </h2>
+
+      {info.finalists?.length ? (
+        <div className={styles.card}>
+          <h3 className={styles.subTitle}>Finalis</h3>
+          <ol className={styles.finalists}>
+            {info.finalists.map((team) => (
+              <li key={team} className={styles.finalist}>
+                {team}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
 
       <dl className={styles.facts}>
         {info.facts.map((f) => (

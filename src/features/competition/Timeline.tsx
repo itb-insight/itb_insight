@@ -14,7 +14,7 @@ import type { TimelineItem } from "@/features/competition/types";
  *   teks   x = titik x + 36, nama 20/24, tanggal 16/24
  *
  * Warna titik dan garis mengikuti warna ikon lomba (accentFrom/accentTo):
- *   SAR merah muda · MO ungu · BPC hijau · OE biru
+ *   SAR merah muda · MO ungu · BPC peach-lavender · OE biru
  *
  * Inline style dipakai karena globals.css punya aturan global tanpa @layer
  * yang mengalahkan utility Tailwind. Lihat catatan di CompetitionHero.

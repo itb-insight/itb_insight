@@ -3,6 +3,7 @@ import { externalLinkProps, formatRupiah, joinIndonesian, lowestFee } from "@/fe
 import type { Competition } from "@/features/competition/types";
 import { registerEnabled } from "@/features/competition/status";
 import CompetitionInfo, { FeeTiers } from "@/features/competition/info/CompetitionInfo";
+import Collaboration from "@/features/competition/Collaboration";
 import DesktopCountdown from "@/features/compe-desktop/DesktopCountdown";
 
 const vw = (px: number) => `${(px / 1728) * 100}vw`;
@@ -249,6 +250,9 @@ export default function CompetitionDesktopLayout({
               ))}
             </div>
           ) : null}
+
+          {/* IN COLLABORATION WITH (hanya lomba yang punya mitra) */}
+          <Collaboration competition={competition} variant="desktop" />
         </div>
       </section>
 

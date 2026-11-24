@@ -278,7 +278,7 @@ export default function SARLandingPage() {
           }}
         >
           <img
-            src="/images/bpc.webp"
+            src="/images/icon-bpc-2026.webp"
             alt="BPC Logo"
             loading="lazy"
             style={{
