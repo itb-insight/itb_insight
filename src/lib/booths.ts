@@ -1,5 +1,16 @@
-// Server-side data layer for booths. Points are awarded by booth staff scanning the
-// visitor's personal QR (docs/QR-FEATURES.md).
+// Server-side data layer for booths & main-quest QR point awards.
+//
+// Enforces the gamification wireframe rules:
+//  - "Ini Akun Panitia!" (`COMMITTEE_ACCOUNT`): accounts with profiles.role_a (staff/stakeholder/
+//    sponsor_partner/company/admin) cannot receive visitor points (unless admin self-testing).
+//  - "BANYAK BANGET!" (`highPoints`): warning when pointsToAward > HIGH_POINTS_THRESHOLD (default 100).
+//  - "Yakin?" (`nonBoothStaff`): warning when the caller is not assigned to the booth (`isAssignedBoothStaff`).
+//    Note from wireframe: if both highPoints and nonBoothStaff apply, `primaryWarning` is `'high_points'`.
+//  - "Berikan Bonus?" (`recentVisitWithin5h`): detected when the visitor was scanned at the same booth
+//    within the last 5 hours (`RECENT_VISIT_WINDOW_MS`).
+//  - "HOORAY!": returns `awardedByName` ("kak <Full Name>") so the visitor UI can thank the staff.
+//  - Manual negative adjustments: admins may pass negative `points` (-1000..1000) when `boothId` is
+//    omitted (`booth_id = null`) to deduct erroneously awarded points.
 
 import 'server-only'
 
@@ -7,7 +18,7 @@ import { recordAuditLog } from '@/lib/audit'
 import { processGateCheckIn } from '@/lib/check-in'
 import { parseVisitorQr } from '@/lib/qr'
 import { createServiceClient } from '@/lib/supabase/server'
-import { type Booth, type UserRole } from '@/lib/types/database'
+import { type Booth, type ProfileRoleA, type UserRole } from '@/lib/types/database'
 
 export async function getActiveBooths(category?: string): Promise<Booth[]> {
   const supabase = createServiceClient()
@@ -29,10 +40,19 @@ export async function getActiveBooths(category?: string): Promise<Booth[]> {
   return data as Booth[]
 }
 
-type Visitor = {
+export type Visitor = {
   userId: string
   fullName: string
   institution: string | null
+  roleA?: ProfileRoleA | null
+}
+
+export type BoothWarningValues = {
+  highPoints: boolean
+  nonBoothStaff: boolean
+  recentVisitWithin5h: boolean
+  /** Wireframe priority: if both highPoints and nonBoothStaff apply, jump straight to high_points. */
+  primaryWarning: 'high_points' | 'non_booth_staff' | 'recent_visit_5h' | null
 }
 
 type AwardError = {
@@ -46,8 +66,10 @@ type AwardError = {
     | 'INVALID_BONUS'
     | 'INVALID_POINTS'
     | 'SELF_AWARD'
+    | 'COMMITTEE_ACCOUNT'
     | 'DATABASE_ERROR'
   message: string
+  visitorRole?: ProfileRoleA | null
 }
 
 // What a scan would do, without writing anything. Lets the scanner ask "give points?" first.
@@ -58,8 +80,13 @@ export type BoothAwardPreview = {
   visitor: Visitor
   checkedIn: boolean
   alreadyVisited: boolean
+  recentVisitWithin5h: boolean
+  lastScannedAt: string | null
   pointsToAward: number
   bonusPoints: number
+  isAssignedBoothStaff: boolean
+  awardedByName: string | null
+  warnings: BoothWarningValues
 }
 
 export type BoothAwardResult =
@@ -73,6 +100,8 @@ export type BoothAwardResult =
       skippedGate: boolean
       totalPoints: number
       totalVisited: number
+      awardedByName: string | null
+      warnings: BoothWarningValues
     }
   | {
       // Visitor never scanned at the gate. The staff UI asks them to confirm with the visitor
@@ -93,31 +122,38 @@ export type BoothAwardParams = {
   boothId?: string
   /** Discretionary bonus on top of booths.points, 0..booths.max_bonus_points. */
   bonusPoints?: number
-  /** Admin only: award exactly this many points instead of base + bonus (testing / corrections). */
+  /** Admin only: award or deduct (-1000..1000 when no booth; 0..1000 with booth) directly. */
   points?: number
   confirmSkippedGate?: boolean
 }
 
 export const MAX_ADMIN_POINTS = 1000
+export const RECENT_VISIT_WINDOW_MS = 5 * 60 * 60 * 1000 // 5 hours
+
+export function getHighPointsThreshold(): number {
+  const raw = Number(process.env.BOOTH_HIGH_POINTS_THRESHOLD)
+  return Number.isInteger(raw) && raw > 0 ? raw : 100
+}
 
 type BoothResolution =
-  | { ok: true; booth: Booth | null }
+  | { ok: true; booth: Booth | null; isAssignedBoothStaff: boolean }
   | { ok: false; code: 'BOOTH_NOT_FOUND' | 'BOOTH_NOT_ASSIGNED' | 'BOOTH_AMBIGUOUS'; message: string }
 
 // Which booth the scanning staff awards for. Booth staff and exhibitors are limited to their
-// active assigned booths and may omit it when they have exactly one. Admins may pick any booth
-// (active or not) or none at all — a manual award with no booth.
+// active assigned booths and may omit it when they have exactly one. Admins and field_staff
+// helpers may pick a booth; `isAssignedBoothStaff` records whether they are actually on that
+// booth's roster so the "Yakin?" warning screen can be triggered for non-booth staff helpers.
 async function resolveStaffBooth(staffUserId: string, staffRole: UserRole, boothId?: string): Promise<BoothResolution> {
   const supabase = createServiceClient()
   let targetId = boothId
 
-  if (staffRole !== 'admin') {
-    const [{ data: assigned }, { data: owned }] = await Promise.all([
-      supabase.from('booth_staff').select('booth_id').eq('user_id', staffUserId),
-      supabase.from('booths').select('id').eq('exhibitor_user_id', staffUserId),
-    ])
-    const allowed = new Set([...(assigned ?? []).map((r) => r.booth_id as string), ...(owned ?? []).map((r) => r.id as string)])
+  const [{ data: assigned }, { data: owned }] = await Promise.all([
+    supabase.from('booth_staff').select('booth_id').eq('user_id', staffUserId),
+    supabase.from('booths').select('id').eq('exhibitor_user_id', staffUserId),
+  ])
+  const allowed = new Set([...(assigned ?? []).map((r) => r.booth_id as string), ...(owned ?? []).map((r) => r.id as string)])
 
+  if (staffRole !== 'admin') {
     if (allowed.size === 0) {
       return { ok: false, code: 'BOOTH_NOT_ASSIGNED', message: 'Akun Anda belum ditugaskan ke booth mana pun.' }
     }
@@ -133,7 +169,7 @@ async function resolveStaffBooth(staffUserId: string, staffRole: UserRole, booth
   }
 
   if (!targetId) {
-    return { ok: true, booth: null } // only reachable for admins
+    return { ok: true, booth: null, isAssignedBoothStaff: false } // only reachable for admins
   }
 
   let query = supabase.from('booths').select('*').eq('id', targetId)
@@ -144,7 +180,32 @@ async function resolveStaffBooth(staffUserId: string, staffRole: UserRole, booth
     return { ok: false, code: 'BOOTH_NOT_FOUND', message: 'Booth tidak ditemukan atau tidak aktif.' }
   }
 
-  return { ok: true, booth: data as Booth }
+  return {
+    ok: true,
+    booth: data as Booth,
+    isAssignedBoothStaff: allowed.has(targetId),
+  }
+}
+
+function computeWarnings(params: {
+  pointsToAward: number
+  isAssignedBoothStaff: boolean
+  recentVisitWithin5h: boolean
+}): BoothWarningValues {
+  const highPoints = params.pointsToAward > getHighPointsThreshold()
+  const nonBoothStaff = !params.isAssignedBoothStaff
+  const recentVisitWithin5h = params.recentVisitWithin5h
+
+  // Wireframe note: "Jika pemberian poin banyak dan bukan staff, langsung aja ke warning screen ngelewatin treshold tertentu!"
+  const primaryWarning: BoothWarningValues['primaryWarning'] = highPoints
+    ? 'high_points'
+    : nonBoothStaff
+      ? 'non_booth_staff'
+      : recentVisitWithin5h
+        ? 'recent_visit_5h'
+        : null
+
+  return { highPoints, nonBoothStaff, recentVisitWithin5h, primaryWarning }
 }
 
 type AwardContext = BoothAwardPreview & { token: string }
@@ -159,7 +220,7 @@ async function loadAwardContext(params: BoothAwardParams): Promise<AwardContext 
 
   const resolved = await resolveStaffBooth(staffUserId, staffRole, boothId)
   if (!resolved.ok) return resolved
-  const booth = resolved.booth
+  const { booth, isAssignedBoothStaff } = resolved
 
   let pointsToAward: number
   let bonus = 0
@@ -167,8 +228,13 @@ async function loadAwardContext(params: BoothAwardParams): Promise<AwardContext 
     if (staffRole !== 'admin') {
       return { ok: false, code: 'INVALID_POINTS', message: 'Hanya admin yang dapat menentukan jumlah poin langsung.' }
     }
-    if (!Number.isInteger(points) || points < 0 || points > MAX_ADMIN_POINTS) {
-      return { ok: false, code: 'INVALID_POINTS', message: `Poin harus bilangan bulat antara 0 dan ${MAX_ADMIN_POINTS}.` }
+    const minAllowed = booth ? 0 : -MAX_ADMIN_POINTS
+    if (!Number.isInteger(points) || points < minAllowed || points > MAX_ADMIN_POINTS) {
+      return {
+        ok: false,
+        code: 'INVALID_POINTS',
+        message: `Poin harus bilangan bulat antara ${minAllowed} dan ${MAX_ADMIN_POINTS}.`,
+      }
     }
     pointsToAward = points
   } else if (!booth) {
@@ -189,7 +255,7 @@ async function loadAwardContext(params: BoothAwardParams): Promise<AwardContext 
 
   const { data: ticket, error: ticketError } = await supabase
     .from('visitor_tickets')
-    .select('id, user_id, checked_in, profiles!visitor_tickets_user_id_fkey(full_name, institution)')
+    .select('id, user_id, checked_in, profiles!visitor_tickets_user_id_fkey(full_name, institution, role_a)')
     .eq('qr_code', token)
     .maybeSingle()
 
@@ -206,13 +272,28 @@ async function loadAwardContext(params: BoothAwardParams): Promise<AwardContext 
     return { ok: false, code: 'SELF_AWARD', message: 'Anda tidak dapat memberi poin ke akun sendiri.' }
   }
 
-  const profile = Array.isArray(ticket.profiles) ? ticket.profiles[0] : ticket.profiles
+  const profile = (Array.isArray(ticket.profiles) ? ticket.profiles[0] : ticket.profiles) as {
+    full_name?: string | null
+    institution?: string | null
+    role_a?: ProfileRoleA | null
+  } | null
+
+  // Wireframe: "Ini Akun Panitia! Akun ini memiliki peran (panitia / stakeholder / sponsor). Tidak ada keperluan memiliki poin lohh"
+  const visitorRole = profile?.role_a ?? null
+  if (visitorRole && !(staffRole === 'admin' && ticket.user_id === staffUserId)) {
+    return {
+      ok: false,
+      code: 'COMMITTEE_ACCOUNT',
+      message: `Ini Akun Panitia! Akun ini memiliki peran (${visitorRole}). Tidak ada keperluan memiliki poin.`,
+      visitorRole,
+    }
+  }
 
   // Once per visitor per booth. Manual awards (no booth) are not deduplicated.
   const { data: existingScan, error: scanError } = booth
     ? await supabase
         .from('booth_scan_events')
-        .select('id')
+        .select('id, scanned_at')
         .eq('user_id', ticket.user_id)
         .eq('booth_id', booth.id)
         .maybeSingle()
@@ -222,6 +303,24 @@ async function loadAwardContext(params: BoothAwardParams): Promise<AwardContext 
     return { ok: false, code: 'DATABASE_ERROR', message: 'Gagal memeriksa riwayat kunjungan booth.' }
   }
 
+  const lastScannedAt = (existingScan as { scanned_at?: string } | null)?.scanned_at ?? null
+  const recentVisitWithin5h = Boolean(
+    existingScan && (!lastScannedAt || Date.now() - new Date(lastScannedAt).getTime() <= RECENT_VISIT_WINDOW_MS),
+  )
+
+  const { data: staffProfile } = await supabase
+    .from('profiles')
+    .select('full_name')
+    .eq('id', staffUserId)
+    .maybeSingle()
+  const awardedByName = (staffProfile as { full_name?: string | null } | null)?.full_name?.trim() || null
+
+  const warnings = computeWarnings({
+    pointsToAward,
+    isAssignedBoothStaff,
+    recentVisitWithin5h,
+  })
+
   return {
     ok: true,
     token,
@@ -230,11 +329,17 @@ async function loadAwardContext(params: BoothAwardParams): Promise<AwardContext 
       userId: ticket.user_id,
       fullName: profile?.full_name || 'Pengunjung',
       institution: profile?.institution || null,
+      roleA: visitorRole,
     },
     checkedIn: ticket.checked_in,
     alreadyVisited: Boolean(existingScan),
+    recentVisitWithin5h,
+    lastScannedAt,
     pointsToAward,
     bonusPoints: bonus,
+    isAssignedBoothStaff,
+    awardedByName,
+    warnings,
   }
 }
 
@@ -242,8 +347,33 @@ async function loadAwardContext(params: BoothAwardParams): Promise<AwardContext 
 export async function previewBoothAward(params: BoothAwardParams): Promise<BoothAwardPreview | AwardError> {
   const ctx = await loadAwardContext(params)
   if (!ctx.ok) return ctx
-  const { booth, visitor, checkedIn, alreadyVisited, pointsToAward, bonusPoints } = ctx
-  return { ok: true, booth, visitor, checkedIn, alreadyVisited, pointsToAward, bonusPoints }
+  const {
+    booth,
+    visitor,
+    checkedIn,
+    alreadyVisited,
+    recentVisitWithin5h,
+    lastScannedAt,
+    pointsToAward,
+    bonusPoints,
+    isAssignedBoothStaff,
+    awardedByName,
+    warnings,
+  } = ctx
+  return {
+    ok: true,
+    booth,
+    visitor,
+    checkedIn,
+    alreadyVisited,
+    recentVisitWithin5h,
+    lastScannedAt,
+    pointsToAward,
+    bonusPoints,
+    isAssignedBoothStaff,
+    awardedByName,
+    warnings,
+  }
 }
 
 // Booth staff scan a visitor's personal QR to award the booth's standard points plus an
@@ -252,7 +382,7 @@ export async function awardBoothPoints(params: BoothAwardParams): Promise<BoothA
   const ctx = await loadAwardContext(params)
   if (!ctx.ok) return ctx
 
-  const { token, booth, visitor, pointsToAward, bonusPoints } = ctx
+  const { token, booth, visitor, pointsToAward, bonusPoints, awardedByName, warnings } = ctx
   const { staffUserId, confirmSkippedGate = false } = params
 
   const alreadyVisited = async (): Promise<BoothAwardResult> => {
@@ -267,6 +397,8 @@ export async function awardBoothPoints(params: BoothAwardParams): Promise<BoothA
       skippedGate: false,
       totalPoints: progress.totalPoints,
       totalVisited: progress.totalVisited,
+      awardedByName,
+      warnings,
     }
   }
 
@@ -315,7 +447,7 @@ export async function awardBoothPoints(params: BoothAwardParams): Promise<BoothA
 
   await recordAuditLog({
     userId: staffUserId,
-    action: 'BOOTH_POINTS_AWARDED',
+    action: pointsToAward < 0 ? 'BOOTH_POINTS_DEDUCTED' : 'BOOTH_POINTS_AWARDED',
     targetTable: 'booth_scan_events',
     recordId: booth?.id ?? null,
     metadata: {
@@ -325,6 +457,7 @@ export async function awardBoothPoints(params: BoothAwardParams): Promise<BoothA
       bonusPoints,
       adminOverride: params.points !== undefined,
       skippedGate,
+      warnings,
     },
   })
 
@@ -340,12 +473,16 @@ export async function awardBoothPoints(params: BoothAwardParams): Promise<BoothA
     skippedGate,
     totalPoints: progress.totalPoints,
     totalVisited: progress.totalVisited,
+    awardedByName,
+    warnings,
   }
 }
 
 export type UserBoothProgress = {
   totalVisited: number
   totalPoints: number
+  boothPoints: number
+  sidequestPoints: number
   visitedBoothIds: string[]
   recentScans: Array<{
     boothId: string | null
@@ -353,25 +490,44 @@ export type UserBoothProgress = {
     category: string
     pointsAwarded: number
     scannedAt: string
+    awardedByName?: string | null
   }>
 }
 
 export async function getUserBoothProgress(userId: string): Promise<UserBoothProgress> {
   const supabase = createServiceClient()
 
-  const { data: scans, error } = await supabase
-    .from('booth_scan_events')
-    .select('id, booth_id, points_awarded, scanned_at, booths(id, name, category)')
-    .eq('user_id', userId)
-    .order('scanned_at', { ascending: false })
+  const [{ data: scans, error }, { data: approvedQuests }] = await Promise.all([
+    supabase
+      .from('booth_scan_events')
+      .select('id, booth_id, points_awarded, scanned_at, awarded_by, booths(id, name, category)')
+      .eq('user_id', userId)
+      .order('scanned_at', { ascending: false }),
+    supabase
+      .from('sidequest_submissions')
+      .select('points_awarded')
+      .eq('user_id', userId)
+      .eq('status', 'approved'),
+  ])
 
-  if (error || !scans) {
-    return { totalVisited: 0, totalPoints: 0, visitedBoothIds: [], recentScans: [] }
+  const questList = Array.isArray(approvedQuests) ? (approvedQuests as Array<{ points_awarded?: number }>) : []
+  const sidequestPoints = questList.reduce((acc, q) => acc + (q.points_awarded || 0), 0)
+
+  if (error || !Array.isArray(scans)) {
+    return {
+      totalVisited: 0,
+      totalPoints: Math.max(0, sidequestPoints),
+      boothPoints: 0,
+      sidequestPoints,
+      visitedBoothIds: [],
+      recentScans: [],
+    }
   }
 
   // booth_id is null for admin manual awards: they count toward points, not booths visited.
   const visitedBoothIds = scans.flatMap((s) => (s.booth_id ? [s.booth_id as string] : []))
-  const totalPoints = scans.reduce((acc, s) => acc + (s.points_awarded || 0), 0)
+  const boothPoints = scans.reduce((acc, s) => acc + (s.points_awarded || 0), 0)
+  const totalPoints = Math.max(0, boothPoints + sidequestPoints)
   const recentScans = scans.map((s) => {
     const b = Array.isArray(s.booths) ? s.booths[0] : s.booths
     return {
@@ -386,6 +542,8 @@ export async function getUserBoothProgress(userId: string): Promise<UserBoothPro
   return {
     totalVisited: visitedBoothIds.length,
     totalPoints,
+    boothPoints,
+    sidequestPoints,
     visitedBoothIds,
     recentScans,
   }

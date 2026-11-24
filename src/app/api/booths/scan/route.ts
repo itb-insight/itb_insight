@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
       }
 
       const status =
-        result.code === 'BOOTH_NOT_ASSIGNED' || result.code === 'SELF_AWARD'
+        result.code === 'BOOTH_NOT_ASSIGNED' || result.code === 'SELF_AWARD' || result.code === 'COMMITTEE_ACCOUNT'
           ? 403
           : result.code === 'DATABASE_ERROR'
             ? 500
