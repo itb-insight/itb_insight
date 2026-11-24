@@ -25,6 +25,7 @@ const PUBLIC_HANDLERS: Record<string, string> = {
   'POST /api/rsvp/[token]': 'Capability URL: 128-bit random token.',
   'POST /api/payments/webhook': 'Midtrans SHA-512 signature (verifyMidtransSignature) and amount check.',
   'POST /api/track': 'Anonymous analytics ingest: rate limited, PII keys stripped.',
+  'GET /api/sidequests/leaderboard': 'Public read-only gamification leaderboard (committee accounts excluded).',
 }
 
 /** Staff and admin surfaces: a session alone is not enough, the handler must check the role. */

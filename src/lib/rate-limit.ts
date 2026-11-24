@@ -18,6 +18,8 @@ type RateLimitScope =
   | 'self-check-in'
   | 'admin-email-send'
   | 'admin-email-preview'
+  | 'sidequest-submit'
+  | 'reward-claim'
 
 type RateLimitOptions = {
   readonly scope: RateLimitScope
