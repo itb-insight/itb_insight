@@ -30,6 +30,8 @@ create table if not exists public.email_outbox (
   user_id uuid references public.profiles(id) on delete set null,
   to_email text not null check (char_length(to_email) between 3 and 254),
   to_name text,
+  -- Per-recipient template variables (e.g. juara, gdrive_link, team_name, team_uid, password).
+  variables jsonb not null default '{}'::jsonb,
   status text not null default 'pending'
     check (status in ('pending', 'sending', 'sent', 'failed')),
   attempts integer not null default 0 check (attempts >= 0),

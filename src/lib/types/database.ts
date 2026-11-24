@@ -200,6 +200,7 @@ export type EmailOutboxItem = {
   user_id?: string | null
   to_email: string
   to_name?: string | null
+  variables: Record<string, string>
   status: EmailOutboxStatus
   attempts: number
   last_error?: string | null
