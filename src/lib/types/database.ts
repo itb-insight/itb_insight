@@ -211,3 +211,60 @@ export type EmailOutboxItem = {
   created_at: string
   updated_at: string
 }
+
+export type SidequestCategory = 'marketing' | 'acara' | 'competition' | 'fundraise'
+export type SidequestSubmissionStatus = 'pending' | 'approved' | 'rejected'
+
+export type Sidequest = {
+  id: string
+  slug: string
+  category: SidequestCategory
+  title: string
+  description?: string | null
+  pic?: string | null
+  points: number
+  shortcut_url?: string | null
+  requires_proof: boolean
+  target_count: number
+  order_index: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export type SidequestSubmission = {
+  id: string
+  quest_id: string
+  user_id: string
+  proof_url?: string | null
+  note?: string | null
+  status: SidequestSubmissionStatus
+  points_awarded: number
+  reviewed_by?: string | null
+  review_note?: string | null
+  submitted_at: string
+  reviewed_at?: string | null
+  updated_at: string
+}
+
+export type RewardTier = {
+  id: string
+  tier_number: number
+  min_points: number
+  max_points: number
+  reward_name: string
+  total_stock?: number | null
+  note?: string | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export type RewardClaim = {
+  id: string
+  tier_id: string
+  user_id: string
+  points_at_claim: number
+  claimed_by?: string | null
+  claimed_at: string
+}
