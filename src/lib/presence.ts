@@ -3,10 +3,12 @@ import 'server-only'
 import { unstable_cache } from 'next/cache'
 
 import { getEvents } from '@/features/events/data'
+import { getUserRole } from '@/lib/admin'
 import { getVenue, type Venue } from '@/lib/geofence'
 import type { PresenceBooth, Zone } from '@/lib/presence-geo'
 import { D_DAY, jakartaDate } from '@/lib/dashboard-agenda'
 import { createServiceClient } from '@/lib/supabase/server'
+import type { UserRole } from '@/lib/types/database'
 
 /*
   Booth presence configuration (server). Zones, all optional, all server-side env:
@@ -20,6 +22,11 @@ import { createServiceClient } from '@/lib/supabase/server'
     PRESENCE_DATES=2026-11-26,2026-11-28     days (Jakarta) presence runs. Default: D-Day plus the
                                              dated events. Set a test day here for the field test.
     PRESENCE_HOURS=7-22                      hours (Jakarta, start inclusive, end exclusive)
+    PRESENCE_TEST_MODE=true                  admin and staff accounts (field/gate/booth) run presence
+                                             any day, any hour, and get the opt-in card without a
+                                             gate check-in, plus the debug readout. Everything else
+                                             stays: consent, the zones, booth + time only. Leave it
+                                             off in production once testing is done.
 
   Location is recorded only inside the event zone, only for signed-in users who opted in, and
   only booth + time are stored (migration 0016). Never awards points: GPS can be faked.
@@ -90,6 +97,19 @@ export async function isPresenceOpen(now: Date = new Date()): Promise<boolean> {
   const hour = jakartaHour(now)
   if (hour < start || hour >= end) return false
   return (await presenceDays()).has(jakartaDate(now.toISOString()))
+}
+
+const PRESENCE_TESTER_ROLES: readonly UserRole[] = ['admin', 'field_staff', 'gate_staff', 'booth_staff']
+
+/** PRESENCE_TEST_MODE is on and this role may test presence outside the event window. */
+export function isPresenceTesterRole(role: UserRole | null): boolean {
+  return process.env.PRESENCE_TEST_MODE === 'true' && role !== null && PRESENCE_TESTER_ROLES.includes(role)
+}
+
+/** Same check from a user; reads the role only when test mode is on. */
+export async function isPresenceTester(user: Parameters<typeof getUserRole>[0]): Promise<boolean> {
+  if (process.env.PRESENCE_TEST_MODE !== 'true') return false
+  return isPresenceTesterRole(await getUserRole(user))
 }
 
 /** Start of today in Jakarta, as an ISO instant. */

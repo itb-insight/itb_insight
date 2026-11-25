@@ -1,5 +1,7 @@
 import "server-only"
 
+import { unstable_cache } from "next/cache"
+
 import { DIVISION_ORDER, type DivisionTag } from "@/lib/analytics/divisions"
 import { SAMPLE_RATES } from "@/lib/analytics/config"
 import {
@@ -10,6 +12,8 @@ import {
   num,
   sqlTime,
 } from "@/lib/analytics/posthog-query"
+import { startOfJakartaDay } from "@/lib/presence"
+import { VISIT_MIN_SECONDS } from "@/lib/presence-geo"
 import { createServiceClient } from "@/lib/supabase/server"
 import {
   MEDIA_PARTNERS,
@@ -26,6 +30,8 @@ import {
   MOCK_TRAFFIC,
 } from "./mockData"
 import type {
+  BoothLiveDto,
+  CheckInSlotDto,
   CompetitionFunnelDto,
   DateRange,
   DivisionActivityDto,
@@ -33,6 +39,9 @@ import type {
   FunnelDto,
   FunnelStageDto,
   KpiDto,
+  LiveDto,
+  LiveWebDto,
+  OnSiteLiveDto,
   RecentEventDto,
   SponsorStatDto,
   TrafficDto,
@@ -510,4 +519,129 @@ export async function getRecentEvents(limit: number): Promise<RecentEventDto[] |
     metadata: ownMetadata(properties),
     created_at: String(timestamp),
   }))
+}
+
+// ─── D-day live ──────────────────────────────────────────────────────────────
+
+const SLOT_MS = 15 * 60 * 1000
+
+/** One RPC (migration 0017) for the whole on-site picture, shared by every admin for 30 s. */
+const fetchOnSite = unstable_cache(
+  async (since: string): Promise<unknown> => {
+    const { data, error } = await createServiceClient().rpc("admin_live_onsite", {
+      p_since: since,
+      p_visit_seconds: VISIT_MIN_SECONDS,
+    })
+    // Thrown, not returned, so a failure is not cached.
+    if (error) throw new Error(error.message)
+    return data
+  },
+  ["admin-live-onsite"],
+  { revalidate: LIVE_TTL, tags: ["admin-live"] },
+)
+
+const record = (value: unknown): Record<string, unknown> =>
+  value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : {}
+const list = (value: unknown): Record<string, unknown>[] => (Array.isArray(value) ? value.map(record) : [])
+const maybeNum = (value: unknown): number | null => (value === null || value === undefined ? null : num(value))
+
+/** 15-minute slots from the first check-in to the slot `now` falls in, gaps as zero. */
+function fillSlots(raw: Record<string, unknown>[], since: Date, now: Date): CheckInSlotDto[] {
+  const counts = new Map<number, number>()
+  for (const row of raw) {
+    const at = new Date(String(row.slot)).getTime()
+    if (Number.isFinite(at)) counts.set(at, num(row.count))
+  }
+  if (counts.size === 0) return []
+
+  const first = Math.min(...counts.keys())
+  const current = since.getTime() + Math.floor((now.getTime() - since.getTime()) / SLOT_MS) * SLOT_MS
+  const last = Math.max(current, ...counts.keys())
+  const slots: CheckInSlotDto[] = []
+  for (let at = first; at <= last; at += SLOT_MS) {
+    slots.push({ slot: new Date(at).toISOString(), count: counts.get(at) ?? 0 })
+  }
+  return slots
+}
+
+function toOnSite(raw: unknown, since: Date, now: Date): OnSiteLiveDto {
+  const data = record(raw)
+  const venue = record(data.venue)
+  const checkedIn = num(data.checked_in)
+  const measured = num(venue.measured)
+
+  const booths: BoothLiveDto[] = list(data.booths).map((row) => ({
+    booth_id: String(row.booth_id),
+    name: String(row.name ?? ""),
+    scans: num(row.scans),
+    visits: num(row.visits),
+    visitors: num(row.visitors),
+    median_dwell_s: maybeNum(row.median_dwell_s),
+    avg_dwell_s: maybeNum(row.avg_dwell_s),
+  }))
+
+  return {
+    checked_in: checkedIn,
+    active_now: num(data.active_now),
+    presence_users: num(data.presence_users),
+    slots: fillSlots(list(data.slots), since, now),
+    booths,
+    venue: {
+      measured,
+      unmeasured: Math.max(0, checkedIn - measured),
+      median_s: maybeNum(venue.median_s),
+      buckets: [
+        { label: "Under 30 min", count: num(venue.under_30m) },
+        { label: "30–60 min", count: num(venue.from_30m_to_1h) },
+        { label: "1–2 h", count: num(venue.from_1h_to_2h) },
+        { label: "Over 2 h", count: num(venue.over_2h) },
+      ],
+    },
+  }
+}
+
+async function getLiveWeb(): Promise<LiveWebDto | null> {
+  const [active, pages] = await Promise.all([
+    hogql(
+      "live-active",
+      `select uniq(distinct_id) from events where timestamp >= now() - interval 5 minute ${envFilter()}`,
+      LIVE_TTL,
+    ),
+    hogql(
+      "live-pages",
+      `select properties.$pathname as path, count()
+       from events
+       where event = '$pageview' and timestamp >= now() - interval 30 minute ${envFilter()} and path is not null
+       group by path
+       order by count() desc
+       limit 5`,
+      LIVE_TTL,
+    ),
+  ])
+  if (!active || !pages) return null
+  return {
+    active_visitors: num(active.results[0]?.[0]),
+    top_pages: pages.results.map(([path, count]) => ({ page_path: String(path), views: num(count) })),
+  }
+}
+
+/**
+ * Today (Jakarta) on site, plus the website right now. Supabase is always live here (the mock
+ * fallback is for PostHog only); PostHog figures are null without query credentials.
+ */
+export async function getLive(now: Date = new Date()): Promise<LiveDto> {
+  const since = startOfJakartaDay(now)
+  const webConfigured = isPostHogQueryConfigured()
+
+  const [onsite, web] = await Promise.all([
+    fetchOnSite(since)
+      .then((raw) => toOnSite(raw, new Date(since), now))
+      .catch((err: unknown) => {
+        console.error("[admin live] on-site query failed:", err instanceof Error ? err.message : err)
+        return null
+      }),
+    webConfigured ? getLiveWeb() : Promise.resolve(null),
+  ])
+
+  return { generated_at: now.toISOString(), since, onsite, web, web_configured: webConfigured }
 }

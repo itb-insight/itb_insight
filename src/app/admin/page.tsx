@@ -6,6 +6,7 @@ import {
   getEngagement,
   getFunnel,
   getKpis,
+  getLive,
   getSponsorStats,
   getTraffic,
 } from "@/features/admin/data/adapters"
@@ -14,6 +15,7 @@ import DivisionFilter from "@/features/admin/components/DivisionFilter/DivisionF
 import EngagementPanel from "@/features/admin/components/EngagementPanel/EngagementPanel"
 import FunnelPanel from "@/features/admin/components/FunnelPanel/FunnelPanel"
 import KpiStrip from "@/features/admin/components/KpiStrip/KpiStrip"
+import LiveDashboard from "@/features/admin/components/Live/LiveDashboard"
 import PageHeader from "@/features/admin/components/PageHeader/PageHeader"
 import PanelUnavailable from "@/features/admin/components/Panel/PanelUnavailable"
 import RecentEventsPanel from "@/features/admin/components/RecentEventsPanel/RecentEventsPanel"
@@ -26,7 +28,8 @@ export default async function AdminDashboardPage() {
 
   // All through the adapter seam: PostHog + Supabase when the PostHog query key is set, mock
   // figures otherwise. A null is a source that failed; its panel says so.
-  const [kpis, activity, funnel, sponsors, engagement, traffic] = await Promise.all([
+  const [live, kpis, activity, funnel, sponsors, engagement, traffic] = await Promise.all([
+    getLive(),
     getKpis(range),
     getDivisionActivity(range),
     getFunnel(range),
@@ -46,6 +49,9 @@ export default async function AdminDashboardPage() {
       />
 
       <div className={styles.body}>
+        {/* Today on site + the website right now; polls every 30 s. */}
+        <LiveDashboard initial={live} />
+
         <DivisionFilter />
         <KpiStrip items={kpis} />
 

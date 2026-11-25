@@ -9,7 +9,7 @@ import { createFakeDb, writesTo, type FakeCall, type FakeDb, type FakeResult } f
 const state = vi.hoisted(() => ({
   db: undefined as unknown as FakeDb,
   user: null as null | { id: string; email: string },
-  admin: false,
+  role: null as null | string,
 }))
 
 vi.mock('next/cache', () => ({ unstable_cache: (fn: () => unknown) => fn }))
@@ -21,7 +21,7 @@ vi.mock('@/lib/auth', () => ({
   getAuthenticatedUser: async () =>
     state.user ? { ok: true, user: state.user } : { ok: false, code: 'UNAUTHORIZED', message: 'no', status: 401 },
 }))
-vi.mock('@/lib/admin', () => ({ isAdminUser: async () => state.admin }))
+vi.mock('@/lib/admin', () => ({ getUserRole: async () => state.role }))
 
 const ping = await import('./ping/route')
 const consent = await import('./consent/route')
@@ -59,7 +59,7 @@ beforeEach(() => {
   vi.stubEnv('PRESENCE_HOURS', '0-24')
   vi.stubEnv('PRESENCE_BURST', '')
   state.user = { id: `user-${Math.random()}`, email: 'Visitor@Example.com' }
-  state.admin = false
+  state.role = null
   useDb(consented)
 })
 
@@ -88,6 +88,22 @@ describe('POST /api/presence/ping', () => {
     expect(res.status).toBe(403)
     expect((await res.json()).error.code).toBe('CONSENT_REQUIRED')
     expect(state.db.calls.some((call) => call.table.startsWith('rpc:'))).toBe(false)
+  })
+
+  it('PRESENCE_TEST_MODE lets admin and staff ping outside presence days, nobody else', async () => {
+    vi.stubEnv('PRESENCE_DATES', '2000-01-01')
+    vi.stubEnv('PRESENCE_TEST_MODE', 'true')
+    const send = async () => ping.POST(request('/api/presence/ping', 'POST', { fixes: [fixAt(0.0005)] }))
+
+    state.role = 'exhibitor'
+    expect((await (await send()).json()).error.code).toBe('PRESENCE_CLOSED')
+
+    state.role = 'booth_staff'
+    expect((await send()).status).toBe(200)
+
+    vi.stubEnv('PRESENCE_TEST_MODE', '')
+    state.user = { id: `user-${Math.random()}`, email: 'staff@example.com' }
+    expect((await (await send()).json()).error.code).toBe('PRESENCE_CLOSED')
   })
 
   it('records nothing outside the event zone', async () => {
@@ -166,6 +182,24 @@ describe('GET /api/presence/config', () => {
 
     useDb({ ...consented, gate_check_ins: () => ({ data: null, error: null, count: 1 }) })
     expect((await (await config.GET(request('/api/presence/config'))).json()).data).toMatchObject({ consented: true, promptEligible: true })
+  })
+
+  it('test mode opens presence for admin and staff any day, with the card and the readout', async () => {
+    vi.stubEnv('PRESENCE_DATES', '2000-01-01')
+    useDb({ ...consented, profiles: () => ({ data: { presence_consent_at: null }, error: null }) })
+    const get = async () => (await (await config.GET(request('/api/presence/config'))).json()).data
+
+    state.role = 'gate_staff'
+    expect(await get()).toMatchObject({ open: false, promptEligible: false, debug: false, tester: false })
+
+    vi.stubEnv('PRESENCE_TEST_MODE', 'true')
+    expect(await get()).toMatchObject({ open: true, promptEligible: true, debug: true, tester: true })
+
+    state.role = 'exhibitor'
+    expect(await get()).toMatchObject({ open: false, promptEligible: false, tester: false })
+
+    state.role = 'admin'
+    expect(await get()).toMatchObject({ open: true, tester: true })
   })
 })
 

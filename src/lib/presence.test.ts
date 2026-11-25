@@ -1,8 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('next/cache', () => ({ unstable_cache: (fn: () => unknown) => fn }))
+vi.mock('@/lib/admin', () => ({ getUserRole: async () => null }))
 
-const { getPresenceSettings, isPresenceOpen, nearBandung, presenceDays, startOfJakartaDay } = await import('./presence')
+const { getPresenceSettings, isPresenceOpen, isPresenceTesterRole, nearBandung, presenceDays, startOfJakartaDay } = await import(
+  './presence'
+)
 
 afterEach(() => vi.unstubAllEnvs())
 
@@ -36,6 +39,16 @@ describe('presence settings', () => {
   it('defaults to D-Day when no dates are configured', async () => {
     vi.stubEnv('PRESENCE_DATES', '')
     expect((await presenceDays()).has('2026-11-28')).toBe(true)
+  })
+
+  it('test mode covers admin and staff roles only, and only when switched on', () => {
+    expect(isPresenceTesterRole('admin')).toBe(false)
+    vi.stubEnv('PRESENCE_TEST_MODE', 'true')
+    for (const role of ['admin', 'field_staff', 'gate_staff', 'booth_staff'] as const) expect(isPresenceTesterRole(role)).toBe(true)
+    expect(isPresenceTesterRole('exhibitor')).toBe(false)
+    expect(isPresenceTesterRole(null)).toBe(false)
+    vi.stubEnv('PRESENCE_TEST_MODE', '1')
+    expect(isPresenceTesterRole('admin')).toBe(false)
   })
 
   it('starts the day at midnight Jakarta time', () => {

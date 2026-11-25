@@ -103,3 +103,62 @@ export interface RecentEventDto {
   metadata: Record<string, string | number | boolean | null>
   created_at: string
 }
+
+// ─── D-day live (GET /api/admin/live, refreshed every 30 s) ─────────────────
+
+export interface CheckInSlotDto {
+  /** Start of a 15-minute slot, ISO. */
+  slot: string
+  count: number
+}
+
+export interface BoothLiveDto {
+  booth_id: string
+  name: string
+  /** QR scans today. */
+  scans: number
+  /** Presence visits of 5 minutes or more today (opted-in visitors only). */
+  visits: number
+  visitors: number
+  median_dwell_s: number | null
+  avg_dwell_s: number | null
+}
+
+export interface VenueTimeDto {
+  /** Checked-in visitors with a later scan or presence ping: their time at the venue is known. */
+  measured: number
+  /** Checked in, nothing since: time unknown. */
+  unmeasured: number
+  median_s: number | null
+  buckets: { label: string; count: number }[]
+}
+
+export interface OnSiteLiveDto {
+  checked_in: number
+  /** Opted-in visitors with a presence ping in the last 5 minutes (a sample). */
+  active_now: number
+  /** Opted-in visitors seen at the venue today. */
+  presence_users: number
+  /** Gate check-ins per 15 minutes, gaps filled with zero, first check-in to now. */
+  slots: CheckInSlotDto[]
+  booths: BoothLiveDto[]
+  venue: VenueTimeDto
+}
+
+export interface LiveWebDto {
+  /** Distinct visitors with an event in the last 5 minutes. */
+  active_visitors: number
+  /** Page views in the last 30 minutes. */
+  top_pages: TopPageDto[]
+}
+
+export interface LiveDto {
+  generated_at: string
+  /** Start of today (Jakarta), ISO. */
+  since: string
+  /** null = the Supabase query failed. */
+  onsite: OnSiteLiveDto | null
+  /** null = PostHog failed or is not configured (see web_configured). */
+  web: LiveWebDto | null
+  web_configured: boolean
+}

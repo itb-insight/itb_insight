@@ -3,7 +3,7 @@ import { type NextRequest } from 'next/server'
 import { apiError, apiSuccess, unauthorizedResponse } from '@/lib/api-response'
 import { getAuthenticatedUser } from '@/lib/auth'
 import { checkWithinVenue, parseFix, type Fix } from '@/lib/geofence'
-import { getPresenceBooths, getPresenceConsent, getPresenceSettings, isPresenceOpen } from '@/lib/presence'
+import { getPresenceBooths, getPresenceConsent, getPresenceSettings, isPresenceOpen, isPresenceTester } from '@/lib/presence'
 import { BURST_FIXES, combineFixes, nearestBooth, VISIT_MIN_SECONDS } from '@/lib/presence-geo'
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit'
 import { createServiceClient } from '@/lib/supabase/server'
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const [open, consentAt] = await Promise.all([isPresenceOpen(), getPresenceConsent(auth.user.id)])
-    if (!open) return apiError('PRESENCE_CLOSED', 'Pencatatan lokasi hanya berjalan saat acara.', 403)
+    if (!open && !(await isPresenceTester(auth.user))) return apiError('PRESENCE_CLOSED', 'Pencatatan lokasi hanya berjalan saat acara.', 403)
     if (!consentAt) return apiError('CONSENT_REQUIRED', 'Kamu belum mengizinkan pencatatan lokasi.', 403)
 
     // Event zone first, with the venue's looser accuracy cap. Outside it nothing is recorded.

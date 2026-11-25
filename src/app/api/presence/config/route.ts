@@ -1,9 +1,9 @@
 import { type NextRequest } from 'next/server'
 
 import { apiError, apiSuccess, unauthorizedResponse } from '@/lib/api-response'
-import { isAdminUser } from '@/lib/admin'
+import { getUserRole } from '@/lib/admin'
 import { getAuthenticatedUser } from '@/lib/auth'
-import { checkedInToday, getPresenceConsent, getPresenceSettings, isPresenceOpen, nearBandung } from '@/lib/presence'
+import { checkedInToday, getPresenceConsent, getPresenceSettings, isPresenceOpen, isPresenceTesterRole, nearBandung } from '@/lib/presence'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,26 +17,29 @@ export async function GET(request: NextRequest) {
   if (!settings) return apiSuccess({ enabled: false as const })
 
   try {
-    const [open, consentAt, checkedIn, debug] = await Promise.all([
+    const [open, consentAt, checkedIn, role] = await Promise.all([
       isPresenceOpen(),
       getPresenceConsent(auth.user.id),
       checkedInToday(auth.user.id),
-      isAdminUser(auth.user),
+      getUserRole(auth.user),
     ])
+    // PRESENCE_TEST_MODE: admin and staff test any day, any hour, without a gate check-in.
+    const tester = isPresenceTesterRole(role)
 
     const { eventZone, boothZone, burst } = settings
     return apiSuccess({
       enabled: true as const,
-      open,
+      open: open || tester,
       consented: consentAt !== null,
       // The browser can't tell where the user is before permission is granted, so the opt-in card
       // shows only to people likely at Ganesha: checked in at the gate today, or a Bandung IP.
-      promptEligible: checkedIn || nearBandung(request.headers),
+      promptEligible: tester || checkedIn || nearBandung(request.headers),
       eventZone: { lat: eventZone.lat, lng: eventZone.lng, radiusM: eventZone.radiusM, maxAccuracyM: eventZone.maxAccuracyM },
       boothZone,
       burst,
-      // Admins see the field-test readout (zone, booth, burst spread).
-      debug,
+      // Admins (and testers) see the field-test readout (zone, booth, burst spread).
+      debug: role === 'admin' || tester,
+      tester,
     })
   } catch (err) {
     console.error('[API Presence Config Error]', err)

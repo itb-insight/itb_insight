@@ -165,4 +165,57 @@ describe('admin adapters', () => {
       created_at: '2026-11-24T10:00:00Z',
     })
   })
+
+  it('build the live on-site picture: Jakarta day, filled 15-minute slots, unmeasured venue time', async () => {
+    const onsite = {
+      checked_in: 5,
+      active_now: 2,
+      presence_users: 3,
+      slots: [
+        { slot: '2026-11-28T01:00:00+00:00', count: 2 },
+        { slot: '2026-11-28T01:30:00+00:00', count: 1 },
+      ],
+      booths: [{ booth_id: 'b1', name: 'Robotics', scans: 4, visits: 2, visitors: 2, median_dwell_s: 420, avg_dwell_s: null }],
+      venue: { measured: 3, median_s: 3600, under_30m: 1, from_30m_to_1h: 0, from_1h_to_2h: 2, over_2h: 0 },
+    }
+    state.db = createFakeDb((call) =>
+      call.table === 'rpc:admin_live_onsite' ? { data: onsite, error: null } : { data: null, error: null },
+    )
+
+    const live = await adapters.getLive(new Date('2026-11-28T02:05:00Z')) // 09:05 WIB
+
+    const rpc = state.db.calls.find((call) => call.table === 'rpc:admin_live_onsite')!
+    expect(rpc.payload).toEqual({ p_since: '2026-11-27T17:00:00.000Z', p_visit_seconds: 300 })
+    expect(live.onsite!.slots.map((slot) => [slot.slot.slice(11, 16), slot.count])).toEqual([
+      ['01:00', 2],
+      ['01:15', 0],
+      ['01:30', 1],
+      ['01:45', 0],
+      ['02:00', 0],
+    ])
+    expect(live.onsite!.booths[0]).toMatchObject({ name: 'Robotics', median_dwell_s: 420, avg_dwell_s: null })
+    expect(live.onsite!.venue).toMatchObject({ measured: 3, unmeasured: 2, median_s: 3600 })
+    expect(live.onsite!.venue.buckets.map((bucket) => bucket.count)).toEqual([1, 0, 2, 0])
+  })
+
+  it('report the on-site panel unavailable when the RPC fails, and web figures only with PostHog', async () => {
+    state.db = createFakeDb(() => ({ data: null, error: { message: 'boom' } }))
+    state.answers['live-active'] = rows([7])
+    state.answers['live-pages'] = rows(['/', 12], ['/events', 3])
+    const quiet = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    const live = await adapters.getLive()
+    expect(live.onsite).toBeNull()
+    expect(live.web).toEqual({
+      active_visitors: 7,
+      top_pages: [
+        { page_path: '/', views: 12 },
+        { page_path: '/events', views: 3 },
+      ],
+    })
+
+    vi.stubEnv('POSTHOG_PERSONAL_API_KEY', '')
+    expect(await adapters.getLive()).toMatchObject({ web: null, web_configured: false })
+    quiet.mockRestore()
+  })
 })

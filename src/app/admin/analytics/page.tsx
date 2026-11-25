@@ -3,12 +3,14 @@ import {
   defaultRange,
   getEngagement,
   getFunnel,
+  getLive,
   getSponsorStats,
   getTraffic,
 } from "@/features/admin/data/adapters"
 import DivisionFilter from "@/features/admin/components/DivisionFilter/DivisionFilter"
 import EngagementPanel from "@/features/admin/components/EngagementPanel/EngagementPanel"
 import FunnelPanel from "@/features/admin/components/FunnelPanel/FunnelPanel"
+import LiveBoothDetail from "@/features/admin/components/Live/LiveBoothDetail"
 import PageHeader from "@/features/admin/components/PageHeader/PageHeader"
 import PanelUnavailable from "@/features/admin/components/Panel/PanelUnavailable"
 import SponsorPanel from "@/features/admin/components/SponsorPanel/SponsorPanel"
@@ -23,7 +25,8 @@ import styles from "../dashboard.module.css"
 export default async function AdminAnalyticsPage() {
   const range = defaultRange()
 
-  const [funnel, sponsors, engagement, traffic] = await Promise.all([
+  const [live, funnel, sponsors, engagement, traffic] = await Promise.all([
+    getLive(),
     getFunnel(range),
     getSponsorStats(range),
     getEngagement(range),
@@ -39,6 +42,8 @@ export default async function AdminAnalyticsPage() {
       />
 
       <div className={styles.body}>
+        <LiveBoothDetail initial={live} />
+
         <DivisionFilter />
 
         <div className={styles.grid}>

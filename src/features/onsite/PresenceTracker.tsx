@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 
-import type { Fix } from "@/lib/geofence"
+import { distanceM, type Fix } from "@/lib/geofence"
 import {
   BURST_FIXES,
   BURST_GAP_MS,
@@ -24,6 +24,8 @@ import styles from "./OnSite.module.css"
       (EXPERIMENTAL, see src/lib/presence-geo.ts)
     - leaving the zone stops sending at once and fires the geofence-exit feedback trigger
     - paused while the tab is hidden; browsers give no location then anyway
+    - test mode (PRESENCE_TEST_MODE, admin/staff only): runs any day, checks every 30 s outside
+      the zone, and shows how far the phone is from it
   No state update per GPS fix: positions live in local variables; the UI changes when the visitor
   enters or leaves the zone and once per ping (booth countdown, admin field-test readout).
 */
@@ -39,6 +41,7 @@ type Config =
       boothZone: Zone | null
       burst: boolean
       debug: boolean
+      tester: boolean
     }
 
 type ActiveConfig = Extract<Config, { enabled: true }>
@@ -56,6 +59,10 @@ type Envelope<T> = { success: true; data: T } | { success: false; error: { code:
 type Stage = "idle" | "explain" | "tracking"
 
 const DISMISSED_KEY = "presence-card-dismissed"
+const TESTER_OUTSIDE_CHECK_MS = 30_000
+
+/** Debug readout while outside the event zone (admins and testers only). */
+type OutsideReadout = { distanceM: number; accuracyM: number } | { noFix: true }
 
 const GEO_OPTIONS: PositionOptions = { enableHighAccuracy: true, maximumAge: 0, timeout: 20_000 }
 
@@ -90,6 +97,7 @@ export default function PresenceTracker({ onVenueExit }: { onVenueExit: () => vo
   const [stage, setStage] = useState<Stage>("idle")
   const [inside, setInside] = useState(false)
   const [readout, setReadout] = useState<PingResult | null>(null)
+  const [outside, setOutside] = useState<OutsideReadout | null>(null)
   const [busy, setBusy] = useState(false)
 
   const exitRef = useRef(onVenueExit)
@@ -130,6 +138,7 @@ export default function PresenceTracker({ onVenueExit }: { onVenueExit: () => vo
     let cancelled = false
     let timer: ReturnType<typeof setTimeout> | undefined
     let wasInside = false
+    const outsideCheckMs = config.tester ? TESTER_OUTSIDE_CHECK_MS : OUTSIDE_CHECK_MS
 
     const schedule = (ms: number) => {
       clearTimeout(timer)
@@ -148,13 +157,21 @@ export default function PresenceTracker({ onVenueExit }: { onVenueExit: () => vo
 
       const first = await currentFix()
       if (cancelled) return
-      if (!first) return schedule(OUTSIDE_CHECK_MS)
+      if (!first) {
+        if (config!.debug) setOutside({ noFix: true })
+        return schedule(outsideCheckMs)
+      }
 
       const inEventZone = first.accuracyM <= config!.eventZone.maxAccuracyM && inZone(config!.eventZone, first)
       if (!inEventZone) {
         leave()
-        return schedule(OUTSIDE_CHECK_MS)
+        // Distances only, kept in this tab: nothing is sent while outside the zone.
+        if (config!.debug) {
+          setOutside({ distanceM: Math.round(distanceM(config!.eventZone, first)), accuracyM: Math.round(first.accuracyM) })
+        }
+        return schedule(outsideCheckMs)
       }
+      if (config!.debug) setOutside(null)
 
       const fixes = [first]
       const started = Date.now()
@@ -247,6 +264,7 @@ export default function PresenceTracker({ onVenueExit }: { onVenueExit: () => vo
         setStage("idle")
         setInside(false)
         setReadout(null)
+        setOutside(null)
       }
     } catch {
       // keep tracking; the visitor can try again
@@ -278,6 +296,23 @@ export default function PresenceTracker({ onVenueExit }: { onVenueExit: () => vo
             Nanti saja
           </button>
         </div>
+      </aside>
+    )
+  }
+
+  if (stage === "tracking" && !inside && config?.debug && outside) {
+    return (
+      <aside className={styles.chip} aria-live="polite">
+        <span>{config.tester ? "Mode uji: di luar zona acara" : "Di luar zona acara"}</span>
+        <button type="button" className={styles.chipButton} onClick={withdraw} disabled={busy}>
+          Matikan
+        </button>
+        <span className={styles.debug}>
+          {"noFix" in outside
+            ? "lokasi tidak terbaca"
+            : `${outside.distanceM} m dari pusat venue (radius ${config.eventZone.radiusM} m) · acc ${outside.accuracyM} m` +
+              (outside.accuracyM > config.eventZone.maxAccuracyM ? ` (> ${config.eventZone.maxAccuracyM} m, diabaikan)` : "")}
+        </span>
       </aside>
     )
   }
