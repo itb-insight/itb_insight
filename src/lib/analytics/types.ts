@@ -26,17 +26,9 @@ export type EventName = KnownEventName | (string & {})
 /**
  * Deliberately flat and primitive-only, NOT Record<string, unknown>. Nested
  * objects are the usual way PII sneaks into an events table, so passing one
- * fails to typecheck. The server re-validates anyway — see server/validate.ts.
+ * fails to typecheck. PostHog would store them as-is, so this type is the guard.
  */
 export type EventMetadata = Record<string, string | number | boolean | null>
-
-export type DeviceType = "desktop" | "mobile" | "tablet"
-
-export interface DeviceInfo {
-  deviceType: DeviceType
-  browser: string
-  os: string
-}
 
 /** Shape the client queues and sends. */
 export interface TrackedEvent {
@@ -45,25 +37,6 @@ export interface TrackedEvent {
   pagePath: string
   metadata: EventMetadata
   ts: number
-}
-
-export interface TrackBatch {
-  sessionId: string
-  device: DeviceInfo
-  events: TrackedEvent[]
-}
-
-/** Shape the server stores — mirrors the `events` table columns in schema.sql. */
-export interface StoredEvent {
-  id: number
-  session_id: string
-  user_id: null
-  event_type: string
-  division: DivisionTag
-  page_path: string
-  metadata: EventMetadata
-  device_type: DeviceType
-  browser: string
-  os: string
-  created_at: string
+  /** Send immediately with a beacon: the page is being hidden or closed. */
+  urgent?: boolean
 }

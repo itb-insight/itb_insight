@@ -12,6 +12,12 @@
 7. Optimized load and build?
 8. [ ] The RSVP flow
 9. [ ] Tracking
+	- [ ] PostHog env vars on Production (key, region, project id, `query:read` key)
+	- [ ] Migrations 0015–0017 applied to production (export `analytics_events` first if wanted)
+	- [ ] `/admin` numbers checked against PostHog on production
+	- [ ] Booth `lat`/`lng` filled; venue field test done; `presence_radius_m` / `BOOTH_MAX_ACCURACY_M` tuned; burst kept or turned off
+	- [ ] `PRESENCE_TEST_MODE` off in Production after testing
+	- [ ] D-day rehearsal: check in, scan, wander; someone watches `/admin`
 10. [ ] Load test
 11. [ ] CI tests
 12. [x] The ITB-Model Fallback
@@ -29,3 +35,4 @@ Find other optimization surfaces
 Dashboard information
 Email notification system
 [ ] Optimized location tracking & permissions
+[ ] Delete booth presence data within 30 days after the event (SQL in docs/analytics/06-dday-presence.md)

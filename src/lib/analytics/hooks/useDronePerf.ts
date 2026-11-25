@@ -20,8 +20,8 @@ export interface DronePerfControls {
  * IMPORTANT NAMING: this measures mount to first rendered frame and reports it
  * as drone_ready_ms. That is NOT time-to-interactive — real TTI is not
  * measurable from userland, and calling it TTI would misrepresent the number
- * on the dashboard. Genuine LCP/INP/TTFB come from useReportWebVitals in
- * AnalyticsRoot instead.
+ * on the dashboard. Genuine LCP/INP/CLS come from PostHog's web vitals
+ * capture ($web_vitals) instead.
  *
  * The 3D flythrough is the heaviest thing on the site and WebGL performance
  * varies wildly on low-end phones, so this is the signal that distinguishes

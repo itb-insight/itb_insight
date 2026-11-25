@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Gabarito, Orbitron, Roboto_Mono } from "next/font/google"
 import Script from "next/script"
 import AnalyticsRoot from "@/lib/analytics/components/AnalyticsRoot"
+import OnSiteRoot from "@/features/onsite/OnSiteRoot"
 import "./globals.css"
 
 const gabarito = Gabarito({
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </div>
         <AnalyticsRoot />
+        <OnSiteRoot />
       </body>
     </html>
   )

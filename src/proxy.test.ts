@@ -15,7 +15,7 @@ vi.mock('@supabase/ssr', () => ({
   },
 }))
 
-const { proxy } = await import('./proxy')
+const { proxy, config } = await import('./proxy')
 
 const ORIGIN = 'https://insight.test'
 const request = (path: string, init: { method?: string; headers?: Record<string, string> } = {}) =>
@@ -160,5 +160,35 @@ describe('proxy: session guard for /dashboard and /admin', () => {
     expect(passedThrough(await proxy(request('/competition/olimpiade-engineering')))).toBe(true)
     expect(passedThrough(await proxy(request('/administrator-guide')))).toBe(true)
     expect(auth.clientsCreated).toBe(0)
+  })
+})
+
+describe('proxy: trailing slashes (next.config.ts skips Next own redirect for PostHog)', () => {
+  it('308-redirects /path/ to /path, keeping the query', async () => {
+    const res = await proxy(request('/event/?tab=2'))
+    expect(res.status).toBe(308)
+    expect(res.headers.get('location')).toBe(`${ORIGIN}/event?tab=2`)
+  })
+
+  it('leaves the root and slash-less paths alone', async () => {
+    expect(passedThrough(await proxy(request('/')))).toBe(true)
+    expect(passedThrough(await proxy(request('/event')))).toBe(true)
+  })
+
+  it('redirects before countdown mode, like Next did', async () => {
+    vi.stubEnv('COUNTDOWN_ONLY', 'true')
+    expect((await proxy(request('/login/'))).status).toBe(308)
+  })
+})
+
+describe('proxy matcher', () => {
+  // Next compiles the matcher with path-to-regexp; the lookahead part is plain RegExp syntax.
+  const matcher = new RegExp(`^${config.matcher[0]}$`)
+
+  it('skips PostHog /ingest paths but still matches pages that merely start with "ingest"', () => {
+    expect(matcher.test('/ingest/e/')).toBe(false)
+    expect(matcher.test('/ingest/static/array.js')).toBe(false)
+    expect(matcher.test('/ingestion-guide')).toBe(true)
+    expect(matcher.test('/dashboard')).toBe(true)
   })
 })

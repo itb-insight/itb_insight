@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import nextConfig from '../next.config'
+import nextConfig, { posthogRewrites } from '../next.config'
 
 // Guards the security headers and asset caching in next.config.ts against accidental removal.
 
@@ -28,5 +28,30 @@ describe('next.config headers', () => {
 
   it('does not advertise the framework', () => {
     expect(nextConfig.poweredByHeader).toBe(false)
+  })
+})
+
+describe('next.config PostHog proxy', () => {
+  it('rewrites /ingest to the configured PostHog region', () => {
+    const us = posthogRewrites('us')
+    expect(us.find((rule) => rule.source === '/ingest/:path*')?.destination).toBe('https://us.i.posthog.com/:path*')
+    expect(us.find((rule) => rule.source === '/ingest/static/:path*')?.destination).toBe(
+      'https://us-assets.i.posthog.com/static/:path*',
+    )
+    expect(posthogRewrites('eu').every((rule) => rule.destination.startsWith('https://eu'))).toBe(true)
+  })
+
+  it('specific paths come before the catch-all (first match wins)', () => {
+    const sources = posthogRewrites('us').map((rule) => rule.source)
+    expect(sources.indexOf('/ingest/:path*')).toBe(sources.length - 1)
+  })
+
+  it('proxies nothing without a valid region', () => {
+    expect(posthogRewrites(undefined)).toEqual([])
+    expect(posthogRewrites('https://evil.example')).toEqual([])
+  })
+
+  it('does not let Next redirect PostHog trailing-slash paths', () => {
+    expect(nextConfig.skipTrailingSlashRedirect).toBe(true)
   })
 })

@@ -1,50 +1,28 @@
 "use client"
 
 import { useEffect } from "react"
-import { usePathname } from "next/navigation"
-import { useReportWebVitals } from "next/web-vitals"
 import { drainAbandoned } from "../funnelJournal"
 import logEvent from "../logEvent"
-import { alreadySeen, flush } from "../queue"
+import { startAnalytics } from "../queue"
 
 /**
- * Mounted once in the root layout. Owns the three things that must happen
- * exactly once per app rather than once per component:
+ * Mounted once in the root layout. Owns what must happen exactly once per app:
  *
- *   1. page_view on every route change
- *   2. web vitals reporting
- *   3. funnel drop-off derivation on page hide
+ *   1. start loading PostHog (lazily, on idle). PostHog itself captures $pageview on every route
+ *      change, $pageleave, and web vitals, so there is no page_view / web-vitals code here.
+ *   2. funnel drop-off derivation on page hide
  *
- * Keeping useReportWebVitals confined here is what lets the root layout stay a
- * server component — only this leaf needs "use client".
+ * Keeping this a leaf is what lets the root layout stay a server component.
  */
 export default function AnalyticsRoot() {
-  const pathname = usePathname()
-
-  useReportWebVitals((metric) => {
-    logEvent(
-      "web_vital",
-      {
-        metric: metric.name,
-        value: Math.round(metric.value),
-        rating: metric.rating ?? null,
-      },
-      { force: true },
-    )
-  })
-
   useEffect(() => {
-    // StrictMode double-invokes effects in dev; without this guard every
-    // page_view count reads 2x locally.
-    if (alreadySeen(`page_view:${pathname}`)) return
-    logEvent("page_view", { path: pathname }, { force: true })
-  }, [pathname])
+    startAnalytics()
+  }, [])
 
   useEffect(() => {
     function emitDropoffs() {
       const now = Date.now()
       const abandoned = drainAbandoned()
-      if (abandoned.length === 0) return
 
       for (const record of abandoned) {
         logEvent(
@@ -55,16 +33,10 @@ export default function AnalyticsRoot() {
             lastStepIndex: record.stepIndex,
             dwellMs: now - record.enteredAt,
           },
-          { division: record.division, force: true },
+          // urgent: the page is going away, so send with a beacon instead of the batch queue.
+          { division: record.division, force: true, urgent: true },
         )
       }
-
-      // Flush explicitly. The queue registers its own visibilitychange
-      // listener when the first event is enqueued, which is always before this
-      // effect runs — so by the time we get here the queue has already
-      // flushed for this hide, and these drop-offs would otherwise sit in the
-      // buffer and be lost when the page goes away.
-      flush()
     }
 
     function handleVisibility() {

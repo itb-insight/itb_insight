@@ -29,3 +29,8 @@
   font-size: 0.8125rem;
   margin-top: 2px;
 }
+
+.unavailable {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}

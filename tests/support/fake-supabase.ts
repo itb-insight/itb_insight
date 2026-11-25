@@ -105,7 +105,14 @@ export function createFakeClient(db: FakeDb) {
     return builder
   }
 
-  return { from }
+  // `.rpc(fn, args)` is recorded as a select on the pseudo-table `rpc:<fn>` with the args as payload.
+  const rpc = (fn: string, args?: unknown) => {
+    const call: FakeCall = { table: `rpc:${fn}`, op: 'select', payload: args, filters: [], mode: 'many' }
+    db.calls.push(call)
+    return Promise.resolve(db.resolve(call))
+  }
+
+  return { from, rpc }
 }
 
 /** Value passed to the first `.eq(column, value)` of a recorded call. */

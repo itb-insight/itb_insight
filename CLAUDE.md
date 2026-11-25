@@ -72,9 +72,10 @@ Shared test helpers: `tests/support/fake-supabase.ts` (chainable Supabase fake f
 
 # Feedback triggers when building PWA / geofencing
 
-The PWA (push notifications, service worker) and geofencing are deliberately not implemented
-yet. When you build either, also wire the feedback triggers described in `docs/FEEDBACK.md`
-("Triggers — status"):
+The PWA (push notifications, service worker) is deliberately not implemented yet. Opt-in booth
+presence (geofencing while the page is open) is, in `src/features/onsite/`, and already wires the
+in-app triggers below. When you build the PWA, add the push versions, as described in
+`docs/FEEDBACK.md` ("Triggers — status"):
 - Time trigger: notify / pop up `/feedback/<slug>` when a form opens (`feedback_forms.opens_at`)
   for users who attended and have not submitted.
 - Geofence exit: prompt for feedback when leaving the event area. Browsers give no background
