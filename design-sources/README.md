@@ -6,7 +6,7 @@ location under `public/` (e.g. `images/mor.png` was `public/images/mor.png`).
 
 | File | What ships instead |
 | --- | --- |
-| `images/mor.png`, `oe.png`, `bpc.png`, `icon-bpc.png` | `public/images/*.webp`, 800 px wide |
+| `images/mor.png`, `oe.png`, `bpc.png`, `icon-bpc.png` | `public/images/*.webp`, 800 px wide (`icon-bpc.png` is the 2026 BPC logo, shipped as `public/assets/icon-bpc-2026.png` and `public/images/icon-bpc-2026.webp`; `bpc.png` is the old one) |
 | `images/shape9.png`, `shape10.png`, `deco/decor2.png` | `public/images/*.webp`, `public/deco/decor2.webp` |
 | `images/gallery/*.JPG` | `public/images/gallery/*.webp` |
 | `images/bg-main.png`, `bg-main.webp`, `bg-main.png` | nothing: the landing background is a CSS gradient now (the old raster is kept in a comment in `LandingPage.module.css`) |

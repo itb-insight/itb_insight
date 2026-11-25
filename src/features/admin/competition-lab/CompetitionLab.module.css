@@ -1,0 +1,255 @@
+/* Admin competition test lab. Desktop: form + claim/log side by side, teams full width.
+   Mobile (<= 760px): stacked. */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+  padding: var(--space-8);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: var(--space-6);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.panelTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.hint {
+  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.label {
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 1rem; /* >= 16px so iOS does not zoom on focus */
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.primary,
+.secondary,
+.danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+}
+
+.primary {
+  color: #fff;
+  background-color: var(--color-accent);
+}
+
+.secondary {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-elevated);
+  border-color: var(--color-border);
+}
+
+.danger {
+  color: #fff;
+  background-color: #c0392b;
+}
+
+.primary:disabled,
+.secondary:disabled,
+.danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.log {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  list-style: none;
+  font-size: 0.8125rem;
+}
+
+.logOk {
+  color: var(--color-text-primary);
+}
+
+.logError {
+  color: #e74c3c;
+}
+
+.logTime {
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.table th,
+.table td {
+  padding: var(--space-3);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.table th {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+.mono {
+  font-family: var(--font-roboto-mono), monospace;
+  white-space: nowrap;
+}
+
+.slot {
+  white-space: nowrap;
+}
+
+.slotState {
+  color: var(--color-text-secondary);
+}
+
+.rowActions {
+  display: flex;
+  gap: var(--space-3);
+  white-space: nowrap;
+}
+
+.link,
+.linkDanger {
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.link {
+  color: var(--color-accent);
+}
+
+.linkDanger {
+  color: #e74c3c;
+}
+
+/* Preview: the dashboard card on its own dark background, as on /dashboard. */
+.preview {
+  margin: 0 var(--space-8) var(--space-8);
+}
+
+.previewForm {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.previewStage {
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%);
+}
+
+@media (max-width: 760px) {
+  .layout {
+    grid-template-columns: 1fr;
+    padding: var(--space-4);
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .preview {
+    margin: 0 var(--space-4) var(--space-4);
+  }
+
+  .previewForm {
+    flex-direction: column;
+  }
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-left: var(--space-4);
+  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}

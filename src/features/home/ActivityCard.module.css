@@ -106,8 +106,9 @@
 
 .headingRow {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
+  gap: 8px 14px;
 }
 
 .competitionName {
@@ -119,9 +120,12 @@
   color: #1b3b7d;
 }
 
+/* Grows with its text: a long status ("Menunggu verifikasi") wraps inside the pill on a narrow
+   card instead of spilling past it, and the heading row wraps the pills onto the next line. */
 .statusChip {
   min-width: 58px;
-  height: 24px;
+  max-width: 100%;
+  min-height: 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -133,7 +137,8 @@
   font-size: 12px;
   line-height: 14px;
   color: #1b3b7d;
-  white-space: nowrap;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .teamName {
@@ -380,4 +385,65 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* ── Live data states (src/lib/dashboard-activity.ts) ───────────────────────── */
+.panelEmpty {
+  border-radius: 12px;
+  padding: 32px 24px;
+}
+
+.emptyText {
+  margin: 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-size: 18px;
+  line-height: 26px;
+  color: #1b3b7d;
+}
+
+/* A withdrawn team stays visible, dimmed, so the member can see what happened. */
+.panelWithdrawn .members,
+.panelWithdrawn .teamName,
+.panelWithdrawn .universityRow {
+  opacity: 0.6;
+}
+
+.statusChipAlert {
+  background: #ffd6d6;
+  color: #8a1c1c;
+}
+
+.teamUid {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+/* Shadow slot (0014): someone listed on the form who has not signed in yet. */
+.memberTag {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px dashed #517eda;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+  color: #1b3b7d;
+  white-space: nowrap;
+}
+
+.memberRowLeader .memberTag {
+  border-color: #acc7ff;
+  color: #ffffff;
+}
+
+a.actionButton {
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .competitionName {
+    font-size: 26px;
+    line-height: 30px;
+    overflow-wrap: anywhere;
+  }
 }

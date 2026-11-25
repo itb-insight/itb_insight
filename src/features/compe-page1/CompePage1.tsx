@@ -21,14 +21,18 @@ const COMPETITIONS = [
     slug: "microdrone-obstacle-race",
     title: "Drone Soccer",
     gradient: "linear-gradient(135deg, #C08CFF 0%, #E9DBF9 100%)",
-    icon: "/images/icon-microdrone.png"
+    icon: "/images/icon-microdrone.png",
+    // Ukuran logo di kartu (px). Tanpa iconSize = ICON_SIZE (140).
+    iconSize: 200,
+    // Geser logo ke samping (px): negatif = ke kiri, positif = ke kanan.
+    iconOffsetX: -30,
   },
   {
     id: 2,
     slug: "business-plan-competition",
     title: "BPC",
-    gradient: "linear-gradient(135deg, #D0FFC7 0%, #76DF62 100%)",
-    icon: "/images/icon-bpc.webp"
+    gradient: "linear-gradient(135deg, #FFE3D3 0%, #FEC09F 55%, #C0BDF5 100%)",
+    icon: "/images/icon-bpc-2026.webp"
   },
   {
     id: 3,
@@ -43,7 +47,7 @@ const COMPETITIONS = [
 // Garis waktu UMUM untuk semua lomba, jadi isinya rentang bulan kasar, bukan
 // tanggal. Diambil dari timeline tiap lomba di src/features/competition/data.ts
 // (Drone Soccer, BPC, Olimpiade Engineering; SAR masih disembunyikan):
-//   Pendaftaran                Drone 14 Agu - 20 Nov, BPC 20 Agu - 24 Sep, OE 22 Agu - 20 Okt
+//   Pendaftaran                Drone 14 Agu - 25 Nov, BPC 20 Agu - 24 Sep, OE 22 Agu - 20 Okt
 //   Warm Up & Technical Meeting  BPC Case Release 25 Sep sampai Technical Meeting Drone 21 Nov
 //   Penyisihan                 BPC BMC 8 Okt dan proposal 15-29 Okt, sampai semifinal 27 Nov
 //   Pengumuman Finalis         BPC 15 Okt (pre-elim) dan 5 Nov (semifinal)
@@ -64,6 +68,7 @@ const SIDE_TOP    = 60;
 const BACK_TOP    = 0;   
 const SIDE_OFFSET = 180; 
 const CAROUSEL_H  = ACTIVE_TOP + CH + 40;
+// Ukuran logo default di kartu berputar; per kartu bisa diganti lewat iconSize.
 const ICON_SIZE   = 140;
 
 export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] }) {
@@ -75,7 +80,10 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
   const n = COMPETITIONS.length;
   const touchX = useRef<number | null>(null);
 
-  const goto = (i: number) => setActive(((i % n) + n) % n);
+  // Petunjuk "Geser ke kanan" hanya untuk kesan pertama: hilang setelah kartu
+  // pertama kali berganti (lewat geser, klik kartu, atau klik petunjuknya).
+  const [swiped, setSwiped] = useState(false);
+  const goto = (i: number) => { setActive(((i % n) + n) % n); setSwiped(true); };
   const onTouchStart = (e: React.TouchEvent) => { touchX.current = e.touches[0].clientX; };
   const onTouchEnd   = (e: React.TouchEvent) => {
     if (touchX.current === null) return;
@@ -132,6 +140,26 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
           position: absolute; top: 0%; right: -5vw; width: 35vw; max-width: 450px; opacity: 0.25; z-index: 1; pointer-events: none; transform: scaleX(-1);
         }
 
+        /* PETUNJUK GESER CAROUSEL */
+        .swipe-hint {
+          position: relative; z-index: 10;
+          display: flex; align-items: center; justify-content: center; gap: 4px;
+          margin: 0 auto 40px; padding: 8px 12px;
+          background: none; border: none; cursor: pointer;
+          color: #E9E9E9; font-family: 'Gabarito', sans-serif;
+          transition: opacity 0.4s ease;
+        }
+        .swipe-hint-text { font-size: 1.2rem; font-weight: 300; letter-spacing: 0.04em; }
+        .swipe-hint-chevron { animation: swipeHintNudge 1.6s ease-in-out infinite; }
+        .swipe-hint:hover .swipe-hint-chevron { color: #fff; }
+        @keyframes swipeHintNudge {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(6px); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .swipe-hint-chevron { animation: none; }
+        }
+
         /* ANIMASI MARQUEE SLIDING TEXT */
         @keyframes marquee {
           0% { transform: translateX(0%); }
@@ -143,11 +171,7 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
           font-size: clamp(4rem, 10vw, 110px);
           letter-spacing: 0.08em;
           line-height: 1.2;
-          background: linear-gradient(180deg, #D0FFC7 0%, #76DF62 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          color: transparent;
+          color: #FFFFFF;
           filter: drop-shadow(0px 0px 10px rgba(222, 235, 251, 0.5));
           margin: 0;
           padding-right: 40px;
@@ -250,7 +274,7 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
 
       {/* CARD CAROUSEL */}
       <div
-        style={{ position: "relative", height: CAROUSEL_H, overflow: "hidden", zIndex: 10, marginBottom: "40px" }}
+        style={{ position: "relative", height: CAROUSEL_H, overflow: "hidden", zIndex: 10 }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
@@ -307,7 +331,7 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
                 <img
                   src={comp.icon}
                   alt={comp.title}
-                  style={{ width: ICON_SIZE, height: ICON_SIZE, objectFit: "contain", filter: "drop-shadow(0px 8px 8px rgba(0,0,0,0.15))" }}
+                  style={{ width: comp.iconSize ?? ICON_SIZE, height: comp.iconSize ?? ICON_SIZE, transform: `translateX(${comp.iconOffsetX ?? 0}px)`, objectFit: "contain", filter: "drop-shadow(0px 8px 8px rgba(0,0,0,0.15))" }}
                 />
                 <h2 style={{
                   fontFamily: "'Gabarito', sans-serif", fontWeight: 800, fontSize: "clamp(1.2rem, 2vw, 1.8rem)",
@@ -320,6 +344,21 @@ export default function CompePage1({ faqs }: { faqs: { q: string; a: string }[] 
           );
         })}
       </div>
+
+      {/* Petunjuk geser (gaya sama dengan "Scroll ke bawah" di landing page) */}
+      <button
+        type="button"
+        className="swipe-hint"
+        onClick={() => goto(active + 1)}
+        aria-label="Lihat lomba berikutnya"
+        tabIndex={swiped ? -1 : 0}
+        style={{ opacity: swiped ? 0 : 1, pointerEvents: swiped ? "none" : "auto" }}
+      >
+        <span className="swipe-hint-text">Geser ke kanan</span>
+        <svg className="swipe-hint-chevron" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
+          <path d="M8 4l8 8-8 8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
 
       {/* ── TOTAL PRIZE ── */}
       <section style={{ padding: "0 24px", textAlign: "center", position: "relative", zIndex: 10 }}>

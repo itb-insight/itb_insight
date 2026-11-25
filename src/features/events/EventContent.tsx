@@ -2,6 +2,7 @@ import type { EventItem } from "@/features/events/types";
 import { u } from "@/features/events/scale";
 import EventDateRow from "@/features/events/EventDateRow";
 import EventButton from "@/features/events/EventButton";
+import reveal from "@/features/events/EventReveal.module.css";
 
 /**
  * Blok teks satu event: judul, baris tanggal, deskripsi, tombol.
@@ -27,6 +28,7 @@ export default function EventContent({ event }: { event: EventItem }) {
     <>
       <h2
         id={`${event.slug}-title`}
+        className={reveal.rise}
         style={{
           position: "absolute",
           left: u(t.x),
@@ -47,32 +49,47 @@ export default function EventContent({ event }: { event: EventItem }) {
         {event.title}
       </h2>
 
-      <EventDateRow event={event} />
-
-      <p
+      {/* Baris tanggal, deskripsi, dan tombol mengalir dalam satu kolom. Kalau
+          baris tanggal pindah baris (lokasi panjang), sisanya ikut turun dan
+          tidak saling menimpa. Jarak 24 dan tinggi minimum 120 / 52 sama
+          dengan posisi Figma (row 48 + 24 -> desc 120 + 24 -> tombol 52). */}
+      <div
+        className={reveal.rise}
         style={{
           position: "absolute",
-          left: u(d.x),
-          top: u(d.y),
+          left: u(t.x),
+          top: u(event.rowBox.y),
           width: u(d.w),
-          margin: 0,
-          fontFamily: "var(--font-primary)",
-          fontSize: u(20),
-          fontWeight: 400,
-          lineHeight: u(24),
-          color: "#ffffff",
-          textAlign: "justify",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        {event.description}
-      </p>
+        <EventDateRow event={event} />
 
-      <EventButton
-        box={b}
-        href={event.buttonHref}
-        label={event.buttonLabel}
-        ariaLabel={`${event.buttonLabel} ${event.title.replace(/-\n/g, "-").replace(/\n/g, " ")}`}
-      />
+        <p
+          style={{
+            margin: `${u(24)} 0 0`,
+            minHeight: u(d.h),
+            fontFamily: "var(--font-primary)",
+            fontSize: u(20),
+            fontWeight: 400,
+            lineHeight: u(24),
+            color: "#ffffff",
+            textAlign: "justify",
+          }}
+        >
+          {event.description}
+        </p>
+
+        <div style={{ position: "relative", marginTop: u(24), height: u(b.h) }}>
+          <EventButton
+            box={{ x: 0, y: 0, w: b.w, h: b.h }}
+            href={event.buttonHref}
+            label={event.buttonLabel}
+            ariaLabel={`${event.buttonLabel} ${event.title.replace(/-\n/g, "-").replace(/\n/g, " ")}`}
+          />
+        </div>
+      </div>
     </>
   );
 }

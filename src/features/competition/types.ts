@@ -31,6 +31,8 @@ export interface Prize {
 }
 
 export interface CompetitionInfoData {
+  /** Nama tim finalis, urut sesuai pengumuman. Kosong = bagiannya tidak tampil. */
+  finalists?: string[];
   /** Info singkat: format, peserta, cakupan, kuota, bahasa, lokasi */
   facts: { label: string; value: string }[];
   /** Tema/subtema, bidang materi, atau spesifikasi alat */
@@ -103,10 +105,26 @@ export interface Competition {
   guidebookUrl: string | null;
   contactUrl: string | null;
   /**
+   * Tautan komunitas peserta, tampil di kartu "My Activity" (/dashboard) untuk tim lomba ini.
+   * Kosong = tombolnya tidak ditampilkan.
+   */
+  community?: { whatsappGroupUrl?: string; discordUrl?: string };
+  /**
    * Formulir pendaftaran eksternal (Google Form). Pendaftaran lomba tidak
    * lagi lewat website. null = belum ada tautan: tombol daftar selalu ditutup.
    */
   registerUrl: string | null;
+  /**
+   * Mitra penyelenggara, tampil sebagai "In collaboration with" di bawah hero
+   * (Collaboration.tsx). Kosong = bagiannya tidak tampil.
+   */
+  collaboration?: {
+    name: string;
+    /** Logo di public/, URL ter-encode (nama berkas sponsor berisi spasi). */
+    logoSrc: string;
+    /** Situs mitra. null = kartu tidak bisa diklik. */
+    href: string | null;
+  };
   /** Detail lomba dari Form Informasi Competition. Lihat CompetitionInfo.tsx. */
   info: CompetitionInfoData;
   timeline: TimelineItem[];

@@ -1,14 +1,17 @@
 import Image from "next/image";
-import { u, sectionStyle } from "@/features/events/scale";
+import { DESIGN_WIDTH, u, sectionStyle } from "@/features/events/scale";
+import EventsHeroCollage from "@/features/events/EventsHeroCollage";
 
 /**
  * Hero "EVENTS." — Figma frame "Desktop - 12", 1728 x 1024.
  *
  * Lapisan (bawah ke atas), sama seperti di Figma:
  *   1. latar gradient #091b3f -> #294d97
- *   2. tirai (HERO_CURTAIN, 1728 x 556) — lihat catatan di bawah
- *   3. teks "EVENTS." EXCRATCH 700 250/238.75, #dee8fb
- *   4. panel terang di y=556, gradient #dee8fb -> #acc7ff, yang MENUTUP
+ *   2. kolase foto dokumentasi (EventsHeroCollage), tertutup tirai
+ *   3. tirai (HERO_CURTAIN, 1728 x 556), semi-transparan
+ *      (HERO_CURTAIN_OPACITY) — lihat catatan di bawah
+ *   4. teks "EVENTS." EXCRATCH 700 250/238.75, #dee8fb
+ *   5. panel terang di y=556 (tebal HERO_PANEL_HEIGHT), gradient #dee8fb -> #acc7ff, yang MENUTUP
  *      bagian bawah huruf — karena itu hurufnya tampak terpotong rata
  *
  * Teks tetap teks asli (bukan bagian dari gambar) supaya terbaca mesin
@@ -29,6 +32,23 @@ import { u, sectionStyle } from "@/features/events/scale";
  */
 export const HERO_CURTAIN = "/events/hero-curtain.webp";
 
+/**
+ * >>> ATUR TRANSPARANSI DI SINI <<<
+ * Opacity tirai biru di atas kolase foto (EventsHeroCollage), dipakai desktop
+ * dan mobile. 1 = tirai penuh (foto tidak terlihat), 0 = foto saja.
+ */
+export const HERO_CURTAIN_OPACITY = 0.6;
+
+/**
+ * >>> ATUR TEBAL PANEL TERANG DI BAWAH "EVENTS." DI SINI <<<
+ * Dalam piksel desain (kanvas lebar 1728). Figma aslinya 468. Mobile memakai
+ * angka yang sama, diskalakan ke lebar layar (EventsHeroMobile).
+ */
+export const HERO_PANEL_HEIGHT = 140;
+
+/** Tinggi tirai / kolase (piksel desain, dari Figma). */
+const CURTAIN_HEIGHT = 556;
+
 export default function EventsHero({ className }: { className?: string }) {
   return (
     <section
@@ -36,13 +56,15 @@ export default function EventsHero({ className }: { className?: string }) {
       aria-labelledby="events-hero-title"
       style={{
         ...sectionStyle,
+        aspectRatio: `${DESIGN_WIDTH} / ${CURTAIN_HEIGHT + HERO_PANEL_HEIGHT}`,
         background: "linear-gradient(180deg, #091b3f 0%, #294d97 100%)",
       }}
     >
       {/* Gambar terbesar di layar pertama (LCP), jadi dimuat paling awal.
           Next 16 menandai prop `priority` sebagai deprecated; dokumentasinya
           menyarankan loading="eager" + fetchPriority="high". */}
-      <div style={{ position: "absolute", left: 0, top: 0, width: "100%", height: u(556) }}>
+      <div style={{ position: "absolute", left: 0, top: 0, width: "100%", height: u(CURTAIN_HEIGHT) }}>
+        <EventsHeroCollage />
         <Image
           src={HERO_CURTAIN}
           alt=""
@@ -51,6 +73,7 @@ export default function EventsHero({ className }: { className?: string }) {
           sizes="100vw"
           loading="eager"
           fetchPriority="high"
+          style={{ opacity: HERO_CURTAIN_OPACITY }}
         />
       </div>
 
@@ -77,9 +100,9 @@ export default function EventsHero({ className }: { className?: string }) {
         style={{
           position: "absolute",
           left: u(-5),
-          top: u(556),
+          top: u(CURTAIN_HEIGHT),
           width: u(1733),
-          height: u(468),
+          height: u(HERO_PANEL_HEIGHT),
           background: "linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%)",
         }}
       />

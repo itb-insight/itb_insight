@@ -2,82 +2,124 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import {
-  Crown,
-  Pencil,
-  Plus,
-  SquarePen,
-  Trophy,
-  User,
-} from "lucide-react"
+import { Crown, Pencil, Plus, SquarePen, Trophy, User } from "lucide-react"
 
 import PilihKegiatanModal from "@/shared/components/modals/PilihKegiatanModal"
 
 import cardStyles from "./HomeCard.module.css"
 import styles from "./ActivityCard.module.css"
-import { ACTIVITY } from "./activityData"
+import type { ActivityEntry, ActivityMember } from "./activityTypes"
+import TeamDialogs, { type TeamDialog } from "./TeamDialogs"
 
-export default function ActivityCard() {
+interface ActivityCardProps {
+  /** null = the activity could not be loaded. */
+  entries: ActivityEntry[] | null
+  /** Admin preview: no "add activity" control. */
+  preview?: boolean
+}
+
+const STATE_TAGS: Record<ActivityMember["state"], string | null> = {
+  active: null,
+  invited: "Diundang",
+  unclaimed: "Belum bergabung",
+}
+
+export default function ActivityCard({ entries, preview = false }: ActivityCardProps) {
   const [active, setActive] = useState(0)
   const [pilihKegiatanOpen, setPilihKegiatanOpen] = useState(false)
 
-  const entry = ACTIVITY[active]
-  const others = ACTIVITY.map((item, i) => ({ item, i })).filter(({ i }) => i !== active)
+  const list = entries ?? []
+  const index = Math.min(active, Math.max(list.length - 1, 0))
+  const entry = list[index]
+  const others = list.map((item, i) => ({ item, i })).filter(({ i }) => i !== index)
 
   return (
     <section className={`${cardStyles.surface} ${styles.card}`}>
       <h2 className={styles.cardTitle}>My Activity</h2>
 
       <div className={styles.tabs}>
-        <div className={styles.tabActive}>
-          <Trophy size={24} color="#1B3B7D" aria-hidden="true" />
-          <span className={styles.tabActiveLabel}>{entry.competitionName}</span>
-        </div>
+        {entry && (
+          <div className={styles.tabActive}>
+            <Trophy size={24} color="#1B3B7D" aria-hidden="true" />
+            <span className={styles.tabActiveLabel}>{entry.competitionName}</span>
+          </div>
+        )}
 
         {others.map(({ item, i }) => (
-          <button
-            key={item.competitionName}
-            type="button"
-            className={styles.tabButton}
-            onClick={() => setActive(i)}
-          >
+          <button key={item.teamId} type="button" className={styles.tabButton} onClick={() => setActive(i)}>
             <Trophy size={24} aria-hidden="true" />
             <span className={styles.tabButtonLabel}>{item.competitionName}</span>
           </button>
         ))}
 
-        <button
-          type="button"
-          className={styles.tabAdd}
-          onClick={() => setPilihKegiatanOpen(true)}
-          aria-haspopup="dialog"
-          aria-expanded={pilihKegiatanOpen}
-          aria-label="Tambah kegiatan"
-        >
-          <Plus size={24} aria-hidden="true" />
-        </button>
+        {!preview && (
+          <button
+            type="button"
+            className={styles.tabAdd}
+            onClick={() => setPilihKegiatanOpen(true)}
+            aria-haspopup="dialog"
+            aria-expanded={pilihKegiatanOpen}
+            aria-label="Tambah kegiatan"
+          >
+            <Plus size={24} aria-hidden="true" />
+          </button>
+        )}
       </div>
 
-      <div className={styles.panel}>
-        <div className={styles.headingRow}>
-          <h3 className={styles.competitionName}>{entry.competitionName}</h3>
-          <span className={styles.statusChip}>{entry.badge}</span>
+      {entry ? (
+        <ActivityPanel key={entry.teamId} entry={entry} preview={preview} />
+      ) : (
+        <div className={`${styles.panel} ${styles.panelEmpty}`}>
+          <p className={styles.emptyText}>
+            {entries === null
+              ? "Aktivitasmu belum bisa dimuat. Coba muat ulang halaman ini."
+              : "Kamu belum terdaftar di lomba mana pun. Tim yang mendaftar lewat formulir akan muncul di sini setelah kamu masuk dengan email yang didaftarkan."}
+          </p>
         </div>
+      )}
 
-        <p className={styles.teamName}>{entry.teamName}</p>
+      {!preview && (
+        <PilihKegiatanModal open={pilihKegiatanOpen} onClose={() => setPilihKegiatanOpen(false)} />
+      )}
+    </section>
+  )
+}
 
-        <div className={styles.universityRow}>
-          <p className={styles.university}>{entry.university}</p>
-          <button type="button" className={styles.editData}>
+function ActivityPanel({ entry, preview }: { entry: ActivityEntry; preview: boolean }) {
+  const [dialog, setDialog] = useState<TeamDialog>(null)
+  // Team actions: not in the admin preview, and nothing to manage once the team has withdrawn.
+  const canAct = !preview && !entry.withdrawn
+  const leads = canAct && entry.viewerIsLeader
+  const hasOpenSlots = entry.members.some((m) => !m.isLeader && m.state !== "active")
+
+  return (
+    <div className={`${styles.panel} ${entry.withdrawn ? styles.panelWithdrawn : ""}`}>
+      <div className={styles.headingRow}>
+        <h3 className={styles.competitionName}>{entry.competitionName}</h3>
+        <span className={styles.statusChip}>{entry.badge}</span>
+        {entry.statusLabel && <span className={`${styles.statusChip} ${styles.statusChipAlert}`}>{entry.statusLabel}</span>}
+      </div>
+
+      <p className={styles.teamName}>
+        {entry.teamName} <span className={styles.teamUid}>· {entry.teamUid}</span>
+      </p>
+
+      <div className={styles.universityRow}>
+        <p className={styles.university}>{entry.institution}</p>
+        {canAct && (
+          <button type="button" className={styles.editData} onClick={() => setDialog("manage")} aria-haspopup="dialog">
             Edit Data
             <Pencil size={16} aria-hidden="true" />
           </button>
-        </div>
+        )}
+      </div>
 
-        <div className={styles.members}>
-          {entry.members.map((member) => (
+      <div className={styles.members}>
+        {entry.members.map((member) => {
+          const tag = STATE_TAGS[member.state]
+          return (
             <div
-              key={`${member.role}-${member.name}`}
+              key={member.id}
               className={`${styles.memberRow} ${member.isLeader ? styles.memberRowLeader : ""}`}
             >
               <span className={styles.memberInfo}>
@@ -88,51 +130,66 @@ export default function ActivityCard() {
                   <User size={24} color="#1B3B7D" aria-hidden="true" />
                 )}
                 <span className={styles.memberRole}>{member.role}</span>
-                <span className={styles.memberName}>{member.name}</span>
+                <span className={styles.memberName}>
+                  {member.name}
+                  {member.isYou && " (Kamu)"}
+                </span>
+                {tag && <span className={styles.memberTag}>{tag}</span>}
               </span>
 
-              {member.isLeader && (
-                <button type="button" className={styles.memberEdit} aria-label="Ubah ketua">
+              {member.isLeader && leads && (
+                <button
+                  type="button"
+                  className={styles.memberEdit}
+                  onClick={() => setDialog("leader")}
+                  aria-haspopup="dialog"
+                  aria-label="Ubah ketua"
+                >
                   <SquarePen size={24} aria-hidden="true" />
                 </button>
               )}
             </div>
-          ))}
-        </div>
+          )
+        })}
+      </div>
 
-        <button type="button" className={styles.inviteRow}>
+      {leads && hasOpenSlots && (
+        <button type="button" className={styles.inviteRow} onClick={() => setDialog("invite")} aria-haspopup="dialog">
           <span className={styles.invitePlus}>+</span>
           <span className={styles.inviteLabel}>Invite Anggota</span>
         </button>
+      )}
 
-        <p className={styles.activityLabel}>Activity</p>
+      {entry.nextStage && (
+        <>
+          <p className={styles.activityLabel}>Activity</p>
+          <div className={styles.submissionRow}>
+            <span className={styles.submissionLabel}>{entry.nextStage.label}</span>
+            <span className={styles.submissionDate}>{entry.nextStage.date}</span>
+          </div>
+        </>
+      )}
 
-        <div className={styles.submissionRow}>
-          <span className={styles.submissionLabel}>{entry.submissionLabel}</span>
-          <span className={styles.submissionDate}>{entry.submissionDate}</span>
-        </div>
-
+      {entry.actions.length > 0 && (
         <div className={styles.actions}>
           {entry.actions.map((action) => (
-            <button key={action.label} type="button" className={styles.actionButton}>
-              <Image
-                src={action.icon}
-                alt=""
-                width={24}
-                height={24}
-                loading="eager"
-                className={styles.actionIcon}
-              />
+            <a
+              key={action.href + action.label}
+              href={action.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.actionButton}
+            >
+              {action.icon && (
+                <Image src={action.icon} alt="" width={24} height={24} loading="eager" className={styles.actionIcon} />
+              )}
               <span className={styles.actionLabel}>{action.label}</span>
-            </button>
+            </a>
           ))}
         </div>
-      </div>
+      )}
 
-      <PilihKegiatanModal
-        open={pilihKegiatanOpen}
-        onClose={() => setPilihKegiatanOpen(false)}
-      />
-    </section>
+      {canAct && <TeamDialogs entry={entry} open={dialog} onClose={() => setDialog(null)} />}
+    </div>
   )
 }

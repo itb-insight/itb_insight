@@ -31,6 +31,9 @@ export const sectionStyle = {
   position: "relative",
   width: "100%",
   aspectRatio: `${DESIGN_WIDTH} / ${DESIGN_HEIGHT}`,
-  overflow: "hidden",
+  // clip, bukan hidden: hidden menjadikan section "scroll container", sehingga
+  // animasi scroll (animation-timeline: view(), EventReveal.module.css)
+  // mengikuti section yang tidak pernah di-scroll dan tidak pernah berjalan.
+  overflow: "clip",
   containerType: "inline-size",
 } as const;

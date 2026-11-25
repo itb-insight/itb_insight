@@ -133,7 +133,7 @@ const DATA: Competition[] = [
     timelineDotX: 68,
     iconWidth: 292,
     iconHeight: 184,
-    registration: { opens: "2026-08-14T00:00:00+07:00", closes: "2026-11-20T23:59:59+07:00" },
+    registration: { opens: "2026-08-14T00:00:00+07:00", closes: "2026-11-25T23:59:59+07:00" },
     finalCountdown: { date: "2026-11-28T00:00:00+07:00", title: ["Countdown", "to final"] },
     fees: [{ amount: 30000, unit: "Per orang" }],
     // Form: "Bilang aja nanti dapat uang tunai" (nominal belum diumumkan).
@@ -146,11 +146,13 @@ const DATA: Competition[] = [
     registerUrl:
       "https://docs.google.com/forms/d/e/1FAIpQLScBs4oDRG4cpPnsNYs1pRUcNY6hGmdjhrHN93Z2XDf4qz166A/viewform",
     timeline: [
-      { id: "pendaftaran", title: "Pendaftaran", dateLabel: "14 Agustus – 20 November 2026", date: "2026-08-14" },
+      { id: "pendaftaran", title: "Pendaftaran (Diperpanjang)", dateLabel: "14 Agustus – 25 November 2026", date: "2026-08-14" },
       { id: "technical-meeting", title: "Technical Meeting", dateLabel: "21 November 2026", date: "2026-11-21" },
       { id: "semifinal", title: "Semifinal", dateLabel: "27 November 2026", date: "2026-11-27" },
       { id: "final", title: "Final", dateLabel: "28 November 2026", date: "2026-11-28" },
     ],
+    // Logo sama dengan bagian sponsor di landing (SponsorsSectionHifi).
+    collaboration: { name: "JETE", logoSrc: "/sponsors/JETE%20(XL).png", href: "https://jete.id" },
     info: {
       facts: [
         { label: "Format", value: "Individu" },
@@ -193,7 +195,7 @@ const DATA: Competition[] = [
     seo: {
       metaTitle: "Drone Soccer Competition",
       metaDescription:
-        "Drone Soccer Competition ITB Insight 2026: lomba drone untuk peserta berusia di atas 10 tahun se-Indonesia, hadiah Rp3.500.000 dan drone. Daftar sampai 20 November 2026, final 28 November di Aula Barat ITB.",
+        "Drone Soccer Competition ITB Insight 2026: lomba drone untuk peserta berusia di atas 10 tahun se-Indonesia, hadiah Rp3.500.000 dan drone. Pendaftaran diperpanjang sampai 25 November 2026, final 28 November di Aula Barat ITB.",
       ogImage: "/assets/og-mo.png",
       keywords: ["lomba drone", "drone soccer", "DJI Tello", "ITB Insight 2026", "kompetisi drone"],
     },
@@ -204,11 +206,12 @@ const DATA: Competition[] = [
     title: "Business Plan Competition",
     description:
       "Business Plan Competition (BPC) ITB INSIGHT 2026 merupakan kompetisi nasional di bidang inovasi bisnis yang mengangkat tema pengaplikasian Artificial Intelligence (AI) yang ditujukan bagi mahasiswa (D3/D4/S1) dan siswa SMA/SMK/MA sederajat. Kompetisi ini dirancang sebagai wadah pengembangan generasi muda dalam menciptakan solusi bisnis yang inovatif, adaptif, dan berdaya saing melalui pemanfaatan teknologi AI, melalui tahapan BMC, proposal dan MVP, hingga final pitching.",
-    iconSrc: "/assets/icon-bpc.png",
-    titleFrom: "#d0ffc7",
-    titleTo: "#76df62",
-    accentFrom: "#d0ffc7",
-    accentTo: "#76df62",
+    iconSrc: "/assets/icon-bpc-2026.png",
+    // Warna logo BPC 2026: badan peach, aksen lavender.
+    titleFrom: "#ffe3d3",
+    titleTo: "#fea575",
+    accentFrom: "#ffd3ba",
+    accentTo: "#a9a3f2",
     heroIconY: 214,
     heroTitleY: 401,
     heroDescY: 451,
@@ -216,7 +219,7 @@ const DATA: Competition[] = [
     timelineTextY: 2332,
     timelineDotX: 52,
     iconWidth: 172,
-    iconHeight: 155,
+    iconHeight: 149,
     registration: { opens: "2026-08-20T00:00:00+07:00", closes: "2026-09-24T23:59:59+07:00" },
     finalCountdown: { date: "2026-11-26T00:00:00+07:00", title: ["Countdown", "to pitching"] },
     fees: [
@@ -243,7 +246,22 @@ const DATA: Competition[] = [
       { id: "final", title: "Final: Pitch Deck & MVP", dateLabel: "5 – 22 November 2026", date: "2026-11-05" },
       { id: "pitching", title: "Pitching & Awarding", dateLabel: "26 November 2026", date: "2026-11-26" },
     ],
+    // Logo sama dengan bagian sponsor di landing (SponsorsSectionHifi).
+    collaboration: { name: "KAI", logoSrc: "/sponsors/KAI%20(XL).png", href: "https://www.kai.id" },
     info: {
+      // Finalis Pitching & Awarding, dari panitia BPC.
+      finalists: [
+        "Silverqueen Merah",
+        "LDR",
+        "Follibrium",
+        "Penumpang Mugen Train",
+        "Menangin Yok",
+        "OTW BAGENDANG",
+        "SkenMAX",
+        "JUGIJAGIJUG",
+        "Kontingen Babeh",
+        "Beji Memanggil",
+      ],
       facts: [
         { label: "Format", value: "Tim 2–3 orang dari institusi yang sama" },
         { label: "Peserta", value: "Mahasiswa D3/D4/S1 dan siswa SMA/SMK/MA sederajat" },
@@ -288,13 +306,13 @@ const DATA: Competition[] = [
       ],
     },
     desktop: {
-      logoSrc: "/images/bpc.webp",
+      logoSrc: "/images/icon-bpc-2026.webp",
       logoWidth: 350,
       heroMaxWidth: 1400,
-      titleFrom: "#DEE8FB",
-      titleTo: "#6CCB59",
-      timelineFrom: "#DEE8FB",
-      timelineTo: "#6CCB59",
+      titleFrom: "#FFF1E8",
+      titleTo: "#FEA575",
+      timelineFrom: "#FFE3D3",
+      timelineTo: "#A9A3F2",
       descriptionLines: [
         "Business Plan Competition (BPC) ITB INSIGHT 2026 merupakan kompetisi nasional di bidang inovasi bisnis yang mengangkat",
         "tema pengaplikasian Artificial Intelligence (AI) yang ditujukan bagi mahasiswa (D3/D4/S1) dan siswa SMA/SMK/MA sederajat.",
