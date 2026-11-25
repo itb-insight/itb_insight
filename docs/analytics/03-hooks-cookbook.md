@@ -1,10 +1,9 @@
 # Hooks Cookbook
 
-> These hooks feed the current volatile analytics ingest only. They do not make dashboard values
-> persistent or authoritative; see [00-overview.md](00-overview.md).
+> These hooks send events to PostHog through `logEvent`; see [00-overview.md](00-overview.md).
 
 The reusable mechanisms. These are the "template-ish" pieces — designed to be dropped into any
-page that doesn't exist yet, without touching the endpoint, the schema, or the dashboard.
+page that doesn't exist yet, without touching PostHog or the database.
 
 Each mechanism ships as **both a hook and a component**. The component is the on-ramp; the hook is
 the escape hatch when you need the ref on an element you already control.
@@ -67,7 +66,8 @@ import trackClick from "@/lib/analytics/trackClick"
 ```
 
 Pair impressions and clicks on the same `sponsorId` and CTR falls out of the join. Sponsors want
-proof of value, so log both — see `sponsor_stats` in [schema.sql](schema.sql).
+proof of value, so log both. The Sponsor Performance panel joins them (`getSponsorStats()` in
+`src/features/admin/data/adapters.ts`).
 
 ---
 
@@ -135,7 +135,7 @@ This is the part worth understanding, because it's what makes the mechanism a te
 
 Drop-off is **derived**, not hand-instrumented. A brand-new funnel on a page nobody has written yet
 gets drop-off tracking for free by calling the hook with a new `funnelId` — no new listener, no new
-event type, no endpoint change.
+event type, no PostHog change.
 
 Call `complete()` on the **terminal** step to mark the funnel finished. Intermediate steps just
 mount and unmount. Use `abandon(reason)` only for an *explicit* abandonment you can observe, like a
@@ -152,8 +152,9 @@ impression and funnel entry counts 2×. The hooks use a module-level dedupe set 
 `queue.ts`). If you write a new hook that fires on mount, use it.
 
 **Never log form values.** `complete()` takes optional metadata; do not put field contents in it.
-The server strips keys matching `email|name|phone|nim|nik|token|password|address` and drops nested
-objects, but the first line of defence is not sending them.
+Nothing strips them on the way to PostHog (`EventMetadata` only rules out nested objects), so not
+sending them is the only defence.
 
 **Sampled events are undercounted by design.** Check `SAMPLE_RATES` in
-`src/lib/analytics/config.ts` before doing arithmetic on an event type.
+`src/lib/analytics/config.ts` before doing arithmetic on an event type in PostHog's UI. `/admin`
+already scales them back up.

@@ -16,11 +16,10 @@ schema_version: 2
 ## Schema present but not wired
 
 - `payments` and `midtrans_transactions` exist after migration `0004` but have no payment API, UI, Snap call, or webhook.
-- `analytics_events` exists after `0006`, including RLS policies, but `/api/track` writes only to the in-memory store.
 
 ## Planned-entity gap register
 
-These final-PRD entities are not current schema/runtime claims and require approved migrations, RLS, retention, and API wiring: `check_ins`, `booths`, `booth_scan_events`, `uploads`, `rsvp_invites`, `feedback_responses`, `partners`, `partnership_inquiries`, `programs`, `sessions`, and `audit_logs`. Payment tables are present but still need the CMP-10–CMP-16 runtime contract. Durable analytics rollups/PostHog are planned integration design, not current analytics.
+These final-PRD entities are not current schema/runtime claims and require approved migrations, RLS, retention, and API wiring: `check_ins`, `booths`, `booth_scan_events`, `uploads`, `rsvp_invites`, `feedback_responses`, `partners`, `partnership_inquiries`, `programs`, `sessions`, and `audit_logs`. Payment tables are present but still need the CMP-10–CMP-16 runtime contract. Web analytics live in PostHog, not in this database; `booth_presence` (0016) holds opt-in D-day booth visits, booth and time only.
 
 ## Data rules
 

@@ -13,6 +13,17 @@
 | `0005_rls_initplan_optimization.sql` | Rewrites RLS policies to use `(select auth.uid())`. |
 | `0006_analytics_events.sql` | Adds `analytics_events`, indexes, and write-only browser insert/read-for-admin policies. |
 | `0007_backend_complete_schema.sql` | Adds booths, booth_scan_events, gate_check_ins, rsvp_invites, feedback_responses, partners, partnership_inquiries, inspirates_records, audit_logs; expands scoped roles & payment statuses. |
+| `0007_security_hardening.sql` | Closes direct client writes ahead of the public deploy (including the `analytics_events` insert policy). |
+| `0008_catalog_alignment_and_payment_safety.sql` | Aligns competitions with the real catalog; removes an unsafe payment default. |
+| `0009_feedback_forms.sql` | Configurable feedback engine (`feedback_forms`, `feedback_submissions`). |
+| `0010_booth_staff_scan.sql` | Booth points awarded by booth staff scanning the visitor's QR. |
+| `0011_profile_roles.sql` | `profiles.role_a` / `role_b`. |
+| `0012_admin_manual_points.sql` | Manual point awards (`booth_scan_events.booth_id` null). |
+| `0013_close_open_inquiry_policy.sql` | Closes direct inserts into `partnership_inquiries`. |
+| `0014_form_registrations_shadow_members.sql` | Off-site (Google Form) teams and shadow members. |
+| `0015_analytics_to_posthog.sql` | Drops `analytics_events` (web analytics moved to PostHog); adds `admin_competition_funnel()`. |
+| `0016_booth_presence.sql` | Booth `lat`/`lng`/`presence_radius_m`, `profiles.presence_consent_at`, `booth_presence`, `record_booth_presence()`. |
+| `0017_admin_live.sql` | `admin_live_onsite()` for the D-day live panels; `booth_scan_events (scanned_at)` index. |
 
 `0002` drops the legacy `registrations` and `rsvp` tables. Use `visitor_tickets`, never `rsvp`, for current QR tickets.
 
@@ -35,7 +46,7 @@
 | `competition_registrations` | Individual/team submissions and status | Yes. |
 | `admin_roles` | Scoped RBAC authorization (`admin`, `gate_staff`, `booth_staff`, etc.) | Yes; `@/lib/admin`. |
 | `payments`, `midtrans_transactions` | Midtrans Snap creation, webhook, and retry | Yes; `/api/payments/*`. |
-| `analytics_events` | Persistent analytics storage | Yes; `/api/track` writes to table. |
+| `booth_presence` | Opt-in booth visits (booth + time, never coordinates), service role only | Yes; `/api/presence/ping`, `/api/admin/live`. |
 
 ## Important constraints
 
