@@ -16,6 +16,10 @@ type RateLimitScope =
   | 'team-manage'
   | 'feedback-submit'
   | 'self-check-in'
+  | 'admin-email-send'
+  | 'admin-email-preview'
+  | 'sidequest-submit'
+  | 'reward-claim'
   | 'presence-ping'
   | 'presence-consent'
 

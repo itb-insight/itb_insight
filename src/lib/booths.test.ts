@@ -93,8 +93,34 @@ describe('awardBoothPoints (point inflation guards)', () => {
     expect(await award({ visitorQr: { token: 'x' } })).toMatchObject({ ok: false, code: 'INVALID_QR' })
   })
 
-  it(`admins may set points directly, but only 0..${MAX_ADMIN_POINTS}`, async () => {
+  it(`admins may set points directly, including negative manual corrections when no booth is chosen`, async () => {
     expect(await award({ staffRole: 'admin', points: MAX_ADMIN_POINTS + 1 })).toMatchObject({ ok: false, code: 'INVALID_POINTS' })
     expect(await award({ staffRole: 'admin', points: 50 })).toMatchObject({ ok: true, pointsAwarded: 50 })
+    expect(await award({ staffRole: 'admin', boothId: undefined, points: -25 })).toMatchObject({ ok: true, pointsAwarded: -25 })
+  })
+
+  it('rejects committee / stakeholder / sponsor accounts with COMMITTEE_ACCOUNT ("Ini Akun Panitia!")', async () => {
+    world.ticket = {
+      ...world.ticket!,
+      profiles: { full_name: 'Panitia Acara', institution: 'ITB', role_a: 'staff' } as unknown as {
+        full_name: string
+        institution: null
+      },
+    }
+    expect(await award()).toMatchObject({ ok: false, code: 'COMMITTEE_ACCOUNT' })
+    expect(writesTo(state.db, 'booth_scan_events')).toEqual([])
+  })
+
+  it('flags wireframe warnings (high_points priority over non_booth_staff)', async () => {
+    const res = await award({ staffRole: 'admin', points: 250 })
+    expect(res).toMatchObject({
+      ok: true,
+      pointsAwarded: 250,
+      warnings: {
+        highPoints: true,
+        nonBoothStaff: true,
+        primaryWarning: 'high_points',
+      },
+    })
   })
 })

@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/analytics/02-endpoint-and-limits.md",
-                "mode": "source",
+                "file": "docs/SIDEQUESTS.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "02-endpoint-and-limits"
+              "title": "SIDEQUESTS"
             }
           }
         ],
@@ -98,7 +98,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "034e7f8a9a76fa28",
@@ -201,24 +202,21 @@
       "bases:Create new base": false
     }
   },
-  "active": "c1af1a82bd18e5f3",
+  "active": "28583da7a86a582b",
   "lastOpenFiles": [
-    "src/zz-live-probe.test.ts",
-    "src/features/admin/data/adapters.test.ts",
-    "src/lib/analytics/posthog-query.test.ts",
-    "src/lib/analytics/posthog-query.test.ts.tmp.248697.6bdc137302e6",
-    "tests/guardrails/sedQCH8fL",
-    "src/features/admin/components/DivisionActivityPanel/sedGgXnxU",
-    "src/features/admin/components/Panel/PanelUnavailable.tsx",
-    "src/features/admin/data/adapters.ts.tmp.248697.ccbbf296a258",
-    "supabase/migrations/0015_analytics_to_posthog.sql",
-    "supabase/migrations/0015_analytics_to_posthog.sql.tmp.248697.5ae1d5a83321",
-    "src/lib/analytics/posthog-query.ts",
-    "docs/analytics/01-tracking-library.md",
-    "docs/analytics/00-overview.md",
-    "docs/analytics/04-dashboards-and-data-seam.md",
+    "supabase/migrations/0019_profile_role_grants.sql",
+    "supabase/migrations/0019_profile_role_grants.sql.tmp.25005.a993d694944f",
+    "src/lib/types/database.ts.tmp.25005.57cb89764a5f",
+    "supabase/migrations/0018_profile_role_b_divisions.sql",
+    "supabase/migrations/0018_profile_role_b_divisions.sql.tmp.25005.e774d5466b76",
     "docs/MAPS-NOTES.md",
     "public/images/timeline/v2/purple.png",
+    "src/shared/hooks/useHasSession.test.ts",
+    "src/shared/hooks/useHasSession.ts.tmp.180708.ce88377eaaf6",
+    "src/features/events/location-tba.test.ts",
+    "src/lib/event-location.ts",
+    "src/lib/event-location.ts.tmp.165559.6093f37f9ba9",
+    "src/proxy.test.ts.tmp.130913.aa862de9a703",
     "design-sources/README.md",
     "design-sources/images/dashboard-bg.png",
     "design-sources/images/gallery/mirror_logo.JPG",

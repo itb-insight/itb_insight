@@ -15,7 +15,20 @@ export type Profile = {
 }
 
 export type ProfileRoleA = 'staff' | 'stakeholder' | 'sponsor_partner' | 'company' | 'admin'
-export type ProfileRoleB = 'booth' | 'webdev' | 'media' | 'competition' | 'event' | 'sponsorship' | 'partner'
+// Mirrors profiles_role_b_check (0018): committee bidang first, then legacy 0011 values.
+export type ProfileRoleB =
+  | 'gensec'
+  | 'creative'
+  | 'event'
+  | 'fundraising'
+  | 'competition'
+  | 'field'
+  | 'marketing'
+  | 'booth'
+  | 'webdev'
+  | 'media'
+  | 'sponsorship'
+  | 'partner'
 
 export type VisitorTicket = {
   id: string
@@ -174,4 +187,97 @@ export type MidtransTransaction = {
   raw_notification?: Record<string, unknown> | null
   created_at: string
   updated_at: string
+}
+
+export type EmailCampaignStatus = 'queued' | 'sending' | 'completed' | 'partial' | 'failed'
+export type EmailOutboxStatus = 'pending' | 'sending' | 'sent' | 'failed'
+
+export type EmailCampaign = {
+  id: string
+  created_by?: string | null
+  subject: string
+  body: string
+  filter: Record<string, unknown>
+  status: EmailCampaignStatus
+  recipient_count: number
+  sent_count: number
+  failed_count: number
+  created_at: string
+  started_at?: string | null
+  completed_at?: string | null
+}
+
+export type EmailOutboxItem = {
+  id: string
+  campaign_id: string
+  user_id?: string | null
+  to_email: string
+  to_name?: string | null
+  variables: Record<string, string>
+  status: EmailOutboxStatus
+  attempts: number
+  last_error?: string | null
+  next_attempt_at: string
+  provider_message_id?: string | null
+  idempotency_key: string
+  sent_at?: string | null
+  created_at: string
+  updated_at: string
+}
+
+export type SidequestCategory = 'marketing' | 'acara' | 'competition' | 'fundraise'
+export type SidequestSubmissionStatus = 'pending' | 'approved' | 'rejected'
+
+export type Sidequest = {
+  id: string
+  slug: string
+  category: SidequestCategory
+  title: string
+  description?: string | null
+  pic?: string | null
+  points: number
+  shortcut_url?: string | null
+  requires_proof: boolean
+  target_count: number
+  order_index: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export type SidequestSubmission = {
+  id: string
+  quest_id: string
+  user_id: string
+  proof_url?: string | null
+  note?: string | null
+  status: SidequestSubmissionStatus
+  points_awarded: number
+  reviewed_by?: string | null
+  review_note?: string | null
+  submitted_at: string
+  reviewed_at?: string | null
+  updated_at: string
+}
+
+export type RewardTier = {
+  id: string
+  tier_number: number
+  min_points: number
+  max_points: number
+  reward_name: string
+  total_stock?: number | null
+  note?: string | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export type RewardClaim = {
+  id: string
+  tier_id: string
+  user_id: string
+  points_at_claim: number
+  claimed_by?: string | null
+  claimed_at: string
 }
