@@ -15,7 +15,20 @@ export type Profile = {
 }
 
 export type ProfileRoleA = 'staff' | 'stakeholder' | 'sponsor_partner' | 'company' | 'admin'
-export type ProfileRoleB = 'booth' | 'webdev' | 'media' | 'competition' | 'event' | 'sponsorship' | 'partner'
+// Mirrors profiles_role_b_check (0018): committee bidang first, then legacy 0011 values.
+export type ProfileRoleB =
+  | 'gensec'
+  | 'creative'
+  | 'event'
+  | 'fundraising'
+  | 'competition'
+  | 'field'
+  | 'marketing'
+  | 'booth'
+  | 'webdev'
+  | 'media'
+  | 'sponsorship'
+  | 'partner'
 
 export type VisitorTicket = {
   id: string
