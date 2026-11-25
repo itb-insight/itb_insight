@@ -1,4 +1,5 @@
 import {
+  dataSource,
   defaultRange,
   getEngagement,
   getFunnel,
@@ -9,6 +10,7 @@ import DivisionFilter from "@/features/admin/components/DivisionFilter/DivisionF
 import EngagementPanel from "@/features/admin/components/EngagementPanel/EngagementPanel"
 import FunnelPanel from "@/features/admin/components/FunnelPanel/FunnelPanel"
 import PageHeader from "@/features/admin/components/PageHeader/PageHeader"
+import PanelUnavailable from "@/features/admin/components/Panel/PanelUnavailable"
 import SponsorPanel from "@/features/admin/components/SponsorPanel/SponsorPanel"
 import TrafficPanel from "@/features/admin/components/TrafficPanel/TrafficPanel"
 import styles from "../dashboard.module.css"
@@ -33,17 +35,17 @@ export default async function AdminAnalyticsPage() {
       <PageHeader
         title="Analytics"
         subtitle="Sponsor, funnel, and engagement detail"
-        meta="Mock data"
+        meta={dataSource() === "live" ? "Live · PostHog + Supabase, last 7 days" : "Mock data"}
       />
 
       <div className={styles.body}>
         <DivisionFilter />
 
         <div className={styles.grid}>
-          <SponsorPanel data={sponsors} />
-          <FunnelPanel data={funnel} />
-          <EngagementPanel data={engagement} />
-          <TrafficPanel data={traffic} />
+          {sponsors ? <SponsorPanel data={sponsors} /> : <PanelUnavailable title="Sponsor Performance" />}
+          {funnel ? <FunnelPanel data={funnel} /> : <PanelUnavailable title="Registration Funnel" />}
+          {engagement ? <EngagementPanel data={engagement} /> : <PanelUnavailable title="3D Engagement Health" />}
+          {traffic ? <TrafficPanel data={traffic} /> : <PanelUnavailable title="Traffic, Last 7 Days" />}
         </div>
       </div>
     </>

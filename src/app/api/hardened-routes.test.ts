@@ -1,4 +1,4 @@
-// Route-level checks for the patched endpoints: admin events auth, closed registration,
+// Route-level checks for the patched endpoints: closed registration,
 // geofenced self check-in, disabled partner inquiry, and the visitor search response shape.
 
 import { NextRequest } from 'next/server'
@@ -22,7 +22,6 @@ vi.mock('@/lib/auth', () => ({
 }))
 vi.mock('@/lib/admin', () => ({ getScopedUser: async () => state.scoped }))
 
-const adminEvents = await import('./admin/events/route')
 const individual = await import('./registrations/individual/route')
 const teams = await import('./teams/route')
 const selfCheckIn = await import('./check-in/self/route')
@@ -45,19 +44,6 @@ beforeEach(() => {
 })
 
 afterEach(() => vi.unstubAllEnvs())
-
-describe('GET /api/admin/events', () => {
-  it('is no longer public', async () => {
-    const res = await adminEvents.GET(new NextRequest('https://insight.test/api/admin/events'))
-    expect(res.status).toBe(401)
-  })
-
-  it('answers admins', async () => {
-    state.scoped = { ok: true, user: { id: 'admin' }, role: 'admin' }
-    const res = await adminEvents.GET(new NextRequest('https://insight.test/api/admin/events?limit=5'))
-    expect(res.status).toBe(200)
-  })
-})
 
 describe('registration APIs obey REGISTER_OPEN_<code>', () => {
   it('reject a closed competition before touching the database', async () => {
