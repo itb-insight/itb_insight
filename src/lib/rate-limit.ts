@@ -16,6 +16,8 @@ type RateLimitScope =
   | 'team-manage'
   | 'feedback-submit'
   | 'self-check-in'
+  | 'presence-ping'
+  | 'presence-consent'
 
 type RateLimitOptions = {
   readonly scope: RateLimitScope
