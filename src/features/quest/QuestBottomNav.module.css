@@ -35,7 +35,7 @@
 */
 .inner {
   position: relative;
-  max-width: 402px;
+  max-width: var(--kolom-quest, 402px);
   margin: 0 auto;
 }
 

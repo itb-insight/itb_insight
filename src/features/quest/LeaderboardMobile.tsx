@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react"
 import Link from "next/link"
 import { House, Info } from "lucide-react"
 
@@ -173,7 +174,9 @@ function PodiumKolom({
       <p className={styles.podiumNama}>{entry.name}</p>
       <div
         className={`${styles.alas} ${juara ? styles.alasJuara : ""}`}
-        style={{ height: tinggiAlas }}
+        /* Lewat properti kustom, bukan height langsung: blok @media di CSS
+           perlu bisa mengalikannya untuk tablet. */
+        style={{ "--tinggi-alas": `${tinggiAlas}px` } as CSSProperties}
       >
         <span className={styles.alasRank}>{rank}</span>
         <span className={styles.alasPoin}>{entry.points}</span>

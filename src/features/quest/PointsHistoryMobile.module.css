@@ -20,12 +20,18 @@
   background: linear-gradient(180deg, #091b3f 0%, #294d97 100%), #091b3f;
   color: #ffffff;
   font-family: var(--font-primary), "Gabarito", sans-serif;
+  /*
+    Lebar kolom dipegang satu properti supaya navigasi bawah — yang modul CSS-nya
+    terpisah — ikut sendiri. Nama properti kustom TIDAK diacak CSS Modules, jadi
+    nilainya tembus ke QuestBottomNav yang berada di dalam .page.
+  */
+  --kolom-quest: 402px;
 }
 
 .isi {
   flex: 1;
   width: 100%;
-  max-width: 402px;
+  max-width: var(--kolom-quest);
   margin: 0 auto;
   /* 17 bawah: kartu bantuan berakhir 907, latar navigasi mulai 924. */
   padding: 31px 16px 17px;
@@ -380,4 +386,13 @@
   font-size: 12px;
   line-height: 14px;
   cursor: pointer;
+}
+
+/* ---- tablet ---------------------------------------------------------------- */
+
+/* Sama seperti Rewards: kartunya sudah melebar sendiri, cukup kolomnya. */
+@media (min-width: 768px) {
+  .page {
+    --kolom-quest: 600px;
+  }
 }
