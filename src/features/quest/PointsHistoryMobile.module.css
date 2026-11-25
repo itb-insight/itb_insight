@@ -1,0 +1,383 @@
+/*
+  Points History — Figma node 2124:21846, kanvas 402 x 1018.
+
+    header      356 x 24  di (26, 31)   — tanpa ikon kanan
+    saringan    370 x 40  di (16, 85)   — empat chip, total 345
+    daftar      368 x 627 di (17, 137)  — enam kartu 97, jarak 9
+    bantuan     368 x 131 di (18, 776)
+    navigasi    latar di y 924, kanvas berakhir 1018
+
+  Lebar di dump tidak konsisten: 370 di x16 (saringan), 368 di x17 (daftar),
+  368 di x18 (kartu bantuan) — tiga nilai untuk kolom yang sama. Di sini
+  semuanya 370 di x16; selisihnya 1-2px dan jelas cuma kelonggaran Figma.
+*/
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%), #091b3f;
+  color: #ffffff;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+.isi {
+  flex: 1;
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+  /* 17 bawah: kartu bantuan berakhir 907, latar navigasi mulai 924. */
+  padding: 31px 16px 17px;
+  box-sizing: border-box;
+}
+
+/* ---- header ---------------------------------------------------------------- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.headerIcon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #fafafa;
+  cursor: pointer;
+}
+
+/*
+  Halaman ini cuma punya ikon kiri. Tanpa penyeimbang di kanan, judulnya
+  tertarik ke kanan oleh space-between — jadi ada kotak kosong seukuran ikon.
+*/
+.headerSpacer {
+  width: 24px;
+  height: 24px;
+}
+
+.judul {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* ---- saringan -------------------------------------------------------------- */
+
+/*
+  Empat chip memakan 345 dari 370 — muat di 402, tapi di layar 375 kolomnya
+  cuma 343 dan chip terakhir terpotong. Jadi barisnya digulung mendatar,
+  tanpa batang gulung yang kelihatan.
+*/
+.saringan {
+  display: flex;
+  gap: 8px;
+  height: 40px;
+  margin-top: 30px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.saringan::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  position: relative;
+  flex: none;
+  box-sizing: border-box;
+  height: 40px;
+  /* 12 padding chip + 8 padding bingkai teks di dalamnya. */
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  color: #dee8fb;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Chip tidak terpilih: cuma garis tepi bergradien 1,5px. */
+.chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.chipAktif {
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  color: #1b3b7d;
+}
+
+.chipAktif::before {
+  display: none;
+}
+
+/* ---- daftar riwayat -------------------------------------------------------- */
+
+.daftar {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kartu {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  gap: 8px;
+  height: 97px;
+  /* 12 padding + 1,5 garis tepi yang menimpa. */
+  padding: 13.5px;
+  border-radius: 12px;
+  background: rgba(2, 8, 22, 0.5);
+}
+
+.kartu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.jam {
+  flex: none;
+  width: 45px;
+  margin: 0;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
+}
+
+.kartuTeks {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.kartuNama,
+.kartuDetail {
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #ffffff;
+}
+
+.kartuNama {
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.kartuDetail {
+  font-size: 12px;
+  line-height: 14px;
+}
+
+/* ---- lencana status -------------------------------------------------------- */
+
+/*
+  Warnanya dipasangkan tetap (latar + teks) dan diambil apa adanya dari dump.
+  Lebar lencana mengikuti isinya: di dump 67 sampai 121.
+*/
+.lencana {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 28px;
+  font-size: 16px;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.lencanaPending {
+  background: #1b3b7d;
+  color: #7fa9f6;
+}
+
+.lencanaRedeemed {
+  background: #404040;
+  color: #d3d3d3;
+}
+
+.lencanaVerified {
+  background: #224b1c;
+  color: #caf0c2;
+}
+
+.lencanaReview {
+  background: #352b3b;
+  color: #c095eb;
+}
+
+.lencanaVoided {
+  background: #3b1919;
+  color: #ff9f9f;
+}
+
+.lencanaManual {
+  background: #4a3929;
+  color: #e4aa5e;
+}
+
+/* ---- jumlah poin ----------------------------------------------------------- */
+
+.kartuJumlah {
+  flex: none;
+  width: 54px;
+  text-align: right;
+}
+
+.jumlah {
+  margin: 0;
+  font-size: 20px;
+  line-height: 24px;
+  color: #ffffff;
+}
+
+.sumber {
+  margin: 0;
+  font-size: 12px;
+  line-height: 14px;
+  color: #acc7ff;
+}
+
+/* ---- kartu bantuan --------------------------------------------------------- */
+
+.bantuan {
+  position: relative;
+  box-sizing: border-box;
+  height: 131px;
+  margin-top: 12px;
+  padding: 13.5px;
+  border-radius: 12px;
+  background: rgba(2, 8, 22, 0.5);
+}
+
+.bantuan::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.bantuanJudul {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #ffffff;
+}
+
+.bantuanNote {
+  margin: 0;
+  font-size: 12px;
+  line-height: 14px;
+  color: #ffffff;
+}
+
+.refBaris {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 7.5px;
+}
+
+.refKotak {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 13px;
+  border-radius: 12px;
+  /* Lebih gelap dari kartunya karena dua lapis 0,5 saling menumpuk. */
+  background: rgba(2, 8, 22, 0.5);
+}
+
+.ref {
+  margin: 0;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #ffffff;
+}
+
+.lapor {
+  position: relative;
+  flex: none;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 75px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  color: #1b3b7d;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 14px;
+  cursor: pointer;
+}

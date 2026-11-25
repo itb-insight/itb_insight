@@ -1,0 +1,131 @@
+/*
+  Navigasi bawah quest — Figma node 3429:17546, kanvas 402.
+
+    latar      Rectangle 1, 403 x 94 di y 909, #091B3F + gradien 180deg
+    bar        402 x 82 di y 921, lima item @80,4 (402 / 5)
+    item       padding atas 8, ikon 24, jarak 2 ke label, label 12/14
+    tombol     56 x 56 di (174, 917) — 4px LEBIH TINGGI dari bar, jadi melayang
+    indikator  134 x 5 di y 990, #DEE8FB radius 100
+
+  Warna aktif #DEE8FB, tidak aktif #7FA9F6.
+*/
+
+.bar {
+  /*
+    Sticky, bukan relative: halaman Rewards (1120) jauh lebih tinggi dari layar,
+    dan navigasi bawah harus tetap kelihatan sambil isinya digulung. Dia tetap
+    memakan tempat di akhir aliran, jadi isi terakhir tidak tertutup.
+  */
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  /* 909 -> 998 di kanvas 998: tingginya 89 termasuk area indikator. */
+  padding-top: 12px;
+  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%), #091b3f;
+}
+
+/*
+  Pembatas lebar. Sempat kutaruh di .items, tapi `margin: 0` dari reset daftar
+  di blok yang sama menimpanya — properti terakhir yang menang, bukan yang
+  ditulis lebih dulu. Dipisah ke elemen sendiri supaya tidak bisa tertimpa.
+
+  Tombol scan juga harus di dalam sini: `left: 50%` miliknya mengacu ke
+  pembungkus berposisi terdekat, dan kalau itu bar selebar layar, tombolnya
+  mendarat di tengah LAYAR, bukan di tengah kolom.
+*/
+.inner {
+  position: relative;
+  max-width: 402px;
+  margin: 0 auto;
+}
+
+.items {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  min-width: 0;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding-top: 8px;
+  color: #7fa9f6;
+  text-decoration: none;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+.linkActive {
+  color: #dee8fb;
+}
+
+.icon {
+  display: block;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  text-align: center;
+}
+
+/* ---- tombol scan melayang -------------------------------------------------- */
+
+.fab {
+  position: absolute;
+  left: 50%;
+  /* Bar mulai di y 921, tombol di 917 -> naik 4px dari tepi atas bar.
+     padding-top bar 12, jadi 12 - 4 = 8 dari tepi atas elemennya. */
+  top: 8px;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  color: #1b3b7d;
+}
+
+/* Garis tepi 4px bergradien — arah 180deg, kebalikan isinya. */
+.fab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 4px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.homeIndicator {
+  display: block;
+  width: 134px;
+  height: 5px;
+  /*
+    Sisa bawah 8. Sempat kuubah jadi 3 memakai kanvas Leaderboard (998), tapi
+    di sana navbarnya TERPOTONG: latarnya 909..1003, lewat 5px dari kanvas.
+    Kanvas Rewards (1120) memuatnya utuh — latar 1026..1120, indikator
+    1107..1112 — jadi 8 itu ukuran komponennya yang sebenarnya.
+  */
+  margin: 21px auto 8px;
+  border-radius: 100px;
+  background: #dee8fb;
+}
