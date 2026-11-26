@@ -24,7 +24,7 @@ export default async function QuestPage({ searchParams }: QuestPageProps) {
   const { tab } = await searchParams
 
   return (
-    <QuestPageShell>
+    <QuestPageShell activeTab="quests">
       <QuestHub
         stats={MOCK_STATS}
         flash={MOCK_FLASH}

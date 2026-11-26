@@ -18,8 +18,9 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* Dikurangi header quest (QuestPageShell) supaya tetap pas satu layar. */
-  min-height: calc(100dvh - var(--quest-header-h));
+  /* Dikurangi header DAN navigasi bawah (keduanya dipegang QuestPageShell)
+     supaya header + layar + nav pas satu layar. */
+  min-height: calc(100dvh - var(--quest-header-h) - var(--quest-nav-h));
   /*
     Satu kolom utuh — termasuk latar navigasi bawah, yang ada di dalamnya.
     Lihat --kolom-quest di globals.css; latar selebar layar dipegang

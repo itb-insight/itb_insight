@@ -6,8 +6,9 @@
   /* Ikut konvensi section quest: tumbuh mulus lalu berhenti di langit-langit.
      Lihat --kolom-quest di globals.css. Sebelumnya dipaku 402. */
   max-width: var(--kolom-quest);
-  /* Dikurangi header quest (QuestPageShell) supaya tetap pas satu layar. */
-  min-height: calc(100dvh - var(--quest-header-h));
+  /* Dikurangi header DAN navigasi bawah (keduanya dipegang QuestPageShell)
+     supaya header + layar + nav pas satu layar. */
+  min-height: calc(100dvh - var(--quest-header-h) - var(--quest-nav-h));
   margin: 0 auto;
   /* Gradien SENGAJA tidak digambar di sini: .shell (QuestPageShell) yang
      memegangnya untuk seluruh halaman. Kalau diulang di sini, dia mulai

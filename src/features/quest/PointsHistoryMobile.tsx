@@ -1,7 +1,6 @@
 import Link from "next/link"
 import { House } from "lucide-react"
 
-import QuestBottomNav from "./QuestBottomNav"
 import styles from "./PointsHistoryMobile.module.css"
 
 /**
@@ -130,7 +129,6 @@ export default function PointsHistoryMobile({
         </section>
       </div>
 
-      <QuestBottomNav active="rewards" />
     </div>
   )
 }

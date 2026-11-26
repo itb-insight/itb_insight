@@ -1,7 +1,6 @@
 import Link from "next/link"
 import { Check, Clock, House, Lock } from "lucide-react"
 
-import QuestBottomNav from "./QuestBottomNav"
 import styles from "./RewardsMobile.module.css"
 
 /** Tier: sudah terbuka, tier berikutnya yang dikejar, atau masih jauh. */
@@ -204,7 +203,6 @@ export default function RewardsMobile({
         ) : null}
       </div>
 
-      <QuestBottomNav active="rewards" />
     </div>
   )
 }

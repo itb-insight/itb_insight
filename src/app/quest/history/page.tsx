@@ -71,7 +71,7 @@ export default function PointsHistoryPage() {
   if (process.env.NODE_ENV === "production") notFound()
 
   return (
-    <QuestPageShell>
+    <QuestPageShell activeTab="rewards">
       <PointsHistoryMobile
         filters={[
           { label: "All", active: true },

@@ -6,7 +6,6 @@ import { useState } from "react"
 import FlashBanner from "./FlashBanner"
 import PointsCard from "./PointsCard"
 import QuestCard from "./QuestCard"
-import QuestBottomNav from "./QuestBottomNav"
 import { QuestHeader, QuestScreen } from "./QuestShell"
 import SideQuestSection from "./SideQuestSection"
 import styles from "./quest.module.css"
@@ -80,7 +79,6 @@ export default function QuestHub({
           </div>
         )}
       </div>
-      <QuestBottomNav active="quests" hrefs={{ quests: basePath }} />
     </QuestScreen>
   )
 }

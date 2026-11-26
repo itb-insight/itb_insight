@@ -21,6 +21,8 @@
   --kolom-quest: 900px;
   /* Tinggi header quest (QuestMobileHeader), dikurangkan dari tinggi tiap layar. */
   --quest-header-h: 99px;
+  /* Tinggi navigasi bawah quest, juga dikurangkan dari tinggi tiap layar. */
+  --quest-nav-h: 94px;
 
   /* Chart ramp — ORDINAL, not categorical.
      Six neutral steps on the #242424 card surface measure at chroma 0 with a
@@ -88,6 +90,19 @@ html {
   nilai yang sama — kalau tiap halaman punya angkanya sendiri, nav-nya berubah
   lebar tiap pindah tab.
 */
+
+/*
+  Header quest bertukar di 901px bersama navbar situs, dan yang desktop lebih
+  tinggi (141.26 di Figma; terukur 141.25 di render). Tingginya harus ikut
+  berganti di sini juga: akar tiap layar quest memakai
+  `calc(100dvh - var(--quest-header-h))`, jadi kalau nilainya tidak cocok,
+  layar yang mestinya pas satu layar jadi kelebihan dan tergulung.
+*/
+@media (min-width: 901px) {
+  :root {
+    --quest-header-h: 141.26px;
+  }
+}
 
 body {
   font-family: var(--font-primary);

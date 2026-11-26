@@ -26,8 +26,9 @@
      --kolom-quest di globals.css. */
   max-width: var(--kolom-quest);
   margin-inline: auto;
-  /* Dikurangi header quest (QuestPageShell) supaya tetap pas satu layar. */
-  height: calc(100dvh - var(--quest-header-h));
+  /* Dikurangi header DAN navigasi bawah (keduanya dipegang QuestPageShell)
+     supaya header + layar + nav pas satu layar. */
+  height: calc(100dvh - var(--quest-header-h) - var(--quest-nav-h));
   min-height: 600px;
   overflow: hidden;
   font-family: var(--font-primary), "Gabarito", sans-serif;
@@ -284,7 +285,12 @@
   position: absolute;
   left: 16px;
   right: 16px;
-  bottom: 106px;
+  /*
+    12, bukan 106. Di Figma kartunya 106 dari dasar frame karena 94 paling
+    bawah dipakai navigasi. Nav-nya sekarang di luar layar ini (QuestPageShell),
+    jadi 106 - 94 = 12 yang menyisakan jarak yang sama ke nav.
+  */
+  bottom: 12px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -347,12 +353,6 @@
 
 /* ---------- navbar ---------- */
 
-.nav {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
 
 .back:focus-visible,
 .chip:focus-visible {

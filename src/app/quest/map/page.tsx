@@ -17,7 +17,7 @@ export default function QuestMapPage() {
   if (process.env.NODE_ENV === "production") notFound()
 
   return (
-    <QuestPageShell>
+    <QuestPageShell activeTab="map">
       <QuestMap />
     </QuestPageShell>
   )

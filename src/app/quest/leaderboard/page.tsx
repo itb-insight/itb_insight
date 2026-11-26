@@ -41,7 +41,7 @@ export default function LeaderboardPage() {
   if (process.env.NODE_ENV === "production") notFound()
 
   return (
-    <QuestPageShell>
+    <QuestPageShell activeTab="board">
       <LeaderboardMobile
         podium={[PODIUM[0], PODIUM[1], PODIUM[2]]}
         rows={BARIS}

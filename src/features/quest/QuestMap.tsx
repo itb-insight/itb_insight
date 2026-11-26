@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { useEffect, useId, useRef, useState, type CSSProperties } from "react"
 
-import QuestBottomNav, { type QuestTab } from "./QuestBottomNav"
 import { ArrowLeftIcon, CheckIcon } from "./QuestIcons"
 import shared from "./quest-shared.module.css"
 import styles from "./QuestMap.module.css"
@@ -30,7 +29,6 @@ interface QuestMapProps {
   filters?: string[]
   spot?: QuestSpot
   backHref?: string
-  activeTab?: QuestTab
 }
 
 type Box = { x: number; y: number; w: number; h: number }
@@ -73,7 +71,6 @@ export default function QuestMap({
   filters = ["All", "Booths", "Landmarks", "Events"],
   spot = { initials: "LM", name: "Kolam Intel", meta: "Landmark | ~120 m  |  QR + photo", points: "+80" },
   backHref = "/quest",
-  activeTab = "map",
 }: QuestMapProps) {
   const uid = useId().replace(/:/g, "")
   const [filter, setFilter] = useState(filters[0])
@@ -199,9 +196,6 @@ export default function QuestMap({
         <p className={styles.spotPoints}>{spot.points}</p>
       </div>
 
-      <div className={styles.nav}>
-        <QuestBottomNav active={activeTab} />
-      </div>
     </section>
   )
 }

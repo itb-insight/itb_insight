@@ -85,7 +85,7 @@ export default function RewardsPage() {
   if (process.env.NODE_ENV === "production") notFound()
 
   return (
-    <QuestPageShell>
+    <QuestPageShell activeTab="rewards">
       <RewardsMobile
         wallet={{ spend: "648", lifetime: "1,248" }}
         claim={{

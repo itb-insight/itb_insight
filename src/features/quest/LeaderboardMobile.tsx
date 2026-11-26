@@ -2,7 +2,6 @@ import type { CSSProperties } from "react"
 import Link from "next/link"
 import { House, Info } from "lucide-react"
 
-import QuestBottomNav from "./QuestBottomNav"
 import styles from "./LeaderboardMobile.module.css"
 
 export interface PodiumEntry {
@@ -137,7 +136,6 @@ export default function LeaderboardMobile({
         ) : null}
       </div>
 
-      <QuestBottomNav active="board" />
     </div>
   )
 }

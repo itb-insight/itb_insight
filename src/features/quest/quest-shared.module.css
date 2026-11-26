@@ -11,9 +11,25 @@
   membawa .frameBg sendiri — tanpa ini, di luar kolom yang kelihatan
   latar body, bukan gradien quest.
 */
-.headerSlot {
+/* Header mobile ikut lebar kolom isi; yang desktop melintang selebar layar. */
+.headerMobile {
   max-width: var(--kolom-quest);
   margin-inline: auto;
+}
+
+.headerDesktop {
+  display: none;
+}
+
+/* 901px: patahan yang sama dengan navbar situs. */
+@media (min-width: 901px) {
+  .headerMobile {
+    display: none;
+  }
+
+  .headerDesktop {
+    display: block;
+  }
 }
 
 .shell {
