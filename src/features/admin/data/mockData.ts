@@ -49,7 +49,6 @@ export const MOCK_COMPETITIONS: CompetitionFunnelDto[] = [
     competition_name: "Hackathon Insight",
     started: 612,
     completed: 490,
-    checked_in: 371,
     completion_rate_pct: 80,
   },
   {
@@ -57,7 +56,6 @@ export const MOCK_COMPETITIONS: CompetitionFunnelDto[] = [
     competition_name: "Business Case Comp.",
     started: 544,
     completed: 381,
-    checked_in: 265,
     completion_rate_pct: 70,
   },
   {
@@ -65,7 +63,6 @@ export const MOCK_COMPETITIONS: CompetitionFunnelDto[] = [
     competition_name: "UI/UX Sprint",
     started: 398,
     completed: 210,
-    checked_in: 182,
     completion_rate_pct: 53,
   },
 ]

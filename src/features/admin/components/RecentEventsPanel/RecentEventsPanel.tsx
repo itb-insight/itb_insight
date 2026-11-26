@@ -1,6 +1,7 @@
 import { connection } from "next/server"
-import { getRecentEvents } from "../../data/adapters"
+import { dataSource, getRecentEvents } from "../../data/adapters"
 import Panel from "../Panel/Panel"
+import PanelUnavailable from "../Panel/PanelUnavailable"
 import styles from "./RecentEventsPanel.module.css"
 
 /** Renders metadata compactly without exposing nested structures. */
@@ -10,33 +11,40 @@ function formatMetadata(metadata: Record<string, string | number | boolean | nul
   return entries.map(([key, value]) => `${key}=${value}`).join(", ")
 }
 
-function formatTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString("en-GB", { hour12: false })
+const TIME = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Asia/Jakarta",
+  day: "2-digit",
+  month: "short",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: false,
+})
+
+function formatTime(timestamp: string): string {
+  const date = new Date(timestamp)
+  return Number.isNaN(date.getTime()) ? timestamp : TIME.format(date)
 }
 
 /**
- * The only live-data panel on the dashboard.
- *
- * `await connection()` is required: this reads mutable module state and
- * touches no other request-time API, so without it Next would prerender the
- * panel at build and serve a frozen empty list forever. Isolating it in its
- * own component keeps the surrounding mock-driven panels static.
+ * Latest raw events from PostHog. Wrapped in Suspense by the page so the other panels don't
+ * wait on it; `connection()` keeps it request-time (the PostHog read itself is cached ~30 s).
  */
 export default async function RecentEventsPanel() {
   await connection()
 
   const events = await getRecentEvents(40)
+  if (events === null) return <PanelUnavailable title="Recent Events" full />
+
+  const mock = dataSource() === "mock"
 
   return (
-    <Panel
-      title="Recent Events"
-      subtitle="Live raw event feed from this server process — most recent first"
-      full
-    >
+    <Panel title="Recent Events" subtitle="Latest events from the site, most recent first (WIB)" full>
       {events.length === 0 ? (
         <p className={styles.empty}>
-          No events captured yet. Browse the public site in another tab, then reload — the buffer
-          fills as batches arrive.
+          {mock
+            ? "No PostHog query key configured (POSTHOG_PROJECT_ID, POSTHOG_PERSONAL_API_KEY), so there is no live feed."
+            : "No events in the last 7 days."}
         </p>
       ) : (
         <div className={styles.scroll}>
@@ -55,7 +63,7 @@ export default async function RecentEventsPanel() {
                 <tr key={event.id}>
                   <td className={styles.time}>{formatTime(event.created_at)}</td>
                   <td className={styles.type}>{event.event_type}</td>
-                  <td className={styles.div}>{event.division}</td>
+                  <td className={styles.div}>{event.division ?? "—"}</td>
                   <td className={styles.path}>{event.page_path}</td>
                   <td className={styles.meta}>{formatMetadata(event.metadata)}</td>
                 </tr>
@@ -66,9 +74,8 @@ export default async function RecentEventsPanel() {
       )}
 
       <p className={styles.caveat}>
-        In-memory ring buffer, capped at 500 events and scoped to one server process. It clears on
-        restart and shows only a partial slice of traffic — it proves ingest works, it is not the
-        analytics store. Every other panel reads mock data.
+        From PostHog, last 7 days, refreshed about every 30 seconds. Sampled event types
+        (scroll_depth, section_impression) appear only for the sampled share.
       </p>
     </Panel>
   )

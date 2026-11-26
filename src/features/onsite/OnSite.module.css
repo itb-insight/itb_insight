@@ -1,0 +1,126 @@
+/* Floating cards for the D-day helpers (presence opt-in, feedback prompt, presence chip).
+   Bottom-centred, clear of the page content, full width minus a 16px gutter on phones. */
+
+.card {
+  position: fixed;
+  z-index: 60;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  width: min(420px, calc(100vw - 32px));
+  padding: 20px;
+  border: 1px solid rgba(172, 199, 255, 0.35);
+  border-radius: 16px;
+  background: #10204a;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+  font-family: var(--font-primary);
+}
+
+.cardTitle {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.cardText {
+  margin: 0;
+  font-size: 14px;
+  line-height: 21px;
+  color: #dee8fb;
+}
+
+.link {
+  color: #acc7ff;
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.primary,
+.secondary,
+.chipButton {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.primary {
+  border: 0;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  color: #1b3b7d;
+  font-weight: 600;
+}
+
+.secondary {
+  border: 1px solid rgba(222, 232, 251, 0.4);
+  background: transparent;
+  color: #dee8fb;
+}
+
+.primary:disabled,
+.secondary:disabled,
+.chipButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.primary:focus-visible,
+.secondary:focus-visible,
+.chipButton:focus-visible,
+.link:focus-visible {
+  outline: 2px solid #acc7ff;
+  outline-offset: 2px;
+}
+
+.chip {
+  position: fixed;
+  z-index: 60;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  max-width: calc(100vw - 32px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 8px 8px 8px 16px;
+  border: 1px solid rgba(172, 199, 255, 0.35);
+  border-radius: 14px;
+  background: #10204a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  font-family: var(--font-primary);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.chipButton {
+  min-height: 32px;
+  border: 1px solid rgba(222, 232, 251, 0.4);
+  background: transparent;
+  color: #dee8fb;
+}
+
+.debug {
+  flex-basis: 100%;
+  font-family: var(--font-roboto-mono), monospace;
+  font-size: 11px;
+  color: #acc7ff;
+}
+
+/* The feedback prompt sits above the presence chip when both are up. */
+.stacked {
+  bottom: 88px;
+}

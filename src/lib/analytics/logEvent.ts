@@ -8,6 +8,8 @@ interface LogEventOptions {
   division?: DivisionTag
   /** Bypasses sampling. Use for clicks and conversions — see trackClick. */
   force?: boolean
+  /** Send right away with a beacon. Only for events fired while the page is being hidden. */
+  urgent?: boolean
 }
 
 /**
@@ -35,6 +37,7 @@ export default function logEvent(
       pagePath: window.location.pathname,
       metadata,
       ts: Date.now(),
+      ...(options.urgent ? { urgent: true } : {}),
     })
   } catch {
     // Analytics must never break a page render or a click handler.

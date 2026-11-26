@@ -6,7 +6,6 @@
       {
         "id": "ba5731ceda13aed1",
         "type": "tabs",
-        "dimension": 53.15487571701721,
         "children": [
           {
             "id": "696c6d32523082a1",
@@ -38,25 +37,6 @@
           }
         ],
         "currentTab": 1
-      },
-      {
-        "id": "644bd59d96feb685",
-        "type": "tabs",
-        "dimension": 46.84512428298279,
-        "children": [
-          {
-            "id": "61f258f9e7e6ccb8",
-            "type": "leaf",
-            "state": {
-              "type": "image",
-              "state": {
-                "file": "public/images/timeline/v2/purple.png"
-              },
-              "icon": "lucide-image",
-              "title": "purple"
-            }
-          }
-        ]
       }
     ],
     "direction": "vertical"
@@ -118,7 +98,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "034e7f8a9a76fa28",
@@ -221,19 +202,25 @@
       "bases:Create new base": false
     }
   },
-  "active": "61f258f9e7e6ccb8",
+  "active": "28583da7a86a582b",
   "lastOpenFiles": [
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.bff51b6eadd3",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.62edfa1aa487",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.86bd0c2d78d9",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.0e34093f0f20",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.371cd1bd4034",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.980507d8df71",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.b7f2db20f874",
+    "src/features/booth-scan/BoothScanner.module.css",
+    "src/features/booth-scan/BoothScanner.module.css.tmp.25005.ee2dcdc1a0f5",
+    "src/features/booth-scan/BoothScanner.tsx",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.6c93dbf32081",
+    "docs/SIDEQUESTS.md",
+    "docs/EMAIL.md",
+    "docs/analytics/06-dday-presence.md",
+    "docs/analytics/02-posthog-setup.md",
     "docs/MAPS-NOTES.md",
-    "src/shared/hooks/useHasSession.test.ts",
-    "src/shared/hooks/useHasSession.ts.tmp.180708.ce88377eaaf6",
-    "src/features/events/location-tba.test.ts",
-    "src/lib/event-location.ts",
-    "src/lib/event-location.ts.tmp.165559.6093f37f9ba9",
-    "src/proxy.test.ts.tmp.130913.aa862de9a703",
-    "src/proxy.test.ts.tmp.130913.c7bde2c5c85e",
-    "src/proxy.ts.tmp.130913.5722b1baa188",
-    "src/features/auth/SignUpHifi/SignUpHifi.tsx.tmp.130913.3f9a70d9efb0",
-    "src/features/auth/LoginHifi/LoginHifi.tsx.tmp.130913.e357add9f1fc",
+    "public/images/timeline/v2/purple.png",
     "design-sources/README.md",
     "design-sources/images/dashboard-bg.png",
     "design-sources/images/gallery/mirror_logo.JPG",
@@ -244,7 +231,6 @@
     "design-sources/images/gallery/fountain.JPG",
     "design-sources/deco/decor2.png",
     "design-sources/images/shape10.png",
-    "design-sources/images/shape9.png",
     "docs/RELEASE-CHECKLIST.md",
     "public/itb-model/ITB-MODEL.md",
     "node_modules/jsqr/README.md",

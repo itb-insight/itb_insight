@@ -4,7 +4,7 @@ import FooterHifi from "@/shared/components/Footer/FooterHifi/FooterHifi"
 import styles from "./LegalPage.module.css"
 
 export const LEGAL_CONTACT_EMAIL = "itbinsight26@gmail.com"
-export const LEGAL_LAST_UPDATED = "17 November 2026"
+export const LEGAL_LAST_UPDATED = "25 November 2026"
 
 type LegalPageProps = {
   title: string

@@ -18,8 +18,8 @@ schema_version: 2
 - As a guest, visit public pages and request `/dashboard`; verify redirect to `/login?next=…`.
 - Authenticate, call or exercise ticket ensure, submit an individual registration, create/join a team, and submit as leader in a non-production test environment.
 - Verify a submitted team cannot be joined afterward.
-- Post a valid analytics batch to `/api/track`; confirm only the current process’s recent-event feed changes. Do not treat dashboard KPIs as results.
-- Confirm `/admin` is not exposed as a secure/admin-verified workflow; it is current public demo/mock state.
+- Browse a few pages with PostHog configured; confirm events reach PostHog through `/ingest` with no query strings, and appear in `/admin` Recent Events within ~30 s.
+- As a non-admin, confirm `/admin` is refused and `GET /api/admin/live` returns 403.
 
 ## Planned-feature test gates
 

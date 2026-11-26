@@ -5,7 +5,8 @@ import { useState } from "react"
 
 import { postWithAuth } from "@/features/dashboard/apiClient"
 
-import QrCameraScanner from "./QrCameraScanner"
+import { warningScreens, type BoothWarnings } from "@/features/booth-scan/types"
+import QrCameraScanner from "@/shared/components/QrCameraScanner/QrCameraScanner"
 import styles from "./QrPointsTester.module.css"
 
 type BoothOption = { id: string; name: string }
@@ -20,6 +21,8 @@ type Preview = {
   checkedIn: boolean
   alreadyVisited: boolean
   pointsToAward: number
+  bonusRemaining: number | null
+  warnings: BoothWarnings
 }
 
 type Award = {
@@ -79,7 +82,8 @@ export default function QrPointsTester({ booths }: { booths: BoothOption[] }) {
   async function handleConfirm(qrCode: string, preview: Preview) {
     setPhase({ kind: "loading", label: "Memberi poin…" })
     try {
-      const award = await call<Award>({ qrCode, confirmSkippedGate: true })
+      // The dialog showed the preview's warnings, so confirming acknowledges them.
+      const award = await call<Award>({ qrCode, confirmSkippedGate: true, confirmWarnings: true })
       setPhase({ kind: "done", award })
       addLog({
         name: award.visitor.fullName,
@@ -215,9 +219,11 @@ export default function QrPointsTester({ booths }: { booths: BoothOption[] }) {
               {phase.preview.visitor.institution ? `${phase.preview.visitor.institution} · ` : ""}
               {boothLabel(phase.preview.booth)}
             </p>
-            {phase.preview.alreadyVisited && (
-              <p className={styles.warn}>Pengunjung ini sudah pernah diberi poin di booth ini; poin tidak akan bertambah.</p>
-            )}
+            {warningScreens(phase.preview).map((screen) => (
+              <p key={screen.key} className={styles.warn}>
+                <strong>{screen.title}</strong> {screen.body}
+              </p>
+            ))}
             {phase.preview.booth && !phase.preview.checkedIn && (
               <p className={styles.warn}>Belum absen di gate. Jika diberi poin, pengunjung dicatat hadir (skipped gate).</p>
             )}

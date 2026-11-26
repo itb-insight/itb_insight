@@ -18,7 +18,7 @@ export async function updateProfile(_prev: ProfileState, formData: FormData): Pr
     if (!full_name || !phone || !institution) {
         return { ok: false, message: 'Semua kolom wajib diisi.' };
     }
-    // Same limits as the profiles_field_lengths constraint (0007_security_hardening).
+    // Same limits as the profiles_field_lengths constraint (0023_security_hardening).
     if (full_name.length > 120 || phone.length > 32 || institution.length > 200) {
         return { ok: false, message: 'Isian terlalu panjang.' };
     }

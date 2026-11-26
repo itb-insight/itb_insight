@@ -19,9 +19,7 @@ import { listFiles, readText } from '../support/repo'
 const WRITE_POLICY_EXCEPTIONS: Record<string, string> = {}
 
 /** Version prefix -> why the duplicate is tolerated. Never add new ones. */
-const KNOWN_DUPLICATE_VERSIONS: Record<string, string> = {
-  '0007': 'Already applied; renaming would re-run it. Verify both 0007 files ran in every environment.',
-}
+const KNOWN_DUPLICATE_VERSIONS: Record<string, string> = {}
 
 const files = listFiles('supabase/migrations', /\.sql$/)
 

@@ -4,7 +4,7 @@ schema_version: 3
 
 ## Current state
 
-`/admin*` is public demo/mock UI. `admin_roles` then `ADMIN_EMAILS` exists only as an unused helper. `GET /api/admin/events` is public and analytics metrics are volatile/mock. This is not final PRD RBAC.
+`/admin*` is admin-only (`src/app/admin/layout.tsx`; roles from `admin_roles`, `profiles.role_a`, or a confirmed `ADMIN_EMAILS` address). Its analytics panels read PostHog and Supabase through `src/features/admin/data/adapters.ts` (mock web figures only when PostHog query credentials are unset), with a D-day live section polling `GET /api/admin/live` every 30 s. See [analytics/04-dashboards-and-data-seam.md](analytics/04-dashboards-and-data-seam.md).
 
 ## Final PRD target
 

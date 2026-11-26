@@ -34,8 +34,8 @@ export default function DivisionActivityPanel({ data, total }: DivisionActivityP
 
   return (
     <Panel
-      title="Today's Activity by Division"
-      subtitle={`${total.toLocaleString()} events logged today`}
+      title="Activity by Division"
+      subtitle={`${total.toLocaleString()} events, last 7 days (sampled events scaled up)`}
       full
       action={
         <button

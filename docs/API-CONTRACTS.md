@@ -11,14 +11,17 @@ Only **Current** rows are implemented.
 | `POST /api/tickets/ensure` | Current | Authenticated create/reuse of a `visitor_tickets` QR ticket. |
 | `POST /api/registrations/individual`, `POST /api/teams`, `POST /api/teams/join`, `POST /api/registrations/team` | Current | Authenticated registration/team workflow. |
 | `POST /api/check-in/scan`, `POST /api/check-in/self`, `POST /api/check-in/manual` | Current | Gate scanner (staff), self-scan, and manual lookup with duplicate prevention. |
-| `GET /api/booths`, `POST /api/booths/scan`, `GET /api/booths/progress` | Current | Booth catalog, gate-dependent visit scanning, and gamification progress. |
+| `GET /api/booths`, `POST /api/booths/scan`, `GET /api/booths/progress` | Current | Booth catalog, staff QR point awards (base once per booth, capped repeat bonus, warnings confirmed with `confirmWarnings`; rules in `docs/SIDEQUESTS.md`), and gamification progress. |
 | `GET /api/rsvp/[token]`, `POST /api/rsvp/[token]` | Current | Tokenized RSVP invitations and response submission with substitution support. |
 | `GET/POST /api/feedback/[slug]`, `GET /api/feedback?form=` | Current | Configurable feedback forms (public form + submit) and staff summary. See `docs/FEEDBACK.md`. |
 | `GET /api/partners`, `POST /api/partners/inquiry` | Current | Tiered partners listing and integrated inquiry submission. |
 | `POST /api/payments/create`, `POST /api/payments/webhook`, `GET /api/payments/status` | Current | Midtrans Snap session creation (server-side fee), verified webhook, and status retry. |
 | `GET /api/admin/stats`, `GET /api/admin/export` | Current | Live analytics statistics and audited CSV data export (registrations, visitors, feedback `&form=<slug>`, rsvp). |
 | `GET /api/admin/inspirates`, `POST /api/admin/inspirates` | Current | Inspirates dissemination records for field staff. |
-| `POST /api/track`, `GET /api/admin/events` | Current | Analytics ingest (in-memory ring buffer + persistent Supabase insert) and feed. |
+| `GET /api/admin/live` | Current | Admin-only D-day live figures (on site, venue time, booths, website now), 30 s server cache. |
+| `GET /api/presence/config`, `POST/DELETE /api/presence/consent`, `POST /api/presence/ping` | Current | Opt-in booth presence. See `docs/analytics/06-dday-presence.md`. |
+| `GET /api/feedback/pending` | Current | Open feedback forms the signed-in attendee hasn't submitted (in-app prompts). |
+| `/ingest/*` | Current | Rewrite to PostHog (`next.config.ts`); not an app route. |
 | `/login`, `/auth/callback`, `/dashboard*` | Current | Login/callback and participant dashboard. Only `/dashboard*` is protected. |
 
 ## PRD target mapping

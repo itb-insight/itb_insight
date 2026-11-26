@@ -1,16 +1,16 @@
 # The Drone Cube
 
-> Its telemetry currently enters the volatile analytics pipeline and must not be treated as a
-> durable operational metric; see [00-overview.md](00-overview.md).
+> Its telemetry goes to PostHog and feeds the 3D Engagement Health panel in `/admin`; see
+> [00-overview.md](00-overview.md).
 
 `src/features/drone/` — a minimal Three.js cube standing in for the 'drone' component.
 
 ## Why it exists
 
 Not for the visual. The point is to have a **real GPU-bound thing to instrument**. The component
-emits actual WebGL timing telemetry, but the current Engagement dashboard still displays mock,
-non-authoritative values and does not aggregate this telemetry. Once durable ingestion and real-data
-adapters exist, device variance can help distinguish low interest from a component that never loaded.
+emits actual WebGL timing telemetry, and the Engagement panel shows its p50/p90 next to scroll depth
+by device class. Together with the impression, that tells low interest apart from a component that
+never loaded. (A per-device split of `readyMs` is a HogQL query away if it's ever needed.)
 
 ## Usage
 
@@ -38,12 +38,9 @@ Emits `drone_ready` with `readyMs` — **mount to first rendered frame**.
 ### This is not time-to-interactive
 
 Real TTI is not measurable from userland. Calling this number TTI would misrepresent it, so the
-event field is named `drone_ready_ms`. The current Engagement panel is mock-backed; any future
-real-data adapter must label this value as mount-to-first-frame rather than time-to-interactive.
+event field is named `drone_ready_ms`, and the Engagement panel labels it mount-to-first-frame.
 
-Genuine LCP / INP / TTFB come from `useReportWebVitals` in `AnalyticsRoot` and land as `web_vital`
-events. They and `drone_ready_ms` currently enter only the volatile event pipeline; neither is a
-durable dashboard metric yet.
+Genuine LCP / INP / CLS come from PostHog's web vitals capture (`$web_vitals` events).
 
 `drone_context_lost` fires if the WebGL context is lost or never obtainable — on a device with no
 WebGL the component degrades quietly rather than throwing.
