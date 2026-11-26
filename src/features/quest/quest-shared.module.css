@@ -11,6 +11,11 @@
   membawa .frameBg sendiri — tanpa ini, di luar kolom yang kelihatan
   latar body, bukan gradien quest.
 */
+.headerSlot {
+  max-width: var(--kolom-quest);
+  margin-inline: auto;
+}
+
 .shell {
   min-height: 100dvh;
   background: linear-gradient(180deg, #091b3f 0%, #294d97 100%);

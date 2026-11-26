@@ -3,10 +3,15 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 402px;
-  min-height: 100dvh;
+  /* Ikut konvensi section quest: tumbuh mulus lalu berhenti di langit-langit.
+     Lihat --kolom-quest di globals.css. Sebelumnya dipaku 402. */
+  max-width: var(--kolom-quest);
+  /* Dikurangi header quest (QuestPageShell) supaya tetap pas satu layar. */
+  min-height: calc(100dvh - var(--quest-header-h));
   margin: 0 auto;
-  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%);
+  /* Gradien SENGAJA tidak digambar di sini: .shell (QuestPageShell) yang
+     memegangnya untuk seluruh halaman. Kalau diulang di sini, dia mulai
+     lagi dari 0% di bawah header dan muncul sambungan di garis itu. */
   color: #fff;
   font-family: var(--font-primary), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -17,9 +22,6 @@
   padding: 0 17px 40px;
 }
 
-.withNav {
-  padding-bottom: 130px;
-}
 
 .header {
   position: relative;
@@ -622,87 +624,16 @@
   color: transparent;
 }
 
-.nav {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  z-index: 10;
-  width: 100%;
-  max-width: 402px;
-  height: 94px;
-  transform: translateX(-50%);
-  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%);
-}
 
-.navList {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  align-items: start;
-  height: 100%;
-  margin: 0;
-  padding: 12px 0 0;
-  list-style: none;
-}
 
-.navItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: #7fa9f6;
-  font-family: inherit;
-  font-size: 12px;
-  line-height: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-}
 
-.navItemActive {
-  color: #dee8fb;
-}
 
-.navIcon {
-  display: grid;
-  place-items: center;
-  height: 21px;
-}
 
-.scanButton {
-  composes: frame;
-  --gb-gradient: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
-  --gb-width: 4px;
-  display: grid;
-  place-items: center;
-  box-sizing: border-box;
-  width: 52px;
-  height: 52px;
-  margin: -2px auto 0;
-  padding: 0;
-  border: 0;
-  border-radius: 16px;
-  background: linear-gradient(180deg, #acc7ff 0%, #dee8fb 100%);
-  color: #1b3b7d;
-  cursor: pointer;
-}
 
 .scanButton::before {
   --gb-width: 4px;
 }
 
-.homeIndicator {
-  position: absolute;
-  bottom: 9px;
-  left: 50%;
-  width: 134px;
-  height: 5px;
-  border-radius: 3px;
-  background: #dee8fb;
-  transform: translateX(-50%);
-}
 
 .detailBody {
   display: flex;

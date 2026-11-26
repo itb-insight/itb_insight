@@ -19,6 +19,8 @@
 
   /* Langit-langit lebar kolom section quest. Lihat catatan di atas body. */
   --kolom-quest: 900px;
+  /* Tinggi header quest (QuestMobileHeader), dikurangkan dari tinggi tiap layar. */
+  --quest-header-h: 99px;
 
   /* Chart ramp — ORDINAL, not categorical.
      Six neutral steps on the #242424 card surface measure at chroma 0 with a

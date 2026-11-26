@@ -1,8 +1,14 @@
+/*
+ * Kerangka layar Quest Mode. Navigasi bawahnya DIBUANG dari sini: ada dua
+ * implementasi dengan nama sama di folder ini, dan yang dipakai adalah
+ * ./QuestBottomNav (punya Nagita) karena di versi ini tab Map, Board dan
+ * Rewards cuma <button> mati, bukan Link.
+ */
 import clsx from "clsx"
 import Link from "next/link"
 import type { ReactNode } from "react"
 
-import { BackIcon, BoardNavIcon, HomeIcon, MapNavIcon, QuestsNavIcon, RewardsNavIcon, ScanIcon } from "./icons"
+import { BackIcon, HomeIcon } from "./icons"
 import styles from "./quest.module.css"
 
 interface QuestHeaderProps {
@@ -34,59 +40,6 @@ export function BackButton({ href }: BackButtonProps) {
         <BackIcon />
       </Link>
     </div>
-  )
-}
-
-interface QuestBottomNavProps {
-  active?: "quests" | "map" | "board" | "rewards"
-  questsHref: string
-}
-
-export function QuestBottomNav({ active = "quests", questsHref }: QuestBottomNavProps) {
-  const itemClass = (key: string) => clsx(styles.navItem, active === key && styles.navItemActive)
-  return (
-    <nav className={styles.nav} aria-label="Quest navigation">
-      <ul className={styles.navList}>
-        <li>
-          <Link href={questsHref} className={itemClass("quests")} aria-current={active === "quests" ? "page" : undefined}>
-            <span className={styles.navIcon}>
-              <QuestsNavIcon />
-            </span>
-            Quests
-          </Link>
-        </li>
-        <li>
-          <button type="button" className={itemClass("map")}>
-            <span className={styles.navIcon}>
-              <MapNavIcon />
-            </span>
-            Map
-          </button>
-        </li>
-        <li>
-          <button type="button" className={styles.scanButton} aria-label="Scan">
-            <ScanIcon />
-          </button>
-        </li>
-        <li>
-          <button type="button" className={itemClass("board")}>
-            <span className={styles.navIcon}>
-              <BoardNavIcon />
-            </span>
-            Board
-          </button>
-        </li>
-        <li>
-          <button type="button" className={itemClass("rewards")}>
-            <span className={styles.navIcon}>
-              <RewardsNavIcon />
-            </span>
-            Rewards
-          </button>
-        </li>
-      </ul>
-      <span className={styles.homeIndicator} aria-hidden="true" />
-    </nav>
   )
 }
 

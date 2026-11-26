@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 
 import RewardsMobile from "@/features/quest/RewardsMobile"
-import shared from "@/features/quest/quest-shared.module.css"
+import QuestPageShell from "@/features/quest/QuestPageShell"
 import type { RewardEntry, TierEntry } from "@/features/quest/RewardsMobile"
 
 export const metadata = {
@@ -85,7 +85,7 @@ export default function RewardsPage() {
   if (process.env.NODE_ENV === "production") notFound()
 
   return (
-    <div className={shared.shell}>
+    <QuestPageShell>
       <RewardsMobile
         wallet={{ spend: "648", lifetime: "1,248" }}
         claim={{
@@ -103,6 +103,6 @@ export default function RewardsPage() {
           note: "Winner announced at 18:00 on the mainstage. Bring your student card or ID for verification.",
         }}
       />
-    </div>
+    </QuestPageShell>
   )
 }

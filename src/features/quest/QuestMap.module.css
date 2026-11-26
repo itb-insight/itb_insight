@@ -14,13 +14,20 @@
  * lebar posisinya tetap sama terhadap tengah layar.
  */
 
+/*
+  Akar layar ini SENGAJA tidak menggambar gradien (shared.frameBg sudah
+  dilepas dari JSX-nya): .shell milik QuestPageShell yang memegangnya untuk
+  seluruh halaman. Kalau digambar lagi di sini, gradiennya mulai dari 0%
+  lagi di bawah header dan muncul sambungan di garis itu.
+*/
 .page {
   position: relative;
   /* Kolomnya dibatasi dan ditengahkan seperti halaman quest lain; lihat
      --kolom-quest di globals.css. */
   max-width: var(--kolom-quest);
   margin-inline: auto;
-  height: 100dvh;
+  /* Dikurangi header quest (QuestPageShell) supaya tetap pas satu layar. */
+  height: calc(100dvh - var(--quest-header-h));
   min-height: 600px;
   overflow: hidden;
   font-family: var(--font-primary), "Gabarito", sans-serif;

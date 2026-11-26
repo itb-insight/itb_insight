@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 
 import QuestMap from "@/features/quest/QuestMap"
-import shared from "@/features/quest/quest-shared.module.css"
+import QuestPageShell from "@/features/quest/QuestPageShell"
 
 export const metadata = {
   title: "Quest Map | ITB Insight",
@@ -17,8 +17,8 @@ export default function QuestMapPage() {
   if (process.env.NODE_ENV === "production") notFound()
 
   return (
-    <div className={shared.shell}>
+    <QuestPageShell>
       <QuestMap />
-    </div>
+    </QuestPageShell>
   )
 }

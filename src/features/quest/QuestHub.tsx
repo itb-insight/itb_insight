@@ -6,7 +6,8 @@ import { useState } from "react"
 import FlashBanner from "./FlashBanner"
 import PointsCard from "./PointsCard"
 import QuestCard from "./QuestCard"
-import { QuestBottomNav, QuestHeader, QuestScreen } from "./QuestShell"
+import QuestBottomNav from "./QuestBottomNav"
+import { QuestHeader, QuestScreen } from "./QuestShell"
 import SideQuestSection from "./SideQuestSection"
 import styles from "./quest.module.css"
 import type { EasterEgg, QuestCollection, QuestItem, QuestStats } from "./types"
@@ -43,7 +44,7 @@ export default function QuestHub({
 
   return (
     <QuestScreen>
-      <div className={clsx(styles.body, styles.withNav)}>
+      <div className={styles.body}>
         <QuestHeader compact={tab === "side"} showHome={tab === "main"} />
         <PointsCard stats={stats} compact={tab === "side"} />
         <FlashBanner title={flash.title} description={flash.description} secondsLeft={flash.secondsLeft} />
@@ -79,7 +80,7 @@ export default function QuestHub({
           </div>
         )}
       </div>
-      <QuestBottomNav questsHref={basePath} />
+      <QuestBottomNav active="quests" hrefs={{ quests: basePath }} />
     </QuestScreen>
   )
 }

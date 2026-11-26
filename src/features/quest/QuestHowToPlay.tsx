@@ -70,7 +70,7 @@ export default function QuestHowToPlay({
   }
 
   return (
-    <section className={`${styles.page} ${shared.frameBg}`} aria-labelledby={`${uid}-title`}>
+    <section className={styles.page} aria-labelledby={`${uid}-title`}>
       <button type="button" onClick={onClose} className={styles.close} aria-label="Kembali">
         <CancelIcon uid={`${uid}-cancel`} />
       </button>

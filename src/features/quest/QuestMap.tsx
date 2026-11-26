@@ -96,7 +96,7 @@ export default function QuestMap({
   }, [filters])
 
   return (
-    <section className={`${styles.page} ${shared.frameBg}`} aria-label={title}>
+    <section className={styles.page} aria-label={title}>
       <div className={styles.grid} aria-hidden="true" />
 
       <div className={styles.canvas} aria-hidden="true">

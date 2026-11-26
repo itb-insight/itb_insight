@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 
 import LeaderboardMobile from "@/features/quest/LeaderboardMobile"
-import shared from "@/features/quest/quest-shared.module.css"
+import QuestPageShell from "@/features/quest/QuestPageShell"
 
 export const metadata = {
   title: "Leaderboard | ITB Insight",
@@ -41,7 +41,7 @@ export default function LeaderboardPage() {
   if (process.env.NODE_ENV === "production") notFound()
 
   return (
-    <div className={shared.shell}>
+    <QuestPageShell>
       <LeaderboardMobile
         podium={[PODIUM[0], PODIUM[1], PODIUM[2]]}
         rows={BARIS}
@@ -53,6 +53,6 @@ export default function LeaderboardPage() {
           points: "1.248",
         }}
       />
-    </div>
+    </QuestPageShell>
   )
 }

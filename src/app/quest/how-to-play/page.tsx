@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation"
 
 import QuestHowToPlay from "@/features/quest/QuestHowToPlay"
-import shared from "@/features/quest/quest-shared.module.css"
+import QuestPageShell from "@/features/quest/QuestPageShell"
 import { createClient } from "@/lib/supabase/server"
 
 export const metadata = {
@@ -36,8 +36,8 @@ export default async function QuestHowToPlayPage() {
   if (!user) redirect("/login?next=/quest/how-to-play")
 
   return (
-    <div className={shared.shell}>
+    <QuestPageShell>
       <QuestHowToPlay />
-    </div>
+    </QuestPageShell>
   )
 }

@@ -18,7 +18,8 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  min-height: 100dvh;
+  /* Dikurangi header quest (QuestPageShell) supaya tetap pas satu layar. */
+  min-height: calc(100dvh - var(--quest-header-h));
   /*
     Satu kolom utuh — termasuk latar navigasi bawah, yang ada di dalamnya.
     Lihat --kolom-quest di globals.css; latar selebar layar dipegang
@@ -26,8 +27,9 @@
   */
   max-width: var(--kolom-quest);
   margin-inline: auto;
-  /* Gradien ditulis duluan: di Figma dia bertumpuk di atas fill #091B3F. */
-  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%), #091b3f;
+  /* Gradien SENGAJA tidak digambar di sini: .shell (QuestPageShell) yang
+     memegangnya untuk seluruh halaman. Kalau diulang di sini, dia mulai
+     lagi dari 0% di bawah header dan muncul sambungan di garis itu. */
   color: #ffffff;
   font-family: var(--font-primary), "Gabarito", sans-serif;
 }
