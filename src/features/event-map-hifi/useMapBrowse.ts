@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react"
 
-import type { MapCategory } from "./mapCategories"
+import { MAP_CATEGORIES, type MapCategory } from "./mapCategories"
 import { locationsByCategory, type MapLocation } from "./mapLocations"
 
 export interface MapBrowse {
@@ -11,11 +11,14 @@ export interface MapBrowse {
   places: MapLocation[]
   openCategoryBy: (category: MapCategory) => void
   openPlaceBy: (place: MapLocation) => void
+  /** Open a place from outside the list (e.g. its pin on the map), with its category behind it. */
+  showPlace: (place: MapLocation) => void
   backToCategories: () => void
   backToPlaces: () => void
 }
 
-export function useMapBrowse(): MapBrowse {
+/** `onOpenPlace` runs whenever a place is opened, e.g. to focus the map on it. */
+export function useMapBrowse(onOpenPlace?: (place: MapLocation) => void): MapBrowse {
   const [openCategory, setOpenCategory] = useState<MapCategory | null>(null)
   const [openPlace, setOpenPlace] = useState<MapLocation | null>(null)
 
@@ -26,7 +29,21 @@ export function useMapBrowse(): MapBrowse {
     setOpenPlace(null)
   }, [])
 
-  const openPlaceBy = useCallback((place: MapLocation) => setOpenPlace(place), [])
+  const openPlaceBy = useCallback(
+    (place: MapLocation) => {
+      setOpenPlace(place)
+      onOpenPlace?.(place)
+    },
+    [onOpenPlace],
+  )
+
+  const showPlace = useCallback(
+    (place: MapLocation) => {
+      setOpenCategory(MAP_CATEGORIES.find((c) => c.id === place.category) ?? null)
+      openPlaceBy(place)
+    },
+    [openPlaceBy],
+  )
 
   const backToCategories = useCallback(() => {
     setOpenCategory(null)
@@ -41,6 +58,7 @@ export function useMapBrowse(): MapBrowse {
     places,
     openCategoryBy,
     openPlaceBy,
+    showPlace,
     backToCategories,
     backToPlaces,
   }

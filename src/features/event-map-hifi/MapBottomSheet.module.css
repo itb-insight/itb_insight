@@ -168,3 +168,14 @@
   object-fit: cover;
   margin-top: 16px;
 }
+
+.about {
+  margin: 16px 18px 0 23px;
+  font-size: 15px;
+  line-height: 22px;
+  color: #ffffff;
+}
+
+.links {
+  margin: 16px 18px 0 23px;
+}

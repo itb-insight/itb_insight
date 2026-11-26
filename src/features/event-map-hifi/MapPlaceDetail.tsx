@@ -2,11 +2,8 @@ import Image from "next/image"
 
 import styles from "./MapPlaceDetail.module.css"
 import { ArrowLeftIcon } from "./CategoryIcons"
-import {
-  MAP_PLACEHOLDER_ABOUT,
-  MAP_PLACEHOLDER_DETAIL_IMAGE,
-  type MapLocation,
-} from "./mapLocations"
+import MapPlaceLinks from "./MapPlaceLinks"
+import type { MapLocation } from "./mapLocations"
 
 interface MapPlaceDetailProps {
   location: MapLocation
@@ -30,16 +27,21 @@ export default function MapPlaceDetail({ location, onBack, onNavigate }: MapPlac
         </button>
       </div>
 
-      <Image
-        src={location.detailImage ?? MAP_PLACEHOLDER_DETAIL_IMAGE}
-        alt=""
-        width={454}
-        height={259}
-        className={styles.image}
-        loading="eager"
-      />
+      {location.detailImage ? (
+        <Image
+          src={location.detailImage}
+          alt=""
+          width={454}
+          height={259}
+          sizes="454px"
+          loading="eager"
+          className={styles.image}
+        />
+      ) : null}
 
-      <p className={styles.about}>{location.about ?? MAP_PLACEHOLDER_ABOUT}</p>
+      {location.about ? <p className={styles.about}>{location.about}</p> : null}
+
+      <MapPlaceLinks links={location.links} className={styles.links} />
 
       <button type="button" className={styles.navigate} onClick={() => onNavigate?.(location)}>
         Navigate

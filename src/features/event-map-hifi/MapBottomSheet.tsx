@@ -8,7 +8,8 @@ import { ArrowLeftIcon } from "./CategoryIcons"
 import CategoryRow from "./CategoryRow"
 import MapPlaceCard from "./MapPlaceCard"
 import { MAP_CATEGORIES } from "./mapCategories"
-import { MAP_PLACEHOLDER_DETAIL_IMAGE, type MapLocation } from "./mapLocations"
+import MapPlaceLinks from "./MapPlaceLinks"
+import type { MapLocation } from "./mapLocations"
 import type { MapBrowse } from "./useMapBrowse"
 
 interface MapBottomSheetProps {
@@ -61,14 +62,21 @@ export default function MapBottomSheet({ browse, onNavigate }: MapBottomSheetPro
               Navigate
             </button>
 
-            <Image
-              src={openPlace.detailImage ?? MAP_PLACEHOLDER_DETAIL_IMAGE}
-              alt=""
-              width={393}
-              height={259}
-              className={styles.image}
-              loading="eager"
-            />
+            {openPlace.about ? <p className={styles.about}>{openPlace.about}</p> : null}
+
+            <MapPlaceLinks links={openPlace.links} className={styles.links} />
+
+            {openPlace.detailImage ? (
+              <Image
+                src={openPlace.detailImage}
+                alt=""
+                width={393}
+                height={259}
+                sizes="100vw"
+                loading="eager"
+                className={styles.image}
+              />
+            ) : null}
           </>
         ) : openCategory ? (
           <>

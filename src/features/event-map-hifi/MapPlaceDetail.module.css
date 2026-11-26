@@ -90,3 +90,7 @@
   color: #1b3b7d;
   cursor: pointer;
 }
+
+.links {
+  margin: 32px var(--gutter-right) 0 var(--gutter-left);
+}
