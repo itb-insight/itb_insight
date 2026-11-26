@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 
 import RewardsMobile from "@/features/quest/RewardsMobile"
+import shared from "@/features/quest/quest-shared.module.css"
 import type { RewardEntry, TierEntry } from "@/features/quest/RewardsMobile"
 
 export const metadata = {
@@ -84,22 +85,24 @@ export default function RewardsPage() {
   if (process.env.NODE_ENV === "production") notFound()
 
   return (
-    <RewardsMobile
-      wallet={{ spend: "648", lifetime: "1,248" }}
-      claim={{
-        status: "READY TO CLAIM . VALID 04:52",
-        name: "ITB Insight Sticker Pack",
-        note: "Show QR to merch-desk staff. Points are taken once they confirm.",
-        action: "Show QR",
-      }}
-      historyHref="/quest/history"
-      tiers={TIERS}
-      rewards={REWARDS}
-      youAre={{
-        rank: "#37",
-        title: "Door prize for Top 3 on the leaderboard",
-        note: "Winner announced at 18:00 on the mainstage. Bring your student card or ID for verification.",
-      }}
-    />
+    <div className={shared.shell}>
+      <RewardsMobile
+        wallet={{ spend: "648", lifetime: "1,248" }}
+        claim={{
+          status: "READY TO CLAIM . VALID 04:52",
+          name: "ITB Insight Sticker Pack",
+          note: "Show QR to merch-desk staff. Points are taken once they confirm.",
+          action: "Show QR",
+        }}
+        historyHref="/quest/history"
+        tiers={TIERS}
+        rewards={REWARDS}
+        youAre={{
+          rank: "#37",
+          title: "Door prize for Top 3 on the leaderboard",
+          note: "Winner announced at 18:00 on the mainstage. Bring your student card or ID for verification.",
+        }}
+      />
+    </div>
   )
 }

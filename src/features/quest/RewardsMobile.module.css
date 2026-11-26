@@ -19,22 +19,21 @@
   flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
+  /*
+    Satu kolom utuh — termasuk latar navigasi bawah, yang ada di dalamnya.
+    Lihat --kolom-quest di globals.css; latar selebar layar dipegang
+    .shell di route-nya.
+  */
+  max-width: var(--kolom-quest);
+  margin-inline: auto;
   background: linear-gradient(180deg, #091b3f 0%, #294d97 100%), #091b3f;
   color: #ffffff;
   font-family: var(--font-primary), "Gabarito", sans-serif;
-  /*
-    Lebar kolom dipegang satu properti supaya navigasi bawah — yang modul CSS-nya
-    terpisah — ikut sendiri. Nama properti kustom TIDAK diacak CSS Modules, jadi
-    nilainya tembus ke QuestBottomNav yang berada di dalam .page.
-  */
-  --kolom-quest: 402px;
 }
 
 .isi {
   flex: 1;
   width: 100%;
-  max-width: var(--kolom-quest);
-  margin: 0 auto;
   /* 27 bawah: kartu You Are berakhir 999, latar navigasi mulai 1026. */
   padding: 31px 16px 27px;
   box-sizing: border-box;
@@ -591,17 +590,4 @@
   font-size: 12px;
   line-height: 14px;
   color: #dee8fb;
-}
-
-/* ---- tablet ---------------------------------------------------------------- */
-
-/*
-  Di sini cuma lebar kolomnya yang berubah. Kartu tier, baris belanja dan kartu
-  dompet semuanya baris mendatar yang memang melebar sendiri mengikuti kolom —
-  menaikkan tingginya juga cuma akan membuatnya kelihatan menggembung.
-*/
-@media (min-width: 768px) {
-  .page {
-    --kolom-quest: 600px;
-  }
 }

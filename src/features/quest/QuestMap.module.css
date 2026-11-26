@@ -16,6 +16,10 @@
 
 .page {
   position: relative;
+  /* Kolomnya dibatasi dan ditengahkan seperti halaman quest lain; lihat
+     --kolom-quest di globals.css. */
+  max-width: var(--kolom-quest);
+  margin-inline: auto;
   height: 100dvh;
   min-height: 600px;
   overflow: hidden;

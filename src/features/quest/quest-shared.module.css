@@ -5,6 +5,17 @@
  * sebagai sudut CSS. "0deg" = warna pertama di BAWAH, "180deg" = warna pertama di ATAS.
  */
 
+/*
+  Pembungkus halaman: latar gradien selebar layar, isinya dibatasi
+  --kolom-quest (lihat globals.css). Dipakai di route yang komponennya
+  membawa .frameBg sendiri — tanpa ini, di luar kolom yang kelihatan
+  latar body, bukan gradien quest.
+*/
+.shell {
+  min-height: 100dvh;
+  background: linear-gradient(180deg, #091b3f 0%, #294d97 100%);
+}
+
 /* Latar semua frame Section 2: #091b3f (atas) -> #294d97 (bawah). */
 .frameBg {
   background: linear-gradient(180deg, #091b3f 0%, #294d97 100%);

@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 
 import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
 import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
@@ -14,13 +14,37 @@ const LINKS = [
   { href: "/competition", label: "Competition" },
 ]
 
+/*
+  Quest belum tayang: /quest/how-to-play 404 di produksi, jadi menunya pun cuma
+  muncul saat development — percuma memasang menu publik yang menuju 404.
+  Hapus syarat ini bersamaan dengan notFound() di halaman itu.
+
+  Href-nya selalu how-to-play, juga untuk yang belum masuk: halaman itu yang
+  mengalihkan ke /login?next=... Menukar href di sini tidak dipakai karena
+  useHasSession() mengembalikan false sampai hidrasi selesai, jadi tautannya
+  akan sempat menunjuk /login walau pengguna sudah masuk.
+*/
+const MENU_LINKS =
+  process.env.NODE_ENV === "production"
+    ? LINKS
+    : [...LINKS, { href: "/quest/how-to-play", label: "Quest" }]
+
 export default function MobileMenuHifi({
   variant = "navbar",
   countdownOnly = false,
+  trigger,
+  wrapClassName,
 }: {
   variant?: "navbar" | "header"
   /** COUNTDOWN_ONLY=true: only the auth actions, no page links (they would hit the countdown). */
   countdownOnly?: boolean
+  /**
+   * Tombol pembuka buatan pemanggil, untuk yang sudah punya tombolnya sendiri
+   * dari Figma (header mobile quest). Tanpa ini dipakai tombol bawaan `variant`.
+   */
+  trigger?: (props: { onClick: () => void; "aria-expanded": boolean }) => ReactNode
+  /** Kelas pembungkus pengganti, kalau posisi menunya diatur pemanggil. */
+  wrapClassName?: string
 }) {
   const [open, setOpen] = useState(false)
   const wrapRef = useRef<HTMLDivElement>(null)
@@ -48,9 +72,13 @@ export default function MobileMenuHifi({
   return (
     <div
       ref={wrapRef}
-      className={variant === "header" ? styles.menuWrapHeader : styles.menuWrapNavbar}
+      className={
+        wrapClassName ?? (variant === "header" ? styles.menuWrapHeader : styles.menuWrapNavbar)
+      }
     >
-      {variant === "header" ? (
+      {trigger ? (
+        trigger({ onClick: () => setOpen((v) => !v), "aria-expanded": open })
+      ) : variant === "header" ? (
         <button
           type="button"
           aria-label="Menu"
@@ -81,7 +109,7 @@ export default function MobileMenuHifi({
         <div className={`${styles.mobileMenu} ${countdownOnly ? styles.mobileMenuCompact : ""}`}>
           {countdownOnly ? null : (
             <>
-              {LINKS.map((link) =>
+              {MENU_LINKS.map((link) =>
                 link.href === MAP_PATH && isMapsDisabled() ? (
                   // Tap focuses it (tabIndex=0), which shows the pill on touch screens.
                   <ComingSoon key={link.href} className={styles.mobileMenuLink} placement="left">

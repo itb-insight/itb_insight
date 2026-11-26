@@ -19,24 +19,22 @@
   flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
+  /*
+    Satu kolom utuh — termasuk latar navigasi bawah, yang ada di dalamnya.
+    Lihat --kolom-quest di globals.css; latar selebar layar dipegang
+    .shell di route-nya.
+  */
+  max-width: var(--kolom-quest);
+  margin-inline: auto;
   /* Gradien ditulis duluan: di Figma dia bertumpuk di atas fill #091B3F. */
   background: linear-gradient(180deg, #091b3f 0%, #294d97 100%), #091b3f;
   color: #ffffff;
   font-family: var(--font-primary), "Gabarito", sans-serif;
-  /*
-    Lebar kolom dipegang satu properti supaya navigasi bawah — yang modul CSS-nya
-    terpisah — ikut sendiri. Nama properti kustom TIDAK diacak CSS Modules, jadi
-    nilainya tembus ke QuestBottomNav yang berada di dalam .page.
-  */
-  --kolom-quest: 402px;
 }
 
-/* Kanvasnya 402; di tablet melebar ke 600 (lihat blok @media di bawah). */
 .isi {
   flex: 1;
   width: 100%;
-  max-width: var(--kolom-quest);
-  margin: 0 auto;
   padding: 31px 16px 0;
   box-sizing: border-box;
 }
@@ -469,10 +467,6 @@
   teks 16px tetap 16px, yang tumbuh cuma ruangnya.
 */
 @media (min-width: 768px) {
-  .page {
-    --kolom-quest: 600px;
-  }
-
   .podium {
     grid-template-columns: repeat(3, 118px);
     gap: 12px;

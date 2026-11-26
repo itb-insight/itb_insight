@@ -75,6 +75,12 @@
 }
 
 /* isi #dee8fb (bawah) -> #acc7ff (atas), tepi 5.1 #dee8fb (atas) -> #acc7ff (bawah) */
+/* Jangkar menu yang terbuka: .mobileMenu memposisikan dirinya ke pembungkus ini. */
+.menuWrap {
+  position: relative;
+  flex: none;
+}
+
 .menu {
   display: grid;
   place-items: center;

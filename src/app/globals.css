@@ -17,6 +17,9 @@
   --color-accent: #ffffff;
   --color-accent-hover: #e0e0e0;
 
+  /* Langit-langit lebar kolom section quest. Lihat catatan di atas body. */
+  --kolom-quest: 900px;
+
   /* Chart ramp — ORDINAL, not categorical.
      Six neutral steps on the #242424 card surface measure at chroma 0 with a
      worst adjacent deltaE of 9.0 (below the 15 floor for categorical use), so
@@ -65,6 +68,24 @@
 html {
   scroll-behavior: smooth;
 }
+
+/*
+  Lebar kolom isi untuk seluruh section quest (Leaderboard, Rewards, History,
+  Map, How to Play).
+
+  Kolomnya TUMBUH MULUS mengikuti layar — margin sampingnya yang tetap, bukan
+  lebarnya — lalu berhenti di 900. Jadi cuma ada langit-langit, bukan patahan:
+  di layar 500 kolomnya 500, di 768 jadi 768, baru di atas 900 dia diam.
+  Sebelumnya sempat dibuat melompat 402 -> 600 di 768; diganti karena
+  lompatannya terasa dan tidak sejalan dengan komponen Section 2.
+
+  900 itu angka karangan kami, bukan dari Figma: di atas itu satu baris
+  peringkat jadi terlalu lebar — mata harus menyeberang jauh dari nama ke poin.
+
+  Ditaruh global karena navigasi bawah quest (modul CSS terpisah) ikut membaca
+  nilai yang sama — kalau tiap halaman punya angkanya sendiri, nav-nya berubah
+  lebar tiap pindah tab.
+*/
 
 body {
   font-family: var(--font-primary);

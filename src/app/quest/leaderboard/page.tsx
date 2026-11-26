@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 
 import LeaderboardMobile from "@/features/quest/LeaderboardMobile"
+import shared from "@/features/quest/quest-shared.module.css"
 
 export const metadata = {
   title: "Leaderboard | ITB Insight",
@@ -40,16 +41,18 @@ export default function LeaderboardPage() {
   if (process.env.NODE_ENV === "production") notFound()
 
   return (
-    <LeaderboardMobile
-      podium={[PODIUM[0], PODIUM[1], PODIUM[2]]}
-      rows={BARIS}
-      nearby={SEKITAR}
-      me={{
-        rank: 37,
-        name: "You . Sachitta P.",
-        note: "60 pts behind #38 | 1 quest pending",
-        points: "1.248",
-      }}
-    />
+    <div className={shared.shell}>
+      <LeaderboardMobile
+        podium={[PODIUM[0], PODIUM[1], PODIUM[2]]}
+        rows={BARIS}
+        nearby={SEKITAR}
+        me={{
+          rank: 37,
+          name: "You . Sachitta P.",
+          note: "60 pts behind #38 | 1 quest pending",
+          points: "1.248",
+        }}
+      />
+    </div>
   )
 }

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 
 import PointsHistoryMobile from "@/features/quest/PointsHistoryMobile"
+import shared from "@/features/quest/quest-shared.module.css"
 import type { HistoryEntry } from "@/features/quest/PointsHistoryMobile"
 
 export const metadata = {
@@ -70,16 +71,18 @@ export default function PointsHistoryPage() {
   if (process.env.NODE_ENV === "production") notFound()
 
   return (
-    <PointsHistoryMobile
-      filters={[
-        { label: "All", active: true },
-        { label: "Earned" },
-        { label: "Spent" },
-        { label: "Issues 1" },
-      ]}
-      entries={ENTRIES}
-      reference="REF - U-0913837e"
-      referenceNote="Show this reference code to help desk at [LOCATION] if points are missing even after syncing."
-    />
+    <div className={shared.shell}>
+      <PointsHistoryMobile
+        filters={[
+          { label: "All", active: true },
+          { label: "Earned" },
+          { label: "Spent" },
+          { label: "Issues 1" },
+        ]}
+        entries={ENTRIES}
+        reference="REF - U-0913837e"
+        referenceNote="Show this reference code to help desk at [LOCATION] if points are missing even after syncing."
+      />
+    </div>
   )
 }
