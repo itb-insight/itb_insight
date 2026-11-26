@@ -2,6 +2,7 @@
 
 import { useRef, type PointerEvent as ReactPointerEvent } from "react"
 import Image from "next/image"
+import { LocateFixed } from "lucide-react"
 
 import styles from "./MapBottomSheet.module.css"
 import { ArrowLeftIcon } from "./CategoryIcons"
@@ -18,6 +19,9 @@ interface MapBottomSheetProps {
   snap: SheetSnap
   onSnapChange: (snap: SheetSnap) => void
   onNavigate?: (location: MapLocation) => void
+  /** "Temukan aku": find the visitor and fly the map to them. */
+  onLocate?: () => void
+  locating?: boolean
 }
 
 const SNAP_CLASS: Record<SheetSnap, string> = {
@@ -36,7 +40,14 @@ interface Drag {
   heights: Record<SheetSnap, number>
 }
 
-export default function MapBottomSheet({ browse, snap, onSnapChange, onNavigate }: MapBottomSheetProps) {
+export default function MapBottomSheet({
+  browse,
+  snap,
+  onSnapChange,
+  onNavigate,
+  onLocate,
+  locating = false,
+}: MapBottomSheetProps) {
   const {
     categories,
     openCategory,
@@ -128,6 +139,14 @@ export default function MapBottomSheet({ browse, snap, onSnapChange, onNavigate 
         if (e.target === e.currentTarget && !drag.current) e.currentTarget.style.height = ""
       }}
     >
+      {/* Sits on top of the sheet's edge; hidden when the sheet covers the map. */}
+      {snap !== "full" ? (
+        <button type="button" className={styles.locate} onClick={onLocate} disabled={locating}>
+          <LocateFixed aria-hidden="true" className={styles.locateIcon} />
+          {locating ? "Mencari…" : "Temukan aku"}
+        </button>
+      ) : null}
+
       <button
         type="button"
         className={styles.handle}

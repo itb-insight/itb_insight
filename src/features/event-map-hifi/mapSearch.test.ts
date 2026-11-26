@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import { MAP_LOCATIONS } from "./mapLocations"
-import { normalize, searchLocations } from "./mapSearch"
+import { matchesYou, normalize, searchLocations } from "./mapSearch"
 
 const names = (query: string) => searchLocations(query, MAP_LOCATIONS).map((l) => l.name)
 
@@ -30,6 +30,13 @@ describe("map search", () => {
   it("requires every word to match", () => {
     expect(names("parkir sipil")).toEqual(["Parkir Sipil"])
     expect(names("toilet zzz")).toEqual([])
+  })
+
+  it('finds "You are here" with posisi / aku / you and similar words', () => {
+    for (const q of ["posisi", "aku", "you", "You are here", "posisi aku", "lokasi saya", "temukan aku", "pos"]) {
+      expect(matchesYou(q), q).toBe(true)
+    }
+    for (const q of ["", "stage", "toilet", "aku stage", "parkir"]) expect(matchesYou(q), q).toBe(false)
   })
 
   it("normalizes accents and symbols", () => {

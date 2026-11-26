@@ -46,3 +46,17 @@ export function searchLocations(query: string, locations: MapLocation[]): MapLoc
   })
   return scored.sort((a, b) => a.score - b.score || a.index - b.index).map((s) => s.location)
 }
+
+// ---- "You are here" ----
+
+/** Search result id for the visitor's own position (not a place in MAP_LOCATIONS). */
+export const YOU_ID = "you"
+
+const YOU_WORDS = normalize("posisi posisiku aku you are here lokasi lokasiku saya me my location temukan dimana")
+  .split(" ")
+
+/** True when every typed word starts one of the "where am I" keywords (posisi, aku, you, ...). */
+export function matchesYou(query: string): boolean {
+  const q = normalize(query)
+  return q !== "" && q.split(" ").every((w) => YOU_WORDS.some((k) => k.startsWith(w)))
+}

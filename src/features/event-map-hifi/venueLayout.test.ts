@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import { MAP_INITIAL_VIEW } from "./mapLocations"
-import { labelPoint, lineMidpoint, pointInRing, VENUE_LAYOUT } from "./venueLayout"
+import { distanceToRingM, isNearEventArea, labelPoint, lineMidpoint, pointInRing, VENUE_LAYOUT } from "./venueLayout"
 
 const { zones, lines, labels, anchors, eventArea } = VENUE_LAYOUT
 
@@ -114,5 +114,33 @@ describe("geometry helpers", () => {
 
   it("finds the midpoint of a line by length", () => {
     expect(lineMidpoint([[0, 0], [0, 1], [0, 3]])).toEqual([0, 1.5])
+  })
+})
+
+describe("event area range for the visitor's location", () => {
+  // 0.009 degrees of latitude is about 1,000 m.
+  const northEdgeLat = Math.max(...VENUE_LAYOUT.eventArea!.geometry.coordinates[0].map((p) => p[1]))
+  const northLng = VENUE_LAYOUT.eventArea!.geometry.coordinates[0].find((p) => p[1] === northEdgeLat)![0]
+
+  it("is in range inside the event area", () => {
+    expect(isNearEventArea({ lat: -6.8918, lng: 107.6104 })).toBe(true) // near Play Tech
+  })
+
+  it("is in range up to 1 km outside the edge, and out of range beyond", () => {
+    expect(isNearEventArea({ lat: northEdgeLat + 0.0085, lng: northLng })).toBe(true) // ~946 m
+    expect(isNearEventArea({ lat: northEdgeLat + 0.0095, lng: northLng })).toBe(false) // ~1,058 m
+    expect(isNearEventArea({ lat: -6.9175, lng: 107.6191 })).toBe(false) // Bandung city centre
+  })
+
+  it("measures to the nearest edge, not a vertex", () => {
+    const square = [
+      [0, 0],
+      [0.01, 0],
+      [0.01, 0.01],
+      [0, 0.01],
+      [0, 0],
+    ]
+    expect(distanceToRingM({ lat: 0.005, lng: 0.005 }, square)).toBe(0)
+    expect(distanceToRingM({ lat: 0.005, lng: 0.015 }, square)).toBeCloseTo(556.6, 0) // 0.005 deg east
   })
 })

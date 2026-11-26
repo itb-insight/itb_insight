@@ -1,0 +1,47 @@
+/* Over the map, under the mobile navbar / beside the desktop sidebar. */
+.notice {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+  box-sizing: border-box;
+  max-width: min(420px, calc(100% - 32px));
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 8px 12px 16px;
+  border-radius: 12px;
+  background: #091b3f;
+  box-shadow: 0 8px 24px rgb(9 27 63 / 0.35);
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  color: #dee8fb;
+}
+
+@media (max-width: 899px) {
+  .notice {
+    top: calc(var(--map-navbar-h, 116px) + 12px);
+    left: 16px;
+    right: 16px;
+    max-width: none;
+  }
+}
+
+.text {
+  flex: 1;
+  margin: 0;
+  font-size: 15px;
+  line-height: 21px;
+}
+
+.close {
+  flex: none;
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  padding: 4px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: #acc7ff;
+  cursor: pointer;
+}

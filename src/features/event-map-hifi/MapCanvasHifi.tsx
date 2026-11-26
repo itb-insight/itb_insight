@@ -11,6 +11,7 @@ import { MAP_PIN, pinForCategory } from "./mapCategories"
 import { isLocationVisible, isZoneVisible, type MapTab } from "./mapFilters"
 import MapZoomStepper from "./MapZoomStepper"
 import { MAP_INITIAL_VIEW, MAP_LOCATIONS, MAP_STYLE_URL, type MapLocation } from "./mapLocations"
+import type { UserPosition } from "./useUserLocation"
 import {
   EXIT_COLOR,
   PATH_CASING_COLOR,
@@ -23,6 +24,8 @@ interface MapCanvasHifiProps {
   mapRef: RefObject<MapRef | null>
   tab: MapTab
   activeLocationId?: string | null
+  /** The visitor's position: a red "You are here" dot, shown on every filter tab. */
+  userPosition?: UserPosition | null
   onSelectLocation?: (location: MapLocation) => void
 }
 
@@ -64,6 +67,7 @@ export default function MapCanvasHifi({
   mapRef,
   tab,
   activeLocationId = null,
+  userPosition = null,
   onSelectLocation,
 }: MapCanvasHifiProps) {
   const { zones, labels, locations } = useMemo(() => filterForTab(tab), [tab])
@@ -246,6 +250,20 @@ export default function MapCanvasHifi({
             </Marker>
           )
         })}
+        {userPosition ? (
+          <Marker
+            longitude={userPosition.lng}
+            latitude={userPosition.lat}
+            anchor="top"
+            offset={[0, -9]} // centre the 18px dot on the position; the label hangs below it
+            style={{ zIndex: 3 }}
+          >
+            <span className={styles.you} role="img" aria-label="Lokasimu saat ini">
+              <span className={styles.youDot} />
+              <span className={styles.youLabel}>You are here</span>
+            </span>
+          </Marker>
+        ) : null}
       </Map>
 
       <MapZoomStepper mapRef={mapRef} />

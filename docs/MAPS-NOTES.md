@@ -39,3 +39,11 @@ once it has an entry in `ZONE_CONTENT`; its id is the slugged zone name (e.g. "P
 - The points named `BL` (bottom-left) and `TR` (top-right) set the rectangle the map may show
   (MapLibre `maxBounds`): users can't pan or zoom out past it. They are not drawn. Move them in
   geojson.io to change the limit.
+- "You are here" (`useUserLocation.ts`): the map asks for location when it opens and shows a red
+  dot on every filter tab. The position stays in the browser (never sent to the server). Search
+  words posisi / aku / you / lokasi saya put a "You are here" result first; the mobile sheet's
+  "Temukan aku" button flies to the visitor and asks for permission again if it was dismissed.
+  A blocked permission can only be undone in the browser's site settings; the map says so.
+- The location is only used inside the `event area` polygon or within 1 km of its edge
+  (`EVENT_AREA_MARGIN_M` / `isNearEventArea()` in `venueLayout.ts`). Farther away there is no
+  dot, the map doesn't move, and "Temukan aku" explains why.

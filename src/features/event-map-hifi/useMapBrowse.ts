@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from "react"
 import { MAP_CATEGORIES, type MapCategory } from "./mapCategories"
 import { isCategoryVisible, isLocationVisible, type MapTab } from "./mapFilters"
 import { MAP_LOCATIONS, type MapLocation } from "./mapLocations"
-import { searchLocations } from "./mapSearch"
+import { matchesYou, searchLocations, YOU_ID } from "./mapSearch"
 
 export interface MapBrowse {
   /** Categories shown on the active tab. */
@@ -16,7 +16,10 @@ export interface MapBrowse {
   places: MapLocation[]
   query: string
   setQuery: (query: string) => void
-  /** Search results on the active tab; empty when there is no query. */
+  /**
+   * Search results on the active tab; empty when there is no query. "posisi" / "aku" / "you"
+   * put a "You are here" entry first (on every tab); choosing it calls `onLocateMe`.
+   */
   results: MapLocation[]
   openCategoryBy: (category: MapCategory) => void
   openPlaceBy: (place: MapLocation) => void
@@ -27,7 +30,16 @@ export interface MapBrowse {
 }
 
 /** Sidebar / bottom sheet navigation: categories -> places -> place detail, plus search. */
-export function useMapBrowse(tab: MapTab): MapBrowse {
+/** Whether the visitor's position is known and within range of the event area. */
+export type YouStatus = "unknown" | "near" | "far"
+
+const YOU_DESCRIPTIONS: Record<YouStatus, string> = {
+  unknown: "Ketuk untuk menemukan lokasimu",
+  near: "Posisimu saat ini",
+  far: "Di luar area acara (lebih dari 1 km)",
+}
+
+export function useMapBrowse(tab: MapTab, onLocateMe?: () => void, youStatus: YouStatus = "unknown"): MapBrowse {
   const [category, setCategory] = useState<MapCategory | null>(null)
   const [place, setPlace] = useState<MapLocation | null>(null)
   const [query, setQuery] = useState("")
@@ -42,14 +54,32 @@ export function useMapBrowse(tab: MapTab): MapBrowse {
     () => (openCategory ? visible.filter((l) => l.category === openCategory.id) : []),
     [visible, openCategory],
   )
-  const results = useMemo(() => searchLocations(query, visible), [query, visible])
+  const results = useMemo(() => {
+    const places = searchLocations(query, visible)
+    if (!matchesYou(query)) return places
+    const you: MapLocation = {
+      id: YOU_ID,
+      category: "you",
+      name: "You are here",
+      description: YOU_DESCRIPTIONS[youStatus],
+      lat: 0, // not used: choosing it locates the visitor instead
+      lng: 0,
+    }
+    return [you, ...places]
+  }, [query, visible, youStatus])
 
   const openCategoryBy = useCallback((next: MapCategory) => {
     setCategory(next)
     setPlace(null)
   }, [])
 
-  const openPlaceBy = useCallback((next: MapLocation) => setPlace(next), [])
+  const openPlaceBy = useCallback(
+    (next: MapLocation) => {
+      if (next.id === YOU_ID) onLocateMe?.()
+      else setPlace(next)
+    },
+    [onLocateMe],
+  )
 
   const showPlace = useCallback((next: MapLocation) => {
     setCategory(MAP_CATEGORIES.find((c) => c.id === next.category) ?? null)

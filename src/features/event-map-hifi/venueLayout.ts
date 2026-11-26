@@ -327,3 +327,41 @@ export function buildVenueLayout(source: FeatureCollection): VenueLayout {
 }
 
 export const VENUE_LAYOUT = buildVenueLayout(raw as unknown as FeatureCollection)
+
+// ---- "You are here" range ----
+
+/** The visitor's location is only used inside the event area or up to this far outside it. */
+export const EVENT_AREA_MARGIN_M = 1000
+
+const METRES_PER_DEGREE = 111_320
+
+/**
+ * Metres from `point` to the polygon ring: 0 inside, otherwise the distance to the nearest edge.
+ * Uses a flat projection around the point, accurate to well under 1% at this scale.
+ */
+export function distanceToRingM(point: { lat: number; lng: number }, ring: Position[]): number {
+  if (pointInRing([point.lng, point.lat], ring)) return 0
+  const k = Math.cos((point.lat * Math.PI) / 180) * METRES_PER_DEGREE
+  const xy = (p: Position) => [(p[0] - point.lng) * k, (p[1] - point.lat) * METRES_PER_DEGREE]
+  let best = Infinity
+  for (let i = 1; i < ring.length; i++) {
+    const [ax, ay] = xy(ring[i - 1])
+    const [bx, by] = xy(ring[i])
+    const dx = bx - ax
+    const dy = by - ay
+    const len2 = dx * dx + dy * dy
+    // Closest point on segment AB to the origin (the visitor).
+    const t = len2 === 0 ? 0 : Math.min(1, Math.max(0, -(ax * dx + ay * dy) / len2))
+    best = Math.min(best, Math.hypot(ax + t * dx, ay + t * dy))
+  }
+  return best
+}
+
+/**
+ * True when the visitor is inside the event area or within EVENT_AREA_MARGIN_M of it. Without
+ * an "event area" polygon nobody is in range, so the location feature stays off.
+ */
+export function isNearEventArea(point: { lat: number; lng: number }): boolean {
+  const ring = VENUE_LAYOUT.eventArea?.geometry.coordinates[0]
+  return !!ring && distanceToRingM(point, ring) <= EVENT_AREA_MARGIN_M
+}
