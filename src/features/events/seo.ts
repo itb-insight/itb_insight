@@ -11,7 +11,7 @@ const PAGE_PATH = "/event";
 
 const TITLE = "Events";
 const DESCRIPTION =
-  "Rangkaian acara ITB Insight 2026: Tech-Xhibition, Playtech & Showtech, Technology Seminar, Insight on Stage, Inspirates, dan Alumni Gathering di Kampus ITB Ganesha, Sabtu 28 November 2026.";
+  "Rangkaian acara ITB Insight 2026: Tech-Xhibition, Playtech & Showtech, Technology Seminar, dan Insight on Stage di Kampus ITB Ganesha, Sabtu 28 November 2026, serta dokumentasi Inspirates dan Alumni Gathering.";
 
 const OG_DEFAULT = `${SITE_URL}/events/tech-xhibition/og.jpg`;
 

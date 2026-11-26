@@ -135,38 +135,39 @@ const EVENT_COPY: EventCopy[] = [
     slug: "inspirates",
     title: "Inspirates",
     description:
-      "Program roadshow ITB Insight 2026 dari mahasiswa Teknik Fisika ITB ke sekolah. Kenali Teknik Fisika, temukan teknologi di sekitarmu, dan coba langsung alat demonstrasi karya mahasiswa.",
-    day: "Roadshow",
-    // MENUNGGU KONFIRMASI: lembar menulis 2-20 November, jadwal sekolahnya 11-17 November.
-    dateLabel: "2–20 November, 2026",
-    date: "2026-11-02",
-    location: "Bandung",
+      "Roadshow ITB Insight 2026 dari mahasiswa Teknik Fisika ITB ke enam sekolah di Bandung dan Cimahi telah selesai. Siswa mengenal Teknik Fisika, menemukan teknologi di sekitar mereka, dan mencoba langsung alat demonstrasi karya mahasiswa.",
+    day: "Selesai",
+    dateLabel: "11–20 November, 2026",
+    date: "2026-11-11",
+    location: "Bandung & Cimahi",
     badgeColor: "#073c46",
     photo: {
-      src: "/events/inspirates/hero.webp",
-      alt: "Tim Inspirates berfoto bersama siswa di sekolah",
+      src: "/events/inspirates/sman-1-ngamprah/final-photo.webp",
+      alt: "Ratusan siswa SMAN 1 Ngamprah berfoto bersama tim Inspirates",
     },
     buttonHref: "/event/inspirates",
-    buttonLabel: "Lihat Detail",
+    buttonLabel: "Lihat Dokumentasi",
     detailSlug: "inspirates",
+    status: "done",
   },
   {
     slug: "alumni-gathering",
     title: "Alumni\nGathering",
     description:
-      "Alumni Gathering merupakan salah satu kegiatan yang mengundang para alumni agar dapat berinteraksi langsung dengan HMFT-ITB serta prodi untuk mensosialisasikan perkembangan mahasiswa, HMFT-ITB, ITB Insight, dan menjadikan ajang seru-seruan dan reuni antar alumni.",
-    day: "Segera",
-    dateLabel: "Tanggal menyusul",
-    date: null,
-    location: "Menyusul",
+      "Alumni Gathering telah mempertemukan para alumni Teknik Fisika ITB dengan HMFT-ITB dan program studi untuk mensosialisasikan perkembangan mahasiswa, HMFT-ITB, dan ITB Insight 2026, sekaligus menjadi ajang seru-seruan dan reuni antar alumni.",
+    day: "Selesai",
+    dateLabel: "18 Oktober, 2026",
+    date: "2026-10-18",
+    location: "Aula Timur, ITB Ganesha",
     badgeColor: "#7b7b7b",
     photo: {
-      src: "/events/event-photo.jpg",
-      alt: "Dokumentasi kegiatan ITB Insight",
+      src: "/events/alumni-gathering/everyone.webp",
+      alt: "Foto bersama alumni, mahasiswa, dan panitia di Alumni Gathering Teknik Fisika ITB",
     },
-    buttonHref: null,
-    buttonLabel: "Coming Soon",
-    status: "coming-soon",
+    buttonHref: "/event/alumni-gathering",
+    buttonLabel: "Lihat Dokumentasi",
+    detailSlug: "alumni-gathering",
+    status: "done",
   },
 ];
 
@@ -217,7 +218,11 @@ export async function getEvents(): Promise<EventItem[]> {
   if (EVENT_COPY.length > LAYOUT_SLOTS.length) {
     throw new Error("Event lebih banyak dari slot tata letak. Tambah slot di layoutSlots.ts.");
   }
+  // EVENTS_LOCATION_TBA hanya menyembunyikan lokasi event yang belum berlangsung.
   return EVENT_COPY.map((copy, i) =>
-    compose(LAYOUT_SLOTS[i], { ...copy, location: displayLocation(copy.location) }),
+    compose(
+      LAYOUT_SLOTS[i],
+      copy.status === "done" ? copy : { ...copy, location: displayLocation(copy.location) },
+    ),
   );
 }

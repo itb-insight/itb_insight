@@ -8,8 +8,7 @@ type FooterLink = { label: string; href: string }
 
 /*
  * Tautan event, urut sesuai halaman /event. Event yang punya halaman
- * detail menaut ke /event/<slug>; yang belum (Insight Festival, Alumni
- * Gathering) menaut ke section-nya di /event (id section = slug di
+ * detail menaut ke /event/<slug>; yang belum (Insight Festival) menaut ke section-nya di /event (id section = slug di
  * src/features/events/data.ts). Ditulis di sini, bukan diimpor dari data
  * event, karena footer juga dipakai di komponen klien (ErrorLayout) dan
  * data event bersifat server-only.
@@ -21,7 +20,7 @@ const eventLinks: FooterLink[] = [
   { label: "Technology Seminar", href: "/event/technology-seminar" },
   { label: "Insight on Stage", href: "/event/insight-on-stage" },
   { label: "Inspirates", href: "/event/inspirates" },
-  { label: "Alumni Gathering", href: "/event#alumni-gathering" },
+  { label: "Alumni Gathering", href: "/event/alumni-gathering" },
 ]
 
 /*

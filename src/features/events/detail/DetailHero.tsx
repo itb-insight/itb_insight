@@ -2,12 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import type { EventDetail } from "@/features/events/types";
 import DetailButton from "@/features/events/detail/DetailButton";
+import HeroVideo from "@/features/events/detail/HeroVideo";
 import styles from "@/features/events/detail/EventDetail.module.css";
 
 /**
  * Hero: foto kegiatan selebar layar, memudar ke navy di bawah, dengan judul
  * EXCRATCH bergradient es seperti judul section di /event.
  * Foto ini elemen terbesar di layar pertama (LCP), jadi dimuat paling awal.
+ * Kalau event punya heroVideo, foto ini menjadi posternya.
  */
 export default function DetailHero({ detail }: { detail: EventDetail }) {
   return (
@@ -22,6 +24,7 @@ export default function DetailHero({ detail }: { detail: EventDetail }) {
         className={styles.heroImage}
         style={{ objectFit: "cover", objectPosition: detail.hero.position ?? "50% 50%" }}
       />
+      {detail.heroVideo ? <HeroVideo {...detail.heroVideo} /> : null}
       <div className={styles.container}>
         <div className={styles.heroBody}>
           <nav aria-label="Breadcrumb" className={styles.crumb}>

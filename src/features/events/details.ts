@@ -503,52 +503,123 @@ const DETAILS: EventDetail[] = [
     // MENUNGGU KONFIRMASI: kemungkinan maksudnya "Technology Around You".
     tagline: "Technology Around Is You",
     summary:
-      "Program roadshow ITB Insight 2026 dari mahasiswa Teknik Fisika ITB ke sekolah. Kenali Teknik Fisika, temukan teknologi di sekitarmu, dan coba langsung alat demonstrasi karya mahasiswa.",
-    aboutTitle: "Teknik Fisika datang ke sekolahmu",
+      "Roadshow ITB Insight 2026 dari mahasiswa Teknik Fisika ITB ke sekolah telah selesai. Selama 11–20 November 2026, tim Inspirates mengunjungi enam sekolah di Bandung dan Cimahi untuk mengenalkan Teknik Fisika dan teknologi di sekitar kita.",
+    aboutTitle: "Teknik Fisika datang ke sekolah",
     about: [
       "Inspirates mengenalkan Teknik Fisika dan ITB Insight 2026 langsung ke sekolah. Lewat kegiatan ini, siswa diajak melihat bagaimana fisika, matematika, dan rekayasa diterapkan dalam teknologi, mengenal berbagai proyek mahasiswa, dan mencoba langsung alat demonstrasi buatan mahasiswa Teknik Fisika ITB.",
-      "Ada juga sesi sharing tentang perkuliahan, kehidupan mahasiswa, proyek teknologi, dan kegiatan di ITB Insight 2026. Temukan hal-hal menarik di balik teknologi yang kamu pakai sehari-hari!",
+      "Di setiap sekolah ada juga sesi sharing tentang perkuliahan, kehidupan mahasiswa, proyek teknologi, dan kegiatan di ITB Insight 2026. Terima kasih untuk seluruh sekolah dan siswa yang sudah menyambut tim Inspirates!",
     ],
     accent: "#7fe0a0",
-    // MENUNGGU KONFIRMASI: lembar menulis 2-20 November, jadwal sekolahnya 11-17 November.
-    startDate: "2026-11-02",
+    done: true,
+    startDate: "2026-11-11",
     endDate: "2026-11-20",
     facts: {
-      date: "2–20 November 2026",
-      time: "Menyesuaikan jadwal tiap sekolah",
-      venue: "SMA di Bandung dan sekitarnya",
-      audience: "Siswa SMA/SMK/MA sederajat di sekolah yang dikunjungi",
+      date: "11–20 November 2026",
+      venue: "6 sekolah di Bandung dan Cimahi",
+      audience: "Siswa SMA/MTs di sekolah yang dikunjungi",
       ticket: "Gratis",
-      registration: "Tidak perlu. Cukup scan QR kehadiran di lokasi.",
+      registration: "Tidak perlu",
     },
     hero: {
-      src: img("inspirates", "hero"),
-      alt: "Tim Inspirates berfoto bersama siswa di sekolah",
-      position: "50% 30%",
+      src: img("inspirates", "drone-hero-poster"),
+      alt: "Foto udara siswa dan tim Inspirates berkumpul di lapangan SMAN 1 Bandung",
+    },
+    heroVideo: {
+      desktop: "/events/inspirates/drone-hero-1280.mp4",
+      mobile: "/events/inspirates/drone-hero-854.mp4",
     },
     aboutImage: {
-      src: img("inspirates", "highlight-2"),
-      alt: "Siswa mencoba alat demonstrasi bersama mahasiswa",
+      src: img("inspirates", "sman-4-cimahi/drone"),
+      alt: "Mahasiswa menunjukkan drone kepada siswa SMAN 4 Cimahi",
     },
     ogImage: "/events/inspirates/og.jpg",
     ctas: [
-      { label: "Jadwal Sekolah", href: "#jadwal" },
+      { label: "Lihat Sekolah", href: "#jadwal" },
       { label: "Lihat Alat", href: "#alat" },
     ],
-    highlightsTitle: "Yang bisa kamu lakukan",
+    highlightsTitle: "Yang dilakukan bersama siswa",
     highlights: [
-      { text: "Kenali Teknik Fisika dan teknologi di sekitarmu." },
-      { text: "Coba langsung alat teknologi karya mahasiswa Teknik Fisika ITB." },
-      { text: "Main kuis seru berhadiah bersama teman sekelas." },
-      { text: "Tanya langsung soal kuliah dan masuk ITB kepada mahasiswa." },
+      { text: "Mengenal Teknik Fisika dan teknologi di sekitar kita." },
+      { text: "Mencoba langsung alat teknologi karya mahasiswa Teknik Fisika ITB." },
+      { text: "Kuis seru berhadiah bersama teman sekelas." },
+      { text: "Tanya jawab langsung soal kuliah dan masuk ITB bersama mahasiswa." },
     ],
+    // Sumber: temp/INSPIRATES.xlsx, lembar "Pembagian Sekolah".
     schoolVisits: [
-      { school: "SMAN 1 Dayeuhkolot", date: "2026-11-11", time: "07.00 – 10.00" },
-      { school: "SMA Muhammadiyah 1 Cimahi", date: "2026-11-11", time: "13.00 – 15.00" },
-      { school: "SMAN 1 Bandung", date: "2026-11-12", time: "08.00 – 11.00" },
-      { school: "SMAN 1 Ngamprah", date: "2026-11-13", time: "07.30 – 11.00" },
-      { school: "SMAN 4 Cimahi", date: "2026-11-16", time: "07.00 – 09.00" },
-      { school: "SMAN 16 Bandung", date: "2026-11-17", time: "07.45 – 10.15" },
+      {
+        school: "SMA Muhammadiyah 1 Cimahi",
+        date: "2026-11-11",
+        photo: {
+          src: img("inspirates", "sma-muhammadiyah-1-cimahi/final-photo"),
+          alt: "Foto bersama siswa SMA Muhammadiyah 1 Cimahi dan tim Inspirates di lapangan sekolah",
+        },
+        photos: [
+          { src: img("inspirates", "sma-muhammadiyah-1-cimahi/present-drone"), alt: "Siswa menyimak demonstrasi drone dan robot" },
+          { src: img("inspirates", "sma-muhammadiyah-1-cimahi/drone"), alt: "Mahasiswa menjelaskan drone kepada siswi" },
+        ],
+      },
+      {
+        school: "SMAN 1 Bandung",
+        date: "2026-11-12",
+        photo: {
+          src: img("inspirates", "sman-1-bandung/final-photo"),
+          alt: "Foto bersama siswa SMAN 1 Bandung dengan spanduk Inspirates 2026",
+        },
+        photos: [
+          { src: img("inspirates", "sman-1-bandung/presenting"), alt: "Mahasiswa mempresentasikan Drone Soccer Competition di kelas" },
+          { src: img("inspirates", "sman-1-bandung/raise-hand"), alt: "Siswa mengangkat tangan menjawab pertanyaan" },
+          { src: img("inspirates", "sman-1-bandung/face-recog"), alt: "Demo pengenalan wajah di layar proyektor" },
+        ],
+      },
+      {
+        school: "SMAN 1 Ngamprah",
+        date: "2026-11-13",
+        photo: {
+          src: img("inspirates", "sman-1-ngamprah/final-photo"),
+          alt: "Foto bersama ratusan siswa SMAN 1 Ngamprah dan tim Inspirates di halaman sekolah",
+        },
+        photos: [
+          { src: img("inspirates", "sman-1-ngamprah/drone-admire"), alt: "Siswa mengamati drone dari dekat" },
+          { src: img("inspirates", "sman-1-ngamprah/face-recog"), alt: "Siswa memainkan Real Time Emotion Game di layar besar" },
+          { src: img("inspirates", "sman-1-ngamprah/face-recog-2"), alt: "Siswa mencoba deteksi ekspresi wajah di laptop" },
+        ],
+      },
+      {
+        school: "SMAN 4 Cimahi",
+        date: "2026-11-16",
+        photo: {
+          src: img("inspirates", "sman-4-cimahi/final-photo"),
+          alt: "Foto bersama siswa SMAN 4 Cimahi dan tim Inspirates",
+        },
+        photos: [
+          { src: img("inspirates", "sman-4-cimahi/drone"), alt: "Mahasiswa menunjukkan drone kepada siswa" },
+          { src: img("inspirates", "sman-4-cimahi/robot"), alt: "Siswa menonton robot beraksi di lantai" },
+        ],
+      },
+      {
+        school: "SMAN 16 Bandung",
+        date: "2026-11-17",
+        photo: {
+          src: img("inspirates", "sman-16-bandung/final-photo"),
+          alt: "Foto bersama siswa SMAN 16 Bandung di lapangan sekolah",
+        },
+        photos: [
+          { src: img("inspirates", "sman-16-bandung/present"), alt: "Mahasiswa menjelaskan alat demonstrasi kepada siswa" },
+          { src: img("inspirates", "sman-16-bandung/raise-hand"), alt: "Siswa mengangkat tangan di kelas" },
+        ],
+      },
+      {
+        school: "Pesantren Al Inayah",
+        date: "2026-11-19",
+        photo: {
+          src: img("inspirates", "pesantren-al-inayah/final-photo"),
+          alt: "Foto bersama santri Pesantren Al Inayah dengan spanduk Inspirates 2026",
+        },
+        photos: [
+          { src: img("inspirates", "pesantren-al-inayah/presenting"), alt: "Mahasiswa memperagakan drone di depan santri" },
+          { src: img("inspirates", "pesantren-al-inayah/crowd"), alt: "Santri menyimak materi Inspirates" },
+        ],
+      },
     ],
     rundown: {
       title: "Rangkaian kegiatan di sekolah",
@@ -558,7 +629,7 @@ const DETAILS: EventDetail[] = [
             { title: "Pembukaan", note: "Perkenalan tim Inspirates." },
             { title: "Modul I: Mengenal Teknik Fisika", note: "Teknik Fisika itu belajar apa? Kuliahnya seperti apa? Lulusannya bisa jadi apa?" },
             { title: "Modul II: Mengenal ITB Insight 2026", note: "Apa itu ITB Insight dan apa saja yang bisa dilihat di main event." },
-            { title: "Kuis interaktif", note: "Adu cepat menjawab pertanyaan bersama timmu." },
+            { title: "Kuis interaktif", note: "Adu cepat menjawab pertanyaan bersama tim." },
             { title: "Pengenalan dan demonstrasi alat", note: "Demonstrasi alat dan kenali setiap alat lewat brosur." },
             { title: "Tanya jawab & sharing", note: "Ngobrol bebas dengan mahasiswa tentang apa pun." },
             { title: "Foto bersama & penutupan", note: "Foto bareng sebagai penutup kegiatan." },
@@ -574,20 +645,15 @@ const DETAILS: EventDetail[] = [
           title: "Alat demonstrasi",
           unit: "alat",
           items: [
-            { name: "Solar Tracker", description: "Saksikan panel surya yang selalu mengejar arah cahaya!" },
-            { name: "Insight AI Assistant", description: "Tanyakan apa saja kepada asisten AI kami!" },
-            { name: "Robo Gripper", description: "Pindahkan bola ke target dengan Robocar!" },
-            { name: "Robo Soccer", description: "Cetak gol pakai Robocar!" },
-            { name: "Real Time Emotion Game", description: "Tirukan ekspresi yang diminta dan kumpulkan skor!" },
+            { name: "Solar Tracker", description: "Panel surya yang selalu mengejar arah cahaya." },
+            { name: "Insight AI Assistant", description: "Asisten AI yang siap menjawab pertanyaan." },
+            { name: "Robo Gripper", description: "Pindahkan bola ke target dengan Robocar." },
+            { name: "Robo Soccer", description: "Cetak gol pakai Robocar." },
+            { name: "Real Time Emotion Game", description: "Tirukan ekspresi yang diminta dan kumpulkan skor." },
           ],
         },
       ],
     },
-    checkIn: [
-      "Scan QR kehadiran.",
-      "Isi nama.",
-      "Tekan Kirim. Selesai, kamu sudah tercatat hadir.",
-    ],
     faq: [
       {
         q: "Apa itu Inspirates?",
@@ -599,26 +665,83 @@ const DETAILS: EventDetail[] = [
       },
     ],
     gallery: [
-      { src: img("inspirates", "gallery-5"), alt: "Ratusan siswa mengikuti Inspirates di aula sekolah" },
-      { src: img("inspirates", "highlight-4"), alt: "Siswa mengangkat tangan menjawab kuis" },
-      { src: img("inspirates", "gallery-3"), alt: "Siswa merakit rangkaian elektronik bersama mahasiswa" },
-      { src: img("inspirates", "highlight-5"), alt: "Siswa mencoba kacamata virtual reality" },
-      { src: img("inspirates", "gallery-1"), alt: "Mahasiswa menunjukkan hologram kepada siswa" },
-      { src: img("inspirates", "reminder-square"), alt: "Foto bersama seluruh siswa di halaman sekolah" },
+      { src: img("inspirates", "sman-1-ngamprah/final-photo"), alt: "Ratusan siswa SMAN 1 Ngamprah berfoto bersama tim Inspirates" },
+      { src: img("inspirates", "sma-muhammadiyah-1-cimahi/present-drone"), alt: "Siswa menyimak demonstrasi drone dan robot" },
+      { src: img("inspirates", "sman-1-ngamprah/face-recog"), alt: "Siswa memainkan Real Time Emotion Game di layar besar" },
+      { src: img("inspirates", "sman-4-cimahi/robot"), alt: "Siswa menonton robot beraksi di lantai" },
+      { src: img("inspirates", "pesantren-al-inayah/presenting"), alt: "Mahasiswa memperagakan drone di depan santri" },
+      { src: img("inspirates", "sman-16-bandung/raise-hand"), alt: "Siswa SMAN 16 Bandung mengangkat tangan menjawab kuis" },
     ],
     card: {
-      when: "2–20 Nov",
-      where: "SMA di Bandung",
-      image: { src: img("inspirates", "hero"), alt: "" },
+      when: "11–20 Nov",
+      where: "Sekolah di Bandung & Cimahi",
+      image: { src: img("inspirates", "sman-1-ngamprah/final-photo"), alt: "" },
     },
     seoDescription:
-      "Inspirates ITB Insight 2026: roadshow mahasiswa Teknik Fisika ITB ke SMA di Bandung dan sekitarnya. Demo alat, kuis, dan sharing kuliah. November 2026.",
+      "Inspirates ITB Insight 2026: roadshow mahasiswa Teknik Fisika ITB ke enam sekolah di Bandung dan Cimahi, 11–20 November 2026. Dokumentasi demo alat, kuis, dan sharing kuliah.",
+  },
+  {
+    slug: "alumni-gathering",
+    name: "Alumni Gathering",
+    tagline: "Reuni alumni Teknik Fisika ITB",
+    summary:
+      "Alumni Gathering Teknik Fisika ITB telah dilaksanakan pada Minggu, 18 Oktober 2026 di Aula Timur ITB Ganesha, mempertemukan para alumni dengan HMFT-ITB, program studi, dan panitia ITB Insight 2026.",
+    aboutTitle: "Kembali ke kampus, bertemu lagi",
+    about: [
+      "Alumni Gathering mengundang para alumni untuk berinteraksi langsung dengan HMFT-ITB dan program studi Teknik Fisika. Acara ini menjadi ruang untuk mensosialisasikan perkembangan mahasiswa, HMFT-ITB, dan ITB Insight 2026.",
+      "Selain sesi sosialisasi, alumni dari berbagai angkatan menikmati ramah tamah, karaoke bersama live band, dan foto bersama. Terima kasih untuk seluruh alumni yang telah hadir!",
+    ],
+    accent: "#f5b971",
+    done: true,
+    startDate: "2026-10-18",
+    facts: {
+      date: "Minggu, 18 Oktober 2026",
+      venue: "Aula Timur, ITB Ganesha",
+      audience: "Alumni Teknik Fisika ITB",
+    },
+    hero: {
+      src: img("alumni-gathering", "everyone"),
+      alt: "Foto bersama alumni, mahasiswa, dan panitia di depan layar Alumni Gathering Teknik Fisika ITB",
+      // turunkan potongan: judul hero tidak menimpa tulisan di layar panggung
+      position: "50% 85%",
+    },
+    aboutImage: {
+      src: img("alumni-gathering", "alumni-table"),
+      alt: "Para alumni berfoto di meja bundar Aula Timur",
+    },
+    ogImage: "/events/alumni-gathering/og.jpg",
+    ctas: [{ label: "Lihat Dokumentasi", href: "#galeri" }],
+    highlightsTitle: "Rangkaian acara",
+    highlights: [
+      { title: "Sosialisasi", text: "Perkembangan program studi, HMFT-ITB, dan ITB Insight 2026 dipaparkan kepada para alumni." },
+      { title: "Reuni", text: "Ramah tamah dan temu kangen alumni lintas angkatan Teknik Fisika ITB." },
+      { title: "Karaoke Session", text: "Bernyanyi bersama diiringi live band mahasiswa." },
+      { title: "Foto bersama", text: "Alumni, mahasiswa, dan panitia ITB Insight 2026 berfoto di panggung." },
+    ],
+    gallery: [
+      { src: img("alumni-gathering", "overall-view"), alt: "Suasana Aula Timur ITB saat Alumni Gathering" },
+      { src: img("alumni-gathering", "presentation"), alt: "Pemaparan acara Alumni Gathering di layar panggung" },
+      { src: img("alumni-gathering", "karaoke-1"), alt: "Karaoke session bersama live band di panggung" },
+      { src: img("alumni-gathering", "prof-brian-on-stage"), alt: "Alumni dan panitia berfoto di panggung ITB Insight 2026" },
+      { src: img("alumni-gathering", "karaoke-2"), alt: "Live band mengiringi karaoke alumni" },
+      { src: img("alumni-gathering", "everyone"), alt: "Foto bersama seluruh peserta Alumni Gathering" },
+    ],
+    card: {
+      when: "18 Okt",
+      where: "Aula Timur, ITB",
+      image: { src: img("alumni-gathering", "everyone"), alt: "" },
+    },
+    seoDescription:
+      "Dokumentasi Alumni Gathering Teknik Fisika ITB, pre-event ITB Insight 2026: Minggu, 18 Oktober 2026 di Aula Timur ITB Ganesha. Sosialisasi, reuni, dan karaoke bersama alumni.",
   },
 ];
 
-/** Applies EVENTS_LOCATION_TBA to the venue shown on the detail page and on "other events" cards. */
+/**
+ * Applies EVENTS_LOCATION_TBA to the venue shown on the detail page and on "other events" cards.
+ * Events that already took place (done) always show their real venue.
+ */
 function withLocation(d: EventDetail): EventDetail {
-  if (!isEventLocationTba()) return d;
+  if (!isEventLocationTba() || d.done) return d;
   return {
     ...d,
     facts: { ...d.facts, venue: displayLocation(d.facts.venue) },
