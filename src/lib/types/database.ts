@@ -73,7 +73,10 @@ export type Booth = {
 export type BoothScanEvent = {
   id: string
   user_id: string
-  booth_id: string
+  /** null for admin manual adjustments (kind 'manual'). */
+  booth_id: string | null
+  /** visit = base points (once per booth), bonus = repeat-visit bonus, manual = admin, no booth (0022). */
+  kind: 'visit' | 'bonus' | 'manual'
   points_awarded: number
   bonus_points: number
   awarded_by?: string | null

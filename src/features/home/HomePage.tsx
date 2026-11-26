@@ -3,10 +3,15 @@ import CalendarCard from "./CalendarCard"
 import CountdownCard from "./CountdownCard"
 import HomeBackground from "./HomeBackground"
 import styles from "./HomePage.module.css"
+import PointsCard, { type PointsSummary } from "./PointsCard"
 import type { ActivityEntry } from "./activityTypes"
 import type { AgendaItem } from "./agendaData"
 
 interface HomePageProps {
+  /** null = could not be loaded; undefined = not shown. */
+  points?: PointsSummary | null
+  isCommittee?: boolean
+  canScan?: boolean
   serverNow?: number
   /** First name for the greeting; "User" when unknown. */
   userName?: string
@@ -16,7 +21,15 @@ interface HomePageProps {
   agenda: AgendaItem[]
 }
 
-export default function HomePage({ serverNow, userName, activity, agenda }: HomePageProps) {
+export default function HomePage({
+  serverNow,
+  userName,
+  activity,
+  agenda,
+  points,
+  isCommittee = false,
+  canScan = false,
+}: HomePageProps) {
   return (
     <div className={styles.page}>
       <HomeBackground />
@@ -27,6 +40,7 @@ export default function HomePage({ serverNow, userName, activity, agenda }: Home
       </main>
 
       <aside className={styles.rail}>
+        {points !== undefined ? <PointsCard points={points} isCommittee={isCommittee} canScan={canScan} /> : null}
         <CountdownCard serverNow={serverNow} />
         <CalendarCard serverNow={serverNow} agenda={agenda} />
       </aside>

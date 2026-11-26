@@ -28,5 +28,5 @@ export function parseTextFields<K extends string>(body: unknown, spec: Record<K,
 
 export const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
-/** Limits shared with the profiles_field_lengths constraint (migration 0007_security_hardening). */
+/** Limits shared with the profiles_field_lengths constraint (migration 0023_security_hardening). */
 export const PROFILE_LIMITS = { name: 120, phoneNumber: 32, institution: 200 } as const

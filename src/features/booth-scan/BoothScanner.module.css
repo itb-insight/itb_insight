@@ -1,0 +1,273 @@
+/* Staff booth scanner on the dashboard's dark background. Phone-first: staff hold the phone
+   in one hand, so controls are full width and at least 48px tall. */
+
+.page {
+  width: 100%;
+  max-width: 520px;
+  padding: calc(var(--sidebar-top, 124px) - 7px) 16px 80px;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  color: #ffffff;
+}
+
+@media (max-width: 1300px) {
+  .page {
+    padding-top: 24px;
+  }
+}
+
+.title {
+  margin: 0 0 20px;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 42px;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 16px;
+  border: 2px solid #517eda;
+  background: linear-gradient(0deg, rgba(172, 199, 255, 0.35) 0%, rgba(27, 59, 125, 0.55) 100%);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ccddff;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 16px; /* >= 16px so iOS does not zoom on focus */
+  font-variant-numeric: tabular-nums;
+  color: #0e214a;
+  background: #f4f7ff;
+  border: 1px solid #acc7ff;
+  border-radius: 10px;
+}
+
+.input:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 1px;
+}
+
+.input[aria-invalid="true"] {
+  border-color: #ff8a8a;
+}
+
+.note {
+  margin: 0;
+  font-size: 15px;
+  line-height: 20px;
+  color: #ccddff;
+}
+
+.fieldError {
+  margin: 0;
+  font-size: 14px;
+  color: #ffb4b4;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.primaryBtn {
+  border: none;
+  background: #acc7ff;
+  color: #0e214a;
+}
+
+.primaryBtn:hover:not(:disabled) {
+  background: #dee8fb;
+}
+
+.primaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondaryBtn {
+  border: 1px solid #acc7ff;
+  background: transparent;
+  color: #ffffff;
+}
+
+.primaryBtn:focus-visible,
+.secondaryBtn:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+}
+
+.result p {
+  margin: 0;
+}
+
+.resultTitle {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.resultOk {
+  background: rgba(64, 160, 110, 0.25);
+  border-color: rgba(120, 220, 160, 0.6);
+}
+
+.resultWarn {
+  background: rgba(200, 150, 40, 0.22);
+  border-color: rgba(240, 200, 100, 0.6);
+}
+
+.resultError {
+  background: rgba(190, 60, 60, 0.25);
+  border-color: rgba(255, 140, 140, 0.6);
+}
+
+/* Review dialog: centred on desktop, bottom sheet on phones. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(4, 12, 32, 0.7);
+}
+
+.dialog {
+  width: 100%;
+  max-width: 440px;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px;
+  border-radius: 16px;
+  border: 2px solid #517eda;
+  background: #13306b;
+  color: #ffffff;
+}
+
+@media (max-width: 760px) {
+  .backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .dialog {
+    max-width: none;
+    max-height: 90dvh;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: calc(22px + env(safe-area-inset-bottom));
+  }
+}
+
+.dialogTitle {
+  margin: 0;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 30px;
+  overflow-wrap: anywhere;
+}
+
+.warning {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border-left: 4px solid #f0c864;
+  background: rgba(240, 200, 100, 0.14);
+}
+
+.warning p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.warningTitle {
+  font-weight: 700;
+  font-size: 17px !important;
+  margin-bottom: 4px !important;
+}
+
+.breakdown {
+  margin: 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.breakdown > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.breakdown dt {
+  font-size: 16px;
+  color: #ccddff;
+}
+
+.breakdown dd {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.bonusInput {
+  width: 96px;
+  text-align: right;
+}
+
+.total {
+  padding-top: 8px;
+  border-top: 1px solid rgba(172, 199, 255, 0.4);
+}
+
+.total dd {
+  font-size: 24px;
+}
+
+.dialogActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 6px;
+}

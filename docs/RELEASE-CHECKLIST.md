@@ -13,7 +13,7 @@
 8. [ ] The RSVP flow
 9. [ ] Tracking
 	- [ ] PostHog env vars on Production (key, region, project id, `query:read` key)
-	- [ ] Migrations 0015–0017 applied to production (export `analytics_events` first if wanted)
+	- [ ] Migrations 0015–0023 applied to production (export `analytics_events` first if wanted; `0020`/`0021` were renumbered from duplicate `0015`/`0016`, see `supabase migration list`)
 	- [ ] `/admin` numbers checked against PostHog on production
 	- [ ] Booth `lat`/`lng` filled; venue field test done; `presence_radius_m` / `BOOTH_MAX_ACCURACY_M` tuned; burst kept or turned off
 	- [ ] `PRESENCE_TEST_MODE` off in Production after testing

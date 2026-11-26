@@ -33,12 +33,14 @@ create table if not exists public.feedback_forms (
   check (opens_at is null or closes_at is null or opens_at < closes_at)
 );
 
+drop trigger if exists feedback_forms_set_updated_at on public.feedback_forms;
 create trigger feedback_forms_set_updated_at
   before update on public.feedback_forms
   for each row execute function public.set_updated_at();
 
 alter table public.feedback_forms enable row level security;
 
+drop policy if exists "Admins can read feedback forms" on public.feedback_forms;
 create policy "Admins can read feedback forms" on public.feedback_forms
   for select
   using (public.is_admin((select auth.uid())));
@@ -68,6 +70,7 @@ create index if not exists feedback_submissions_form_created_idx
 
 alter table public.feedback_submissions enable row level security;
 
+drop policy if exists "Admins can read feedback submissions" on public.feedback_submissions;
 create policy "Admins can read feedback submissions" on public.feedback_submissions
   for select
   using (public.is_admin((select auth.uid())));

@@ -11,7 +11,7 @@ Only **Current** rows are implemented.
 | `POST /api/tickets/ensure` | Current | Authenticated create/reuse of a `visitor_tickets` QR ticket. |
 | `POST /api/registrations/individual`, `POST /api/teams`, `POST /api/teams/join`, `POST /api/registrations/team` | Current | Authenticated registration/team workflow. |
 | `POST /api/check-in/scan`, `POST /api/check-in/self`, `POST /api/check-in/manual` | Current | Gate scanner (staff), self-scan, and manual lookup with duplicate prevention. |
-| `GET /api/booths`, `POST /api/booths/scan`, `GET /api/booths/progress` | Current | Booth catalog, gate-dependent visit scanning, and gamification progress. |
+| `GET /api/booths`, `POST /api/booths/scan`, `GET /api/booths/progress` | Current | Booth catalog, staff QR point awards (base once per booth, capped repeat bonus, warnings confirmed with `confirmWarnings`; rules in `docs/SIDEQUESTS.md`), and gamification progress. |
 | `GET /api/rsvp/[token]`, `POST /api/rsvp/[token]` | Current | Tokenized RSVP invitations and response submission with substitution support. |
 | `GET/POST /api/feedback/[slug]`, `GET /api/feedback?form=` | Current | Configurable feedback forms (public form + submit) and staff summary. See `docs/FEEDBACK.md`. |
 | `GET /api/partners`, `POST /api/partners/inquiry` | Current | Tiered partners listing and integrated inquiry submission. |

@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/SIDEQUESTS.md",
-                "mode": "preview",
+                "file": "docs/MAPS-NOTES.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "SIDEQUESTS"
+              "title": "MAPS-NOTES"
             }
           }
         ],
@@ -204,19 +204,23 @@
   },
   "active": "28583da7a86a582b",
   "lastOpenFiles": [
-    "supabase/migrations/0019_profile_role_grants.sql",
-    "supabase/migrations/0019_profile_role_grants.sql.tmp.25005.a993d694944f",
-    "src/lib/types/database.ts.tmp.25005.57cb89764a5f",
-    "supabase/migrations/0018_profile_role_b_divisions.sql",
-    "supabase/migrations/0018_profile_role_b_divisions.sql.tmp.25005.e774d5466b76",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.bff51b6eadd3",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.62edfa1aa487",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.86bd0c2d78d9",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.0e34093f0f20",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.371cd1bd4034",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.980507d8df71",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.b7f2db20f874",
+    "src/features/booth-scan/BoothScanner.module.css",
+    "src/features/booth-scan/BoothScanner.module.css.tmp.25005.ee2dcdc1a0f5",
+    "src/features/booth-scan/BoothScanner.tsx",
+    "src/features/booth-scan/BoothScanner.tsx.tmp.25005.6c93dbf32081",
+    "docs/SIDEQUESTS.md",
+    "docs/EMAIL.md",
+    "docs/analytics/06-dday-presence.md",
+    "docs/analytics/02-posthog-setup.md",
     "docs/MAPS-NOTES.md",
     "public/images/timeline/v2/purple.png",
-    "src/shared/hooks/useHasSession.test.ts",
-    "src/shared/hooks/useHasSession.ts.tmp.180708.ce88377eaaf6",
-    "src/features/events/location-tba.test.ts",
-    "src/lib/event-location.ts",
-    "src/lib/event-location.ts.tmp.165559.6093f37f9ba9",
-    "src/proxy.test.ts.tmp.130913.aa862de9a703",
     "design-sources/README.md",
     "design-sources/images/dashboard-bg.png",
     "design-sources/images/gallery/mirror_logo.JPG",
@@ -235,6 +239,8 @@
     "notes.md",
     "docs/REGISTRATION-FLOWS.md",
     "docs/RELEASES.md",
+    "docs/analytics/00-overview.md",
+    "docs/analytics/01-tracking-library.md",
     "qr-notes.md"
   ]
 }

@@ -3,7 +3,7 @@
 import jsQR from "jsqr"
 import { useEffect, useRef } from "react"
 
-import styles from "./QrPointsTester.module.css"
+import styles from "./QrCameraScanner.module.css"
 
 type QrCameraScannerProps = {
   onResult: (text: string) => void
