@@ -204,7 +204,7 @@ export default function RewardsMobile({
         ) : null}
       </div>
 
-      <QuestBottomNav active="rewards" scanHref="/quest/scan" />
+      <QuestBottomNav active="rewards" />
     </div>
   )
 }

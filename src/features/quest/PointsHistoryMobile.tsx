@@ -130,7 +130,7 @@ export default function PointsHistoryMobile({
         </section>
       </div>
 
-      <QuestBottomNav active="rewards" scanHref="/quest/scan" />
+      <QuestBottomNav active="rewards" />
     </div>
   )
 }

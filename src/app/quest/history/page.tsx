@@ -61,7 +61,7 @@ const ENTRIES: HistoryEntry[] = [
   },
 ]
 
-export default function PointsHistoryHifiPage() {
+export default function PointsHistoryPage() {
   /*
     Masih memakai data contoh, jadi tetap digerbang walau route-nya sudah
     route sungguhan: isi palsu tidak boleh ikut ke produksi. Hapus baris ini

@@ -75,7 +75,7 @@ const REWARDS: RewardEntry[] = [
   },
 ]
 
-export default function RewardsHifiPage() {
+export default function RewardsPage() {
   /*
     Masih memakai data contoh, jadi tetap digerbang walau route-nya sudah
     route sungguhan: isi palsu tidak boleh ikut ke produksi. Hapus baris ini

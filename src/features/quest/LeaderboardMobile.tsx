@@ -137,7 +137,7 @@ export default function LeaderboardMobile({
         ) : null}
       </div>
 
-      <QuestBottomNav active="board" scanHref="/quest/scan" />
+      <QuestBottomNav active="board" />
     </div>
   )
 }

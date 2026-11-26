@@ -31,7 +31,7 @@ const SEKITAR = [
   { rank: 38, name: "Putriiiiii", quests: 10, points: "1.215" },
 ]
 
-export default function QuestLeaderboardPreview() {
+export default function LeaderboardPage() {
   /*
     Masih memakai data contoh, jadi tetap digerbang walau route-nya sudah
     route sungguhan: isi palsu tidak boleh ikut ke produksi. Hapus baris ini
