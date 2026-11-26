@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 
+import { MAP_INITIAL_VIEW } from "./mapLocations"
 import { labelPoint, lineMidpoint, pointInRing, VENUE_LAYOUT } from "./venueLayout"
 
 const { zones, lines, labels, anchors, eventArea } = VENUE_LAYOUT
@@ -58,6 +59,27 @@ describe("venue layout (venue-layout.json)", () => {
     const of = (kind: string) => labels.features.filter((f) => f.properties.kind === kind).map((f) => f.properties.label)
     expect(of("exit")).toEqual(["Exit", "Exit"])
     expect(of("landmark").sort()).toEqual(["Indonesia Tenggelam", "Lapangan Basket & Voli", "Monumen Kubus", "Tunnel"])
+  })
+
+  it("turns the BL / TR points into the map's bounds, not landmarks", () => {
+    expect(VENUE_LAYOUT.bounds).toEqual([
+      [107.605924, -6.895397],
+      [107.61462, -6.884319],
+    ])
+    expect(labels.features.some((f) => /^(bl|tr)$/i.test(f.properties.label))).toBe(false)
+  })
+
+  it("keeps the event area and the initial view inside the bounds", () => {
+    const [[west, south], [east, north]] = VENUE_LAYOUT.bounds!
+    for (const [lng, lat] of eventArea!.geometry.coordinates[0]) {
+      expect(lng).toBeGreaterThanOrEqual(west)
+      expect(lng).toBeLessThanOrEqual(east)
+      expect(lat).toBeGreaterThanOrEqual(south)
+      expect(lat).toBeLessThanOrEqual(north)
+    }
+
+    const { longitude, latitude } = MAP_INITIAL_VIEW
+    expect(longitude > west && longitude < east && latitude > south && latitude < north).toBe(true)
   })
 
   it("drops the degenerate shapes geojson.io leaves behind", () => {

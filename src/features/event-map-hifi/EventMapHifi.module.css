@@ -17,6 +17,8 @@
 
 @media (max-width: 899px) {
   .page {
+    /* Mobile navbar height; the bottom sheet's "full" state ends just under it. */
+    --map-navbar-h: 116px;
     flex-direction: column;
   }
 

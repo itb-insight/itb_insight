@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import { MAP_CATEGORIES, pinForCategory } from "./mapCategories"
-import { MAP_LOCATIONS } from "./mapLocations"
+import { MAP_LOCATIONS, parseParkingName } from "./mapLocations"
 
 const byCategory = (id: string) => MAP_LOCATIONS.filter((l) => l.category === id)
 
@@ -24,6 +24,29 @@ describe("map locations", () => {
     expect(byCategory("toilet")).toHaveLength(2)
     expect(byCategory("fnb").map((l) => l.name)).toEqual(["Food and Beverages"])
     for (const id of ["parkir", "toilet", "fnb"]) expect(pinForCategory(id)).toMatch(/^\/map-pin\//)
+  })
+
+  it("lists exits and entry gates with the side they are on", () => {
+    const gates = byCategory("gate").map((l) => [l.name, l.description])
+    expect(gates).toEqual([
+      ["Main Gate", "Pintu masuk · sisi selatan · dekat Monumen Kubus"],
+      ["Exit 1", "Pintu keluar · sisi utara · dekat Tunnel"],
+      ["Exit 2", "Pintu keluar · sisi barat laut"],
+    ])
+  })
+
+  it("moves parking vehicle types out of the title into icons", () => {
+    expect(parseParkingName("Parkir Sipil - Motorcycles only")).toEqual({ name: "Parkir Sipil", vehicles: ["motorcycle"] })
+    expect(parseParkingName("Parkir Seni Rupa (motorcycles and car)")).toEqual({
+      name: "Parkir Seni Rupa",
+      vehicles: ["motorcycle", "car"],
+    })
+    expect(parseParkingName("Parkir Timur")).toEqual({ name: "Parkir Timur", vehicles: [] })
+    const publicParking = byCategory("parkir").filter((l) => !l.starred)
+    expect(publicParking.map((l) => [l.name, l.vehicles])).toEqual([
+      ["Parkir Sipil", ["motorcycle"]],
+      ["Parkir Seni Rupa", ["motorcycle", "car"]],
+    ])
   })
 
   it("leaves sterile zones (backstage, FOH) out of the place list", () => {

@@ -1,6 +1,6 @@
 "use client"
 
-import type { RefObject } from "react"
+import { useMemo, type RefObject } from "react"
 import Image from "next/image"
 import Map, { Layer, Marker, Source, type MapRef } from "react-map-gl/maplibre"
 import { Star } from "lucide-react"
@@ -8,6 +8,7 @@ import "maplibre-gl/dist/maplibre-gl.css"
 
 import styles from "./MapCanvasHifi.module.css"
 import { MAP_PIN, pinForCategory } from "./mapCategories"
+import { isLocationVisible, isZoneVisible, type MapTab } from "./mapFilters"
 import MapZoomStepper from "./MapZoomStepper"
 import { MAP_INITIAL_VIEW, MAP_LOCATIONS, MAP_STYLE_URL, type MapLocation } from "./mapLocations"
 import {
@@ -20,6 +21,7 @@ import {
 
 interface MapCanvasHifiProps {
   mapRef: RefObject<MapRef | null>
+  tab: MapTab
   activeLocationId?: string | null
   onSelectLocation?: (location: MapLocation) => void
 }
@@ -35,20 +37,48 @@ const FONT_ITALIC = ["Montserrat SemiBold Italic", "Open Sans Italic", "Noto San
   that checks the role server-side and drop them from venue-layout.json.
 */
 
+// `Map` here is the react-map-gl component, hence globalThis.Map.
+const ZONE_BY_ID = new globalThis.Map(VENUE_LAYOUT.zones.features.map((f) => [f.properties.id, f.properties]))
+
+/** Zones, labels and pins for a filter tab. Paths and sterile lines are always drawn. */
+function filterForTab(tab: MapTab) {
+  if (tab === "All") {
+    return { zones: VENUE_LAYOUT.zones, labels: VENUE_LAYOUT.labels, locations: MAP_LOCATIONS }
+  }
+  const zoneShown = (id: string) => {
+    const zone = ZONE_BY_ID.get(id)
+    return !zone || isZoneVisible(tab, zone)
+  }
+  return {
+    zones: { ...VENUE_LAYOUT.zones, features: VENUE_LAYOUT.zones.features.filter((f) => zoneShown(f.properties.id)) },
+    // Zone names follow their zone; path tags, exits and landmarks always show.
+    labels: {
+      ...VENUE_LAYOUT.labels,
+      features: VENUE_LAYOUT.labels.features.filter((f) => f.properties.kind !== "zone" || zoneShown(f.properties.id)),
+    },
+    locations: MAP_LOCATIONS.filter((l) => isLocationVisible(tab, l)),
+  }
+}
+
 export default function MapCanvasHifi({
   mapRef,
+  tab,
   activeLocationId = null,
   onSelectLocation,
 }: MapCanvasHifiProps) {
+  const { zones, labels, locations } = useMemo(() => filterForTab(tab), [tab])
+
   return (
     <div className={styles.canvas}>
       <Map
         ref={mapRef}
         initialViewState={MAP_INITIAL_VIEW}
+        // Panning and zooming out stop at the rectangle drawn with the "BL"/"TR" points.
+        maxBounds={VENUE_LAYOUT.bounds ?? undefined}
         mapStyle={MAP_STYLE_URL}
         style={{ width: "100%", height: "100%" }}
       >
-        <Source id="venue-zones" type="geojson" data={VENUE_LAYOUT.zones}>
+        <Source id="venue-zones" type="geojson" data={zones}>
           <Layer
             id="zone-fill"
             type="fill"
@@ -106,7 +136,7 @@ export default function MapCanvasHifi({
         </Source>
 
         {/* Later layers win label collisions, so zone names go last. */}
-        <Source id="venue-labels" type="geojson" data={VENUE_LAYOUT.labels}>
+        <Source id="venue-labels" type="geojson" data={labels}>
           <Layer
             id="exit-dot"
             type="circle"
@@ -185,7 +215,7 @@ export default function MapCanvasHifi({
           />
         </Source>
 
-        {MAP_LOCATIONS.map((location) => {
+        {locations.map((location) => {
           const active = activeLocationId === location.id
           const pin = pinForCategory(location.category)
           // Event zones have no pin of their own; they get the selected pin only while focused.

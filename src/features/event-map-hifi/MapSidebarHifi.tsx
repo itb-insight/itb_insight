@@ -1,15 +1,15 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { X } from "lucide-react"
 
 import styles from "./MapSidebarHifi.module.css"
 import { ArrowLeftIcon, SearchIcon } from "./CategoryIcons"
 import CategoryRow from "./CategoryRow"
 import MapPlaceCard from "./MapPlaceCard"
 import MapPlaceDetail from "./MapPlaceDetail"
-import { MAP_CATEGORIES, MAP_TABS, type MapTab } from "./mapCategories"
+import { MAP_TABS, type MapTab } from "./mapFilters"
 import type { MapLocation } from "./mapLocations"
 import type { MapBrowse } from "./useMapBrowse"
 
@@ -26,9 +26,20 @@ export default function MapSidebarHifi({
   onTabChange,
   onNavigate,
 }: MapSidebarHifiProps) {
-  const [query, setQuery] = useState("")
-  const { openCategory, openPlace, places, openCategoryBy, openPlaceBy, backToCategories, backToPlaces } =
-    browse
+  const {
+    categories,
+    openCategory,
+    openPlace,
+    places,
+    query,
+    setQuery,
+    results,
+    openCategoryBy,
+    openPlaceBy,
+    backToCategories,
+    backToPlaces,
+  } = browse
+  const searching = query.trim() !== ""
 
   return (
     <aside className={styles.sidebar}>
@@ -66,18 +77,41 @@ export default function MapSidebarHifi({
 
       <div className={styles.search}>
         <input
-          type="text"
+          type="search"
           className={styles.searchInput}
-          placeholder="Where do you want to go?"
+          placeholder="Ingin ke mana?"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           aria-label="Cari lokasi"
         />
-        <SearchIcon className={styles.searchIcon} />
+        {query ? (
+          <button
+            type="button"
+            className={styles.searchClear}
+            aria-label="Hapus pencarian"
+            onClick={() => setQuery("")}
+          >
+            <X aria-hidden="true" />
+          </button>
+        ) : (
+          <SearchIcon className={styles.searchIcon} />
+        )}
       </div>
 
       {openPlace ? (
         <MapPlaceDetail location={openPlace} onBack={backToPlaces} onNavigate={onNavigate} />
+      ) : searching ? (
+        results.length > 0 ? (
+          <ul className={styles.cards} aria-label="Hasil pencarian">
+            {results.map((place) => (
+              <li key={place.id}>
+                <MapPlaceCard location={place} onSelect={openPlaceBy} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={styles.empty}>Tidak ada lokasi yang cocok dengan &ldquo;{query.trim()}&rdquo;.</p>
+        )
       ) : openCategory ? (
         <>
           <button type="button" className={styles.back} onClick={backToCategories}>
@@ -99,7 +133,7 @@ export default function MapSidebarHifi({
         </>
       ) : (
         <ul className={styles.list}>
-          {MAP_CATEGORIES.map((category) => (
+          {categories.map((category) => (
             <li key={category.id}>
               <CategoryRow category={category} onSelect={openCategoryBy} />
             </li>

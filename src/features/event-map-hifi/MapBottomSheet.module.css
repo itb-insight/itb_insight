@@ -8,15 +8,41 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: var(--sheet-h, 360px);
+  height: var(--sheet-h);
+  overflow: hidden;
   border-radius: 20px 20px 0 0;
   background: linear-gradient(180deg, #091b3f 0%, #294d97 100%), #091b3f;
+  box-shadow: 0 -6px 24px rgb(9 27 63 / 0.35);
   font-family: var(--font-primary), "Gabarito", sans-serif;
-  transition: height 0.25s ease;
+  transition:
+    height 0.25s ease,
+    border-radius 0.25s ease;
 }
 
-.collapsed {
-  --sheet-h: 120px;
+/* Snap points: keep in sync with sheetSnap.ts. --map-navbar-h is set in EventMapHifi.module.css. */
+.snapClosed {
+  --sheet-h: 44px;
+}
+
+.snapHalf {
+  --sheet-h: min(360px, calc((100% - var(--map-navbar-h, 116px)) * 0.6));
+}
+
+/* Full: square corners so the sheet fills the screen under the navbar. */
+.snapFull {
+  --sheet-h: calc(100% - var(--map-navbar-h, 116px));
+  border-radius: 0;
+}
+
+/* While a finger is on the handle the height follows it directly. */
+.dragging {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    transition: none;
+  }
 }
 
 .handle {
@@ -25,11 +51,16 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 33px;
+  height: 40px;
   padding: 0;
   border: none;
   background: none;
-  cursor: pointer;
+  cursor: grab;
+  touch-action: none; /* the drag moves the sheet, not the page */
+}
+
+.handle:active {
+  cursor: grabbing;
 }
 
 .handleBar {

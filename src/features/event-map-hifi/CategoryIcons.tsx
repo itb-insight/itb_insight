@@ -104,6 +104,66 @@ export function ParkingIcon({ className }: IconProps) {
   )
 }
 
+/** Car, front view. Drawn for this project in the same solid 24px style as the icons above. */
+export function CarIcon({ className }: IconProps) {
+  return (
+    <Box className={className}>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path
+          fill="currentColor"
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M6.1 4h11.8c.86 0 1.63.52 1.95 1.32l1.6 4.02A2.4 2.4 0 0 1 23 11.5V17a1 1 0 0 1-1 1h-1v1.5a1.5 1.5 0 0 1-3 0V18H6v1.5a1.5 1.5 0 0 1-3 0V18H2a1 1 0 0 1-1-1v-5.5a2.4 2.4 0 0 1 1.55-2.16l1.6-4.02A2.1 2.1 0 0 1 6.1 4m.4 2L5.1 9.5h13.8L17.5 6zM5.5 15a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3m13 0a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3M9 13.25c0-.41.34-.75.75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75"
+        />
+      </svg>
+    </Box>
+  )
+}
+
+/** Motorcycle, side view. Drawn for this project in the same solid 24px style as the icons above. */
+export function MotorcycleIcon({ className }: IconProps) {
+  return (
+    <Box className={className}>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        {/* wheels */}
+        <path
+          fill="currentColor"
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M5 12.5a4 4 0 1 1 0 8a4 4 0 0 1 0-8m0 2.2a1.8 1.8 0 1 0 0 3.6a1.8 1.8 0 0 0 0-3.6m14-2.2a4 4 0 1 1 0 8a4 4 0 0 1 0-8m0 2.2a1.8 1.8 0 1 0 0 3.6a1.8 1.8 0 0 0 0-3.6"
+        />
+        {/* seat, tank and engine */}
+        <path
+          fill="currentColor"
+          d="M2 9.6c0-.33.27-.6.6-.6h5.15l1.6-1.6c.23-.23.53-.36.85-.36h4.35c.36 0 .7.16.93.44l1.3 1.6c.24.3.27.72.07 1.05l-2.4 4.1c-.21.37-.6.6-1.03.6H9.6c-.4 0-.77-.2-.99-.53L7.2 12.7c-.36-.53-.96-.85-1.6-.85H3.2c-.66 0-1.2-.54-1.2-1.2z"
+        />
+        {/* handlebar, fork and swingarm */}
+        <path
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M14.6 4.6h2.6l1.8 11.9M9.4 14.2l-2.7 1.4"
+        />
+      </svg>
+    </Box>
+  )
+}
+
+/** Exits & Gates: a door with an arrow leading out. Same solid 24px style. */
+export function ExitIcon({ className }: IconProps) {
+  return (
+    <Box className={className}>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path
+          fill="currentColor"
+          d="M4 2h10a1 1 0 0 1 1 1v5h-2V4H5v16h8v-4h2v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1m12.3 5.3a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1 0 1.4l-4 4a1 1 0 0 1-1.4-1.4l2.3-2.3H9a1 1 0 1 1 0-2h9.6l-2.3-2.3a1 1 0 0 1 0-1.4"
+        />
+      </svg>
+    </Box>
+  )
+}
+
 /** ion:search-sharp */
 export function SearchIcon({ className }: IconProps) {
   return (

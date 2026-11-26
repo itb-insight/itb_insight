@@ -2,6 +2,7 @@ import Image from "next/image"
 
 import styles from "./MapPlaceCard.module.css"
 import type { MapLocation } from "./mapLocations"
+import PlaceName from "./PlaceName"
 
 interface MapPlaceCardProps {
   location: MapLocation
@@ -23,7 +24,9 @@ export default function MapPlaceCard({ location, onSelect }: MapPlaceCardProps) 
         />
       ) : null}
       <span className={styles.content}>
-        <span className={styles.title}>{location.name}</span>
+        <span className={styles.title}>
+          <PlaceName location={location} />
+        </span>
         {location.description ? (
           <span className={styles.description}>{location.description}</span>
         ) : null}

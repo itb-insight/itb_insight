@@ -4,6 +4,7 @@ import styles from "./MapPlaceDetail.module.css"
 import { ArrowLeftIcon } from "./CategoryIcons"
 import MapPlaceLinks from "./MapPlaceLinks"
 import type { MapLocation } from "./mapLocations"
+import PlaceName from "./PlaceName"
 
 interface MapPlaceDetailProps {
   location: MapLocation
@@ -16,7 +17,9 @@ export default function MapPlaceDetail({ location, onBack, onNavigate }: MapPlac
     <>
       <div className={styles.head}>
         <div className={styles.heading}>
-          <h2 className={styles.title}>{location.name}</h2>
+          <h2 className={styles.title}>
+            <PlaceName location={location} />
+          </h2>
           {location.description ? (
             <p className={styles.subtitle}>{location.description}</p>
           ) : null}

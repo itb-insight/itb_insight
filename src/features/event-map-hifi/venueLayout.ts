@@ -13,7 +13,10 @@ import raw from "./venue-layout.json"
     "toilets"                     toilet (toilet pin)
     "path…"                       walking route; "enter"/"exit" in the name adds a small tag
     "sterile" (line)              sterile barrier
+    "TR" / "BL" (points)          top-right / bottom-left corners of the area the map may show
     "Exit" (point)                exit marker
+    "…gate / gerbang / entrance / entry…" (polygon or point)
+                                  entry gate (listed under "Exits & Gates")
     any other named point         landmark label
     any other named polygon       zone, labelled with its name, filled with its `fill` colour
 
@@ -31,6 +34,9 @@ export const TOILET_COLOR = "#33AAFF"
 export const EXIT_COLOR = "#15803D"
 const DEFAULT_ZONE_COLOR = "#6B7280"
 
+/** Names of entry gates ("Main Gate", "Gerbang Barat", "Side Entrance", ...). */
+const GATE_NAME = /\b(gate|gerbang|entrance|entry)\b/i
+
 /**
  * Zones that are sterile (crew/talent only), matched by lower-case name. They are drawn in red
  * with a "STERILE" tag and never get a sidebar entry or description (mapLocations.ts).
@@ -41,7 +47,7 @@ export type ParkingType = keyof typeof PARKING_COLORS
 
 export interface ZoneProps {
   id: string
-  kind: "zone" | "parking" | "toilet"
+  kind: "zone" | "gate" | "parking" | "toilet"
   color: string
   sterile: boolean
 }
@@ -62,7 +68,7 @@ export interface LabelProps {
 /** One point inside each drawn polygon: where its pin goes and where the map flies to. */
 export interface Anchor {
   id: string
-  kind: "zone" | "parking-guest" | "parking-public" | "toilet"
+  kind: "zone" | "gate" | "exit" | "parking-guest" | "parking-public" | "toilet"
   /** Display name: the zone label, or the details in "public parking (<details>)". */
   name: string
   sterile: boolean
@@ -77,6 +83,8 @@ export interface VenueLayout {
   anchors: Anchor[]
   /** Event boundary. Never drawn: it backs the live count of people still inside the event. */
   eventArea: Feature<Polygon> | null
+  /** [[west, south], [east, north]] from the "BL" and "TR" points; null unless both exist. */
+  bounds: [[number, number], [number, number]] | null
 }
 
 // ---- geometry (planar; fine at campus scale) ----
@@ -187,12 +195,28 @@ function parkingName(name: string): string {
   return open >= 0 && name.endsWith(")") ? name.slice(open + 1, -1).trim() : name
 }
 
+/** The rectangle spanned by the two corner points (min/max, so swapped corners still work). */
+function mapBounds(a: Position | null, b: Position | null): VenueLayout["bounds"] {
+  if (!a || !b) return null
+  const west = Math.min(a[0], b[0])
+  const east = Math.max(a[0], b[0])
+  const south = Math.min(a[1], b[1])
+  const north = Math.max(a[1], b[1])
+  if (west === east || south === north) return null
+  return [
+    [west, south],
+    [east, north],
+  ]
+}
+
 export function buildVenueLayout(source: FeatureCollection): VenueLayout {
   const zones: Feature<Polygon, ZoneProps>[] = []
   const lines: Feature<LineString, LineProps>[] = []
   const labels: Feature<Point, LabelProps>[] = []
   const anchors: Anchor[] = []
   let eventArea: Feature<Polygon> | null = null
+  let bottomLeft: Position | null = null
+  let topRight: Position | null = null
   const usedIds = new Map<string, number>()
 
   const uniqueId = (base: string) => {
@@ -248,25 +272,36 @@ export function buildVenueLayout(source: FeatureCollection): VenueLayout {
 
       const id = uniqueId(slug(name) || "zone")
       const sterile = STERILE_ZONES.has(lower)
+      const kind = GATE_NAME.test(name) ? "gate" : "zone"
       const fill = typeof props.fill === "string" && props.fill ? props.fill : DEFAULT_ZONE_COLOR
       zones.push({
         type: "Feature",
-        properties: { id, kind: "zone", color: sterile ? STERILE_COLOR : fill, sterile },
+        properties: { id, kind, color: sterile ? STERILE_COLOR : fill, sterile },
         geometry,
       })
       if (name) {
         const display = name === lower ? titleCase(name) : name // "backstage" -> "Backstage"
         label(id, "zone", [lng, lat], display, sterile ? "STERILE" : "")
-        anchors.push({ id, kind: "zone", name: display, sterile, lng, lat })
+        anchors.push({ id, kind, name: display, sterile, lng, lat })
       }
       continue
     }
 
     if (geometry?.type === "Point") {
       if (!name) continue
+      if (lower === "bl" || lower === "tr") {
+        if (lower === "bl") bottomLeft = geometry.coordinates
+        else topRight = geometry.coordinates
+        continue
+      }
       const exit = lower === "exit"
       const display = name === lower ? titleCase(name) : name // "indonesia tenggelam" -> "Indonesia Tenggelam"
-      label(uniqueId(exit ? "exit" : slug(name)), exit ? "exit" : "landmark", geometry.coordinates, display)
+      const id = uniqueId(exit ? "exit" : slug(name))
+      const [lng, lat] = geometry.coordinates
+      label(id, exit ? "exit" : "landmark", [lng, lat], display)
+      if (exit || GATE_NAME.test(name)) {
+        anchors.push({ id, kind: exit ? "exit" : "gate", name: display, sterile: false, lng, lat })
+      }
       continue
     }
 
@@ -287,6 +322,7 @@ export function buildVenueLayout(source: FeatureCollection): VenueLayout {
     labels: { type: "FeatureCollection", features: labels },
     anchors,
     eventArea,
+    bounds: mapBounds(bottomLeft, topRight),
   }
 }
 
