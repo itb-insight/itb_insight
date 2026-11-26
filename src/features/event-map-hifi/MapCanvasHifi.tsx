@@ -27,6 +27,8 @@ interface MapCanvasHifiProps {
   /** The visitor's position: a red "You are here" dot, shown on every filter tab. */
   userPosition?: UserPosition | null
   onSelectLocation?: (location: MapLocation) => void
+  /** Runs once the map is ready to move (e.g. to follow a deep link). */
+  onMapLoad?: () => void
 }
 
 // Glyph stacks the Carto Positron style already serves (other stacks may 404).
@@ -69,6 +71,7 @@ export default function MapCanvasHifi({
   activeLocationId = null,
   userPosition = null,
   onSelectLocation,
+  onMapLoad,
 }: MapCanvasHifiProps) {
   const { zones, labels, locations } = useMemo(() => filterForTab(tab), [tab])
 
@@ -81,6 +84,7 @@ export default function MapCanvasHifi({
         maxBounds={VENUE_LAYOUT.bounds ?? undefined}
         mapStyle={MAP_STYLE_URL}
         style={{ width: "100%", height: "100%" }}
+        onLoad={onMapLoad}
       >
         <Source id="venue-zones" type="geojson" data={zones}>
           <Layer

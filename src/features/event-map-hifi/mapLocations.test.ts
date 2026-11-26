@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest"
 
 import { MAP_CATEGORIES, pinForCategory } from "./mapCategories"
+import { MAP_FOOTER_LINKS } from "@/lib/maps"
+
+import { resolveMapDeepLink } from "./mapDeepLink"
 import { MAP_LOCATIONS, parseParkingName } from "./mapLocations"
 
 const byCategory = (id: string) => MAP_LOCATIONS.filter((l) => l.category === id)
@@ -62,5 +65,23 @@ describe("map locations", () => {
       expect(categories.has(place.category), place.id).toBe(true)
     }
     expect(new Set(MAP_LOCATIONS.map((l) => l.id)).size).toBe(MAP_LOCATIONS.length)
+  })
+})
+
+describe("map deep links", () => {
+  it("every footer Map link opens a real place or section", () => {
+    for (const { label, href } of MAP_FOOTER_LINKS) {
+      const [path, query] = href.split("?")
+      expect(path, label).toBe("/event-map")
+      expect(resolveMapDeepLink(query), label).not.toBeNull()
+    }
+  })
+
+  it("resolves places before categories and ignores unknown ids", () => {
+    expect(resolveMapDeepLink("?place=stage")).toEqual({ place: MAP_LOCATIONS.find((l) => l.id === "stage") })
+    expect(resolveMapDeepLink("?category=parkir")).toMatchObject({ category: { id: "parkir" } })
+    expect(resolveMapDeepLink("?place=nope")).toBeNull()
+    expect(resolveMapDeepLink("?category=<script>")).toBeNull()
+    expect(resolveMapDeepLink("")).toBeNull()
   })
 })

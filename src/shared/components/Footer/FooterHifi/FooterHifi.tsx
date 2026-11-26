@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
+import { MAP_FOOTER_LINKS, MAP_PATH, isDisabledMapHref, isMapsDisabled } from "@/lib/maps"
 import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
 import styles from "./FooterHifi.module.css"
 
@@ -34,16 +34,10 @@ const competitionLinks: FooterLink[] = [
 ]
 
 /*
- * Area di peta acara. Belum ada tautan per area, jadi semuanya menuju /event-map;
- * saat NEXT_PUBLIC_MAPS_DISABLED=true tampil redup dengan pill "Coming Soon!".
+ * Area di peta acara (src/lib/maps.ts). Tiap tautan langsung membuka tempat atau bagiannya di
+ * /event-map; saat NEXT_PUBLIC_MAPS_DISABLED=true tampil redup dengan pill "Coming Soon!".
  */
-const mapLinks: FooterLink[] = [
-  { label: "Parkir", href: MAP_PATH },
-  { label: "Booths", href: MAP_PATH },
-  { label: "Stage", href: MAP_PATH },
-  { label: "Plaza Widya", href: MAP_PATH },
-  { label: "Lapangan Cinta", href: MAP_PATH },
-]
+const mapLinks: FooterLink[] = MAP_FOOTER_LINKS
 
 /**
  * links kosong = kolom masih placeholder ("Page").
@@ -98,7 +92,7 @@ export default function FooterHifi() {
               )}
               {links
                 ? links.map(({ label, href }) =>
-                    href === MAP_PATH && isMapsDisabled() ? (
+                    isDisabledMapHref(href) ? (
                       <ComingSoon key={label} className={styles.columnLink} placement="top">
                         {label}
                       </ComingSoon>

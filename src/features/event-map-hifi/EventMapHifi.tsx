@@ -6,6 +6,7 @@ import type { MapRef } from "react-map-gl/maplibre"
 import styles from "./EventMapHifi.module.css"
 import MapBottomSheet from "./MapBottomSheet"
 import MapCanvasHifi from "./MapCanvasHifi"
+import { resolveMapDeepLink } from "./mapDeepLink"
 import MapNotice from "./MapNotice"
 import type { MapTab } from "./mapFilters"
 import type { MapLocation } from "./mapLocations"
@@ -85,6 +86,19 @@ export default function EventMapHifi() {
     [browse, sheetSnap],
   )
 
+  // Footer links like /event-map?place=stage open that place and fly to it right away;
+  // ?category=parkir opens that section. The URL is left as is so the link can be shared.
+  const followDeepLink = useCallback(() => {
+    const link = resolveMapDeepLink(window.location.search)
+    if (!link) return
+    if ("place" in link) {
+      browse.showPlace(link.place)
+      navigate(link.place)
+    } else {
+      browse.openCategoryBy(link.category)
+    }
+  }, [browse, navigate])
+
   const search = useCallback(
     (query: string) => {
       browse.setQuery(query)
@@ -119,6 +133,7 @@ export default function EventMapHifi() {
         activeLocationId={browse.openPlace?.id ?? null}
         userPosition={youStatus === "near" ? position : null}
         onSelectLocation={selectFromMap}
+        onMapLoad={followDeepLink}
       />
 
       <div className={styles.mobileOnly}>

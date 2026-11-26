@@ -47,3 +47,7 @@ once it has an entry in `ZONE_CONTENT`; its id is the slugged zone name (e.g. "P
 - The location is only used inside the `event area` polygon or within 1 km of its edge
   (`EVENT_AREA_MARGIN_M` / `isNearEventArea()` in `venueLayout.ts`). Farther away there is no
   dot, the map doesn't move, and "Temukan aku" explains why.
+- Deep links: `/event-map?place=<id>` opens a place and flies to it; `?category=<id>` opens a
+  sidebar section. Build them with `mapPlaceHref()` / `mapCategoryHref()` in `src/lib/maps.ts`.
+  The footer's Map column (`MAP_FOOTER_LINKS`) uses them; a test checks every footer link
+  resolves to a real place or section.
