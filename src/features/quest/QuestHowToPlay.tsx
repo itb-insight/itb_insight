@@ -6,7 +6,7 @@ import { useId, useRef, useState, type MouseEvent } from "react"
 
 import { CancelIcon, CheckIcon, PinIcon } from "./QuestIcons"
 import shared from "./quest-shared.module.css"
-import styles from "./QuestHowToPlayHifi.module.css"
+import styles from "./QuestHowToPlay.module.css"
 
 /*
  * Figma: halaman "Quest" > Section 2 > frame "How to play" (2105:5863)
@@ -19,7 +19,7 @@ export interface QuestRule {
   body: string
 }
 
-interface QuestHowToPlayHifiProps {
+interface QuestHowToPlayProps {
   rules?: QuestRule[]
   /** Tujuan tombol X kalau tidak ada halaman sebelumnya untuk kembali. */
   closeHref?: string
@@ -45,13 +45,13 @@ const DEFAULT_RULES: QuestRule[] = [
   },
 ]
 
-export default function QuestHowToPlayHifi({
+export default function QuestHowToPlay({
   rules = DEFAULT_RULES,
   closeHref = "/quest",
   privacyHref = "/privacy",
   rulesHref = "/terms",
   enterHref = "/quest",
-}: QuestHowToPlayHifiProps) {
+}: QuestHowToPlayProps) {
   const uid = useId().replace(/:/g, "")
   const router = useRouter()
   const checkboxRef = useRef<HTMLInputElement>(null)

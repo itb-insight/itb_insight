@@ -1,17 +1,17 @@
 import type { ReactNode } from "react"
 import { notFound } from "next/navigation"
 
-import QuestHeaderHifi from "@/features/quest-hifi/QuestHeaderHifi"
-import QuestHowToPlayHifi from "@/features/quest-hifi/QuestHowToPlayHifi"
-import QuestMapHifi from "@/features/quest-hifi/QuestMapHifi"
-import QuestMobileHeaderHifi from "@/features/quest-hifi/QuestMobileHeaderHifi"
-import QuestSignInButtonHifi from "@/features/quest-hifi/QuestSignInButtonHifi"
-import shared from "@/features/quest-hifi/quest-shared.module.css"
+import QuestHeader from "@/features/quest/QuestHeader"
+import QuestHowToPlay from "@/features/quest/QuestHowToPlay"
+import QuestMap from "@/features/quest/QuestMap"
+import QuestMobileHeader from "@/features/quest/QuestMobileHeader"
+import QuestSignInButton from "@/features/quest/QuestSignInButton"
+import shared from "@/features/quest/quest-shared.module.css"
 import styles from "./page.module.css"
 
 export const metadata = {
-  title: "Quest (hi-fi) | ITB Insight",
-  description: "Preview sementara Section 2 halaman Quest versi hi-fi.",
+  title: "Preview komponen quest | ITB Insight",
+  description: "Preview komponen Section 2 halaman Quest.",
   robots: { index: false },
 }
 
@@ -28,13 +28,13 @@ function DesktopHeaders() {
   return (
     <div className={`${styles.desktop} ${shared.frameBg}`}>
       <div className={styles.headerRow} style={{ top: 11 }}>
-        <QuestHeaderHifi state="signedOut" uid="qh-out" />
+        <QuestHeader state="signedOut" uid="qh-out" />
       </div>
       <div className={styles.headerRow} style={{ top: 216 }}>
-        <QuestHeaderHifi state="signedIn" uid="qh-in" />
+        <QuestHeader state="signedIn" uid="qh-in" />
       </div>
       <div className={styles.headerRow} style={{ top: 421 }}>
-        <QuestHeaderHifi state="flash" uid="qh-flash" />
+        <QuestHeader state="flash" uid="qh-flash" />
       </div>
     </div>
   )
@@ -43,7 +43,7 @@ function DesktopHeaders() {
 function MobileHeader() {
   return (
     <div className={`${styles.phone} ${shared.frameBg}`}>
-      <QuestMobileHeaderHifi uid="qmh" />
+      <QuestMobileHeader uid="qmh" />
     </div>
   )
 }
@@ -51,7 +51,7 @@ function MobileHeader() {
 function HowToPlay() {
   return (
     <div className={styles.phone}>
-      <QuestHowToPlayHifi />
+      <QuestHowToPlay />
     </div>
   )
 }
@@ -59,7 +59,7 @@ function HowToPlay() {
 function MapFrame() {
   return (
     <div className={styles.phone}>
-      <QuestMapHifi />
+      <QuestMap />
     </div>
   )
 }
@@ -67,7 +67,7 @@ function MapFrame() {
 function SignIn() {
   return (
     <div className={styles.signIn}>
-      <QuestSignInButtonHifi />
+      <QuestSignInButton />
     </div>
   )
 }
@@ -80,7 +80,7 @@ const RENDER: Record<Frame, () => ReactNode> = {
   signin: SignIn,
 }
 
-export default async function QuestHifiPage({
+export default async function QuestPreviewPage({
   searchParams,
 }: {
   searchParams: Promise<{ frame?: string }>

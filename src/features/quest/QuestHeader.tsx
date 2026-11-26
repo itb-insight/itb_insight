@@ -5,7 +5,7 @@ import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
 import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
 import { UserIcon } from "./QuestIcons"
 import shared from "./quest-shared.module.css"
-import styles from "./QuestHeaderHifi.module.css"
+import styles from "./QuestHeader.module.css"
 
 /*
  * Figma: halaman "Quest" > Section 2 > frame "Header Quest" (2100:26729).
@@ -17,7 +17,7 @@ import styles from "./QuestHeaderHifi.module.css"
 
 export type QuestHeaderState = "signedOut" | "signedIn" | "flash"
 
-interface QuestHeaderHifiProps {
+interface QuestHeaderProps {
   state: QuestHeaderState
   /** Poin dompet, sudah diformat, misal "1,240". */
   points?: string
@@ -39,7 +39,7 @@ const LINKS = [
   { href: MAP_PATH, label: "Map" },
 ]
 
-export default function QuestHeaderHifi({
+export default function QuestHeader({
   state,
   points = "1,240",
   rank = "#37",
@@ -49,7 +49,7 @@ export default function QuestHeaderHifi({
   signInHref = "/login",
   questHref = "/quest",
   profileHref = "/dashboard/profile",
-}: QuestHeaderHifiProps) {
+}: QuestHeaderProps) {
   return (
     <header className={styles.header}>
       <div className={styles.left}>

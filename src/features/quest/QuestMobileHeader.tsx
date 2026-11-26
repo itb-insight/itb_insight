@@ -4,14 +4,14 @@ import Link from "next/link"
 
 import { MenuIcon, TimerIcon } from "./QuestIcons"
 import shared from "./quest-shared.module.css"
-import styles from "./QuestMobileHeaderHifi.module.css"
+import styles from "./QuestMobileHeader.module.css"
 
 /*
  * Figma: halaman "Quest" > Section 2 > frame "mobile header" (2104:3055),
  * bagian "Header Mobile": logo, pill timer | poin, tombol menu.
  */
 
-interface QuestMobileHeaderHifiProps {
+interface QuestMobileHeaderProps {
   /** Poin dompet, sudah diformat, misal "1,240". */
   points?: string
   questHref?: string
@@ -21,12 +21,12 @@ interface QuestMobileHeaderHifiProps {
   uid?: string
 }
 
-export default function QuestMobileHeaderHifi({
+export default function QuestMobileHeader({
   points = "1,240",
   questHref = "/quest",
   menuButtonProps,
   uid = "quest-mobile-header",
-}: QuestMobileHeaderHifiProps) {
+}: QuestMobileHeaderProps) {
   return (
     <header className={styles.header}>
       <Link href="/" className={styles.logo} aria-label="ITB Insight">

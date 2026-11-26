@@ -3,10 +3,10 @@
 import Link from "next/link"
 import { useEffect, useId, useRef, useState, type CSSProperties } from "react"
 
-import QuestBottomNavHifi, { type QuestTab } from "./QuestBottomNavHifi"
+import QuestBottomNav, { type QuestTab } from "./QuestBottomNav"
 import { ArrowLeftIcon, CheckIcon } from "./QuestIcons"
 import shared from "./quest-shared.module.css"
-import styles from "./QuestMapHifi.module.css"
+import styles from "./QuestMap.module.css"
 
 /*
  * Figma: halaman "Quest" > Section 2 > frame "Quest Map Layer" (2185:798), 402 x 852.
@@ -24,7 +24,7 @@ export interface QuestSpot {
   points: string
 }
 
-interface QuestMapHifiProps {
+interface QuestMapProps {
   title?: string
   nearby?: string
   filters?: string[]
@@ -67,14 +67,14 @@ const at = ({ x, y, w, h }: Partial<Box>): CSSProperties => ({
   height: h,
 })
 
-export default function QuestMapHifi({
+export default function QuestMap({
   title = "QUEST MAP",
   nearby = "15 open nearby",
   filters = ["All", "Booths", "Landmarks", "Events"],
   spot = { initials: "LM", name: "Kolam Intel", meta: "Landmark | ~120 m  |  QR + photo", points: "+80" },
   backHref = "/quest",
   activeTab = "map",
-}: QuestMapHifiProps) {
+}: QuestMapProps) {
   const uid = useId().replace(/:/g, "")
   const [filter, setFilter] = useState(filters[0])
   const filtersRef = useRef<HTMLDivElement>(null)
@@ -200,7 +200,7 @@ export default function QuestMapHifi({
       </div>
 
       <div className={styles.nav}>
-        <QuestBottomNavHifi active={activeTab} />
+        <QuestBottomNav active={activeTab} />
       </div>
     </section>
   )
