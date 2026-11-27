@@ -60,7 +60,26 @@
   flex: none;
 }
 
+/* Narrow screens (no design yet): the header's right slot (legend, search, filters) goes under
+   the title instead of squeezing it to one word per line and pushing the page sideways. */
+@media (max-width: 899px) {
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .heading {
+    flex: 1 1 100%;
+  }
+
+  .action {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}
+
 .body {
+  /* Grows only when the panel is taller than its content (a stretched WidgetRowHifi). */
+  flex: 1 1 auto;
   min-width: 0;
   /* Kolom: widget yang punya slot kaki (mis. tombol "Lihat semua booth")
      dapat jarak yang sama dengan jarak kepala -> isi. */

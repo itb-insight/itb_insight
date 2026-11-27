@@ -31,6 +31,10 @@ interface TeamRegistrationTableProps {
   subtitle?: string
   onDetail?: (row: TeamRegistrationRow) => void
   onResendLink?: (row: TeamRegistrationRow) => void
+  /** Members are @handles (the mock); false writes their names as they are. */
+  memberHandles?: boolean
+  /** Rows shown first; the rest behind a "Tampilkan lagi" button. All rows without it. */
+  pageSize?: number
 }
 
 export default function TeamRegistrationTable({
@@ -40,7 +44,13 @@ export default function TeamRegistrationTable({
   subtitle = "Status pembayaran hanya dari webhook midtrans",
   onDetail,
   onResendLink,
+  memberHandles = true,
+  pageSize,
 }: TeamRegistrationTableProps) {
+  const firstPage = pageSize ?? Number.POSITIVE_INFINITY
+  const [limit, setLimit] = useState(firstPage)
+  // Without handlers the buttons would do nothing, so the action column is left out.
+  const actions = Boolean(onDetail || onResendLink)
   const [query, setQuery] = useState("")
   const [competition, setCompetition] = useState<string>(ALL)
 
@@ -74,13 +84,19 @@ export default function TeamRegistrationTable({
               placeholder="cari nama tim atau anggota"
               aria-label="Cari nama tim atau anggota"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(event) => {
+                setQuery(event.target.value)
+                setLimit(firstPage)
+              }}
             />
           </div>
           <FilterChips
             options={chipOptions}
             value={competition}
-            onChange={setCompetition}
+            onChange={(value) => {
+              setCompetition(value)
+              setLimit(firstPage)
+            }}
             variant="dark"
             ariaLabel="Filter lomba"
           />
@@ -89,13 +105,13 @@ export default function TeamRegistrationTable({
     >
       <table className={`${tableStyles.table} ${styles.table}`}>
         <colgroup>
-          <col style={{ width: "5.1%" }} />
-          <col style={{ width: "19.7%" }} />
+          <col style={{ width: actions ? "5.1%" : "12%" }} />
+          <col style={{ width: actions ? "19.7%" : "18.5%" }} />
           <col style={{ width: "15.1%" }} />
-          <col style={{ width: "21.5%" }} />
+          <col style={{ width: actions ? "21.5%" : "26.9%" }} />
           <col style={{ width: "15.5%" }} />
           <col style={{ width: "11.9%" }} />
-          <col style={{ width: "11.2%" }} />
+          {actions ? <col style={{ width: "11.2%" }} /> : null}
         </colgroup>
         <thead>
           <tr>
@@ -105,16 +121,16 @@ export default function TeamRegistrationTable({
             <th scope="col">Anggota</th>
             <th scope="col">Status</th>
             <th scope="col">Daftar pada</th>
-            <th scope="col"><span className={styles.srOnly}>Aksi</span></th>
+            {actions ? <th scope="col"><span className={styles.srOnly}>Aksi</span></th> : null}
           </tr>
         </thead>
         <tbody>
           {visible.length === 0 ? (
             <tr>
-              <td colSpan={7} className={tableStyles.empty}>Tidak ada tim yang cocok.</td>
+              <td colSpan={actions ? 7 : 6} className={tableStyles.empty}>Tidak ada tim yang cocok.</td>
             </tr>
           ) : (
-            visible.map((row) => {
+            visible.slice(0, limit).map((row) => {
               const status = STATUS[row.status]
               const resend = RESENDABLE.includes(row.status)
               return (
@@ -125,7 +141,7 @@ export default function TeamRegistrationTable({
                     {row.teamName ?? "Belum diberi nama"}
                   </td>
                   <td className={styles.members}>
-                    {row.members.map((member) => `@${member}`).join(", ")}
+                    {row.members.map((member) => (memberHandles ? `@${member}` : member)).join(", ")}
                   </td>
                   <td>
                     <div className={styles.fit}>
@@ -135,6 +151,7 @@ export default function TeamRegistrationTable({
                     </div>
                   </td>
                   <td>{formatDate(row.registeredAt)}</td>
+                  {actions ? (
                   <td>
                     <div className={styles.fit}>
                       <button
@@ -146,12 +163,22 @@ export default function TeamRegistrationTable({
                       </button>
                     </div>
                   </td>
+                  ) : null}
                 </tr>
               )
             })
           )}
         </tbody>
       </table>
+      {visible.length > limit ? (
+        <button
+          type="button"
+          className={`${gb.border} ${styles.action} ${styles.detail} ${styles.more}`}
+          onClick={() => setLimit((current) => current + (pageSize ?? visible.length))}
+        >
+          Tampilkan {Math.min(pageSize ?? visible.length, visible.length - limit)} lagi ({limit} dari {visible.length})
+        </button>
+      ) : null}
     </GlassPanel>
   )
 }

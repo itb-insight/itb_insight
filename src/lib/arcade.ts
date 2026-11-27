@@ -83,11 +83,21 @@ export type ArcadeSideQuest = {
   description: string | null
   points: number
   verify: string
+  /** For verify = 'proof': 'link' (social quests: send a link) or 'photo' (upload a photo). */
+  proofKind: 'photo' | 'link'
   shortcutUrl: string | null
   needsHandle: string | null
   needsVote: boolean
+  /** Booth area this quest belongs to (BOOTH_CATEGORIES id, or 'merch'); null = general. */
+  area: string | null
   attempts: number
   status: 'todo' | 'review' | 'done' | 'rejected'
+}
+
+/** Whether the player may upload (or re-upload once after a void) a photo proof for this quest. */
+export function canUploadProof(quest: ArcadeSideQuest, committee: boolean): boolean {
+  if (quest.verify !== 'proof' || committee) return false
+  return quest.status === 'todo' || (quest.status === 'rejected' && quest.attempts < 2)
 }
 export type ArcadeCollection = { slug: string; title: string; description: string | null; bonus: number; progress: number; total: number }
 export type ArcadePlayer = {
@@ -101,6 +111,30 @@ export type ArcadePlayer = {
   collections: ArcadeCollection[]
 }
 
+const QUEST_COLUMNS = 'id, slug, title, description, points, verify, shortcut_url, needs_handle, needs_vote, area'
+
+/**
+ * The active arcade-* quests. proof_kind arrives with migration 0035; until that runs, the column is
+ * missing (Postgres 42703) and the query is retried without it, so every proof quest is a photo
+ * quest instead of the whole list coming back empty. Any other error is logged, not hidden.
+ */
+async function loadArcadeQuests(): Promise<Array<Record<string, unknown>>> {
+  const supabase = createServiceClient()
+  const query = (columns: string) =>
+    supabase.from('sidequests').select(columns).eq('is_active', true).like('slug', 'arcade-%').order('order_index')
+
+  const withKind = await query(`${QUEST_COLUMNS}, proof_kind`)
+  if (!withKind.error) return (withKind.data ?? []) as unknown as Array<Record<string, unknown>>
+  if (withKind.error.code !== '42703') {
+    console.error('[arcade] side quests failed', withKind.error)
+    return []
+  }
+  console.warn('[arcade] sidequests.proof_kind missing: apply migration 0035. Showing photo proofs for now.')
+  const legacy = await query(QUEST_COLUMNS)
+  if (legacy.error) console.error('[arcade] side quests failed', legacy.error)
+  return (legacy.data ?? []) as unknown as Array<Record<string, unknown>>
+}
+
 export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
   const supabase = createServiceClient()
   const [board, committee, booths, visits, quests, subs, cols] = await Promise.all([
@@ -108,12 +142,7 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
     supabase.rpc('arcade_is_committee', { p_user: userId, p_admin_emails: adminEmailList() }),
     supabase.from('booths').select('id, name, category, location_name, points').eq('is_active', true).order('slug'),
     supabase.from('booth_scan_events').select('booth_id').eq('user_id', userId).eq('kind', 'visit'),
-    supabase
-      .from('sidequests')
-      .select('id, slug, title, description, points, verify, shortcut_url, needs_handle, needs_vote')
-      .eq('is_active', true)
-      .like('slug', 'arcade-%')
-      .order('order_index'),
+    loadArcadeQuests(),
     supabase.from('sidequest_submissions').select('quest_id, status, attempts').eq('user_id', userId),
     supabase.from('arcade_collections').select('slug, title, description, rule, categories, min_total, min_per_category, bonus').eq('is_active', true).order('order_index'),
   ])
@@ -130,7 +159,7 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
   const subByQuest = new Map(
     ((subs.data ?? []) as Array<{ quest_id: string; status: string; attempts: number }>).map((s) => [s.quest_id, s]),
   )
-  const sideQuests: ArcadeSideQuest[] = ((quests.data ?? []) as Array<{
+  const sideQuests: ArcadeSideQuest[] = (quests as Array<{
     id: string
     slug: string
     title: string
@@ -140,6 +169,8 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
     shortcut_url: string | null
     needs_handle: string | null
     needs_vote: boolean
+    area: string | null
+    proof_kind?: string | null
   }>).map((q) => {
     const sub = subByQuest.get(q.id)
     const s = sub?.status
@@ -149,9 +180,11 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
       description: q.description,
       points: q.points,
       verify: q.verify,
+      proofKind: q.proof_kind === 'link' ? 'link' : 'photo',
       shortcutUrl: q.shortcut_url,
       needsHandle: q.needs_handle,
       needsVote: q.needs_vote,
+      area: q.area,
       attempts: sub?.attempts ?? 0,
       status: s === 'approved' ? 'done' : s === 'pending' ? 'review' : s === 'rejected' ? 'rejected' : 'todo',
     }

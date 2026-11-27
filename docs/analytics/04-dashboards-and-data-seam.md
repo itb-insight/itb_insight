@@ -19,6 +19,22 @@ admin-only (`src/app/admin/layout.tsx`).
 | Booths today (`/admin/analytics`) | `getLive` | Same call, every booth. |
 | **D-Day** (`/admin/d-day`, every staff member) | `getDDay` | Supabase `admin_dday()` (0028): live headcount, check-ins per gate, booths, funnel, staff scans. 30 s cache, polled by `/api/admin/d-day`. Headcount rule: [06-dday-presence.md](06-dday-presence.md#live-headcount-admind-day). |
 
+## Insight pages (`/admin/web`, `/admin/registrations`, `/admin/feedback`, `/admin/sponsor`)
+
+The real versions of the `/admin-hifi/*` designs, admin-only (the `(admin-only)` route group) and
+in the menu under Data as Web, User, Feedback and Sponsor. Their adapters live in their own modules
+(`web.ts`, `registrations.ts`, `feedback.ts`, `sponsor.ts`) and are re-exported from `adapters.ts`,
+so pages still import from the seam. Shared helpers (`lastDays`, `inRange`, `sampleWeight`,
+`selectAll` for paging past PostgREST's 1000-row cap) are in `query.ts`.
+
+| Page | Adapter | Source |
+| --- | --- | --- |
+| Web: summary, Kunjungan, Asal Traffic, Di mana visitor berhenti | `getWebInsights` | PostHog, 30 days (chart up to 120): page views, distinct visitors, session length, single-page sessions; sources from each session's first `utm_source`, else `$referring_domain` (`classifySource`: no referrer or our own domain = direct, so untagged WhatsApp shares land there); funnel = landing `/` → sign-up completed → `/register*` → Midtrans payments settled (Supabase). |
+| Web: Error Monitor | — | No uptime or 5xx source yet: shown as "—" with links to PostHog, Vercel and Search Console. |
+| User | `getRegistrations` | Supabase: every `competition_registrations` row with its team, members, and payments. Status (`registrationStatus`): withdrawn → paid or verified = registered → pending or none = awaiting payment → otherwise expired. Finalist attendance has no source (no finalist flag). |
+| Feedback | `getFeedbackInsights` | Supabase: all `feedback_forms` and submissions. Ratings per form (overall) and per other star/scale question rescaled to 0–5; response rate = checked-in visitors (`gate_check_ins`) who responded ÷ checked-in visitors. The table shows the newest 1,000. |
+| Sponsor | `getSponsorWeb`, `getBoothInsights` | Sponsors and booths aren't linked in the database, so the admin picks both (`?sponsor=&booth=`). PostHog, 14 days: media-partner section impressions (shared by every partner) and this partner's clicks. Supabase: the booth's QR scans per Jakarta hour and day, against checked-in tickets. Map hotspot opens and booth feedback have no source yet. |
+
 ## Rules
 
 - **Mock fallback.** Without `POSTHOG_PROJECT_ID` + `POSTHOG_PERSONAL_API_KEY`, the PostHog-backed

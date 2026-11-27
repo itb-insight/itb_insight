@@ -40,7 +40,7 @@ const questObj = {
   id: '11111111-1111-1111-1111-111111111111',
   slug: 'follow-ig-itb-insight',
   category: 'marketing',
-  title: 'Follow IG @itb.insight',
+  title: 'Follow IG @itbinsight',
   points: 10,
   requires_proof: true,
   target_count: 1,

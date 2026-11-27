@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation"
 
 import QuestPageShell from "@/features/quest/QuestPageShell"
-import { QuestScreen } from "@/features/quest/QuestShell"
-import styles from "@/features/quest/quest.module.css"
+import { QuestHeader, QuestScreen } from "@/features/quest/QuestShell"
+import styles from "@/features/quest/arcade.module.css"
+import quest from "@/features/quest/quest.module.css"
 import { getArcadePlayer } from "@/lib/arcade"
 import { createClient } from "@/lib/supabase/server"
 import { ensureVisitorTicket } from "@/lib/tickets"
@@ -25,10 +26,16 @@ export default async function ArcadeQrPage() {
   return (
     <QuestPageShell activeTab="quests" points={player?.points} rank={player?.rank}>
       <QuestScreen>
-        <div className={styles.body}>
-          <h1 className={styles.cardTitle}>QR Insight Arcade</h1>
-          <p className={styles.cardMeta}>Tunjukkan QR ini ke panitia di booth, gate, atau meja hadiah.</p>
-          {token ? <PersonalQr token={token} size={280} /> : <p className={styles.cardMeta}>QR belum tersedia, muat ulang halaman.</p>}
+        <div className={quest.body}>
+          <QuestHeader title="QR Kamu" backHref="/arcade" backLabel="Kembali ke Insight Arcade" />
+          {token ? (
+            <div className={styles.qrCard}>
+              <PersonalQr token={token} size={288} />
+            </div>
+          ) : (
+            <p className={styles.empty}>QR belum tersedia, muat ulang halaman.</p>
+          )}
+          <p className={styles.qrHint}>Tunjukkan QR ini ke panitia di booth, gate, atau meja hadiah.</p>
         </div>
       </QuestScreen>
     </QuestPageShell>

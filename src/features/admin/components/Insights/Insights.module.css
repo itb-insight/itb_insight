@@ -1,0 +1,91 @@
+/* Bits shared by the /admin insight pages that the hi-fi widgets don't cover. */
+
+.pickers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pickers[aria-busy="true"] {
+  opacity: 0.6;
+}
+
+.picker select {
+  box-sizing: border-box;
+  height: 40px;
+  max-width: 280px;
+  padding: 0 36px 0 14px;
+  border: 2px solid #517eda;
+  border-radius: 24px;
+  background: transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237fa9f6' stroke-width='2'/%3E%3C/svg%3E")
+    no-repeat right 14px center;
+  color: #7fa9f6;
+  font: inherit;
+  font-size: 16px;
+  line-height: 24px;
+  text-overflow: ellipsis;
+  appearance: none;
+  cursor: pointer;
+}
+
+.picker select:focus-visible {
+  outline: 2px solid #acc7ff;
+  outline-offset: 2px;
+}
+
+.picker option {
+  background: #0b1424;
+  color: #dee8fb;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* A short note under a widget row: where a number comes from, or why it's missing. */
+.note {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--admin-link, #7fa9f6);
+}
+
+.unavailable {
+  margin: 0;
+  padding: 24px;
+  border: 2px dashed rgba(222, 232, 251, 0.3);
+  border-radius: 12px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--admin-text-muted, #ccddff);
+}
+
+/* Two charts side by side in one panel (Figma 1972:24319): 640 wide each, 18 apart. */
+.twoCharts {
+  display: grid;
+  /* minmax(0, …): a plain 1fr can't shrink below the SVG's measured width, so the charts would
+     never get narrower after a resize. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  min-width: 0;
+}
+
+@media (max-width: 999px) {
+  .twoCharts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .picker select {
+    max-width: 100%;
+  }
+}

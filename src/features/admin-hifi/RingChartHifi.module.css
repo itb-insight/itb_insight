@@ -114,3 +114,11 @@
   color: var(--admin-text-strong);
   white-space: nowrap;
 }
+
+/* Layar sempit: cincin 320px tidak muat di dalam panel ponsel. */
+@media (max-width: 600px) {
+  .ringWrap {
+    --ring-size: 220px;
+    --ring-hole: 69px;
+  }
+}

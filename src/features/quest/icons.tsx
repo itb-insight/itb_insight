@@ -94,6 +94,23 @@ export function CameraIcon({ size, ...props }: IconProps) {
   )
 }
 
+export function LinkIcon({ size, ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={size ?? 20}
+      height={size ?? 20}
+      aria-hidden="true"
+      focusable="false"
+      {...props}
+    >
+      <path d="M10 14a4.5 4.5 0 0 0 6.36 0l3.18-3.18a4.5 4.5 0 0 0-6.36-6.36L11.6 6.04" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M14 10a4.5 4.5 0 0 0-6.36 0l-3.18 3.18a4.5 4.5 0 0 0 6.36 6.36l1.58-1.58" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 export function CheckIcon({ size, ...props }: IconProps) {
   return (
     <svg

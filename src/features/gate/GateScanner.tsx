@@ -99,15 +99,15 @@ export default function GateScanner({
   const demoOptions: Array<{ option: DemoOption; title: string; detail: string; total: number; icon: typeof Gift }> = [
     {
       option: "contribution",
-      title: "Contribution",
-      detail: `+${contributionPoints} poin, untuk pengunjung yang aktif di booth`,
+      title: "Visited",
+      detail: `+${contributionPoints} poin untuk pengunjung yang datang ke booth `,
       total: contributionPoints,
       icon: Sparkles,
     },
     {
       option: "bonus",
       title: "Bonus",
-      detail: `+${bonusPoints} poin tambahan, sekaligus Contribution (+${contributionPoints})`,
+      detail: `+${bonusPoints} poin tambahan untuk pengunjung yang aktif di booth, sekaligus Contribution (+${contributionPoints})`,
       total: bonusPoints + contributionPoints,
       icon: Gift,
     },

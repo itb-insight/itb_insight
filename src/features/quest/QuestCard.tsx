@@ -2,7 +2,7 @@ import clsx from "clsx"
 import Link from "next/link"
 import type { ReactNode } from "react"
 
-import { CalendarStarIcon, CameraIcon, CheckIcon, ClockIcon, StoreIcon } from "./icons"
+import { CalendarStarIcon, CameraIcon, CheckIcon, ClockIcon, LinkIcon, StoreIcon } from "./icons"
 import styles from "./quest.module.css"
 import type { QuestIconKind, QuestItem, QuestStatus } from "./types"
 
@@ -16,6 +16,8 @@ function renderIcon(kind: QuestIconKind): ReactNode {
       return <ClockIcon />
     case "camera":
       return <CameraIcon />
+    case "link":
+      return <LinkIcon />
     case "check":
       return <CheckIcon />
     default:

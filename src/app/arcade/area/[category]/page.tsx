@@ -1,17 +1,15 @@
-import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
-import QuestCard from "@/features/quest/QuestCard"
+import ArcadeAreaView from "@/features/quest/ArcadeAreaView"
 import QuestPageShell from "@/features/quest/QuestPageShell"
-import { QuestScreen } from "@/features/quest/QuestShell"
-import styles from "@/features/quest/quest.module.css"
-import { getArcadePlayer } from "@/lib/arcade"
+import { canUploadProof, getArcadePlayer, getDroneTeams } from "@/lib/arcade"
 import { createClient } from "@/lib/supabase/server"
 
 export const dynamic = "force-dynamic"
 export const metadata = { title: "Insight Arcade | ITB Insight", robots: { index: false, follow: false } }
 
-// One area of the main quest (Tech-Xhibition, Play-Tech, ...): its booths and which ones you visited.
+// One area of the main quest (Tech-Xhibition, Play-Tech, ...): its booths, which ones you visited,
+// and the area's photo side quests with their upload form.
 export default async function ArcadeAreaPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params
   const supabase = await createClient()
@@ -24,35 +22,14 @@ export default async function ArcadeAreaPage({ params }: { params: Promise<{ cat
   const area = player.areas.find((a) => a.category === category)
   if (!area) notFound()
 
+  const sideQuests = player.sideQuests
+    .filter((q) => q.area === area.category && q.verify === "proof")
+    .map((q) => ({ quest: q, canUpload: canUploadProof(q, player.committee) }))
+  const teams = sideQuests.some((s) => s.canUpload && s.quest.needsVote) ? await getDroneTeams() : undefined
+
   return (
     <QuestPageShell activeTab="quests" points={player.points} rank={player.rank}>
-      <QuestScreen>
-        <div className={styles.body}>
-          <Link href="/arcade" className={styles.cardMeta}>
-            ← Insight Arcade
-          </Link>
-          <h1 className={styles.cardTitle}>
-            {area.label} · {area.visited}/{area.total}
-          </h1>
-          <p className={styles.cardMeta}>Tunjukkan QR profilmu ke panitia di booth untuk mendapat poin.</p>
-          <div className={styles.list}>
-            {area.booths.map((booth) => (
-              <QuestCard
-                key={booth.id}
-                href="/arcade/qr"
-                quest={{
-                  id: booth.id,
-                  title: booth.name,
-                  meta: booth.visited ? "Sudah dikunjungi" : (booth.location ?? undefined),
-                  points: booth.points,
-                  status: booth.visited ? "done" : "default",
-                  icon: booth.visited ? "check" : "store",
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      </QuestScreen>
+      <ArcadeAreaView area={area} sideQuests={sideQuests} committee={player.committee} teams={teams} />
     </QuestPageShell>
   )
 }

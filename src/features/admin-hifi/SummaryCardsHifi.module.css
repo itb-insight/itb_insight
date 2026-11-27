@@ -153,3 +153,44 @@
      (diukur dari render: 2px di ukuran ini, 1px di 36px). */
   margin-top: -0.037em;
 }
+
+/*
+  Layar sempit (belum ada rancangannya). Teksnya diletakkan absolut untuk kartu ~330px, jadi
+  kartunya jangan lebih sempit dari itu: dua kolom di tablet, satu kolom di ponsel. Kartu
+  ke-3/4 di tablet dan semua kartu di ponsel memakai sudut yang sama dengan kartu 1.
+*/
+@media (max-width: 1399px) {
+  .grid {
+    grid-template-columns: repeat(min(var(--kolom, 4), 2), minmax(0, 1fr));
+    row-gap: 22.33px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card,
+  .card:nth-child(even) {
+    border-radius: 72px 0;
+  }
+
+  /* Satu kolom: semua teks ditengahkan, tanpa titik-x dari Figma. */
+  .title {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .title,
+  .caption {
+    font-size: 20px;
+    line-height: 25px;
+  }
+
+  .value {
+    font-size: 44px;
+    line-height: 56px;
+  }
+}

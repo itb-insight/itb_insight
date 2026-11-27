@@ -14,17 +14,26 @@ import styles from "./quest.module.css"
 interface QuestHeaderProps {
   compact?: boolean
   showHome?: boolean
+  /** Uppercased by CSS. Default "Quest Mode". */
+  title?: string
+  /** Shows a back arrow to this page instead of the home icon. */
+  backHref?: string
+  backLabel?: string
 }
 
-export function QuestHeader({ compact, showHome }: QuestHeaderProps) {
+export function QuestHeader({ compact, showHome, title = "Quest Mode", backHref, backLabel = "Kembali" }: QuestHeaderProps) {
   return (
     <header className={clsx(styles.header, compact && styles.headerCompact)}>
-      {showHome ? (
+      {backHref ? (
+        <Link href={backHref} className={styles.headerAction} aria-label={backLabel}>
+          <BackIcon />
+        </Link>
+      ) : showHome ? (
         <Link href="/" className={styles.headerAction} aria-label="Home">
           <HomeIcon />
         </Link>
       ) : null}
-      <h1 className={styles.headerTitle}>Quest Mode</h1>
+      <h1 className={styles.headerTitle}>{title}</h1>
     </header>
   )
 }

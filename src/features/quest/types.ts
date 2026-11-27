@@ -1,6 +1,6 @@
 export type QuestStatus = "default" | "pending" | "review" | "done" | "locked"
 
-export type QuestIconKind = "store" | "calendar" | "clock" | "camera" | "check" | "none"
+export type QuestIconKind = "store" | "calendar" | "clock" | "camera" | "link" | "check" | "none"
 
 export interface QuestStats {
   points: number

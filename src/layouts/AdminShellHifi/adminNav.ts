@@ -1,5 +1,5 @@
 import type { ComponentType } from "react"
-import { BarChart3, DoorOpen, FileText, Gamepad2, Gift, Handshake, ImageIcon, KeyRound, ScanLine, Settings, Users } from "lucide-react"
+import { BarChart3, DoorOpen, FileText, Gamepad2, Gift, Handshake, ImageIcon, KeyRound, ScanLine, Settings, UserRound, Users } from "lucide-react"
 
 import { BOOTH_ACCESS_PATH, BOOTH_SECTION_PATH, DDAY_PATH, GATE_SECTION_PATH } from "@/lib/admin-nav"
 
@@ -45,7 +45,8 @@ const isProduction = process.env.NODE_ENV === "production"
     Remove the condition together with that gate.
   - QR Points (test): wrote real points through the old award flow; off in production since
     Insight Arcade went live (migration 0030).
-  - "Desain hi-fi": the /admin-hifi/* mock pages, which also 404 in production.
+  The /admin-hifi/* design mocks (404 in production) are no longer in the menu: /admin/web,
+  /admin/registrations, /admin/feedback and /admin/sponsor are their real versions.
 */
 export const ADMIN_NAV: AdminNavSection[] = [
   {
@@ -54,6 +55,10 @@ export const ADMIN_NAV: AdminNavSection[] = [
       { label: "Dashboard", href: "/admin", icon: HomeIcon, access: "booth" },
       { label: "D-Day", href: DDAY_PATH, icon: CalendarIcon, access: "staff" },
       { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+      { label: "Web", href: "/admin/web", icon: InternetIcon },
+      { label: "User", href: "/admin/registrations", icon: UserRound },
+      { label: "Feedback", href: "/admin/feedback", icon: ChatBubbleIcon },
+      { label: "Sponsor", href: "/admin/sponsor", icon: CoinIcon },
     ],
   },
   {
@@ -84,19 +89,6 @@ export const ADMIN_NAV: AdminNavSection[] = [
       { label: "Settings", href: "/admin/settings", icon: Settings, soon: true },
     ],
   },
-  ...(isProduction
-    ? []
-    : [
-        {
-          title: "Desain hi-fi (mock)",
-          items: [
-            { label: "User", href: "/admin-hifi/user", icon: HomeIcon },
-            { label: "Feedback", href: "/admin-hifi/feedback", icon: ChatBubbleIcon },
-            { label: "Sponsor", href: "/admin-hifi/sponsor", icon: CoinIcon },
-            { label: "Web", href: "/admin-hifi/web", icon: InternetIcon },
-          ],
-        },
-      ]),
 ]
 
 /** What a user can open under /admin (from getAdminAccess). */

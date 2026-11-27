@@ -5,7 +5,9 @@ import type {
   FunnelStageDto,
   KpiDto,
   SponsorStatDto,
+  SponsorWebDto,
   TrafficDto,
+  WebInsightsDto,
 } from "./types"
 
 /**
@@ -104,4 +106,46 @@ export const MOCK_TRAFFIC: TrafficDto = {
     { page_path: "/sponsors", views: 1092 },
     { page_path: "/schedule", views: 764 },
   ],
+}
+
+/** /admin/web without PostHog: the hi-fi design's figures, 30 days of a gentle wave. */
+export const MOCK_WEB: WebInsightsDto = {
+  summary: { pageviews: 61500, visitors: 38900, avg_session_s: 161, bounce_pct: 36 },
+  daily: Array.from({ length: 30 }, (_, i) => {
+    const date = new Date(Date.UTC(2026, 10, 28) - (29 - i) * 24 * 60 * 60 * 1000)
+    const wave = 0.5 + 0.5 * Math.sin(i * 1.1)
+    return {
+      day: date.toISOString().slice(0, 10),
+      pageviews: Math.round(1200 + 1600 * wave + (i % 3) * 180),
+      visitors: Math.round(700 + 1000 * wave + (i % 3) * 110),
+    }
+  }),
+  sources: [
+    { source: "instagram", sessions: 9800 },
+    { source: "whatsapp", sessions: 7400 },
+    { source: "search", sessions: 6100 },
+    { source: "direct", sessions: 5200 },
+    { source: "tiktok", sessions: 3900 },
+    { source: "x", sessions: 1300 },
+    { source: "other", sessions: 1100 },
+  ],
+  funnel: [
+    { step: "Landing page", count: 38900 },
+    { step: "Sign up", count: 4200 },
+    { step: "Daftar lomba", count: 1900 },
+    { step: "Bayar", count: 610 },
+  ],
+}
+
+/** /admin/sponsor without PostHog: the hi-fi design's daily impressions and clicks. */
+export function mockSponsorWeb(days: string[]): SponsorWebDto {
+  const impressions = [6800, 1500, 3100, 1900, 4200, 900, 5500, 1300, 5300, 5000, 9200, 4100, 3800, 4400]
+  const clicks = [340, 90, 155, 100, 205, 50, 285, 70, 280, 255, 460, 210, 190, 230]
+  const daily = days.map((day, i) => ({ day, impressions: impressions[i % impressions.length], clicks: clicks[i % clicks.length] }))
+  return {
+    impressions: daily.reduce((sum, row) => sum + row.impressions, 0),
+    clicks: daily.reduce((sum, row) => sum + row.clicks, 0),
+    site_pageviews: 61500,
+    daily,
+  }
 }

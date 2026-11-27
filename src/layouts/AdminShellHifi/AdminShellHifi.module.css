@@ -19,3 +19,11 @@
     padding: 32px 24px 64px;
   }
 }
+
+/* Phones: the panels' 40px side padding leaves charts too little room (as on the booth pages). */
+@media (max-width: 600px) {
+  .page {
+    padding: 24px 16px 48px;
+    --admin-panel-pad-x: 16px;
+  }
+}

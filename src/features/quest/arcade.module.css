@@ -1,0 +1,398 @@
+/*
+  Insight Arcade pages on real data (/arcade, /arcade/area/*, /arcade/<quest>, /arcade/qr).
+  Builds on quest.module.css (cards, frame border, colours); this file holds the page rhythm:
+  intro text, info box, section headings, detail page and the proof form.
+*/
+
+.intro {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #ccddff;
+}
+
+.intro a,
+.noticeText a {
+  color: #fff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Info box: a framed card with a short title and plain text or a list. */
+.notice {
+  composes: frame from "./quest.module.css";
+  box-sizing: border-box;
+  margin-top: 16px;
+  padding: 16px 17px;
+  border-radius: 15px;
+  background: linear-gradient(180deg, rgba(27, 59, 125, 0.5) 0%, rgba(81, 126, 218, 0.35) 100%);
+}
+
+.noticeTitle {
+  margin: 0;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.noticeText {
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #ccddff;
+}
+
+.noticeList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0 0 0 18px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #ccddff;
+}
+
+.noticeList strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+.noticeAction {
+  margin-top: 14px;
+  width: 100%;
+  text-decoration: none;
+}
+
+/* Sections on the hub and area page. */
+.section {
+  margin-top: 28px;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #acc7ff;
+}
+
+.sectionCount {
+  flex: none;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: #dee8fb;
+  font-variant-numeric: tabular-nums;
+}
+
+.sectionHint {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #7fa9f6;
+}
+
+/* Overrides .list's 21px top margin and 18px gap: tighter under a section heading. */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.empty {
+  margin: 12px 0 0;
+  padding: 16px;
+  border: 1px dashed rgba(172, 199, 255, 0.5);
+  border-radius: 11px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  text-align: center;
+  color: #acc7ff;
+}
+
+/* Area page: the area name under the MAIN QUEST header. */
+.areaTitle {
+  margin: 0;
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Area page: a side quest with its proof form inline. */
+.sideCard {
+  composes: frame from "./quest.module.css";
+  box-sizing: border-box;
+  margin-top: 12px;
+  padding: 16px 17px 18px;
+  border-radius: 15px;
+  background: linear-gradient(180deg, rgba(27, 59, 125, 0.5) 0%, rgba(81, 126, 218, 0.35) 100%);
+}
+
+.sideCardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sideCardTitle {
+  margin: 0;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.sideCardText {
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #ccddff;
+  white-space: pre-line;
+}
+
+/* Inside a side card the form sits on the card, not in a second card. */
+.sideCard .form {
+  margin-top: 16px;
+  padding: 0;
+  background: none;
+}
+
+.sideCard .form::before {
+  content: none;
+}
+
+.sideCard .linkButtons .wideButton:first-child {
+  margin-top: 16px;
+}
+
+/* Side quest detail. */
+.detailTitle {
+  margin: 6px 0 0;
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 700;
+  color: #fff;
+  overflow-wrap: anywhere;
+}
+
+.status {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  background: rgba(172, 199, 255, 0.2);
+  color: #dee8fb;
+}
+
+.status_review {
+  background: rgba(192, 140, 255, 0.25);
+  color: #e9dbf9;
+}
+
+.status_done {
+  background: rgba(118, 223, 98, 0.25);
+  color: #d0ffc7;
+}
+
+.status_rejected {
+  background: rgba(255, 120, 120, 0.2);
+  color: #ffd0d0;
+}
+
+.description {
+  margin: 16px 0 0;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  color: #fafafa;
+  white-space: pre-line;
+}
+
+.wideButton {
+  width: 100%;
+  height: 44px;
+  margin-top: 20px;
+  text-decoration: none;
+}
+
+/* One or two account buttons (TikTok + X) above the proof form. */
+.linkButtons {
+  display: flex;
+  flex-direction: column;
+}
+
+.linkButtons .wideButton + .wideButton {
+  margin-top: 10px;
+}
+
+/* Proof form. */
+.form {
+  composes: frame from "./quest.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  margin-top: 24px;
+  padding: 18px 17px;
+  border-radius: 15px;
+  background: linear-gradient(180deg, #294d97 0%, #517eda 100%);
+}
+
+.formTitle {
+  margin: 0;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
+  color: #dee8fb;
+}
+
+.fieldHint {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #acc7ff;
+}
+
+/* "Make your account public" reminder on link proofs. */
+.publicNote {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(250, 213, 0, 0.14);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+  color: #fff3a6;
+}
+
+.publicNote strong {
+  font-weight: 700;
+  color: #fff341;
+}
+
+/* .input is flex: 1 for row layouts; in this column it would collapse to 0 height. */
+.field > input,
+.field > select {
+  flex: none;
+}
+
+.field input[type="file"] {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-family: inherit;
+  font-size: 14px;
+  color: #ccddff;
+}
+
+.field input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: #dee8fb;
+  color: #1b3b7d;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.select {
+  appearance: none;
+  height: 40px;
+  background-image: linear-gradient(45deg, transparent 50%, #dee8fb 50%),
+    linear-gradient(135deg, #dee8fb 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.select option {
+  color: #091b3f;
+}
+
+.submit {
+  width: 100%;
+  height: 44px;
+}
+
+.message {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.messageOk {
+  color: #d0ffc7;
+}
+
+.messageError {
+  color: #ffd0d0;
+}
+
+/* QR page. */
+.qrCard {
+  display: grid;
+  place-items: center;
+  width: min(100%, 320px);
+  box-sizing: border-box;
+  margin: 8px auto 0;
+  padding: 16px;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.qrCard svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.qrHint {
+  margin: 16px auto 0;
+  max-width: 320px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  text-align: center;
+  color: #ccddff;
+}

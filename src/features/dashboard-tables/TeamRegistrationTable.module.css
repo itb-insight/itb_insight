@@ -5,6 +5,11 @@
 
 .table td:first-child {
   padding-left: 4px;
+  /* Team UIDs ("OE-PXHVG0") read as one token: don't break them at the hyphen. */
+  overflow-wrap: normal;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  padding-right: 12px;
 }
 
 .toolbar {
@@ -127,4 +132,12 @@
   width: min(122.45px, 84.4cqw);
   min-width: max-content;
   font-size: min(12px, max(10px, 8.27cqw));
+}
+
+/* "Tampilkan lagi" under the table (when pageSize is set). */
+.more {
+  display: block;
+  width: auto;
+  margin: 16px auto 0;
+  padding: 6px 16px;
 }

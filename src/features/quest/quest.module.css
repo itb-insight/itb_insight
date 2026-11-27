@@ -36,9 +36,12 @@
 .headerTitle {
   position: absolute;
   top: 30px;
-  left: 0;
-  right: 0;
+  /* Clear of the back / home icon on both sides, and never on top of it: the title is drawn
+     after the icon and used to swallow its taps. */
+  left: 44px;
+  right: 44px;
   margin: 0;
+  pointer-events: none;
   font-size: 20px;
   line-height: 28px;
   font-weight: 700;
@@ -49,6 +52,7 @@
 
 .headerAction {
   position: absolute;
+  z-index: 1;
   top: 24px;
   left: 17px;
   display: grid;
@@ -60,6 +64,11 @@
   background: none;
   color: #fafafa;
   cursor: pointer;
+}
+
+/* Inside the padded .body the icon's 40px hit box would sit 17px in; pull the glyph onto the content edge. */
+.body > .header .headerAction {
+  left: -10px;
 }
 
 .frame {
@@ -504,8 +513,8 @@
   composes: frame;
   --gb-gradient: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
   box-sizing: border-box;
-  height: 96px;
-  padding: 17px 17px 0;
+  min-height: 96px;
+  padding: 17px;
   border-radius: 15px;
   background: linear-gradient(180deg, rgba(27, 59, 125, 0.5) 0%, rgba(172, 199, 255, 0.5) 100%);
 }
@@ -513,6 +522,7 @@
 .collectionHead {
   display: flex;
   justify-content: space-between;
+  gap: 12px;
   font-size: 16px;
   line-height: 20px;
   font-weight: 700;

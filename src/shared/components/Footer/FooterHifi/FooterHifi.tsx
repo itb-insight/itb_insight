@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { MAP_FOOTER_LINKS, MAP_PATH, isDisabledMapHref, isMapsDisabled } from "@/lib/maps"
 import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
+import { SOCIAL } from "@/shared/constants/social"
 import styles from "./FooterHifi.module.css"
 
 type FooterLink = { label: string; href: string }
@@ -50,10 +51,10 @@ const columns: { header: string; href: string; links?: FooterLink[]; linkHeader?
 ]
 
 const socials = [
-  { href: "https://instagram.com/itbinsight", label: "Instagram", icon: "/images/icons/InstagramLogo.svg" },
-  { href: "https://x.com/itbinsight", label: "X", icon: "/images/icons/XLogo.svg" },
-  //{ href: "https://youtube.com/@insightitb", label: "Youtube", icon: "/images/icons/YoutubeLogo.svg" },
-  { href: "https://www.tiktok.com/@itb_insight", label: "TikTok", icon: "/images/icons/TiktokLogo.svg" },
+  { href: SOCIAL.instagram.url, label: SOCIAL.instagram.label, icon: "/images/icons/InstagramLogo.svg" },
+  { href: SOCIAL.x.url, label: SOCIAL.x.label, icon: "/images/icons/XLogo.svg" },
+  //{ href: SOCIAL.youtube.url, label: SOCIAL.youtube.label, icon: "/images/icons/YoutubeLogo.svg" },
+  { href: SOCIAL.tiktok.url, label: SOCIAL.tiktok.label, icon: "/images/icons/TiktokLogo.svg" },
 ]
 
 export default function FooterHifi() {

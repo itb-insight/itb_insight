@@ -1,6 +1,8 @@
 /* Penanda kerja, bukan rancangan. Sengaja mentah supaya tidak tertukar
    dengan widget yang sudah jadi. */
 .kotak {
+  flex: 1 1 auto;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -1,44 +1,72 @@
 "use client"
 
+import clsx from "clsx"
 import { useRouter } from "next/navigation"
 import { type FormEvent, useState } from "react"
 
+import { PROOF_LINK_MAX, parseProofLink } from "@/lib/proof-link"
 import { createClient } from "@/lib/supabase/client"
 
-import styles from "./quest.module.css"
+import styles from "./arcade.module.css"
+import questStyles from "./quest.module.css"
 
 /*
-  Photo proof for an Insight Arcade side quest (POST /api/arcade/proof). The photo is shrunk in the
-  browser (longest side 1600 px, JPEG) so uploads stay small on venue mobile data.
+  Proof for an Insight Arcade side quest (POST /api/arcade/proof), by the quest's proof kind:
+  - link: story / Add Yours quests. A link to the story or post, checked here with the same parser
+    the API uses (src/lib/proof-link.ts).
+  - photo: follow quests (screenshot + username), drone soccer, merch. The photo is shrunk in the browser first (longest side 1600 px, WebP or JPEG) so uploads stay small on venue mobile data;
+  the server re-encodes it again before storing (src/lib/proof-image.ts).
 */
 
-async function shrink(file: File): Promise<Blob> {
+const MAX_SIDE = 1600
+/** The API's limit (src/app/api/arcade/proof/route.ts). */
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024
+
+function encode(canvas: HTMLCanvasElement, type: string, quality: number): Promise<Blob | null> {
+  return new Promise((resolve) => canvas.toBlob(resolve, type, quality))
+}
+
+async function shrink(file: File): Promise<{ blob: Blob; name: string }> {
   try {
     const bitmap = await createImageBitmap(file)
-    const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height))
+    const scale = Math.min(1, MAX_SIDE / Math.max(bitmap.width, bitmap.height))
     const canvas = document.createElement("canvas")
     canvas.width = Math.round(bitmap.width * scale)
     canvas.height = Math.round(bitmap.height * scale)
-    canvas.getContext("2d")?.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.82))
-    return blob ?? file
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return { blob: file, name: file.name }
+    // White under transparent PNGs, which would otherwise turn black as JPEG.
+    ctx.fillStyle = "#fff"
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+    bitmap.close()
+    // Safari before 18 cannot encode WebP and silently returns PNG: check the type, fall back to JPEG.
+    const webp = await encode(canvas, "image/webp", 0.8)
+    if (webp && webp.type === "image/webp") return { blob: webp, name: "proof.webp" }
+    const jpeg = await encode(canvas, "image/jpeg", 0.82)
+    return jpeg ? { blob: jpeg, name: "proof.jpg" } : { blob: file, name: file.name }
   } catch {
-    return file
+    // Not decodable here (e.g. HEIC outside Safari): send as is, the server decides.
+    return { blob: file, name: file.name }
   }
 }
 
 export default function ProofUploadForm({
   quest,
+  kind,
   needsHandle,
   teams,
 }: {
   quest: string
+  /** sidequests.proof_kind: 'link' = send a link, 'photo' = upload a photo. */
+  kind: "photo" | "link"
   needsHandle: string | null
   /** Drone soccer: the teams to vote for; undefined = no vote. */
   teams?: Array<{ id: string; name: string }>
 }) {
   const router = useRouter()
   const [file, setFile] = useState<File | null>(null)
+  const [link, setLink] = useState("")
   const [handle, setHandle] = useState("")
   const [team, setTeam] = useState("")
   const [busy, setBusy] = useState(false)
@@ -46,7 +74,11 @@ export default function ProofUploadForm({
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!file) return setMessage({ ok: false, text: "Pilih foto bukti dulu." })
+    if (kind === "photo" && !file) return setMessage({ ok: false, text: "Pilih foto bukti dulu." })
+    if (kind === "link") {
+      const checked = parseProofLink(link)
+      if (!checked.ok) return setMessage({ ok: false, text: checked.message })
+    }
     setBusy(true)
     setMessage(null)
     try {
@@ -58,8 +90,18 @@ export default function ProofUploadForm({
       }
       const body = new FormData()
       body.set("quest", quest)
-      body.set("file", await shrink(file), "proof.jpg")
-      if (needsHandle) body.set("handle", handle)
+      if (kind === "link") {
+        body.set("link", link.trim())
+      } else if (file) {
+        const photo = await shrink(file)
+        if (photo.blob.size > MAX_UPLOAD_BYTES) {
+          setMessage({ ok: false, text: "Foto terlalu besar (maks. 4 MB). Coba screenshot atau foto JPG/PNG." })
+          return
+        }
+        body.set("file", photo.blob, photo.name)
+        // Follow quests: the username, so one account counts once per quest.
+        if (needsHandle) body.set("handle", handle)
+      }
       if (teams) body.set("voteTeam", team)
       const res = await fetch("/api/arcade/proof", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body })
       const payload = (await res.json().catch(() => null)) as
@@ -86,31 +128,71 @@ export default function ProofUploadForm({
   }
 
   return (
-    <form onSubmit={submit} className={styles.list}>
-      <label className={styles.cardMeta}>
-        Foto bukti (screenshot atau foto)
-        <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] ?? null)} disabled={busy} />
-      </label>
-      {needsHandle ? (
-        <label className={styles.cardMeta}>
-          Username {needsHandle === "instagram" ? "Instagram" : "TikTok/X"} kamu
-          <input
-            type="text"
-            value={handle}
-            onChange={(e) => setHandle(e.target.value)}
-            placeholder="@username"
-            autoCapitalize="none"
-            autoComplete="off"
-            maxLength={41}
+    <form onSubmit={submit} className={styles.form}>
+      <h2 className={styles.formTitle}>Kirim bukti</h2>
+      {kind === "link" || needsHandle ? (
+        <p className={styles.publicNote}>
+          <strong>Pastikan akunmu publik</strong> sampai poin diverifikasi, supaya panitia bisa memeriksa
+          {kind === "link" ? " linkmu" : " akunmu"}. Akun privat bisa membuat poinmu dicabut.
+        </p>
+      ) : null}
+      {kind === "link" ? (
+        <>
+          <label className={styles.field}>
+            Link story atau postingan kamu
+            <input
+              type="url"
+              inputMode="url"
+              className={questStyles.input}
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              placeholder="https://www.instagram.com/stories/username/…"
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+              maxLength={PROOF_LINK_MAX}
+              required
+              disabled={busy}
+            />
+            <span className={styles.fieldHint}>Buka story / postinganmu → Share (⋯) → Copy link.</span>
+          </label>
+        </>
+      ) : (
+        <>
+          <label className={styles.field}>
+            {needsHandle ? "Screenshot bukti follow" : "Foto bukti"}
+            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] ?? null)} disabled={busy} />
+          </label>
+          {needsHandle ? (
+            <label className={styles.field}>
+              Username {needsHandle === "instagram" ? "Instagram" : "TikTok atau X"} kamu
+              <input
+                type="text"
+                className={questStyles.input}
+                value={handle}
+                onChange={(e) => setHandle(e.target.value)}
+                placeholder="@username"
+                autoCapitalize="none"
+                autoComplete="off"
+                maxLength={41}
+                required
+                disabled={busy}
+              />
+            </label>
+          ) : null}
+        </>
+      )}
+      {teams ? (
+        <label className={styles.field}>
+          Tim yang kamu dukung
+          <select
+            className={clsx(questStyles.input, styles.select)}
+            value={team}
+            onChange={(e) => setTeam(e.target.value)}
             required
             disabled={busy}
-          />
-        </label>
-      ) : null}
-      {teams ? (
-        <label className={styles.cardMeta}>
-          Tim yang kamu dukung
-          <select value={team} onChange={(e) => setTeam(e.target.value)} required disabled={busy}>
+          >
             <option value="" disabled>
               Pilih tim…
             </option>
@@ -122,11 +204,11 @@ export default function ProofUploadForm({
           </select>
         </label>
       ) : null}
-      <button type="submit" className={styles.card} disabled={busy}>
-        <span className={styles.cardTitle}>{busy ? "Mengirim…" : "Kirim bukti"}</span>
+      <button type="submit" className={clsx(questStyles.lightButton, styles.submit)} disabled={busy}>
+        {busy ? "Mengirim…" : "Kirim bukti"}
       </button>
       {message ? (
-        <p className={styles.cardMeta} role="status">
+        <p className={clsx(styles.message, message.ok ? styles.messageOk : styles.messageError)} role="status">
           {message.text}
         </p>
       ) : null}

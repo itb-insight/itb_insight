@@ -23,6 +23,8 @@ export interface FeedbackRowHifi {
 interface FeedbackTableHifiProps {
   title?: string
   rows: FeedbackRowHifi[]
+  /** Baris yang tampil dulu; sisanya lewat tombol "Tampilkan lagi". Tanpa ini semua baris tampil. */
+  pageSize?: number
 }
 
 /** Saringan bintang di kanan atas. `null` = semua. */
@@ -42,9 +44,12 @@ const SARINGAN: { kunci: string; label: string; cocok: (b: number) => boolean }[
 export default function FeedbackTableHifi({
   title = "Semua Feedback",
   rows,
+  pageSize,
 }: FeedbackTableHifiProps) {
   const [cari, setCari] = useState("")
   const [saringan, setSaringan] = useState("semua")
+  const awal = pageSize ?? Number.POSITIVE_INFINITY
+  const [batas, setBatas] = useState(awal)
 
   const terlihat = useMemo(() => {
     const kunci = cari.trim().toLowerCase()
@@ -70,7 +75,10 @@ export default function FeedbackTableHifi({
               className={styles.cari}
               placeholder="cari isi feedback atau nama"
               value={cari}
-              onChange={(e) => setCari(e.target.value)}
+              onChange={(e) => {
+                setCari(e.target.value)
+                setBatas(awal)
+              }}
               aria-label="Cari isi feedback atau nama"
             />
           </div>
@@ -81,7 +89,10 @@ export default function FeedbackTableHifi({
               type="button"
               className={`${styles.pil} ${saringan === s.kunci ? styles.pilAktif : ""}`}
               aria-pressed={saringan === s.kunci}
-              onClick={() => setSaringan(s.kunci)}
+              onClick={() => {
+                setSaringan(s.kunci)
+                setBatas(awal)
+              }}
             >
               {s.label}
             </button>
@@ -121,7 +132,7 @@ export default function FeedbackTableHifi({
                   </td>
                 </tr>
               ) : (
-                terlihat.map((r) => {
+                terlihat.slice(0, batas).map((r) => {
                   const gaya = KATEGORI[r.kategori]
                   return (
                     <tr key={r.id}>
@@ -154,6 +165,16 @@ export default function FeedbackTableHifi({
             </tbody>
           </table>
         </div>
+
+        {terlihat.length > batas ? (
+          <button
+            type="button"
+            className={`${styles.pil} ${styles.lagi}`}
+            onClick={() => setBatas((b) => b + (pageSize ?? terlihat.length))}
+          >
+            Tampilkan {Math.min(pageSize ?? terlihat.length, terlihat.length - batas)} lagi ({batas} dari {terlihat.length})
+          </button>
+        ) : null}
       </div>
     </PanelHifi>
   )

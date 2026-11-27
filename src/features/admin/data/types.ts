@@ -268,3 +268,132 @@ export interface DDayDto {
   /** null = the query failed. */
   data: DDayDataDto | null
 }
+
+// ─── /admin/web ──────────────────────────────────────────────────────────────
+
+export interface WebSummaryDto {
+  pageviews: number
+  visitors: number
+  /** Mean session length, seconds. */
+  avg_session_s: number
+  /** Sessions with one page view, percent. */
+  bounce_pct: number
+}
+
+export interface WebDayDto {
+  /** Jakarta calendar day, "YYYY-MM-DD". */
+  day: string
+  pageviews: number
+  visitors: number
+}
+
+export type TrafficSourceKey = "instagram" | "whatsapp" | "search" | "direct" | "tiktok" | "x" | "other"
+
+export interface TrafficSourceDto {
+  source: TrafficSourceKey
+  sessions: number
+}
+
+export interface WebFunnelStepDto {
+  step: string
+  count: number
+}
+
+/** Each part is null when its source failed. */
+export interface WebInsightsDto {
+  summary: WebSummaryDto | null
+  /** Oldest first, ending today. Leading days before the first page view are dropped. */
+  daily: WebDayDto[] | null
+  sources: TrafficSourceDto[] | null
+  funnel: WebFunnelStepDto[] | null
+}
+
+// ─── /admin/registrations ────────────────────────────────────────────────────
+
+export type RegistrationStatusKey = "registered" | "withdrawn" | "awaiting_payment" | "expired"
+
+export interface RegistrationRowDto {
+  id: string
+  competition: string
+  competition_label: string
+  /** Team name, or the participant's name for an individual registration. */
+  name: string | null
+  members: string[]
+  status: RegistrationStatusKey
+  registered_at: string
+}
+
+export interface RegistrationsDto {
+  rows: RegistrationRowDto[]
+  competitions: Array<{ value: string; label: string }>
+  counts: Record<RegistrationStatusKey, number>
+}
+
+// ─── /admin/feedback ─────────────────────────────────────────────────────────
+
+export type FeedbackCategory = "booth" | "competition" | "event"
+
+export interface FeedbackRatingDto {
+  label: string
+  category: FeedbackCategory
+  /** Mean on a 0–5 scale. */
+  value: number
+  n: number
+}
+
+export interface FeedbackRowDto {
+  id: string
+  category: FeedbackCategory
+  subject: string
+  stars: number
+  comment: string
+  name: string
+  created_at: string
+}
+
+export interface FeedbackInsightsDto {
+  average: number | null
+  total: number
+  by_category: Record<FeedbackCategory, number>
+  /** Checked-in visitors who sent at least one response, and all checked-in visitors. */
+  responded_attendees: number
+  checked_in: number
+  ratings: FeedbackRatingDto[]
+  /** Newest first, capped (FEEDBACK_ROW_LIMIT). */
+  rows: FeedbackRowDto[]
+}
+
+// ─── /admin/sponsor ──────────────────────────────────────────────────────────
+
+export interface SponsorOptionDto {
+  id: string
+  name: string
+}
+
+export interface SponsorWebDto {
+  /** Media-partner section impressions (shared by every partner in the marquee). */
+  impressions: number
+  clicks: number
+  site_pageviews: number
+  /** Per Jakarta day, oldest first. */
+  daily: Array<{ day: string; impressions: number; clicks: number }>
+}
+
+export interface BoothDayDto {
+  /** Jakarta calendar day, "YYYY-MM-DD". */
+  day: string
+  /** Hours (0–23, Jakarta) covered by the chart, with distinct visitors per hour. */
+  hours: Array<{ hour: number; visitors: number }>
+  visitors: number
+  points: number
+}
+
+export interface BoothInsightsDto {
+  booth_id: string
+  name: string
+  visitors: number
+  points: number
+  checked_in: number
+  /** Event days with scans, oldest first. */
+  days: BoothDayDto[]
+}

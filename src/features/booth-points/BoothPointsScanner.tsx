@@ -167,8 +167,8 @@ export default function BoothPointsScanner({ booths, practice }: { booths: Point
   const options: Array<{ option: BoothPointOption; title: string; detail: string; icon: typeof Gift }> = [
     {
       option: "contribution",
-      title: "Contribution",
-      detail: `+${contributionPoints} poin, untuk pengunjung yang aktif di booth`,
+      title: "Visited",
+      detail: `+${contributionPoints} pengunjung yang datang ke booth `,
       icon: Sparkles,
     },
   ]
@@ -179,7 +179,7 @@ export default function BoothPointsScanner({ booths, practice }: { booths: Point
       detail:
         given.contribution || given.bonus
           ? `+${bonusPoints} poin tambahan`
-          : `+${bonusPoints} poin tambahan, sekaligus Contribution (+${contributionPoints})`,
+          : `+${bonusPoints} poin tambahan untuk pengunjung yang aktif di booth, sekaligus Visited (+${contributionPoints})`,
       icon: Gift,
     })
   }

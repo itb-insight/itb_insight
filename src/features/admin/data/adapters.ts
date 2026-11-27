@@ -3,7 +3,6 @@ import "server-only"
 import { unstable_cache } from "next/cache"
 
 import { DIVISION_ORDER, type DivisionTag } from "@/lib/analytics/divisions"
-import { SAMPLE_RATES } from "@/lib/analytics/config"
 import {
   envFilter,
   hogql,
@@ -30,6 +29,7 @@ import {
   MOCK_TRAFFIC,
 } from "./mockData"
 import { ASSUME_IN_AREA_HOURS, BOOTH_TARGET, isAfterClose } from "./dday"
+import { bounds, DAY_MS, inRange, lastDays, pct, sampleWeight, TIME_ZONE } from "./query"
 import type {
   BoothLiveDto,
   CheckInSlotDto,
@@ -70,10 +70,6 @@ import type {
  * counts are population estimates, not raw event counts.
  */
 
-const DAY_MS = 24 * 60 * 60 * 1000
-const RANGE_STEP_MS = 5 * 60 * 1000
-const TIME_ZONE = "Asia/Jakarta"
-
 export type DataSource = "live" | "mock"
 
 export function dataSource(): DataSource {
@@ -85,34 +81,19 @@ export function dataSource(): DataSource {
  * builds the same query and hits the same cache entry.
  */
 export function defaultRange(now: Date = new Date()): DateRange {
-  const to = new Date(Math.ceil(now.getTime() / RANGE_STEP_MS) * RANGE_STEP_MS)
-  const from = new Date(to.getTime() - 7 * DAY_MS)
-  return { from: from.toISOString(), to: to.toISOString() }
+  return lastDays(7, now)
 }
+
+export { sampleWeight }
+
+// Per-page adapters (/admin/web, /admin/registrations, /admin/feedback, /admin/sponsor), kept in
+// their own modules; pages still import them from here.
+export { getWebInsights, funnelShares, TRAFFIC_SOURCES, WEB_SUMMARY_DAYS } from "./web"
+export { getRegistrations } from "./registrations"
+export { getFeedbackInsights, FEEDBACK_ROW_LIMIT } from "./feedback"
+export { getBoothInsights, getBoothOptions, getSponsorWeb, sponsorOptions, SPONSOR_DAYS } from "./sponsor"
 
 // ─── Query helpers ───────────────────────────────────────────────────────────
-
-function bounds(range: DateRange) {
-  const from = new Date(range.from)
-  const to = new Date(range.to)
-  return { from, to, days: Math.max(1, Math.round((to.getTime() - from.getTime()) / DAY_MS)) }
-}
-
-/** `timestamp` inside the range, plus the production-only filter on production. */
-function inRange(range: DateRange): string {
-  const { from, to } = bounds(range)
-  return `timestamp >= ${sqlTime(from)} and timestamp < ${sqlTime(to)} ${envFilter()}`
-}
-
-/** HogQL expression giving each event its sampling weight (1-in-N events count N times). */
-export function sampleWeight(): string {
-  const cases = Object.entries(SAMPLE_RATES)
-    .filter(([name, rate]) => /^[a-z_]+$/.test(name) && Number.isInteger(rate) && rate > 1)
-    .map(([name, rate]) => `event = '${name}', ${rate}`)
-  return cases.length > 0 ? `multiIf(${cases.join(", ")}, 1)` : "1"
-}
-
-const pct = (part: number, whole: number) => (whole > 0 ? Math.round((part / whole) * 100) : 0)
 
 function trend(current: number, previous: number): { delta: string; direction: TrendDirection } {
   if (previous === 0) return { delta: "no data for the previous 7 days", direction: "flat" }

@@ -1,12 +1,15 @@
+import clsx from "clsx"
 import Link from "next/link"
+import type { ReactNode } from "react"
 
 import type { ArcadePlayer } from "@/lib/arcade"
 
 import PointsCard from "./PointsCard"
 import QuestCard from "./QuestCard"
-import { QuestScreen } from "./QuestShell"
+import { QuestHeader, QuestScreen } from "./QuestShell"
 import { CollectionCard } from "./SideQuestSection"
-import styles from "./quest.module.css"
+import styles from "./arcade.module.css"
+import quest from "./quest.module.css"
 import type { QuestItem, QuestStatus } from "./types"
 
 /*
@@ -16,14 +19,39 @@ import type { QuestItem, QuestStatus } from "./types"
 
 const SIDE_STATUS: Record<string, QuestStatus> = { todo: "default", review: "review", done: "done", rejected: "default" }
 
-function sideMeta(verify: string, status: string): string {
+function sideMeta(verify: string, status: string, proofKind: string): string {
   if (status === "done") return "Selesai"
   if (status === "review") return "Menunggu verifikasi"
   if (status === "rejected") return "Ditolak, kirim ulang"
   if (verify === "auto_gate") return "Otomatis saat QR-mu di-scan di gate"
   if (verify === "auto_feedback") return "Otomatis setelah isi formulir (login)"
   if (verify === "auto_referral") return "Segera dibuka"
-  return "Upload bukti"
+  return proofKind === "link" ? "Kirim link bukti" : "Upload foto bukti"
+}
+
+function Section({
+  title,
+  count,
+  hint,
+  empty,
+  children,
+}: {
+  title: string
+  count?: string
+  hint?: string
+  empty: string
+  children: ReactNode[]
+}) {
+  return (
+    <section className={styles.section}>
+      <div className={styles.sectionHead}>
+        <h2 className={styles.sectionTitle}>{title}</h2>
+        {count ? <span className={styles.sectionCount}>{count}</span> : null}
+      </div>
+      {hint ? <p className={styles.sectionHint}>{hint}</p> : null}
+      {children.length > 0 ? <div className={styles.cards}>{children}</div> : <p className={styles.empty}>{empty}</p>}
+    </section>
+  )
 }
 
 export default function ArcadeHub({ player, signedIn }: { player: ArcadePlayer | null; signedIn: boolean }) {
@@ -39,71 +67,103 @@ export default function ArcadeHub({ player, signedIn }: { player: ArcadePlayer |
     tierSegments: { filled: Math.min(10, Math.round(((player?.points ?? 0) / target) * 10)), total: 10 },
   }
 
+  const areas = player?.areas ?? []
+  const areasDone = areas.filter((a) => a.total > 0 && a.visited === a.total).length
+  const sideQuests = player?.sideQuests ?? []
+  const sideDone = sideQuests.filter((q) => q.status === "done").length
+  const collections = player?.collections ?? []
+
   return (
     <QuestScreen>
-      <div className={styles.body}>
-        <h1 className={styles.cardTitle}>Insight Arcade</h1>
+      <div className={quest.body}>
+        <QuestHeader title="Insight Arcade" showHome />
+
         {!signedIn ? (
-          <p className={styles.cardMeta}>
-            <Link href="/login?next=/arcade">Login</Link> untuk mulai mengumpulkan poin. Tunjukkan QR profilmu ke panitia di
-            tiap booth.
-          </p>
+          <section className={styles.notice}>
+            <h2 className={styles.noticeTitle}>Ayo main!</h2>
+            <p className={styles.noticeText}>
+              Login untuk mulai mengumpulkan poin. Tunjukkan QR profilmu ke panitia di tiap booth.
+            </p>
+            <Link href="/login?next=/arcade" className={clsx(quest.lightButton, styles.noticeAction)}>
+              Login
+            </Link>
+          </section>
         ) : player?.committee ? (
-          <p className={styles.cardMeta}>Akun panitia tidak ikut Insight Arcade.</p>
+          <p className={styles.intro}>Akun panitia tidak ikut Insight Arcade.</p>
         ) : null}
 
         {player ? <PointsCard stats={stats} /> : null}
 
-        <p className={styles.cardMeta}>
-          Main 06:00–14:50 WIB. Sticker untuk yang sudah menyelesaikan quest (selama stok ada). Top 1–5 dapat Mug, 6–10
-          Keychain. Ambil hadiah di Booth Entre dengan menunjukkan QR profilmu.
-        </p>
+        <section className={styles.notice}>
+          <h2 className={styles.noticeTitle}>Aturan main</h2>
+          <ul className={styles.noticeList}>
+            <li>
+              Main <strong>06:00–14:50 WIB</strong>.
+            </li>
+            <li>Sticker untuk yang sudah menyelesaikan quest (selama stok ada).</li>
+            <li>
+              Top 1–5 dapat <strong>Mug</strong>, Top 6–10 dapat <strong>Keychain</strong>.
+            </li>
+            <li>
+              Ambil hadiah di <strong>Booth Entre</strong> dengan menunjukkan QR profilmu.
+            </li>
+          </ul>
+        </section>
 
-        <h2 className={styles.cardTitle}>Main Quest · scan QR di booth</h2>
-        <div className={styles.list}>
-          {(player?.areas ?? []).map((area) => {
-            const quest: QuestItem = {
-              id: area.category,
-              title: area.label,
-              meta: `${area.visited}/${area.total} dikunjungi`,
-              points: area.booths.reduce((sum, b) => sum + b.points, 0),
-              status: area.visited === area.total && area.total > 0 ? "done" : "default",
-              icon: area.visited === area.total && area.total > 0 ? "check" : "store",
-            }
-            return <QuestCard key={area.category} quest={quest} href={`/arcade/area/${area.category}`} />
-          })}
-        </div>
+        {player ? (
+          <>
+            <Section
+              title="Main Quest"
+              count={`${areasDone}/${areas.length}`}
+              hint="Scan QR profilmu di booth"
+              empty="Belum ada area yang dibuka."
+            >
+              {areas.map((area) => {
+                const done = area.total > 0 && area.visited === area.total
+                const item: QuestItem = {
+                  id: area.category,
+                  title: area.label,
+                  meta: `${area.visited}/${area.total} booth dikunjungi`,
+                  points: area.booths.reduce((sum, b) => sum + b.points, 0),
+                  status: done ? "done" : "default",
+                  icon: done ? "check" : "store",
+                }
+                return <QuestCard key={area.category} quest={item} href={`/arcade/area/${area.category}`} />
+              })}
+            </Section>
 
-        <h2 className={styles.cardTitle}>Side Quest</h2>
-        <div className={styles.list}>
-          {(player?.sideQuests ?? []).map((q) => {
-            const quest: QuestItem = {
-              id: q.slug,
-              title: q.title,
-              meta: sideMeta(q.verify, q.status),
-              points: q.points,
-              status: SIDE_STATUS[q.status] ?? "default",
-              icon: q.status === "done" ? "check" : q.verify === "proof" ? "camera" : "calendar",
-            }
-            return <QuestCard key={q.slug} quest={quest} href={`/arcade/${q.slug}`} />
-          })}
-        </div>
+            <Section title="Side Quest" count={`${sideDone}/${sideQuests.length}`} empty="Belum ada side quest.">
+              {sideQuests.map((q) => {
+                const item: QuestItem = {
+                  id: q.slug,
+                  title: q.title,
+                  meta: sideMeta(q.verify, q.status, q.proofKind),
+                  points: q.points,
+                  status: SIDE_STATUS[q.status] ?? "default",
+                  icon: q.status === "done" ? "check" : q.verify !== "proof" ? "calendar" : q.proofKind === "link" ? "link" : "camera",
+                }
+                return <QuestCard key={q.slug} quest={item} href={`/arcade/${q.slug}`} />
+              })}
+            </Section>
 
-        <h2 className={styles.cardTitle}>Koleksi · bonus otomatis</h2>
-        {(player?.collections ?? []).map((c) => (
-          <CollectionCard
-            key={c.slug}
-            collection={{
-              id: c.slug,
-              title: c.title,
-              description: c.description ?? "",
-              reward: c.bonus,
-              progress: c.progress,
-              total: c.total,
-              segments: { filled: c.progress, total: c.total },
-            }}
-          />
-        ))}
+            <Section title="Koleksi" hint="Bonus otomatis saat koleksi lengkap" empty="Belum ada koleksi.">
+              {collections.map((c) => (
+                <CollectionCard
+                  key={c.slug}
+                  collection={{
+                    id: c.slug,
+                    title: c.title,
+                    description: c.description ?? "",
+                    reward: c.bonus,
+                    progress: c.progress,
+                    total: c.total,
+                    segments: { filled: c.progress, total: c.total },
+                  }}
+                />
+              ))}
+            </Section>
+          </>
+        ) : null}
       </div>
     </QuestScreen>
   )

@@ -9,6 +9,7 @@ import { createClient, createServiceClient } from "@/lib/supabase/server"
 import styles from "../booth-access/page.module.css"
 
 export const dynamic = "force-dynamic"
+const LIMIT = 80
 export const metadata = { title: "Review Arcade | ITB Insight Admin", robots: { index: false, follow: false } }
 
 // Insight Arcade proof review: admins and arcade_duties reviewers (outside (admin-only)).
@@ -26,12 +27,12 @@ export default async function ArcadeReviewPage() {
     service
       .from("sidequest_submissions")
       .select(
-        "id, user_id, status, points_awarded, handle, proof_path, proof_sha256, submitted_at, sidequests(title, points), competition_teams(team_name), profiles!sidequest_submissions_user_id_fkey(full_name)",
+        "id, user_id, status, points_awarded, handle, proof_path, proof_url, proof_sha256, submitted_at, sidequests(title, points, needs_handle), competition_teams(team_name), profiles!sidequest_submissions_user_id_fkey(full_name)",
       )
       .eq("source", "proof")
       .eq("review_state", "unreviewed")
       .order("submitted_at", { ascending: true })
-      .limit(80),
+      .limit(LIMIT + 1),
     getArcadeBoard(),
   ])
 
@@ -42,13 +43,16 @@ export default async function ArcadeReviewPage() {
     points_awarded: number
     handle: string | null
     proof_path: string | null
+    proof_url: string | null
     proof_sha256: string | null
     submitted_at: string
-    sidequests: { title: string; points: number } | null
+    sidequests: { title: string; points: number; needs_handle: string | null } | null
     competition_teams: { team_name: string } | null
     profiles: { full_name: string | null } | null
   }
-  const rows = (data ?? []) as unknown as Row[]
+  const all = (data ?? []) as unknown as Row[]
+  const more = all.length > LIMIT
+  const rows = all.slice(0, LIMIT)
   const rank = new Map(board.entries.map((e) => [e.userId, e.rank]))
 
   const hashes = [...new Set(rows.map((r) => r.proof_sha256).filter((h): h is string => Boolean(h)))]
@@ -76,8 +80,10 @@ export default async function ArcadeReviewPage() {
       points: r.status === "approved" ? r.points_awarded : (r.sidequests?.points ?? 0),
       pending: r.status === "pending",
       handle: r.handle,
+      platform: r.sidequests?.needs_handle ?? null,
       vote: r.competition_teams?.team_name ?? null,
       imageUrl: r.proof_path ? (signed.get(r.proof_path) ?? null) : null,
+      linkUrl: r.proof_url?.startsWith("https://") ? r.proof_url : null,
       duplicate: (dupCount.get(r.proof_sha256 ?? "") ?? 0) > 1,
       submittedAt: r.submitted_at,
     }))
@@ -85,9 +91,9 @@ export default async function ArcadeReviewPage() {
 
   return (
     <>
-      <PageHeader title="Review Insight Arcade" subtitle="Periksa bukti foto side quest. Pemain peringkat atas didahulukan." />
+      <PageHeader title="Review Insight Arcade" subtitle="Periksa bukti link dan foto side quest. Pemain peringkat atas didahulukan." />
       <div className={styles.body}>
-        <ReviewQueue items={items} />
+        <ReviewQueue items={items} more={more} />
       </div>
     </>
   )

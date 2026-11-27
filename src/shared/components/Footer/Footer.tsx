@@ -1,12 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
+import { SOCIAL } from "@/shared/constants/social"
+
 import styles from "./Footer.module.css"
 
-const socials = [
-  { href: "https://www.instagram.com/itbinsight", label: "Instagram" },
-  { href: "https://x.com/Itb_Insight", label: "X" },
-  { href: "https://youtube.com/@insightitb", label: "Youtube" },
-]
+const socials = [SOCIAL.instagram, SOCIAL.x, SOCIAL.youtube].map((s) => ({ href: s.url, label: s.label }))
 
 export default function Footer() {
   return (
