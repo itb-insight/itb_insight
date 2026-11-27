@@ -22,7 +22,7 @@ Separate local development, test/sandbox, preview, and production configuration.
 
 - Use a disposable or non-production Supabase project for development/testing.
 - Keep production, test data, and secrets separated; do not place keys, raw exports, QR tokens, payment tokens, or PII in documentation or evidence.
-- Confirm migrations `0001`–`0017` and exact deployment configuration with the owner before a remote change. This repository document does not establish a remote environment’s state.
+- Confirm migrations `0001`–`0023` and exact deployment configuration with the owner before a remote change. This repository document does not establish a remote environment’s state.
 - Apply the release/security checklists only to features that exist. The secure-admin and payment milestones require their own implementation and verification before release.
 
 ## Auth redirect check

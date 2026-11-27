@@ -6,7 +6,7 @@
 --           Free text for now: the company list (companyA/B/C) is temporary, so it is not
 --           pinned with a CHECK that would need a migration for every new partner.
 --
--- Not user-writable: 0007_security_hardening grants authenticated users UPDATE on
+-- Not user-writable: the security hardening migration (now 0023) grants authenticated users UPDATE on
 -- (full_name, phone, institution) only, and profiles has no INSERT policy, so these columns
 -- can be set only by the service role (API) or the SQL editor. Keep it that way.
 

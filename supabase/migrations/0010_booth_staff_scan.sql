@@ -22,6 +22,7 @@ create index if not exists booth_staff_user_id_idx on public.booth_staff (user_i
 
 alter table public.booth_staff enable row level security;
 
+drop policy if exists "Staff read own booth assignments" on public.booth_staff;
 create policy "Staff read own booth assignments" on public.booth_staff
   for select
   using (user_id = (select auth.uid()) or public.is_admin((select auth.uid())));

@@ -1,0 +1,105 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 29px 24px 28px;
+}
+
+.label {
+  margin: 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 34px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.value {
+  margin: 4px 0 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 60px;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.meta,
+.note {
+  margin: 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-size: 15px;
+  line-height: 20px;
+  text-align: center;
+  color: #ccddff;
+}
+
+.recent {
+  width: 100%;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recentRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(14, 33, 74, 0.45);
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  color: #ffffff;
+}
+
+.recentPoints {
+  flex-shrink: 0;
+  min-width: 40px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #acc7ff;
+}
+
+.recentText {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.by {
+  color: #ccddff;
+}
+
+.scanLink {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: #acc7ff;
+  color: #0e214a;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.scanLink:hover {
+  background: #dee8fb;
+}
+
+.scanLink:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
