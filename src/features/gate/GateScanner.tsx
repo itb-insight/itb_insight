@@ -1,6 +1,6 @@
 "use client"
 
-import { Camera, CheckCircle2, DoorOpen, Gift, ScanLine, Sparkles, X } from "lucide-react"
+import { Camera, CheckCircle2, ChevronDown, ChevronUp, DoorOpen, Gift, ScanLine, Sparkles, Users, X } from "lucide-react"
 import { useState } from "react"
 
 import PanelHifi from "@/features/admin-hifi/PanelHifi"
@@ -14,13 +14,23 @@ import styles from "./GateScanner.module.css"
   Gate scanner (/admin/gate), for gate staff and admins.
     1. Scan the visitor's profile QR (Dashboard -> Profil). POST /api/gate/scan sets
        profiles.entered_gate (0026, never reset) and checks the visitor ticket in.
+       With "mewakili lebih dari satu pengunjung" ticked, the scan also saves how many other people
+       the visitor stands for (parents, teachers; profiles.represented_count, 0027). The box is
+       cleared after each scan so the number is not carried over to the next visitor.
     2. Show the visitor what a booth scan looks like: the same screen booth staff use
        (BoothPointsScanner), as a demo. Tapping an option here only shows the result locally:
        no request is sent and no points are given. Points come from booth staff only.
 */
 
 type Visitor = { fullName: string; institution: string | null }
-type GateScan = { visitor: Visitor; firstEntry: boolean; checkedInAt: string; ownAccount: boolean }
+type GateScan = {
+  visitor: Visitor
+  firstEntry: boolean
+  checkedInAt: string
+  ownAccount: boolean
+  /** Saved by this scan; null = not changed. */
+  represents: number | null
+}
 type DemoOption = "contribution" | "bonus"
 
 type Phase =
@@ -36,24 +46,41 @@ const timeFormat = new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "
 export default function GateScanner({
   contributionPoints,
   bonusPoints,
+  maxRepresented,
 }: {
   contributionPoints: number
   bonusPoints: number
+  maxRepresented: number
 }) {
+  const [representing, setRepresenting] = useState(false)
+  // Text, so the field can be cleared while typing; read with representedCount().
+  const [countText, setCountText] = useState("1")
   const [phase, setPhase] = useState<Phase>({ kind: "idle" })
   const [scan, setScan] = useState<GateScan | null>(null)
   const [demo, setDemo] = useState<DemoOption | null>(null)
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const busy = phase.kind === "busy"
 
+  const clampCount = (value: number) => Math.min(maxRepresented, Math.max(1, Math.round(value)))
+  const representedCount = () => {
+    const value = Number.parseInt(countText, 10)
+    return Number.isFinite(value) ? clampCount(value) : 1
+  }
+  const stepCount = (delta: number) => setCountText(String(clampCount(representedCount() + delta)))
+
   async function handleScanned(qrCode: string) {
     setPhase({ kind: "busy" })
     try {
-      const res = await postWithAuth<GateScan>("/api/gate/scan", { qrCode })
+      const res = await postWithAuth<GateScan>("/api/gate/scan", {
+        qrCode,
+        ...(representing ? { represents: representedCount() } : {}),
+      })
       if (res.needsAuth) throw new Error("Sesi berakhir. Silakan login ulang.")
       if (!res.payload.success) throw new Error(res.payload.error.message)
       const result = res.payload.data
       setScan(result)
+      setRepresenting(false)
+      setCountText("1")
       setHistory((prev) => [{ ...result, key: `${result.checkedInAt}-${prev.length}` }, ...prev].slice(0, 50))
       setPhase({ kind: "idle" })
       navigator.vibrate?.(60)
@@ -90,6 +117,65 @@ export default function GateScanner({
     <div className={boothStyles.layout}>
       <div className={boothStyles.column}>
         <PanelHifi title="1. Scan QR pengunjung" subtitle="QR ada di halaman profil pengunjung (Dashboard → Profil).">
+          <div className={styles.represent}>
+            <label className={styles.checkRow}>
+              <input
+                type="checkbox"
+                className={styles.checkbox}
+                checked={representing}
+                disabled={busy}
+                onChange={(e) => setRepresenting(e.target.checked)}
+              />
+              <span>User ini mewakili lebih dari satu pengunjung</span>
+            </label>
+
+            {representing ? (
+              <div className={styles.countField}>
+                <label htmlFor="gate-represented-count" className={styles.countLabel}>
+                  Jumlah orang yang diwakili <span className={boothStyles.muted}>(selain pemilik akun)</span>
+                </label>
+                <div className={styles.stepper}>
+                  <input
+                    id="gate-represented-count"
+                    type="number"
+                    inputMode="numeric"
+                    min={1}
+                    max={maxRepresented}
+                    step={1}
+                    className={styles.countInput}
+                    value={countText}
+                    disabled={busy}
+                    onChange={(e) => setCountText(e.target.value.replace(/\D/g, "").slice(0, 3))}
+                    onBlur={() => setCountText(String(representedCount()))}
+                  />
+                  <div className={styles.arrows}>
+                    <button
+                      type="button"
+                      className={styles.arrowBtn}
+                      aria-label="Tambah satu"
+                      disabled={busy || representedCount() >= maxRepresented}
+                      onClick={() => stepCount(1)}
+                    >
+                      <ChevronUp size={18} aria-hidden="true" />
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.arrowBtn}
+                      aria-label="Kurangi satu"
+                      disabled={busy || representedCount() <= 1}
+                      onClick={() => stepCount(-1)}
+                    >
+                      <ChevronDown size={18} aria-hidden="true" />
+                    </button>
+                  </div>
+                </div>
+                <p className={boothStyles.muted}>
+                  Misalnya orang tua dengan 2 anak: isi 2. Berlaku untuk scan berikutnya, lalu kotak ini kosong lagi.
+                </p>
+              </div>
+            ) : null}
+          </div>
+
           {phase.kind === "scanning" ? (
             <>
               <QrCameraScanner onResult={handleScanned} onError={(message) => setPhase({ kind: "error", message })} />
@@ -124,6 +210,12 @@ export default function GateScanner({
                 </p>
                 <p className={boothStyles.visitorName}>{scan.visitor.fullName}</p>
                 {scan.visitor.institution ? <p className={boothStyles.muted}>{scan.visitor.institution}</p> : null}
+                {scan.represents ? (
+                  <p className={styles.representedNote}>
+                    <Users size={18} aria-hidden="true" /> Mewakili {scan.represents} orang lain · total{" "}
+                    {scan.represents + 1} orang
+                  </p>
+                ) : null}
                 {scan.ownAccount ? <p className={boothStyles.note}>Ini akunmu sendiri.</p> : null}
                 <p className={boothStyles.muted}>Check-in {timeFormat.format(new Date(scan.checkedInAt))}</p>
               </div>
@@ -197,7 +289,10 @@ export default function GateScanner({
               {history.map((entry) => (
                 <li key={entry.key} className={boothStyles.logRow}>
                   <span className={boothStyles.logName}>{entry.visitor.fullName}</span>
-                  <span className={boothStyles.logOutcome}>{entry.firstEntry ? "Masuk" : "Sudah masuk"}</span>
+                  <span className={boothStyles.logOutcome}>
+                    {entry.firstEntry ? "Masuk" : "Sudah masuk"}
+                    {entry.represents ? ` · +${entry.represents} diwakili` : ""}
+                  </span>
                   <span className={boothStyles.muted}>{timeFormat.format(new Date(entry.checkedInAt))}</span>
                 </li>
               ))}

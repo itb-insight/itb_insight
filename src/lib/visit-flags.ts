@@ -24,5 +24,17 @@ async function markFlag(userId: string, flag: VisitFlag): Promise<boolean> {
 /** The visitor's QR was scanned at the gate by gate staff / an admin. */
 export const markEnteredGate = (userId: string) => markFlag(userId, 'entered_gate')
 
+/** Most people one visitor can represent (profiles.represented_count check, 0027). */
+export const MAX_REPRESENTED = 200
+
+/**
+ * How many people besides the account holder this visitor represents (parents, teachers). Set at
+ * the gate; replaces the previous value so staff can correct a mistake.
+ */
+export async function setRepresentedCount(userId: string, count: number): Promise<void> {
+  const { error } = await createServiceClient().from('profiles').update({ represented_count: count }).eq('id', userId)
+  if (error) throw new Error(error.message)
+}
+
 /** The visitor's phone was detected inside the event zone. */
 export const markVisitedItb = (userId: string) => markFlag(userId, 'visited_itb')

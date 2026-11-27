@@ -16,6 +16,8 @@ export type Profile = {
   entered_gate?: boolean
   /** Phone seen inside the event zone (0026). Never reset. */
   visited_itb?: boolean
+  /** People besides the account holder this visitor represents, set at the gate (0027). */
+  represented_count?: number
   created_at: string
   updated_at: string
 }

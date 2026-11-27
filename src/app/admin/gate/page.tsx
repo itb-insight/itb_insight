@@ -5,6 +5,7 @@ import GateScanner from "@/features/gate/GateScanner"
 import { getAdminAccess } from "@/lib/admin-access"
 import { BONUS_POINTS, CONTRIBUTION_POINTS } from "@/lib/booth-points"
 import { createClient } from "@/lib/supabase/server"
+import { MAX_REPRESENTED } from "@/lib/visit-flags"
 
 import styles from "./page.module.css"
 
@@ -16,7 +17,9 @@ export const metadata = {
 
 // Gate section: gate staff (role_a 'staff', role_b 'human_resource', role_c 'gate_staff') and
 // admins scan a visitor's profile QR at the entrance. That sets profiles.entered_gate (0026) and
-// checks the visitor ticket in; the result shows the visitor what a booth scan looks like.
+// checks the visitor ticket in; the result shows the visitor what a booth scan looks like. A visitor
+// can be marked as representing other people (parents, teachers): profiles.represented_count (0027),
+// which the /admin "On Site Today" headcounts add on.
 export default async function GateSectionPage() {
   const supabase = await createClient()
   const {
@@ -34,7 +37,11 @@ export default async function GateSectionPage() {
         subtitle="Scan QR profil pengunjung saat masuk, lalu tunjukkan cara kerja scan di booth."
       />
       <div className={styles.body}>
-        <GateScanner contributionPoints={CONTRIBUTION_POINTS} bonusPoints={BONUS_POINTS} />
+        <GateScanner
+          contributionPoints={CONTRIBUTION_POINTS}
+          bonusPoints={BONUS_POINTS}
+          maxRepresented={MAX_REPRESENTED}
+        />
       </div>
     </>
   )

@@ -171,6 +171,9 @@ describe('admin adapters', () => {
       checked_in: 5,
       active_now: 2,
       presence_users: 3,
+      represented_now: 4,
+      unique_visitors: 12,
+      represented_total: 6,
       slots: [
         { slot: '2026-11-28T01:00:00+00:00', count: 2 },
         { slot: '2026-11-28T01:30:00+00:00', count: 1 },
@@ -193,6 +196,7 @@ describe('admin adapters', () => {
       ['01:45', 0],
       ['02:00', 0],
     ])
+    expect(live.onsite!).toMatchObject({ in_area_now: 6, unique_visitors: 12, represented_total: 6 })
     expect(live.onsite!.booths[0]).toMatchObject({ name: 'Robotics', median_dwell_s: 420, avg_dwell_s: null })
     expect(live.onsite!.venue).toMatchObject({ measured: 3, unmeasured: 2, median_s: 3600 })
     expect(live.onsite!.venue.buckets.map((bucket) => bucket.count)).toEqual([1, 0, 2, 0])

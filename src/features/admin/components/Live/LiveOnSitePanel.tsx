@@ -15,9 +15,22 @@ export default function LiveOnSitePanel({ data }: { data: OnSiteLiveDto }) {
           <dd className={styles.statValue}>{data.checked_in.toLocaleString()}</dd>
         </div>
         <div className={styles.stat}>
-          <dt className={styles.statLabel}>Active now</dt>
-          <dd className={styles.statValue}>{data.active_now.toLocaleString()}</dd>
-          <dd className={styles.statNote}>presence ping, last 5 min</dd>
+          <dt className={styles.statLabel}>In the area now</dt>
+          <dd className={styles.statValue}>{data.in_area_now.toLocaleString()}</dd>
+          <dd className={styles.statNote}>
+            {data.active_now.toLocaleString()} tracked phones (last 5 min)
+            {data.in_area_now > data.active_now
+              ? ` + ${(data.in_area_now - data.active_now).toLocaleString()} they represent`
+              : ""}
+          </dd>
+        </div>
+        <div className={styles.stat}>
+          <dt className={styles.statLabel}>Unique visitors</dt>
+          <dd className={styles.statValue}>{data.unique_visitors.toLocaleString()}</dd>
+          <dd className={styles.statNote}>
+            ever in the area or scanned at the gate
+            {data.represented_total > 0 ? `, incl. ${data.represented_total.toLocaleString()} represented` : ""}
+          </dd>
         </div>
         <div className={styles.stat}>
           <dt className={styles.statLabel}>Tracking on</dt>
@@ -34,7 +47,8 @@ export default function LiveOnSitePanel({ data }: { data: OnSiteLiveDto }) {
       )}
       <p className={styles.footnote}>
         Presence figures cover only visitors who turned booth tracking on and keep the site open: a
-        sample, not a headcount.
+        sample, not a headcount. A represented group (parent, teacher) counts as in the area while
+        its representative&apos;s phone is; unique visitors only ever go up.
       </p>
     </Panel>
   )

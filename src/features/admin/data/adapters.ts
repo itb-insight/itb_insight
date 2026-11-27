@@ -584,6 +584,9 @@ function toOnSite(raw: unknown, since: Date, now: Date): OnSiteLiveDto {
     checked_in: checkedIn,
     active_now: num(data.active_now),
     presence_users: num(data.presence_users),
+    in_area_now: num(data.active_now) + num(data.represented_now),
+    unique_visitors: num(data.unique_visitors),
+    represented_total: num(data.represented_total),
     slots: fillSlots(list(data.slots), since, now),
     booths,
     venue: {

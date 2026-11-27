@@ -9,3 +9,117 @@
   font-size: 15px;
   line-height: 22px;
 }
+
+/* ---- "mewakili lebih dari satu pengunjung" ------------------------------ */
+
+.represent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 16px;
+  line-height: 22px;
+  cursor: pointer;
+}
+
+.checkbox {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  accent-color: #acc7ff;
+  cursor: pointer;
+}
+
+.countField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 34px;
+}
+
+.countLabel {
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: stretch;
+  width: fit-content;
+  border: 1px solid rgba(172, 199, 255, 0.6);
+  border-radius: var(--admin-radius-sm);
+  overflow: hidden;
+  background: rgba(9, 27, 63, 0.45);
+}
+
+.countInput {
+  width: 88px;
+  padding: 10px 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.countInput::-webkit-inner-spin-button,
+.countInput::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.countInput:focus-visible {
+  outline: 2px solid #acc7ff;
+  outline-offset: -2px;
+}
+
+.arrows {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(172, 199, 255, 0.6);
+}
+
+.arrowBtn {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  width: 44px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.arrowBtn + .arrowBtn {
+  border-top: 1px solid rgba(172, 199, 255, 0.6);
+}
+
+.arrowBtn:not(:disabled):hover,
+.arrowBtn:not(:disabled):active {
+  background: rgba(172, 199, 255, 0.18);
+}
+
+.arrowBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.representedNote {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}

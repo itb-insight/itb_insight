@@ -139,6 +139,15 @@ export interface OnSiteLiveDto {
   active_now: number
   /** Opted-in visitors seen at the venue today. */
   presence_users: number
+  /** People in the area now: active_now plus the people those visitors represent (0027). */
+  in_area_now: number
+  /**
+   * Everyone who has been in the event area, all time, never going down: profiles with
+   * visited_itb or entered_gate, plus the people they represent.
+   */
+  unique_visitors: number
+  /** The represented people included in unique_visitors. */
+  represented_total: number
   /** Gate check-ins per 15 minutes, gaps filled with zero, first check-in to now. */
   slots: CheckInSlotDto[]
   booths: BoothLiveDto[]
