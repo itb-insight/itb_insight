@@ -27,7 +27,7 @@ schema_version: 3
 | Admin/RBAC target and current state | [ADMIN-DASHBOARD.md](ADMIN-DASHBOARD.md) |
 | Current schema and planned gaps | [ERD.md](ERD.md), [DATA-MODEL.md](DATA-MODEL.md), [SUPABASE-SCHEMA-PLAN.md](SUPABASE-SCHEMA-PLAN.md) |
 | QA, release, and runbooks | [QA-CHECKLIST.md](QA-CHECKLIST.md), [RELEASES.md](RELEASES.md), [runbooks/](runbooks/) |
-| Analytics current state and target | [analytics/00-overview.md](analytics/00-overview.md) |
+| Analytics (PostHog, `/admin`, D-day presence) | [analytics/00-overview.md](analytics/00-overview.md) |
 | Filename convention | [NAMING-CONVENTIONS.md](NAMING-CONVENTIONS.md) |
 
 ## Reference inputs

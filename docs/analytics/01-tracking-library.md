@@ -1,8 +1,7 @@
 # Tracking Library
 
-> Current endpoint delivery is volatile: events accepted by `POST /api/track` go to an in-memory
-> store, not to the `analytics_events` table. Dashboard metrics are mock/non-authoritative. See
-> [00-overview.md](00-overview.md).
+> Events go to PostHog through `src/lib/analytics/queue.ts`; see [00-overview.md](00-overview.md)
+> and [02-posthog-setup.md](02-posthog-setup.md).
 
 One primitive, two convenience wrappers. Import root is `@/lib/analytics/*`. No barrel files —
 import the module you need directly.
@@ -38,8 +37,8 @@ type EventMetadata = Record<string, string | number | boolean | null>
 ```
 
 Flat, primitives only — *not* `Record<string, unknown>`. Nested objects are how PII usually ends up
-in an events table, so passing one is a type error. The server re-validates regardless; see
-[02-endpoint-and-limits.md](02-endpoint-and-limits.md).
+in an events table, so passing one is a type error. Nothing downstream strips personal data from
+metadata for you: never put form values, emails or names in it.
 
 ## trackClick
 
@@ -62,15 +61,14 @@ the numbers don't reconcile.
    this just buys autocomplete).
 2. Map it to a division in `EVENT_DIVISION` in `src/lib/analytics/divisions.ts`. Skip this and it
    lands in `MISC`, which is a valid choice for genuinely cross-cutting events.
-3. If it's high-volume, add a sample rate in `src/lib/analytics/config.ts`.
+3. If it's high-volume, add a sample rate in `src/lib/analytics/config.ts`. `/admin` scales sampled
+   events back up from the same table (`sampleWeight()` in `adapters.ts`).
 
-No endpoint change, no schema change, no dashboard change. That's the point of a generic logger.
+No endpoint or schema change: PostHog accepts any event name. To show it in `/admin`, add a HogQL
+query to an adapter ([04-dashboards-and-data-seam.md](04-dashboards-and-data-seam.md)).
 
-## Session identity
+## Identity
 
-`getSessionId()` returns an anonymous id from `sessionStorage` — not `localStorage`, so closing the
-tab ends the identity and it never becomes a persistent cross-visit identifier. `user_id` is
-hardcoded `null` server-side and is not accepted from the client at all.
-
-Never call `getSessionId()` during render — `sessionStorage` doesn't exist on the server and you'll
-get a hydration mismatch. Effects only.
+PostHog keeps an anonymous random id in `localStorage` (no cookies) and we never call `identify()`,
+so events are not linked to accounts. Every event also gets `division`, `page_path` and the
+`app_env` super property.

@@ -31,11 +31,11 @@ export default function EngagementPanel({ data }: EngagementPanelProps) {
       <dl className={styles.perf}>
         <div>
           <dt>Drone ready p50</dt>
-          <dd>{data.drone_ready_ms_p50} ms</dd>
+          <dd>{data.drone_ready_ms_p50 === null ? "no data" : `${data.drone_ready_ms_p50} ms`}</dd>
         </div>
         <div>
           <dt>Drone ready p90</dt>
-          <dd>{data.drone_ready_ms_p90} ms</dd>
+          <dd>{data.drone_ready_ms_p90 === null ? "no data" : `${data.drone_ready_ms_p90} ms`}</dd>
         </div>
       </dl>
       {/* Naming this honestly matters: real time-to-interactive is not

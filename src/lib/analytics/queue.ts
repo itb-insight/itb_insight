@@ -1,19 +1,21 @@
-import { ENDPOINT, FLUSH_INTERVAL_MS, MAX_BATCH } from "./config"
-import { getDeviceInfo, getSessionId } from "./session"
-import type { TrackBatch, TrackedEvent } from "./types"
+import type { PostHog } from "posthog-js"
+import { loadPostHog } from "./posthog"
+import type { TrackedEvent } from "./types"
 
 /**
- * Client-side event queue.
+ * Client-side hand-off to PostHog.
  *
- * Events accumulate in memory and drain on a timer, on a full batch, or when
- * the page is being backgrounded. This is the whole point of the batching
- * requirement: sponsor hovers and scroll ticks add up fast, and one request
- * per event would hammer the endpoint.
+ * PostHog batches and retries on its own, so this module only covers the gap before the SDK has
+ * loaded (it loads lazily, on idle): events wait in a small capped buffer and are delivered with
+ * their original timestamps once it is ready. With no PostHog key configured, events are dropped.
  */
 
-let buffer: TrackedEvent[] = []
-let timer: ReturnType<typeof setInterval> | null = null
-let listenersAttached = false
+/** Events kept while PostHog loads. Oldest are dropped beyond this. */
+export const MAX_PENDING = 100
+
+let pending: TrackedEvent[] = []
+let client: PostHog | null = null
+let state: "idle" | "loading" | "ready" | "disabled" = "idle"
 
 /**
  * StrictMode dedupe. React double-invokes effects in dev, so impressions and
@@ -28,76 +30,68 @@ export function alreadySeen(key: string): boolean {
   return false
 }
 
-function send(batch: TrackBatch): void {
-  const body = JSON.stringify(batch)
-
-  // sendBeacon survives page unload, which fetch generally does not. It needs
-  // an explicit Blob type or the server sees no content type.
-  if (typeof navigator !== "undefined" && typeof navigator.sendBeacon === "function") {
-    const blob = new Blob([body], { type: "application/json" })
-    if (navigator.sendBeacon(ENDPOINT, blob)) return
+function send(posthog: PostHog, event: TrackedEvent): void {
+  try {
+    posthog.capture(
+      event.name,
+      { ...event.metadata, division: event.division, page_path: event.pagePath },
+      {
+        timestamp: new Date(event.ts),
+        // The page is going away: send now with a beacon instead of waiting for the batch.
+        ...(event.urgent ? { transport: "sendBeacon" as const, send_instantly: true } : {}),
+      },
+    )
+  } catch {
+    // Analytics must never surface an error to a visitor.
   }
-
-  // keepalive lets the request outlive the document in browsers without a
-  // working sendBeacon. Failures are swallowed: analytics must never surface
-  // an error to a visitor.
-  void fetch(ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body,
-    keepalive: true,
-  }).catch(() => {})
 }
 
-export function flush(): void {
-  if (buffer.length === 0) return
+function start(): void {
+  if (state !== "idle") return
+  state = "loading"
 
-  const events = buffer
-  buffer = []
-
-  send({
-    sessionId: getSessionId(),
-    device: getDeviceInfo(),
-    events,
+  void loadPostHog().then((posthog) => {
+    if (!posthog) {
+      state = "disabled"
+      pending = []
+      return
+    }
+    client = posthog
+    state = "ready"
+    const queued = pending
+    pending = []
+    for (const event of queued) send(posthog, event)
   })
 }
 
-function handleHide(): void {
-  if (document.visibilityState === "hidden") flush()
-}
-
-/**
- * Registers lifecycle listeners once. Called lazily on the first enqueue so
- * that a page emitting no events attaches nothing at all.
- */
-function ensureStarted(): void {
-  if (listenersAttached || typeof window === "undefined") return
-  listenersAttached = true
-
-  timer = setInterval(flush, FLUSH_INTERVAL_MS)
-
-  // visibilitychange + pagehide, deliberately NOT beforeunload: beforeunload is
-  // unreliable on mobile Safari and it disqualifies the page from bfcache.
-  document.addEventListener("visibilitychange", handleHide)
-  window.addEventListener("pagehide", flush)
-}
-
 export function enqueue(event: TrackedEvent): void {
-  if (typeof window === "undefined") return
+  if (typeof window === "undefined" || state === "disabled") return
 
-  ensureStarted()
-  buffer.push(event)
+  if (state === "ready" && client) {
+    send(client, event)
+    return
+  }
 
-  if (buffer.length >= MAX_BATCH) flush()
+  if (pending.length >= MAX_PENDING) pending.shift()
+  pending.push(event)
+  start()
 }
 
-/** Exposed for tests and HMR teardown; not part of the public tracking API. */
-export function stop(): void {
-  if (timer) clearInterval(timer)
-  timer = null
-  if (typeof window !== "undefined") {
-    document.removeEventListener("visibilitychange", handleHide)
-    window.removeEventListener("pagehide", flush)
-  }
-  listenersAttached = false
+/** Starts loading PostHog without waiting for the first custom event (page views come from it). */
+export function startAnalytics(): void {
+  if (typeof window === "undefined") return
+  start()
+}
+
+/** Test-only: back to a fresh, unloaded state. */
+export function resetQueueForTests(): void {
+  pending = []
+  client = null
+  state = "idle"
+  seenKeys.clear()
+}
+
+/** Test-only: number of events waiting for PostHog. */
+export function pendingCount(): number {
+  return pending.length
 }

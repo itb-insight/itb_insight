@@ -9,7 +9,7 @@ This phase is a delivery slice under [PRD(v1.0).md](PRD(v1.0).md), not product a
 - ACC identity/profile foundations, Google OAuth, protected participant dashboard, visitor QR ticket, and competition registration/team submission.
 - CMP registration baseline and the schema foundations for payment.
 - MAP base interactive map implementation and public competition/event content where source supplies it.
-- Volatile analytics ingest as a development capability only.
+- Web analytics in PostHog, real `/admin` panels, and opt-in D-day booth presence (a sample; never awards points).
 
 ## Deferred required targets and prerequisites
 
@@ -20,7 +20,7 @@ This phase is a delivery slice under [PRD(v1.0).md](PRD(v1.0).md), not product a
 | EVT/FBK/PRT/PRE/GAL/INF | RSVP, programs, feedback, partnership, gallery, privacy/consent | Required target; staged by dependencies/content. |
 | QRS | gate/manual/self check-in, booth scans and idempotency | Required target; needs planned entities and scoped staff access. |
 | LND/EVT/MAP | final content, performance/accessibility gates, map owner/assets | Required target; blocked in part by D-05, D-06, D-08 and assets. |
-| ADM analytics | durable analytics and PostHog | PRD Should target; current analytics is not persistent. |
+| ADM analytics | durable analytics and PostHog | In place: PostHog for the website, Supabase for D-day, read together in `/admin`. Push-based triggers wait for the PWA. |
 
 ## Boundaries
 

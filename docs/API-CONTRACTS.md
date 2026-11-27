@@ -18,7 +18,10 @@ Only **Current** rows are implemented.
 | `POST /api/payments/create`, `POST /api/payments/webhook`, `GET /api/payments/status` | Current | Midtrans Snap session creation (server-side fee), verified webhook, and status retry. |
 | `GET /api/admin/stats`, `GET /api/admin/export` | Current | Live analytics statistics and audited CSV data export (registrations, visitors, feedback `&form=<slug>`, rsvp). |
 | `GET /api/admin/inspirates`, `POST /api/admin/inspirates` | Current | Inspirates dissemination records for field staff. |
-| `POST /api/track`, `GET /api/admin/events` | Current | Analytics ingest (in-memory ring buffer + persistent Supabase insert) and feed. |
+| `GET /api/admin/live` | Current | Admin-only D-day live figures (on site, venue time, booths, website now), 30 s server cache. |
+| `GET /api/presence/config`, `POST/DELETE /api/presence/consent`, `POST /api/presence/ping` | Current | Opt-in booth presence. See `docs/analytics/06-dday-presence.md`. |
+| `GET /api/feedback/pending` | Current | Open feedback forms the signed-in attendee hasn't submitted (in-app prompts). |
+| `/ingest/*` | Current | Rewrite to PostHog (`next.config.ts`); not an app route. |
 | `/login`, `/auth/callback`, `/dashboard*` | Current | Login/callback and participant dashboard. Only `/dashboard*` is protected. |
 
 ## PRD target mapping

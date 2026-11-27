@@ -1,10 +1,22 @@
 # Analytics known gaps
 
-1. **Public admin demo:** `/admin` and `GET /api/admin/events` are not authorized. `noindex` is not access control.
-2. **Volatile ingest:** accepted events stay in a 500-item, per-process memory buffer and disappear on restart/redeploy.
-3. **No persistence wiring:** `analytics_events` exists in migration `0006`, but `/api/track` does not insert into it.
-4. **Mock metrics:** all dashboard figures except the recent-event feed are mock/non-authoritative.
-5. **Per-process rate limiting:** the ingest guard is not globally enforced across instances.
-6. **Reference-only SQL:** [schema.sql](schema.sql) is proposed/reference SQL, not a migration or a runtime source.
+What the numbers can't tell you. Say so when you report them.
 
-Do not make operational, sponsor, security, or capacity claims from current dashboard values. Address authorization, persistence, and query/rollup design together before treating analytics as an operational system.
+1. **Presence is a sample, not a headcount.** Browsers give location only while the page is open
+   and the screen is on, and only for visitors who opted in. A phone in a pocket stops reporting.
+   QR scans and gate check-ins are the complete counts.
+2. **GPS can't separate neighbouring booths.** Accuracy is about 5–20 m outdoors and worse indoors.
+   Booths closer than their radii cross-match; tune `presence_radius_m` and
+   `BOOTH_MAX_ACCURACY_M` in a field test. Burst sampling is experimental.
+3. **Presence can be faked**, so it never awards points.
+4. **Venue time** ends at a visitor's last scan or ping, which is earlier than when they left.
+   Visitors with nothing after check-in are reported as unknown.
+5. **PostHog counts browsers, not people.** No `identify()`: one person on two devices is two
+   visitors; clearing storage makes a new one. Ad blockers that block our own `/ingest` path, and
+   visitors whose browser never loads the SDK, are not counted.
+6. **Sampled events** (`scroll_depth`, `section_impression`) are estimates once scaled up.
+7. **One PostHog project for every environment.** Production `/admin` filters on `app_env`; in
+   PostHog's own UI, add that filter yourself.
+8. **Figures lag**: up to 5 minutes for history panels, 30 seconds for live ones.
+9. **No push yet.** Feedback prompts and presence need the site open; see `docs/FEEDBACK.md` and the
+   PWA notes in `CLAUDE.md`.

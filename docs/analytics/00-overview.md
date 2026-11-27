@@ -1,16 +1,29 @@
 # Analytics overview
 
-**Current limited capability:** the client tracking library posts batches to `POST /api/track`; the route validates them and appends them to a 500-event, per-process in-memory ring buffer. This buffer is volatile and feeds only the demo recent-events feed.
+Two sources, one admin view.
 
 ```text
-client tracking helpers -> POST /api/track -> validation/rate limit -> in-memory event store
-                                                                  -> GET /api/admin/events
+Website   logEvent / trackClick / hooks ──► queue.ts ──► PostHog (via /ingest on our domain)
+                                                              │
+                                                              ▼ HogQL query API (server, cached)
+D-day     gate check-ins, booth QR scans,  ──► Supabase ──► src/features/admin/data/adapters.ts ──► /admin
+          booth presence (opt-in)                               (+ GET /api/admin/live, 30 s)
 ```
 
-- `/admin` is public demo/mock state, not a protected analytics console.
-- Dashboard KPIs, funnels, traffic, sponsor, and engagement figures are mock/non-authoritative.
-- Migration `0006_analytics_events.sql` creates a persistent `analytics_events` table, but active ingest does **not** write to it.
-- [schema.sql](schema.sql) is reference/proposed SQL only; it is not an executed migration.
-- PostHog is a final PRD Should integration target, not installed or configured today. Durable analytics is a target design and requires privacy, retention, authorization, and reliable persistence decisions.
+- **Website engagement** goes to PostHog (US region, one project for every environment). Every
+  event carries `app_env`; production `/admin` counts only `app_env = 'production'`.
+- **D-day engagement** stays in Supabase: `gate_check_ins`, `booth_scan_events` (QR, awards
+  points) and `booth_presence` (opt-in location, never awards points).
+- **`/admin`** is admin-only (`src/app/admin/layout.tsx`). Its panels read through one module,
+  `adapters.ts`. Without PostHog query credentials the web panels show mock figures and the header
+  says "Mock data"; the D-day live section is always real.
 
-Read [02-endpoint-and-limits.md](02-endpoint-and-limits.md) for the live endpoint, [04-dashboards-and-data-seam.md](04-dashboards-and-data-seam.md) for mock metrics, and [99-known-gaps.md](99-known-gaps.md) before operational use.
+| Read next | For |
+| --- | --- |
+| [01-tracking-library.md](01-tracking-library.md) | `logEvent`, `trackClick`, adding an event |
+| [02-posthog-setup.md](02-posthog-setup.md) | Keys, project settings, privacy, the `/ingest` proxy, query limits |
+| [03-hooks-cookbook.md](03-hooks-cookbook.md) | Impressions, scroll depth, funnels |
+| [04-dashboards-and-data-seam.md](04-dashboards-and-data-seam.md) | Which panel reads what |
+| [05-drone.md](05-drone.md) | The drone cube's render telemetry |
+| [06-dday-presence.md](06-dday-presence.md) | Booth presence: rules, consent, tuning, retention |
+| [99-known-gaps.md](99-known-gaps.md) | What the numbers can't tell you |
