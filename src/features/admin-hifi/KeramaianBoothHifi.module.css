@@ -1,0 +1,50 @@
+/*
+  Tombol "Lihat semua booth" — Figma I1875:5148;1875:4975.
+
+    137 x 32, radius 8, garis tepi 2px gradien #DEE8FB -> #ACC7FF
+    teks 12/14 #DEE8FB, padding 8 vertikal, 12 + 8 (bingkai dalam) mendatar
+*/
+.tombol {
+  position: relative;
+  box-sizing: border-box;
+  height: 32px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--admin-text);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Garis bergradien, jadi tidak bisa pakai `border` biasa. */
+.tombol::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: var(--admin-ice-stroke);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.tombol:hover {
+  background: rgba(222, 232, 251, 0.12);
+}
+
+.tombol:focus-visible {
+  outline: 2px solid var(--admin-text);
+  outline-offset: 2px;
+}

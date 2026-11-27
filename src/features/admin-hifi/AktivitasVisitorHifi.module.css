@@ -1,0 +1,69 @@
+/*
+  Dua kartu median di kaki panel — Figma I1875:5149;1922:2248.
+
+    kartu    100 tinggi, radius 12, garis tepi 4px gradien #DEE8FB -> #ACC7FF
+             isi sama dengan panel tapi opacity 0,6
+    isi      keterangan 12/14 di y+22, angka 28/34 di y+44, keduanya 20 dari kiri
+    jarak    16 antar kartu, dua kolom sama lebar
+*/
+.median {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kartu {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 100px;
+  padding: 22px 20px;
+  border-radius: 12px;
+  /* Opacity 0,6 ditulis langsung ke dalam isinya, bukan lewat properti
+     `opacity` — kalau pakai `opacity`, teks di dalamnya ikut pudar. */
+  background: linear-gradient(0deg, rgba(172, 199, 255, 0.3) 0%, rgba(27, 59, 125, 0.3) 100%);
+}
+
+.kartu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 4px;
+  border-radius: inherit;
+  background: var(--admin-ice-stroke);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  color: var(--admin-text-strong);
+}
+
+.value {
+  /* Dump: keterangan di y+22, angka di y+44 -> jarak 8 setelah baris 14px. */
+  margin: 8px 0 0;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 34px;
+  color: var(--admin-text-strong);
+}
+
+@media (max-width: 639px) {
+  .median {
+    grid-template-columns: 1fr;
+  }
+}

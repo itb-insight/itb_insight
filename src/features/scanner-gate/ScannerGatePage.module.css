@@ -3,14 +3,70 @@
   isolation: isolate;
   min-height: 100vh;
   min-height: 100dvh;
-  overflow-x: hidden;
+  /* Kolom: isi mengisi sisa tinggi, footer menempel di bawahnya. */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
   font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+.shell {
+  position: relative;
+  /* Menahan z-index -1 milik lapisan hiasan supaya tidak lolos ke luar kolom. */
+  isolation: isolate;
+  width: 100%;
+  max-width: var(--kolom);
+  /* Mengisi sisa tinggi layar supaya gradien dan hiasannya tidak berhenti
+     separuh jalan waktu isinya pendek. */
+  flex: 1;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* SENGAJA tidak overflow:hidden. Hiasan latarnya lebih lebar dari kolom
+     (deco2 174%), jadi memotongnya membuat tepi kotak yang tegas di layar
+     lebar. Dibiarkan meluber supaya membaur; scroll sampingnya sudah ditahan
+     overflow-x milik .page. */
 }
 
 .content {
   position: relative;
   padding: 94px 24px 48px;
+}
+
+.page {
+  --kolom: 393px;
+}
+
+/* ---- pergantian header ---------------------------------------------------- */
+
+/* `contents`, bukan `block`: MobileHeader memposisikan dirinya absolut terhadap
+   .shell, jadi pembungkusnya tidak boleh ikut jadi kotak layout. */
+.navMobile {
+  display: contents;
+}
+
+.navDesktop {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .page {
+    --kolom: 480px;
+  }
+
+  /* 128 > tinggi navbar solid (101), jadi judulnya tidak ketutupan. */
+  .content {
+    padding: 128px 24px 72px;
+  }
+
+  .navMobile {
+    display: none;
+  }
+
+  .navDesktop {
+    display: block;
+  }
 }
 
 /* ---- judul ---------------------------------------------------------------- */
@@ -102,44 +158,42 @@
   pointer-events: none;
 }
 
+/*
+  Siku sudut. SVG-nya cuma SATU — siku kanan-bawah — sisanya diputar.
+
+  Dulu di sini ada cincin bertopeng yang ternyata menggambar kotak TERTUTUP di
+  keempat sudut, bukan siku. Sekarang pakai aset asli dari Figma.
+
+  Arah putarannya (rotate di CSS searah jarum jam, sumbu y ke bawah):
+    kanan-bawah   0     kiri-bawah   90
+    kiri-atas   180     kanan-atas  270
+
+  Nama berkasnya mengandung spasi, jadi di url() spasinya di-encode %20 —
+  kalau ditulis apa adanya, deklarasinya diabaikan tanpa pesan apa pun.
+*/
 .corner {
   position: absolute;
-  box-sizing: border-box;
-  width: 36px;
-  height: 36px;
-  border-radius: 6px 0 0 0;
-}
-
-.corner::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 4px;
-  border-radius: inherit;
-  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
+  width: 34px;
+  height: 34px;
+  background: url("/images/QR%20Border.svg") no-repeat center / 100% 100%;
 }
 
 .cornerTopLeft {
   left: 43px;
   top: 43px;
+  transform: rotate(180deg);
 }
 
 .cornerTopRight {
   right: 43px;
   top: 43px;
+  transform: rotate(270deg);
 }
 
 .cornerBottomLeft {
   left: 43px;
   bottom: 43px;
+  transform: rotate(90deg);
 }
 
 .cornerBottomRight {

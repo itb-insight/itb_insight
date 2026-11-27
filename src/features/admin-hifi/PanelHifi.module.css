@@ -1,0 +1,70 @@
+.panel {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--admin-panel-gap);
+  padding: calc(var(--admin-border-w) + var(--admin-panel-pad-y))
+    calc(var(--admin-border-w) + var(--admin-panel-pad-x));
+  border-radius: var(--admin-radius-panel);
+  background: var(--admin-panel-fill);
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: var(--admin-border-w);
+  border-radius: inherit;
+  background: var(--admin-panel-stroke);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.heading {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--admin-title-size);
+  font-weight: 400;
+  line-height: var(--admin-title-line);
+  color: var(--admin-text);
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: var(--admin-subtitle-size);
+  font-weight: 400;
+  line-height: var(--admin-subtitle-line);
+  color: var(--admin-text-muted);
+}
+
+.action {
+  flex: none;
+}
+
+.body {
+  min-width: 0;
+  /* Kolom: widget yang punya slot kaki (mis. tombol "Lihat semua booth")
+     dapat jarak yang sama dengan jarak kepala -> isi. */
+  display: flex;
+  flex-direction: column;
+  gap: var(--admin-panel-gap);
+}

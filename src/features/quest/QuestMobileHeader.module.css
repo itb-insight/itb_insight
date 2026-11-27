@@ -1,0 +1,107 @@
+/*
+ * Figma: "Header Mobile" (2104:3319) di frame 402 lebar.
+ *
+ *   baris   tinggi 99, logo 28px dari kiri, tombol menu 29px dari kanan,
+ *           pill di tengah (space-between)
+ *   logo    49 x 48
+ *   pill    timer 46.2 x 32 + poin 75.1 x 32, tepi 1.5
+ *   menu    51 x 51, radius 15.31, tepi 5.1
+ *
+ * Sudut pill mengikuti RENDER Figma (kiri-atas dan kanan-bawah membulat), bukan
+ * JSON-nya yang terbaca cermin. Radius 48 lebih besar dari tinggi pill, jadi
+ * browser memotongnya ke 32 — sama dengan yang terlihat di render.
+ */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 99px;
+  padding: 24px 29px 24px 28px;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+.logo {
+  display: block;
+  flex: none;
+  width: 49px;
+  height: 48px;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+}
+
+.pill {
+  display: flex;
+  flex: none;
+  height: 32px;
+}
+
+/* isi #acc7ff (bawah) -> #1b3b7d (atas) 50%, tepi #acc7ff (bawah) -> #517eda (atas) */
+.pillTimer {
+  display: flex;
+  align-items: flex-start;
+  box-sizing: border-box;
+  width: 46.2px;
+  height: 32px;
+  padding: 6px 0 0 19px;
+  border-radius: 48px 0 0 0;
+  background: linear-gradient(0deg, rgba(172, 199, 255, 0.5) 0%, rgba(27, 59, 125, 0.5) 100%);
+  --stroke-w: 1.5px;
+  --stroke-bg: linear-gradient(0deg, #acc7ff 0%, #517eda 99%);
+}
+
+/* isi #dee8fb (bawah) -> #acc7ff (atas), tepi #dee8fb (atas) -> #acc7ff (bawah) */
+.pillPoints {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 75.1px;
+  height: 32px;
+  padding-left: 7px;
+  border-radius: 0 0 48px 0;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  --stroke-w: 1.5px;
+  --stroke-bg: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+}
+
+.pillPointsText {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+/* isi #dee8fb (bawah) -> #acc7ff (atas), tepi 5.1 #dee8fb (atas) -> #acc7ff (bawah) */
+/* Jangkar menu yang terbuka: .mobileMenu memposisikan dirinya ke pembungkus ini. */
+.menuWrap {
+  position: relative;
+  flex: none;
+}
+
+.menu {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 51px;
+  height: 51px;
+  padding: 0;
+  border-radius: 15.3146px;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  cursor: pointer;
+  --stroke-w: 5.1049px;
+  --stroke-bg: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+}
+
+.menu svg {
+  width: 30.6px;
+  height: 30.6px;
+}
+
+.pill:focus-visible,
+.menu:focus-visible {
+  outline: 2px solid #dee8fb;
+  outline-offset: 3px;
+}

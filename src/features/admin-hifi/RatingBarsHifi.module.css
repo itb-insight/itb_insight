@@ -1,0 +1,192 @@
+/*
+  Rating — Figma node 1937:3828, kartu 1383 x 460.
+
+  Koordinat dump (isi panel mulai x 44, y 36):
+    kepala    judul 28/34, subjudul 20/24 (jarak 4) -> tinggi 62
+    legenda   318 x 24 di x 1021, bulatan 20 + jarak 8 ke teks, antar butir 32
+    baris     y 122 lalu tiap 34 (tinggi 22 + jarak 12), delapan baris
+    kaki      y 406, 12/18
+
+  Satu baris, dari kiri (semuanya berjarak 12):
+    nama      171      x 44
+    lencana    73      x 227   (44 + 171 + 12)
+    bar       948      x 312   (227 + 73 + 12)
+    nilai      66      x 1272  (312 + 948 + 12), rata kanan -> tepi 1338 = isi
+
+  BAR-NYA LIMA SEGMEN, BUKAN SATU ISIAN
+  Di dump bar 948px berisi lima persegi 189,6px yang menempel tanpa jeda
+  (312 / 501,6 / 691,2 / 880,8 / 1070,4). Jadi satu segmen = satu bintang, dan
+  yang membedakan baris adalah berapa segmen yang menyala.
+*/
+
+.isi {
+  display: flex;
+  flex-direction: column;
+  gap: var(--admin-panel-gap);
+}
+
+/* ---- legenda di kepala panel ---------------------------------------------- */
+
+.legenda {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legendaButir {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--admin-body-size);
+  font-weight: 400;
+  line-height: var(--admin-body-line);
+  color: var(--admin-text-muted);
+  white-space: nowrap;
+}
+
+.titik {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+/* ---- daftar baris --------------------------------------------------------- */
+
+.baris {
+  display: grid;
+  /* nama / lencana / bar / nilai — bar yang melar, sisanya tetap. */
+  grid-template-columns: 171px 73px minmax(0, 1fr) 66px;
+  column-gap: 12px;
+  row-gap: 12px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* display: contents supaya keempat sel tiap baris jatuh langsung ke grid di
+   atas — tanpa ini tiap <li> jadi satu sel sendiri dan kolomnya buyar. */
+.sel {
+  display: contents;
+}
+
+.nama {
+  margin: 0;
+  font-size: var(--admin-body-size);
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--admin-text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lencana {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.nilai {
+  margin: 0;
+  font-size: var(--admin-body-size);
+  font-weight: 400;
+  line-height: 20px;
+  text-align: right;
+  white-space: nowrap;
+  color: var(--admin-text-strong);
+}
+
+/* ---- bar ------------------------------------------------------------------ */
+
+.bar {
+  position: relative;
+  box-sizing: border-box;
+  height: 12px;
+  border-radius: 8px;
+  /* Memotong ujung segmen mengikuti lengkung bar. */
+  overflow: hidden;
+}
+
+/* Garis tepi 2px; warnanya ikut kategori, sama dengan segmen yang menyala. */
+.bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: var(--warna-bar);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/*
+  ISIAN BAR
+
+  Di dump bar 948px berisi lima persegi 189,6px yang MENEMPEL TANPA JEDA
+  (312 / 501,6 / 691,2 / 880,8 / 1070,4), masing-masing menyala atau mati. Tanpa
+  jeda, bar bersegmen dan bar menerus terlihat persis sama — bedanya cuma
+  pembulatan panjangnya.
+
+  Dipakai yang menerus, karena jumlah segmen di dump tidak mengikuti aturan apa
+  pun: 4,7 digambar 4 segmen tapi 4,5 digambar 5, dan 3,6 digambar 2. Dengan
+  pembulatan, delapan barisnya cuma jadi dua panjang (5/5 atau 4/5) dan grafik
+  peringkatnya jadi rata — padahal di rancangannya panjangnya jelas bertingkat.
+
+  Tinggi isian 8 di dalam bar 12; sisa 2px atas-bawah adalah garis tepinya.
+*/
+.isian {
+  position: absolute;
+  inset: 2px 0;
+  background: var(--admin-bar-mati);
+}
+
+.isian::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--terisi);
+  background: var(--warna-bar);
+}
+
+/* ---- kaki ----------------------------------------------------------------- */
+
+.kaki {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  color: var(--admin-text-muted);
+}
+
+/* ---- layar sempit --------------------------------------------------------- */
+
+/*
+  Belum ada rancangan sempit. Di bawah 900px kolom nama dan lencana dipersempit
+  supaya bar-nya tidak hilang sama sekali.
+*/
+@media (max-width: 899px) {
+  .baris {
+    grid-template-columns: minmax(0, 1fr) 73px minmax(80px, 1fr) 58px;
+    column-gap: 8px;
+  }
+}

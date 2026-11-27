@@ -1,0 +1,130 @@
+.sidebar {
+  flex: 0 0 292px;
+  width: 292px;
+  box-sizing: border-box;
+  position: sticky;
+  top: var(--admin-nav-h);
+  align-self: flex-start;
+  height: calc(100vh - var(--admin-nav-h));
+  height: calc(100dvh - var(--admin-nav-h));
+  display: flex;
+  flex-direction: column;
+  --sb-pad-top: 32px;
+  --sb-pad-bottom: 16px;
+  --sb-gap-brand: 32px;
+  --sb-gap-groups: 24px;
+  --sb-gap-title: 8px;
+  --sb-gap-items: 6px;
+  --sb-item-h: 58px;
+
+  gap: var(--sb-gap-brand);
+  padding: var(--sb-pad-top) 20px var(--sb-pad-bottom);
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar > * {
+  flex: none;
+}
+
+.brand {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 34px;
+  color: #ffffff;
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sb-gap-groups);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sb-gap-title);
+}
+
+.groupTitle {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #ccddff;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sb-gap-items);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--sb-item-h);
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 0 20px;
+  border-radius: 8px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.itemActive {
+  background: #1b3b7d;
+}
+
+.icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.label {
+  min-width: 0;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.soon {
+  flex: none;
+  margin-left: auto;
+  padding: 2px 8px;
+  border: 1px solid #517eda;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #acc7ff;
+}
+
+@media (max-height: 807px) {
+  .sidebar {
+    --sb-pad-top: 24px;
+    --sb-pad-bottom: 12px;
+    --sb-gap-brand: 24px;
+    --sb-gap-groups: 20px;
+    --sb-gap-title: 6px;
+    --sb-gap-items: 4px;
+    --sb-item-h: 52px;
+  }
+}

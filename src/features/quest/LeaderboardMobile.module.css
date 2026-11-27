@@ -1,0 +1,513 @@
+/*
+  Leaderboard Mobile — Figma node 3429:17434, kanvas 402 x 998.
+
+  Koordinat dump:
+    header     352 x 24 di (26, 31), jarak 91
+    countdown  370 x 72 di (16, 89), radius 12
+    kolom isi  370 x 593 di (16, 185), jarak 15
+      saringan 370 x 40
+      podium   283 x 210 di x 59,5 (tiga kolom 89, jarak 8)
+      daftar   370 x 313, baris 31 menempel tanpa jarak
+    kartu You  370 x 64 di (16, 823)
+    navigasi   di y 909
+
+  Margin kiri-kanan 16 (kecuali header yang 26).
+*/
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* Dikurangi header DAN navigasi bawah (keduanya dipegang QuestPageShell)
+     supaya header + layar + nav pas satu layar. */
+  min-height: calc(100dvh - var(--quest-header-h) - var(--quest-nav-h));
+  /*
+    Satu kolom utuh — termasuk latar navigasi bawah, yang ada di dalamnya.
+    Lihat --kolom-quest di globals.css; latar selebar layar dipegang
+    .shell di route-nya.
+  */
+  max-width: var(--kolom-quest);
+  margin-inline: auto;
+  /* Gradien SENGAJA tidak digambar di sini: .shell (QuestPageShell) yang
+     memegangnya untuk seluruh halaman. Kalau diulang di sini, dia mulai
+     lagi dari 0% di bawah header dan muncul sambungan di garis itu. */
+  color: #ffffff;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+.isi {
+  flex: 1;
+  width: 100%;
+  padding: 31px 16px 0;
+  box-sizing: border-box;
+}
+
+/* ---- header ---------------------------------------------------------------- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Header-nya 26 dari tepi, isi lain 16 — selisih 10. */
+  padding: 0 10px;
+}
+
+.headerIcon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #fafafa;
+  cursor: pointer;
+}
+
+.judul {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* ---- kartu hitung mundur --------------------------------------------------- */
+
+.countdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 34px;
+  /* Dump: bingkai 89..161 = 72, isi 34 di y107 -> 18 atas, 20 bawah. */
+  padding: 18px 20px 20px;
+  border-radius: 12px;
+  background: linear-gradient(0deg, #517eda 0%, #294d97 100%);
+}
+
+.countdownTeks {
+  flex: 1;
+  min-width: 0;
+}
+
+ /*
+  Warna ditulis eksplisit di ketiga paragraf kartu ini. Tanpa itu mereka
+  kelihatan keabu-abuan: globals.css punya aturan telanjang
+  `p { color: var(--color-text-secondary) }`, dan nilai yang DIWARISKAN dari
+  .page selalu kalah dari aturan yang cocok langsung ke elemennya.
+*/
+.freeze {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #ffffff;
+}
+
+.freezeNote {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  color: #ffffff;
+}
+
+.jam {
+  margin: 0;
+  flex: none;
+  font-size: 36px;
+  font-weight: 400;
+  /* Figma: 36px dengan line-height 34 — sengaja lebih rapat dari ukurannya. */
+  line-height: 34px;
+  text-align: right;
+  color: #ffffff;
+}
+
+/* ---- kolom isi ------------------------------------------------------------- */
+
+.utama {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 24px;
+}
+
+.saringan {
+  display: flex;
+  align-items: center;
+  gap: 21px;
+  height: 40px;
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+}
+
+.chip {
+  box-sizing: border-box;
+  height: 40px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  color: #dee8fb;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Chip tidak terpilih: cuma garis tepi bergradien 1,5px. */
+.chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.chipAktif {
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  color: #1b3b7d;
+}
+
+.chipAktif::before {
+  display: none;
+}
+
+.updated {
+  margin: 0 0 0 auto;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  text-align: right;
+  color: #7fa9f6;
+  white-space: nowrap;
+}
+
+/* ---- podium ---------------------------------------------------------------- */
+
+/*
+  Tiga alas berbeda tinggi yang berakhir di garis yang sama, jadi yang
+  disejajarkan bagian BAWAHnya — bukan atasnya. `align-items: end` pada grid
+  menangani itu tanpa perlu menghitung offset tiap kolom.
+*/
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, 89px);
+  justify-content: center;
+  align-items: end;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.podiumKolom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: linear-gradient(0deg, #517eda 0%, #294d97 100%);
+  color: #dee8fb;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.avatarJuara {
+  background: linear-gradient(0deg, #d0ffc7 0%, #76df62 100%);
+  color: #0b0b0b;
+}
+
+.podiumNama {
+  /* 76 lebar, dua baris 20px — nama panjang dipotong, bukan mendorong alas. */
+  width: 76px;
+  height: 40px;
+  margin: 0;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.alas {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 89px;
+  /* Tinggi dioper dari komponen lewat --tinggi-alas; isi menempel ke ATAS. */
+  height: var(--tinggi-alas, auto);
+  padding: 8px 31px 0;
+  border-radius: 12px 12px 0 0;
+  background: linear-gradient(0deg, #517eda 0%, #294d97 100%);
+  color: #dee8fb;
+}
+
+.alas::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(0deg, #517eda 1%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Juara 1: hijau dan TANPA garis tepi — begitu di dump. */
+.alasJuara {
+  background: linear-gradient(0deg, #d0ffc7 0%, #76df62 100%);
+  color: #020816;
+}
+
+.alasJuara::before {
+  display: none;
+}
+
+.alasRank {
+  font-size: 28px;
+  line-height: 34px;
+}
+
+.alasPoin {
+  font-size: 12px;
+  line-height: 14px;
+}
+
+/* ---- daftar peringkat ------------------------------------------------------ */
+
+/*
+  Baris menempel tanpa jarak, jadi garis tepinya bertumpuk dan terlihat seperti
+  satu tabel. Hanya baris pertama dan terakhir yang melengkung.
+*/
+.daftar {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.baris {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 27px minmax(0, 1fr) 54px 47px;
+  align-items: center;
+  gap: 7px;
+  /*
+    Barisnya dipaku 31 (tinggi di dump). padding tegak sengaja 0: teksnya
+    cuma 20px dan sudah ditengahkan `align-items`, jadi padding apa pun di
+    sini justru mendorong barisnya lewat 31 — min-height tidak menahannya.
+  */
+  height: 31px;
+  padding: 0 12px;
+  border: 1.5px solid #acc7ff;
+  background: rgba(9, 27, 63, 0.5);
+}
+
+/* Tanpa ini garis antar baris jadi dobel (1,5 + 1,5). */
+.baris + .baris {
+  border-top: none;
+}
+
+.daftar .baris:first-child {
+  border-radius: 12px 12px 0 0;
+}
+
+.daftar .baris:last-child {
+  border-radius: 0 0 12px 12px;
+}
+
+.peringkat,
+.nama,
+.poin {
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
+}
+
+.nama {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quests {
+  font-size: 12px;
+  line-height: 14px;
+  text-align: right;
+  color: #acc7ff;
+  white-space: nowrap;
+}
+
+.poin {
+  text-align: right;
+}
+
+/* Baris "..." cuma punya satu sel. */
+.barisJeda {
+  grid-template-columns: 1fr;
+}
+
+/* ---- kartu "You" ----------------------------------------------------------- */
+
+.kamu {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 45px 0 22px;
+  /*
+    Dump menulis padding 16, tapi bingkainya dipaku 64 sementara avatarnya 48:
+    16 + 48 + 16 = 80, tidak muat. Koordinat avatarnya (y 831 di bingkai y 823)
+    menunjukkan jarak sebenarnya 8 atas-bawah. Dipakai 8/16 supaya tingginya
+    benar-benar 64.
+  */
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: linear-gradient(0deg, rgba(208, 255, 199, 0.35) 0%, rgba(118, 223, 98, 0.35) 100%);
+}
+
+.kamu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #d0ffc7 0%, #76df62 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.kamuAvatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 100px;
+  background: linear-gradient(0deg, #d0ffc7 0%, #76df62 100%);
+  color: #295b20;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.kamuTeks {
+  flex: 1;
+  min-width: 0;
+}
+
+.kamuNama {
+  margin: 0;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
+}
+
+.kamuNote {
+  margin: 0;
+  font-size: 12px;
+  line-height: 14px;
+  color: #a0e293;
+}
+
+.kamuPoin {
+  flex: none;
+  margin: 0;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: right;
+  color: #ffffff;
+}
+
+/* ---- tablet ---------------------------------------------------------------- */
+
+/*
+  Tidak ada rancangan tablet dari Figma. Yang dilakukan di sini cuma melebarkan
+  kolom dari 402 ke 600 dan membesarkan podium + baris peringkat, supaya tidak
+  kelihatan seperti layar HP yang mengambang. Ukuran huruf sengaja TIDAK diubah:
+  teks 16px tetap 16px, yang tumbuh cuma ruangnya.
+*/
+@media (min-width: 768px) {
+  .podium {
+    grid-template-columns: repeat(3, 118px);
+    gap: 12px;
+  }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+  }
+
+  .podiumNama {
+    width: 104px;
+  }
+
+  .alas {
+    width: 118px;
+    /* Tingginya ikut tumbuh supaya perbandingan 1-2-3 tetap terbaca. */
+    height: calc(var(--tinggi-alas, 0px) * 1.3);
+    padding-inline: 20px;
+  }
+
+  .alasRank {
+    font-size: 34px;
+    line-height: 40px;
+  }
+
+  .baris {
+    height: 36px;
+    padding: 0 16px;
+  }
+
+  .kamu {
+    padding: 10px 20px;
+  }
+
+  .kamuAvatar {
+    width: 56px;
+    height: 56px;
+  }
+}

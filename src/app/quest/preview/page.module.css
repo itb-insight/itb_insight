@@ -1,0 +1,56 @@
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding: 32px;
+  background: #1e1e1e;
+}
+
+.single {
+  background: #1e1e1e;
+}
+
+.label {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #a0a0a0;
+}
+
+/* Frame "Header Quest": 1728 x 1117, tiga header pada y 11 / 216 / 421. */
+.desktop {
+  position: relative;
+  width: 1728px;
+  height: 1117px;
+}
+
+.headerRow {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.mobileRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+}
+
+/* Frame mobile Figma: 402 x 852. */
+.phone {
+  position: relative;
+  width: 402px;
+  height: 852px;
+  overflow: hidden;
+}
+
+.phone > section {
+  height: 852px;
+  min-height: 852px;
+}
+
+.signIn {
+  display: inline-block;
+  padding: 0;
+  background: #091b3f;
+}

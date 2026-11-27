@@ -1,0 +1,16 @@
+.border {
+  position: relative;
+}
+
+.border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: var(--gb-width, 1px);
+  border-radius: inherit;
+  background: var(--gb-gradient, linear-gradient(180deg, #acc7ff 0%, #517eda 100%));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}

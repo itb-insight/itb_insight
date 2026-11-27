@@ -4,6 +4,7 @@ import Script from "next/script"
 import AnalyticsRoot from "@/lib/analytics/components/AnalyticsRoot"
 import OnSiteRoot from "@/features/onsite/OnSiteRoot"
 import "./globals.css"
+import "@/styles/admin-tokens.css"
 
 const gabarito = Gabarito({
   subsets: ["latin"],

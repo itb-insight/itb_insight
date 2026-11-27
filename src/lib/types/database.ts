@@ -9,7 +9,9 @@ export type Profile = {
   avatar_url?: string | null
   role_a?: ProfileRoleA | null
   role_b?: ProfileRoleB | null // only for staff / stakeholder
-  role_c?: string | null // sponsor/partner company; only for sponsor_partner
+  // sponsor_partner: the company (free text). staff: 'gate_staff' (0024), or the booth type for
+  // booth staff (role_b 'booth'; 'all' = every booth, 0025). Otherwise null.
+  role_c?: string | null
   created_at: string
   updated_at: string
 }

@@ -1,0 +1,68 @@
+/*
+ * Dua tata letak bar chart dari Figma. Kepala panel, padding, dan tepi
+ * datang dari PanelHifi.
+ *
+ * "inline"  — Figma "Horizontal Bar 3", dipakai widget Asal Traffic.
+ *             Satu baris: label (120) | bar | angka, jarak 16.
+ *             Antar baris 16. Tinggi baris 20, bar 12 di tengahnya.
+ *
+ * "stacked" — Figma "Horizontal Bar 2", dipakai widget
+ *             Di mana visitor berhenti.
+ *             Label dan angka sejajar di atas, bar penuh di bawahnya.
+ *             Semua bagian berjarak 16 (label -> bar -> label berikutnya).
+ *
+ * Teks: Gabarito 400 16/20, putih. Persentase kecil di varian stacked
+ * Gabarito 400 12/14, satu baris dengan angkanya.
+ */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.text {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--admin-text-strong);
+  white-space: nowrap;
+}
+
+/* ---- inline ---------------------------------------------------------------- */
+
+.inlineRow {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.inlineRow .text:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- stacked --------------------------------------------------------------- */
+
+.stackedRow {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stackedHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.share {
+  font-size: 12px;
+  line-height: 14px;
+}

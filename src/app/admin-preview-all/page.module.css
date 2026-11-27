@@ -1,0 +1,40 @@
+/*
+  Pembatas antar lane. Sengaja dibuat netral dan mentah — ini penanda kerja,
+  bukan bagian rancangan. Jangan ada yang menirunya ke halaman asli.
+*/
+
+.pembatas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba(222, 232, 251, 0.35);
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+.lane {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  color: var(--admin-text);
+}
+
+.pembungkus {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--admin-text-muted);
+}
+
+.pembungkus code {
+  font-family: var(--font-roboto-mono), monospace;
+  font-size: 14px;
+}
+
+.oleh {
+  margin-left: auto;
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--admin-link);
+}

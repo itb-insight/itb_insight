@@ -1,0 +1,28 @@
+/*
+ * Figma: "Group 48096272" (2104:285)
+ *   128 x 40, radius 24, tanpa isi
+ *   tepi 2px #517eda (bawah) -> #acc7ff (atas)
+ *   teks Gabarito 400 20/24 #7fa9f6
+ */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 128px;
+  height: 40px;
+  border-radius: 24px;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #7fa9f6;
+  white-space: nowrap;
+  --stroke-w: 2px;
+  --stroke-bg: linear-gradient(0deg, #517eda 1%, #acc7ff 100%);
+}
+
+.button:focus-visible {
+  outline: 2px solid #dee8fb;
+  outline-offset: 3px;
+}

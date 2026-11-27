@@ -1,0 +1,244 @@
+/*
+ * Figma: "How to play" (2105:5863), 402 x 852. Posisi (dari kiri atas frame):
+ *
+ *   tutup       12, 12      ikon cancel 40 x 40
+ *   Quest Mode  17, 78      Gabarito 400 20/24, gradient es
+ *   judul       17, 110     Gabarito 700 48/56 putih, tiga baris
+ *   aturan      16, 294     tiga kotak 370 x 108, jarak 12
+ *   lokasi      17, 658     ikon pin 16 + teks 12/14 #ccddff
+ *   centang     20, 707     kotak 20 + teks 16/24
+ *   tombol      16, 782     370 x 48
+ *
+ * Jarak vertikal di bawah diturunkan dari posisi-posisi itu.
+ */
+
+/*
+  Akar layar ini SENGAJA tidak menggambar gradien (shared.frameBg sudah
+  dilepas dari JSX-nya): .shell milik QuestPageShell yang memegangnya untuk
+  seluruh halaman. Kalau digambar lagi di sini, gradiennya mulai dari 0%
+  lagi di bawah header dan muncul sambungan di garis itu.
+*/
+.page {
+  position: relative;
+  /* Lihat --kolom-quest di globals.css. */
+  max-width: var(--kolom-quest);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  /* Dikurangi header quest (QuestPageShell) supaya tetap pas satu layar. */
+  min-height: calc(100dvh - var(--quest-header-h));
+  padding: 78px 16px 22px;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  color: #ffffff;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+
+.eyebrow {
+  align-self: flex-start;
+  margin: 0 0 0 1px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.title {
+  margin: 8px 0 0 1px;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 56px;
+  color: #ffffff;
+}
+
+/* ---------- aturan ---------- */
+
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* tepi 2px #dee8fb (atas) -> #acc7ff (bawah), radius 12, padding 16, jarak 16 */
+.rule {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 108px;
+  /* Figma: padding 16 dan tepi 2 ikut dihitung di layout. */
+  padding: 18px;
+  border-radius: 12px;
+  --stroke-w: 2px;
+  --stroke-bg: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+}
+
+.ruleNumber {
+  flex: none;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 34px;
+}
+
+.ruleText {
+  flex: 1;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #dee8fb;
+}
+
+.ruleLead {
+  font-weight: 700;
+  color: #dee8fb;
+}
+
+/* ---------- catatan lokasi ---------- */
+
+/* Kotak teks Figma tingginya 33 tapi isinya 3 baris x 14 = 42 dan rata tengah
+   vertikal; di render Figma baris pertama mulai 3px di atas kotak. Ikon tetap di atas kotak. */
+.privacy {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 348px;
+  max-width: calc(100% - 1px);
+  margin: 16px 0 0 1px;
+}
+
+.privacyIcon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.privacyText {
+  flex: 1;
+  margin: -3px 0 -6px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  text-align: justify;
+  color: #ccddff;
+}
+
+.privacyStrong {
+  font-weight: 700;
+  color: #ccddff;
+}
+
+/* Satu spasi di Figma memakai ukuran 16px. */
+.privacyWideSpace {
+  font-size: 16px;
+}
+
+.privacyLink {
+  color: #ccddff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---------- centang aturan ---------- */
+
+.accept {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 352px;
+  max-width: calc(100% - 4px);
+  min-height: 33px;
+  margin: 16px 0 0 4px;
+  cursor: pointer;
+}
+
+/* Input asli tetap ada untuk keyboard dan pembaca layar, tapi tidak terlihat. */
+.acceptInput {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* 20 x 20, radius 6, #fafafa (bawah) -> #d3d3d3 (atas), 50% */
+.acceptBox {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: linear-gradient(0deg, rgba(250, 250, 250, 0.5) 0%, rgba(211, 211, 211, 0.5) 100%);
+}
+
+.acceptBox svg {
+  width: 18px;
+  height: 18px;
+}
+
+.acceptInput:focus-visible + .acceptBox {
+  outline: 2px solid #dee8fb;
+  outline-offset: 2px;
+}
+
+/* #fafafa (atas) -> #d3d3d3 (bawah) */
+.acceptText {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: justify;
+  background: linear-gradient(180deg, #fafafa 0%, #d3d3d3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.acceptLink {
+  color: transparent;
+  text-decoration: underline;
+  text-decoration-color: #e6e6e6;
+  text-underline-offset: 3px;
+}
+
+/* ---------- tombol ---------- */
+
+/* 370 x 48, radius 12, isi #dee8fb (bawah) -> #acc7ff (atas),
+   tepi 2px #dee8fb (atas) -> #acc7ff (bawah) */
+.enter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  margin-top: auto;
+  border-radius: 12px;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  --stroke-w: 2px;
+  --stroke-bg: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+}
+
+.enterText {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.close:focus-visible,
+.enter:focus-visible,
+.privacyLink:focus-visible,
+.acceptLink:focus-visible {
+  outline: 2px solid #dee8fb;
+  outline-offset: 3px;
+}

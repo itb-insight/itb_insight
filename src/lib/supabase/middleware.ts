@@ -104,7 +104,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Signed-out visitors to the dashboard or admin go to /login. The admin role itself is checked
-  // in src/app/admin/layout.tsx and in every admin API route.
+  // in src/app/admin/layout.tsx (+ its (admin-only) group) and in every admin API route.
   if (!signedIn && isProtectedPath(request.nextUrl.pathname)) {
     const redirectResponse = redirectToLogin(request)
     if (sessionIsDead) {

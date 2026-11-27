@@ -1,0 +1,597 @@
+/*
+  Rewards Mobile — Figma node 2114:21381, kanvas 402 x 1120.
+
+  Urutan tegak menurut koordinat dump (BUKAN urutan layer — di dump kartu
+  "You Are" ditulis sebelum daftar belanja padahal letaknya di bawahnya):
+    header      356 x 24  di (26, 31)
+    dompet      370 x 95  di (16, 89)
+    klaim       370 x 88  di (16, 193)
+    tier        370 x 169 di (16, 305)
+    belanja     370 x 386 di (16, 493)
+    You Are     370 x 96  di (16, 903)
+    navigasi    latar di y 1026, kanvas berakhir 1120
+
+  Margin kiri-kanan 16 (header 26).
+*/
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* Dikurangi header DAN navigasi bawah (keduanya dipegang QuestPageShell)
+     supaya header + layar + nav pas satu layar. */
+  min-height: calc(100dvh - var(--quest-header-h) - var(--quest-nav-h));
+  /*
+    Satu kolom utuh — termasuk latar navigasi bawah, yang ada di dalamnya.
+    Lihat --kolom-quest di globals.css; latar selebar layar dipegang
+    .shell di route-nya.
+  */
+  max-width: var(--kolom-quest);
+  margin-inline: auto;
+  /* Gradien SENGAJA tidak digambar di sini: .shell (QuestPageShell) yang
+     memegangnya untuk seluruh halaman. Kalau diulang di sini, dia mulai
+     lagi dari 0% di bawah header dan muncul sambungan di garis itu. */
+  color: #ffffff;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+.isi {
+  flex: 1;
+  width: 100%;
+  /* 27 bawah: kartu You Are berakhir 999, latar navigasi mulai 1026. */
+  padding: 31px 16px 27px;
+  box-sizing: border-box;
+}
+
+/* ---- header ---------------------------------------------------------------- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.headerIcon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #fafafa;
+  cursor: pointer;
+}
+
+.judul {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* ---- kartu dompet ---------------------------------------------------------- */
+
+.dompet {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  margin-top: 34px;
+  /* 20 padding + 1,5 garis tepi: di Figma garisnya INSIDE, di sini menimpa. */
+  padding: 21.5px;
+  border-radius: 12px;
+  background: linear-gradient(0deg, #517eda 0%, #294d97 100%);
+}
+
+.dompet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(0deg, #517eda 1%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Dua kolom sama lebar (163,5 masing-masing dari 327). */
+.dompetKolom {
+  flex: 1;
+  min-width: 0;
+}
+
+.dompetLabel {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  color: #ffffff;
+}
+
+.dompetAngka {
+  margin: 4px 0 0;
+  font-size: 36px;
+  font-weight: 400;
+  /* 36px dengan line-height 34 — sengaja lebih rapat dari ukurannya. */
+  line-height: 34px;
+  color: #ffffff;
+}
+
+/* ---- kartu klaim ----------------------------------------------------------- */
+
+.klaim {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 88px;
+  margin-top: 9px;
+  padding: 11px 9px 11px 20px;
+  border-radius: 12px;
+  background: linear-gradient(0deg, rgba(81, 126, 218, 0.5) 0%, rgba(41, 77, 151, 0.5) 100%);
+}
+
+.klaimTeks {
+  flex: 1;
+  min-width: 0;
+}
+
+.klaimStatus {
+  margin: 0 0 4px;
+  font-size: 12px;
+  line-height: 14px;
+  color: #a0e293;
+}
+
+.klaimNama {
+  margin: 0;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
+}
+
+.klaimNote {
+  margin: 0;
+  font-size: 12px;
+  line-height: 14px;
+  color: #ffffff;
+}
+
+.klaimAksi {
+  flex: none;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 86px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  color: #1b3b7d;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 20px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ---- judul bagian ---------------------------------------------------------- */
+
+.judulBagian {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #ffffff;
+}
+
+/* ---- tier ------------------------------------------------------------------ */
+
+.tier {
+  margin-top: 24px;
+}
+
+/*
+  Lingkaran status menumpang di GARIS ATAS kartu (lingkaran 329..361, kartu
+  mulai 345), jadi blok ini relatif dan lingkarannya ditumpuk di atas.
+*/
+.tierBlok {
+  position: relative;
+  padding-top: 16px;
+}
+
+.tierKartu,
+.tierBulatan {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 11px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tierBulatan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  justify-items: center;
+  pointer-events: none;
+}
+
+.bulat {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 100px;
+  /* Garis tepi 4px di sini pakai border sungguhan: isinya cuma ikon, tidak
+     ada teks yang bisa tergeser. */
+  border: 4px solid transparent;
+  background:
+    linear-gradient(0deg, #acc7ff 0%, #517eda 99%) padding-box,
+    linear-gradient(0deg, #517eda 1%, #acc7ff 100%) border-box;
+  color: #1b3b7d;
+}
+
+.bulatBuka {
+  background:
+    linear-gradient(0deg, #d0ffc7 0%, #76df62 100%) padding-box,
+    linear-gradient(180deg, #d0ffc7 0%, #76df62 100%) border-box;
+  color: #224b1c;
+}
+
+.kartuTier {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  height: 129px;
+  /*
+    Samping 19, bukan 20: "1.752 to unlock" di kartu GOLD butuh 75,7px dan
+    20/20 cuma menyisakan 76 — terlalu mepet, teksnya terbungkus dan isi
+    kartunya meluber. Dump memang memakai 20 kiri / 19 kanan di kartu itu.
+    Isinya ditengahkan, jadi 19/19 tidak menggeser apa pun yang kelihatan.
+  */
+  padding: 23px 19px 22px;
+  border-radius: 12px;
+  background: linear-gradient(0deg, rgba(172, 199, 255, 0.5) 0%, rgba(27, 59, 125, 0.5) 100%);
+  text-align: center;
+}
+
+/* Tier yang sudah terbuka: terang penuh, teksnya jadi gelap. */
+.kartuTierBuka {
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+}
+
+/* Tier berikutnya: satu-satunya yang punya garis tepi. */
+.kartuTierBerikut::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.tierGrup {
+  display: flex;
+  flex-direction: column;
+}
+
+.tierStatus {
+  margin: 0;
+  font-size: 12px;
+  line-height: 14px;
+  color: #7fa9f6;
+}
+
+.tierNama {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #ccddff;
+}
+
+.tierPoin {
+  margin: 0;
+  font-size: 12px;
+  line-height: 14px;
+  color: #7fa9f6;
+}
+
+.tierPerk {
+  margin: 0;
+  /* Dua baris 14px — dipaku supaya tingginya tidak menggeser kartu. */
+  height: 28px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 14px;
+  white-space: pre-line;
+  color: #7fa9f6;
+}
+
+.kartuTierBuka .tierStatus {
+  color: #1b3b7d;
+}
+
+.kartuTierBuka .tierNama {
+  color: #020816;
+}
+
+.kartuTierBuka .tierPoin,
+.kartuTierBuka .tierPerk {
+  color: #3d65b8;
+}
+
+/* ---- belanja poin ---------------------------------------------------------- */
+
+.belanja {
+  margin-top: 19px;
+}
+
+.belanjaDaftar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 66px;
+  /* 16 padding + 2 garis tepi yang menimpa. */
+  padding: 0 18px;
+  border-radius: 12px;
+  background: linear-gradient(0deg, rgba(222, 232, 251, 0.7) 0%, rgba(172, 199, 255, 0.7) 100%);
+}
+
+.item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Hadiah habis: latar lebih gelap dan TANPA garis tepi. */
+.itemHabis {
+  background: linear-gradient(0deg, rgba(172, 199, 255, 0.5) 0%, rgba(81, 126, 218, 0.5) 99%);
+}
+
+.itemHabis::before {
+  display: none;
+}
+
+.thumb {
+  position: relative;
+  flex: none;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #c08cff 0%, #e9dbf9 100%);
+  color: #3a1457;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.thumb::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #e9dbf9 0%, #c08cff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.thumbSponsor {
+  background: linear-gradient(0deg, #d0ffc7 0%, #76df62 100%);
+  color: #224b1c;
+}
+
+.thumbSponsor::before {
+  background: linear-gradient(180deg, #d0ffc7 0%, #76df62 100%);
+}
+
+/* Thumb pada baris yang habis ikut dipudarkan. */
+.itemHabis .thumb {
+  background: linear-gradient(0deg, rgba(208, 255, 199, 0.5) 0%, rgba(118, 223, 98, 0.5) 100%);
+}
+
+.itemHabis .thumb::before {
+  background: linear-gradient(180deg, rgba(208, 255, 199, 0.5) 0%, rgba(118, 223, 98, 0.5) 100%);
+}
+
+.itemTeks {
+  flex: 1;
+  min-width: 0;
+}
+
+/*
+  Teksnya tetap gelap walau latar barisnya jadi biru tua waktu stok habis —
+  begitu di dump. Lihat catatan di RewardsMobile.tsx.
+*/
+.itemNama,
+.itemSub {
+  margin: 0;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #020816;
+}
+
+.itemSub {
+  margin-top: 4px;
+}
+
+.tombol {
+  flex: none;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  min-width: 75px;
+  height: 32px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  color: #1b3b7d;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 14px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Stok habis: tanpa latar, tanpa garis, tidak bisa diklik. */
+.tombolHabis {
+  background: none;
+  color: #a3a3a3;
+  cursor: not-allowed;
+}
+
+/* Poin kurang: garis tepi tipis putih, tanpa isi. */
+.tombolKurang {
+  border: 1px solid #d3d3d3;
+  background: none;
+  color: #fafafa;
+  cursor: not-allowed;
+}
+
+/* ---- kartu "You Are" ------------------------------------------------------- */
+
+.kamu {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  /*
+    Tegak 20 + 2 garis tepi. Mendatar sengaja 15 TANPA menambahkan garisnya:
+    judul "Door prize for Top 3 on the leaderboard" butuh 279,7px sedangkan
+    17 cuma menyisakan 277, jadi dia terbungkus dua baris dan kartunya jadi
+    120, bukan 96. Dump-nya sendiri sudah mepet — Figma mengukur teks itu
+    277,89 di kotak 280, dan barisnya melewati kartu 3px. Geser 2px ini
+    menukar ketepatan posisi teks dengan tinggi kartu yang benar.
+  */
+  padding: 22px 15px;
+  border-radius: 12px;
+}
+
+.kamu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.kamuPeringkat {
+  flex: none;
+  width: 47px;
+  text-align: center;
+}
+
+.kamuLabel {
+  margin: 0;
+  font-size: 12px;
+  line-height: 18px;
+  color: #acc7ff;
+}
+
+.kamuAngka {
+  margin: 0;
+  font-size: 28px;
+  line-height: 34px;
+  /* Teks bergradien: isian dipotong ke bentuk hurufnya. */
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.kamuTeks {
+  flex: 1;
+  min-width: 0;
+}
+
+.kamuJudul {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #dee8fb;
+}
+
+.kamuNote {
+  margin: 0;
+  font-size: 12px;
+  line-height: 14px;
+  color: #dee8fb;
+}

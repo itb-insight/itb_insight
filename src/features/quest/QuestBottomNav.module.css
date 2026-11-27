@@ -1,0 +1,101 @@
+/*
+ * Figma: navbar bawah Quest Map, 94 tinggi (y 758 di frame 852).
+ *
+ *   item       lima kolom 80.4, padding atas 8, ikon 24, jarak 2,
+ *              label Gabarito 400 12/14; terang #dee8fb, lainnya #7fa9f6
+ *   baris item 12px dari atas bar
+ *   scan       56 x 56, 8px dari atas, radius 12, tepi 4
+ *   indikator  134 x 5, #dee8fb, 81px dari atas
+ */
+
+/*
+  DIUBAH dari aslinya (feat/quest-section2): sticky, bukan relative. Halaman
+  Rewards 1120 jauh lebih tinggi dari layar HP, dan navigasi bawah yang ikut
+  tergulung hilang itu tidak masuk akal. Tetap memakan tempat di akhir aliran,
+  jadi isi terakhir tetap terjangkau.
+*/
+.bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  height: 94px;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+/*
+  DIUBAH dari aslinya: lebar isi dibatasi --kolom-quest supaya tab sejajar
+  dengan kolom isi halaman (402 di HP, 600 di tablet). Latar bar sendiri tetap
+  selebar layar. Tanpa variabel itu nilainya `none`, jadi melebar penuh seperti
+  aslinya.
+*/
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  max-width: var(--kolom-quest, none);
+  margin: 0 auto;
+  padding: 12px 0 0;
+  list-style: none;
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  height: 48px;
+  padding-top: 8px;
+  color: #7fa9f6;
+}
+
+.tabActive {
+  color: #dee8fb;
+}
+
+.tabIcon {
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+
+.tabLabel {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  color: inherit;
+}
+
+.scanSlot {
+  display: flex;
+  justify-content: center;
+}
+
+/* 56 x 56, isi #dee8fb (bawah) -> #acc7ff (atas), tepi 4 #dee8fb (atas) -> #acc7ff (bawah).
+   Di Figma tombolnya 1px kiri dari tengah (x 172 di frame 402). */
+.scan {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: -4px 1px 0 0;
+  border-radius: 12px;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  --stroke-w: 4px;
+  --stroke-bg: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+}
+
+.homeIndicator {
+  position: absolute;
+  top: 81px;
+  left: 50%;
+  width: 134px;
+  height: 5px;
+  margin-left: -67px;
+  border-radius: 100px;
+  background: #dee8fb;
+}
+
+.tab:focus-visible,
+.scan:focus-visible {
+  outline: 2px solid #dee8fb;
+  outline-offset: 2px;
+}

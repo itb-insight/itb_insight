@@ -37,8 +37,10 @@ Shared test helpers: `tests/support/fake-supabase.ts` (chainable Supabase fake f
   `admin_roles` / `profiles.role_a`, amounts from `src/lib/competitions.ts`. Never from the body.
 - A feature that is closed in the UI must be closed in its API too. Registration APIs check
   `isRegistrationSwitchOn(slug)` (the same `REGISTER_OPEN_<code>` switch as the button).
-- `/admin` is admin-only in `src/app/admin/layout.tsx`; the proxy redirects signed-out visitors
-  from `/dashboard` and `/admin` (`isProtectedPath` in `src/lib/supabase/middleware.ts`).
+- `/admin` (`src/lib/admin-access.ts`): `src/app/admin/layout.tsx` lets in admins and booth staff
+  (`role_b = 'booth'`); every page except `/admin/booth` sits in the `(admin-only)` route group,
+  whose layout 404s for non-admins. New admin pages go in that group. The proxy redirects
+  signed-out visitors from `/dashboard` and `/admin` (`isProtectedPath` in `src/lib/supabase/middleware.ts`).
 - Database writes go through API routes with the service role. New tables get
   `enable row level security` in the same migration; user-editable columns use column-level grants.
 - Never interpolate user input into PostgREST filter strings: use `.eq()`, or `ilikeAnyFilter()` /

@@ -1,0 +1,18 @@
+/*
+  Dua grafik bersebelahan di dalam satu panel — Figma 1972:24319.
+  Masing-masing 640 lebar, jarak 18.
+*/
+.duaGrafik {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  min-width: 0;
+}
+
+/* Belum ada rancangan sempit; di bawah 1000px ditumpuk daripada diremukkan. */
+@media (max-width: 999px) {
+  .duaGrafik {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}

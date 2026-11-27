@@ -1,0 +1,99 @@
+/* Shell widget admin hi-fi (Figma "Page Admin" → section Widgets).
+   Token warna lokal dari design system Figma: blue/50, blue/100, blue/200, blue/700. */
+
+/*
+  GARIS TEPI DISAMAKAN DENGAN PanelHifi (src/features/admin-hifi/).
+
+  Sebelumnya `border: 4px solid #517EDA` — warna rata, sementara dua pembungkus
+  kartu lain di halaman admin (PanelHifi dan GlassPanel) bergradien
+  #517EDA -> #ACC7FF. Ditumpuk dalam satu halaman, kartu ini terlihat lebih
+  datar dan lebih gelap di bagian atas.
+
+  Gradien tidak bisa dipakai pada `border` biasa, jadi dipakai ring bertopeng —
+  pola yang sama dengan PanelHifi. Konsekuensinya: ring itu MENIMPA kotak dan
+  tidak mendorong isi seperti `border` sungguhan, sehingga tebalnya harus
+  dihitung manual ke dalam padding. Tanpa itu isi kartu naik 4px.
+
+  Jarak isi dari tepi tetap 36/44 seperti sebelumnya — tidak ada yang bergeser.
+*/
+.card {
+  --w-blue-50: #dee8fb;
+  --w-blue-100: #ccddff;
+  --w-blue-200: #acc7ff;
+  --w-blue-700: #1b3b7d;
+  --w-stroke: linear-gradient(0deg, #517eda 1%, #acc7ff 100%);
+  --w-border: 4px;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+  padding: calc(var(--space-8) + var(--w-border)) calc(40px + var(--w-border));
+  border-radius: var(--radius-lg);
+  background: linear-gradient(to top, rgba(172, 199, 255, 0.5), rgba(27, 59, 125, 0.5));
+  color: var(--w-blue-50);
+  font-family: var(--font-primary);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: var(--w-border);
+  border-radius: inherit;
+  background: var(--w-stroke);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  /* Kartu ini berisi peta yang bisa digeser — ring tidak boleh menadah klik. */
+  pointer-events: none;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 400;
+  color: var(--w-blue-50);
+}
+
+.description {
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--w-blue-100);
+}
+
+@media (max-width: 640px) {
+  .card {
+    --w-border: 2px;
+    padding: calc(var(--space-6) + var(--w-border)) calc(var(--space-4) + var(--w-border));
+  }
+  .title {
+    font-size: 22px;
+    line-height: 28px;
+  }
+  .description {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}

@@ -1,0 +1,21 @@
+/* AdminShellHifi.tsx: page padding and content stack of the /admin-hifi mocks.
+   Frame (navbar, sidebar, background): AdminFrame.module.css. Header: AdminPageHeader.module.css. */
+
+.page {
+  box-sizing: border-box;
+  padding: 48px 32px 80px 21px;
+}
+
+/* Figma: Frame 48096451, auto-layout vertikal gap 32. */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 32px;
+}
+
+@media (max-width: 1099px) {
+  .page {
+    padding: 32px 24px 64px;
+  }
+}

@@ -1,0 +1,361 @@
+/*
+ * Figma: "Quest Map Layer" (2185:798), 402 x 852.
+ *
+ * Lapisan dari bawah: grid garis, denah (gedung, jalan, penanda), lalu kepala,
+ * filter, kartu lokasi, dan navbar bawah di atasnya.
+ *
+ *   grid      garis 0.5 #3d65b8 tiap 40px; vertikal mulai x 0, horizontal mulai y 6
+ *   kepala    16, 20     370 x 52, radius 12
+ *   filter    16, 85     tinggi 40, jarak 8
+ *   kartu     16, 670    370 x 76 (106px dari bawah layar)
+ *   navbar    bawah      94 tinggi
+ *
+ * Denah dipasang di kanvas 402 x 852 yang ditengahkan, jadi di layar yang lebih
+ * lebar posisinya tetap sama terhadap tengah layar.
+ */
+
+/*
+  Akar layar ini SENGAJA tidak menggambar gradien (shared.frameBg sudah
+  dilepas dari JSX-nya): .shell milik QuestPageShell yang memegangnya untuk
+  seluruh halaman. Kalau digambar lagi di sini, gradiennya mulai dari 0%
+  lagi di bawah header dan muncul sambungan di garis itu.
+*/
+.page {
+  position: relative;
+  /* Kolomnya dibatasi dan ditengahkan seperti halaman quest lain; lihat
+     --kolom-quest di globals.css. */
+  max-width: var(--kolom-quest);
+  margin-inline: auto;
+  /* Dikurangi header DAN navigasi bawah (keduanya dipegang QuestPageShell)
+     supaya header + layar + nav pas satu layar. */
+  height: calc(100dvh - var(--quest-header-h) - var(--quest-nav-h));
+  min-height: 600px;
+  overflow: hidden;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  color: #dee8fb;
+}
+
+/* Lebar grid dibuat jauh melebihi layar dan dimulai 1600px (= 40 x 40) di kiri
+   kanvas, supaya garis vertikalnya tetap jatuh di x 0, 40, ... kanvas. */
+.grid {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3600px;
+  margin-left: calc(-201px - 1600px);
+  /* Garis 0.5px di Figma dirender sebagai 1 piksel #3d65b8 setengah transparan
+     (diukur dari render). Garis 0.5px asli tidak tergambar sama sekali di Chrome. */
+  background-image:
+    linear-gradient(90deg, rgba(61, 101, 184, 0.5) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(61, 101, 184, 0.5) 1px, transparent 1px);
+  background-size: 40px 40px;
+  /* horizontal di y 6, 46, ... */
+  background-position:
+    0 0,
+    0 6px;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 402px;
+  height: 852px;
+  margin-left: -201px;
+}
+
+.canvas > span,
+.canvas > svg {
+  position: absolute;
+}
+
+/* Gedung: #020816, tepi 1px #091b3f, radius 5. */
+.building {
+  display: block;
+  border: 1px solid #091b3f;
+  border-radius: 5px;
+  background: #020816;
+}
+
+.buildingPill {
+  border-radius: 50px;
+}
+
+.road {
+  display: block;
+  background: #091b3f;
+}
+
+/* Persegi 20, diputar 45°. Isi #c08cff (atas) -> #e9dbf9 (bawah),
+   tepi 1px #e9dbf9 (atas) -> #c08cff (bawah). Gradient ikut arah bentuknya. */
+.diamond {
+  display: block;
+  width: 20px;
+  height: 20px;
+  transform: rotate(45deg);
+  background: linear-gradient(180deg, #c08cff 0%, #e9dbf9 100%);
+  --stroke-w: 1px;
+  --stroke-bg: linear-gradient(180deg, #e9dbf9 0%, #c08cff 100%);
+}
+
+/* Lingkaran 30, tepi LUAR 4 (jadi 38 total), bayangan 10 #dee8fb.
+   Isi #acc7ff (bawah) -> #517eda (atas), tepi #517eda (bawah) -> #acc7ff (atas). */
+.player {
+  display: block;
+  width: 38px;
+  height: 38px;
+  padding: 4px;
+  border-radius: 50%;
+  background: linear-gradient(0deg, #517eda 1%, #acc7ff 100%);
+  box-shadow: 0 0 10px #dee8fb;
+}
+
+.playerCore {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(0deg, #acc7ff 0%, #517eda 99%);
+}
+
+.weak {
+  overflow: visible;
+}
+
+.weakLabel {
+  display: block;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  color: #fff1f1;
+  white-space: nowrap;
+}
+
+/* Label 20 x 20, tepi 1px. */
+.tag {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  --stroke-w: 1px;
+}
+
+/* hijau: isi #d0ffc7 (bawah) -> #76df62 (atas), tepi #d0ffc7 (atas) -> #76df62 (bawah) */
+.tagGreen {
+  background: linear-gradient(0deg, #d0ffc7 0%, #76df62 100%);
+  --stroke-bg: linear-gradient(180deg, #d0ffc7 0%, #76df62 100%);
+}
+
+/* merah muda: isi #ffe4ec (bawah) -> #ffaaaa (atas), tepi #ffaaaa (bawah) -> #ffe4ec (atas) */
+.tagPink {
+  background: linear-gradient(0deg, #ffe4ec 0%, #ffaaaa 100%);
+  --stroke-bg: linear-gradient(0deg, #ffaaaa 0%, #ffe4ec 100%);
+}
+
+.dot {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ccddff;
+}
+
+/* Quest selesai: lingkaran putih 20% + centang 18. */
+.done {
+  display: block;
+  width: 20px;
+  height: 20px;
+  padding: 1px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.done svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- kepala ---------- */
+
+/* isi #091b3f (atas) -> #294d97 (bawah), tepi 2px #517eda (bawah) -> #acc7ff (atas) */
+.bar {
+  position: absolute;
+  top: 20px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 52px;
+  /* Figma: padding 12 / 16 dan tepi 2 ikut dihitung di layout (isi mulai 14 / 18). */
+  padding: 14px 18px;
+  border-radius: 12px;
+  --stroke-w: 2px;
+  --stroke-bg: linear-gradient(0deg, #517eda 1%, #acc7ff 100%);
+}
+
+.back {
+  display: block;
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #dee8fb;
+}
+
+.nearby {
+  flex: none;
+  margin: 0;
+  font-size: 12px;
+  line-height: 14px;
+  color: #dee8fb;
+  white-space: nowrap;
+}
+
+/* ---------- filter ---------- */
+
+.filters {
+  position: absolute;
+  top: 85px;
+  left: 16px;
+  right: 0;
+  display: flex;
+  gap: 8px;
+  padding-right: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
+}
+
+/* tidak aktif: isi putih 20%, tepi 1.5 #dee8fb (bawah) -> #acc7ff (atas), teks #dee8fb */
+.chip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #dee8fb;
+  cursor: pointer;
+  --stroke-w: 1.5px;
+  --stroke-bg: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+}
+
+/* aktif: isi #dee8fb (bawah) -> #acc7ff (atas), tanpa tepi, teks #1b3b7d */
+.chipActive {
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  color: #1b3b7d;
+}
+
+.chipText {
+  display: block;
+  padding: 0 8px;
+  text-align: center;
+  white-space: nowrap;
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: inherit;
+}
+
+/* ---------- kartu lokasi ---------- */
+
+/* isi #acc7ff (bawah) -> #1b3b7d (atas) 50%, tepi 2px #dee8fb (bawah) -> #acc7ff (atas) */
+.spot {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  /*
+    12, bukan 106. Di Figma kartunya 106 dari dasar frame karena 94 paling
+    bawah dipakai navigasi. Nav-nya sekarang di luar layar ini (QuestPageShell),
+    jadi 106 - 94 = 12 yang menyisakan jarak yang sama ke nav.
+  */
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 76px;
+  /* Figma: padding 8 / 16 dan tepi 2 ikut dihitung di layout; isinya lebar tetap
+     (48 + 208 + 50) dan rata kiri, jadi sisa kanannya 14. */
+  padding: 10px 14px 10px 18px;
+  border-radius: 12px;
+  background: linear-gradient(0deg, rgba(172, 199, 255, 0.5) 0%, rgba(27, 59, 125, 0.5) 100%);
+  --stroke-w: 2px;
+  --stroke-bg: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+}
+
+/* 48, isi #dee8fb (bawah) -> #acc7ff (atas), tepi 4 #dee8fb (atas) -> #acc7ff (bawah) */
+.spotAvatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
+  font-size: 16px;
+  line-height: 24px;
+  --stroke-w: 4px;
+  --stroke-bg: linear-gradient(180deg, #dee8fb 0%, #acc7ff 100%);
+}
+
+.spotInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.spotName {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #ffffff;
+}
+
+.spotMeta {
+  margin: 0;
+  font-size: 12px;
+  line-height: 14px;
+  color: #091b3f;
+  white-space: pre;
+}
+
+.spotPoints {
+  flex: none;
+  width: 50px;
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 56px;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* ---------- navbar ---------- */
+
+
+.back:focus-visible,
+.chip:focus-visible {
+  outline: 2px solid #dee8fb;
+  outline-offset: 2px;
+}
