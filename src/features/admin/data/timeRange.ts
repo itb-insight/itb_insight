@@ -44,7 +44,8 @@ export function windowStart(range: RangeOption, now: Date) {
   return new Date(end - range.minutes * 60_000);
 }
 
-export type TimedEvent = { at: string | Date };
+/** `count`: how many events this row stands for (pre-aggregated slots); default 1. */
+export type TimedEvent = { at: string | Date; count?: number };
 
 /**
  * Hitung jumlah event per bucket.
@@ -63,7 +64,7 @@ export function bucketize<T extends TimedEvent>(
   for (const e of events) {
     const t = new Date(e.at).getTime();
     const i = Math.floor((t - start) / bucketMs);
-    if (i >= 0 && i < n) values[i] += 1;
+    if (i >= 0 && i < n) values[i] += e.count ?? 1;
   }
   const labels = values.map((_, i) => formatClock(new Date(start + i * bucketMs)));
   return { labels, values };

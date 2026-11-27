@@ -29,6 +29,7 @@ vi.mock('@/lib/admin', () => ({ getUserRole: async () => state.role }))
 
 const ping = await import('./ping/route')
 const consent = await import('./consent/route')
+const exit = await import('./exit/route')
 const config = await import('./config/route')
 const pending = await import('../feedback/pending/route')
 
@@ -176,10 +177,45 @@ describe('/api/presence/consent', () => {
   it('withdrawing clears consent and deletes every presence row of the user', async () => {
     const res = await consent.DELETE(request('/api/presence/consent', 'DELETE'))
     expect(res.status).toBe(200)
-    expect(writesTo(state.db, 'profiles')[0].payload).toEqual({ presence_consent_at: null })
+    expect(writesTo(state.db, 'profiles')[0].payload).toEqual({ presence_consent_at: null, left_area_at: null })
     const [deleted] = writesTo(state.db, 'booth_presence')
     expect(deleted.op).toBe('delete')
     expect(deleted.filters).toContainEqual({ method: 'eq', args: ['user_id', state.user!.id] })
+  })
+})
+
+describe('POST /api/presence/exit', () => {
+  it('requires sign-in and an enabled, open feature', async () => {
+    state.user = null
+    expect((await exit.POST(request('/api/presence/exit', 'POST'))).status).toBe(401)
+
+    state.user = { id: `user-${Math.random()}`, email: 'v@example.com' }
+    vi.stubEnv('VENUE_LAT', '')
+    expect((await exit.POST(request('/api/presence/exit', 'POST'))).status).toBe(503)
+
+    vi.stubEnv('VENUE_LAT', String(VENUE.lat))
+    vi.stubEnv('PRESENCE_DATES', '2000-01-01')
+    expect((await (await exit.POST(request('/api/presence/exit', 'POST'))).json()).error.code).toBe('PRESENCE_CLOSED')
+    expect(writesTo(state.db, 'profiles')).toEqual([])
+  })
+
+  it('needs consent, then stores only the time on the caller profile', async () => {
+    useDb({ ...consented, profiles: () => ({ data: { presence_consent_at: null }, error: null }) })
+    expect((await (await exit.POST(request('/api/presence/exit', 'POST'))).json()).error.code).toBe('CONSENT_REQUIRED')
+    expect(writesTo(state.db, 'profiles')).toEqual([])
+
+    useDb(consented)
+    const res = await exit.POST(request('/api/presence/exit', 'POST', { lat: 1, lng: 2, userId: 'someone-else' }))
+    expect(res.status).toBe(200)
+    const [write] = writesTo(state.db, 'profiles')
+    expect(Object.keys(write.payload as object)).toEqual(['left_area_at'])
+    expect(write.filters).toContainEqual({ method: 'eq', args: ['id', state.user!.id] })
+  })
+
+  it('is rate limited per user', async () => {
+    const statuses = []
+    for (let i = 0; i < 5; i += 1) statuses.push((await exit.POST(request('/api/presence/exit', 'POST'))).status)
+    expect(statuses.at(-1)).toBe(429)
   })
 })
 

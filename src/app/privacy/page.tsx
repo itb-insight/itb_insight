@@ -70,9 +70,11 @@ export default function PrivacyPage() {
           on, your phone&apos;s browser sends its location about once a minute while you are at
           the event venue (ITB Ganesha campus) with this site open. We use it only to work out
           which booth you are at and for how long, and store only the booth and the times, never
-          your coordinates. Nothing is sent or stored while you are outside the venue. It does not
-          affect points. You can turn it off at any time from the notice on screen, which also
-          deletes the booth-visit records we hold about you.
+          your coordinates. While you are outside the venue your location is never sent: your phone
+          only tells us that you have left, and we store just the time, so our count of visitors
+          in the area stays accurate. It does not affect points. You can turn it off at any time
+          from the notice on screen, which also deletes the booth-visit records and the time you
+          left that we hold about you.
         </li>
         <li>
           <strong>Feedback forms:</strong> your answers, name, email and school, and the time you
@@ -172,8 +174,8 @@ export default function PrivacyPage() {
           form (180 days by default, at most 2 years); anonymous answers are kept for reporting.
         </li>
         <li>
-          Booth-visit records (optional location feature): deleted within 30 days after the
-          event, or as soon as you turn the feature off.
+          Booth-visit records and the time you left the venue (optional location feature):
+          deleted within 30 days after the event, or as soon as you turn the feature off.
         </li>
         <li>
           Analytics data: stored without account identifiers for up to 12 months, then deleted;

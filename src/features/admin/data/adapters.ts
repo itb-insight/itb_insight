@@ -29,9 +29,14 @@ import {
   MOCK_SPONSORS,
   MOCK_TRAFFIC,
 } from "./mockData"
+import { ASSUME_IN_AREA_HOURS, BOOTH_TARGET, isAfterClose } from "./dday"
 import type {
   BoothLiveDto,
   CheckInSlotDto,
+  DDayBoothDto,
+  DDayDataDto,
+  DDayDto,
+  DDayStaffDto,
   CompetitionFunnelDto,
   DateRange,
   DivisionActivityDto,
@@ -647,4 +652,117 @@ export async function getLive(now: Date = new Date()): Promise<LiveDto> {
   ])
 
   return { generated_at: now.toISOString(), since, onsite, web, web_configured: webConfigured }
+}
+
+// ─── /admin/d-day ────────────────────────────────────────────────────────────
+
+/** One RPC (migration 0028) for the whole D-day page, shared by every staff member for 30 s. */
+const fetchDDay = unstable_cache(
+  async (since: string): Promise<unknown> => {
+    const { data, error } = await createServiceClient().rpc("admin_dday", {
+      p_since: since,
+      p_assume_seconds: ASSUME_IN_AREA_HOURS * 3600,
+      p_booth_target: BOOTH_TARGET,
+    })
+    if (error) throw new Error(error.message)
+    return data
+  },
+  ["admin-dday"],
+  { revalidate: LIVE_TTL, tags: ["admin-live"] },
+)
+
+const maybeCoord = (value: unknown): number | null => {
+  const n = typeof value === "number" ? value : value === null || value === undefined ? NaN : Number(value)
+  return Number.isFinite(n) ? n : null
+}
+const maybeText = (value: unknown): string | null => (typeof value === "string" && value !== "" ? value : null)
+
+/**
+ * Real-world lat/lng (0016) first, else the map's coordinate_x (lng) / coordinate_y (lat); a y
+ * beyond ±90 means the two were swapped.
+ */
+function boothPosition(row: Record<string, unknown>): { lng: number | null; lat: number | null } {
+  const lat = maybeCoord(row.lat)
+  const lng = maybeCoord(row.lng)
+  if (lat !== null && lng !== null) return { lng, lat }
+  const x = maybeCoord(row.x)
+  const y = maybeCoord(row.y)
+  if (x === null || y === null) return { lng: null, lat: null }
+  return Math.abs(y) > 90 ? { lng: y, lat: x } : { lng: x, lat: y }
+}
+
+export function toDDay(raw: unknown): DDayDataDto {
+  const data = record(raw)
+  const live = record(data.live)
+  const summary = record(data.summary)
+  const funnel = record(data.funnel)
+  const medians = record(data.medians)
+
+  const booths: DDayBoothDto[] = list(data.booths).map((row) => ({
+    id: String(row.id),
+    name: String(row.name ?? ""),
+    ...boothPosition(row),
+    scans: num(row.scans),
+    points: num(row.points),
+    windows: { "30m": num(row.m30), "1h": num(row.h1), "2h": num(row.h2), "5h": num(row.h5), "12h": num(row.h12) },
+  }))
+
+  const staff: DDayStaffDto[] = list(data.staff).map((row) => ({
+    kind: row.kind === "booth" ? "booth" : "gate",
+    location: String(row.location ?? ""),
+    user_id: String(row.user_id ?? ""),
+    name: String(row.name ?? ""),
+    role_a: maybeText(row.role_a),
+    role_b: maybeText(row.role_b),
+    scans: num(row.scans),
+    points: num(row.points),
+    last_at: maybeText(row.last_at),
+  }))
+
+  return {
+    live: {
+      in_area_now: num(live.accounts) + num(live.represented),
+      accounts: num(live.accounts),
+      represented: num(live.represented),
+      oldest_at: maybeText(live.oldest_at),
+      newest_at: maybeText(live.newest_at),
+      left: num(live.left),
+      timed_out: num(live.timed_out),
+      tracked_now: num(live.tracked_now),
+    },
+    summary: {
+      check_ins: num(summary.check_ins),
+      skipped_gate: num(summary.skipped_gate),
+      booth_scans: num(summary.booth_scans),
+      points_given: num(summary.points_given),
+      booths_active: num(summary.booths_active),
+      booth_visits: num(summary.booth_visits),
+    },
+    funnel: {
+      visitors: num(funnel.visitors),
+      scanned_1: num(funnel.scanned_1),
+      scanned_5: num(funnel.scanned_5),
+      reached_target: num(funnel.reached_target),
+      claimed: num(funnel.claimed),
+    },
+    medians: {
+      checkin_to_first_scan_s: maybeNum(medians.checkin_to_first_scan_s),
+      between_scans_s: maybeNum(medians.between_scans_s),
+    },
+    gates: list(data.gates).map((row) => ({ slot: String(row.slot), gate: String(row.gate ?? ""), count: num(row.count) })),
+    booths,
+    staff,
+  }
+}
+
+/** Today (Jakarta) on the D-day page: live headcount, check-ins, booths, staff. Supabase only. */
+export async function getDDay(now: Date = new Date()): Promise<DDayDto> {
+  const since = startOfJakartaDay(now)
+  const data = await fetchDDay(since)
+    .then(toDDay)
+    .catch((err: unknown) => {
+      console.error("[admin d-day] query failed:", err instanceof Error ? err.message : err)
+      return null
+    })
+  return { generated_at: now.toISOString(), since, after_close: isAfterClose(now), data }
 }

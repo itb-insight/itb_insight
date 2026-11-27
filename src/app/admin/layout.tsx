@@ -13,9 +13,11 @@ export const metadata: Metadata = {
 /**
  * Who gets into /admin (src/lib/admin-access.ts):
  *   - admins: everything;
- *   - booth staff (role_b 'booth'): the dashboard (/admin) and the Booth section. Every other
- *     page sits in the (admin-only) route group, whose layout 404s for non-admins;
- *   - gate staff (staff + human_resource + gate_staff): the Gate section only (/admin sends them there).
+ *   - every staff member (staffAccessFor): the D-day page (/admin/d-day);
+ *   - booth staff (role_b 'booth'): also the dashboard (/admin) and the Booth section;
+ *   - gate staff (staff + human_resource + gate_staff): also the Gate section.
+ * Every other page sits in the (admin-only) route group, whose layout 404s for non-admins. /admin
+ * itself sends staff without the dashboard to the Gate section or D-Day.
  * Signed-out visitors go to /login (the proxy redirects them too); everyone else gets a 404 so the
  * area's existence is not confirmed. Reading the session makes every admin page dynamic.
  * The admin API routes check the role themselves (tests/guardrails/api-auth.test.ts).
@@ -29,10 +31,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!user) redirect("/login?next=/admin")
 
   const access = await getAdminAccess(user)
-  if (!access.isAdmin && !access.booth && !access.gate) notFound()
+  if (!access.staff) notFound()
 
   return (
-    <AdminFrame isAdmin={access.isAdmin} booth={Boolean(access.booth)} gate={access.gate}>
+    <AdminFrame isAdmin={access.isAdmin} booth={Boolean(access.booth)} gate={access.gate} staff={access.staff}>
       {children}
     </AdminFrame>
   )

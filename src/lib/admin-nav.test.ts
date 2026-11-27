@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { ADMIN_HOME_PATH, BOOTH_ADMIN_PATH, GATE_SECTION_PATH, adminLinkFor } from '@/lib/admin-nav'
+import { ADMIN_HOME_PATH, DDAY_PATH, GATE_SECTION_PATH, adminLinkFor } from '@/lib/admin-nav'
 
 describe('adminLinkFor', () => {
   afterEach(() => {
@@ -24,12 +24,12 @@ describe('adminLinkFor', () => {
     expect(adminLinkFor({ isAdmin: false, roleA: 'stakeholder', boothSection: true })).toBe(ADMIN_HOME_PATH)
   })
 
-  it('sends other staff and stakeholders to the hi-fi booth mock, outside production only', () => {
-    vi.stubEnv('NODE_ENV', 'development')
-    expect(adminLinkFor({ isAdmin: false, roleA: 'staff', boothSection: false })).toBe(BOOTH_ADMIN_PATH)
-    expect(adminLinkFor({ isAdmin: false, roleA: 'stakeholder', boothSection: false })).toBe(BOOTH_ADMIN_PATH)
+  it('sends every other staff member to the D-day page, in production too', () => {
     vi.stubEnv('NODE_ENV', 'production')
-    expect(adminLinkFor({ isAdmin: false, roleA: 'staff', boothSection: false })).toBeNull()
+    expect(adminLinkFor({ isAdmin: false, roleA: 'staff', boothSection: false })).toBe(DDAY_PATH)
+    expect(adminLinkFor({ isAdmin: false, roleA: 'stakeholder', boothSection: false })).toBe(DDAY_PATH)
+    // admin_roles staff (field / booth) without a committee profile
+    expect(adminLinkFor({ isAdmin: false, roleA: null, boothSection: false, staff: true })).toBe(DDAY_PATH)
   })
 
   it('shows nothing to visitors, sponsors and companies', () => {

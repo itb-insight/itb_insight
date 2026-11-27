@@ -1,0 +1,84 @@
+/* /admin/d-day: the live headcount panel. Colours and type from src/styles/admin-tokens.css. */
+
+.liveRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px 48px;
+}
+
+.liveNumber {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--admin-text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.liveUnit {
+  font-size: var(--admin-subtitle-size);
+  font-weight: 400;
+  color: var(--admin-text-muted);
+}
+
+.liveStats {
+  flex: 1 1 420px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px 24px;
+  margin: 0;
+}
+
+.liveStat dt {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--admin-text-muted);
+}
+
+.liveStat dd {
+  margin: 4px 0 0;
+  font-size: 24px;
+  line-height: 30px;
+  color: var(--admin-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.footnote,
+.unavailable {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--admin-text-muted);
+}
+
+.warning {
+  padding: 16px 20px;
+  border: 2px solid #f2a65a;
+  border-radius: var(--admin-radius-sm);
+  background: rgba(242, 166, 90, 0.14);
+}
+
+.warningTitle {
+  margin: 0;
+  font-size: var(--admin-body-size);
+  font-weight: 700;
+  line-height: var(--admin-body-line);
+  color: #ffd2a6;
+}
+
+.warningText {
+  margin: 4px 0 0;
+  font-size: var(--admin-body-size);
+  line-height: var(--admin-body-line);
+  color: var(--admin-text);
+}
+
+@media (max-width: 599px) {
+  .liveNumber {
+    font-size: 56px;
+  }
+}

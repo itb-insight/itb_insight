@@ -1,3 +1,5 @@
+import type { StaffScanGroup } from "@/features/dashboard-tables/types"
+import type { DDayBoothDto, DDayFunnelDto, DDayGateSlotDto, DDayStaffDto } from "@/features/admin/data/types"
 import type { Booth, BoothScanEvent, GateCheckIn } from "@/lib/types/database"
 import {
   bucketize,
@@ -146,3 +148,144 @@ export function buildBoothHeat(
 }
 
 export const formatNumberId = (n: number) => n.toLocaleString("id-ID")
+
+// ─── /admin/d-day (live, admin_dday in migration 0028) ───────────────────────
+
+/**
+ * Live headcount rule: a visitor counts as in the area for this long after their latest in-area
+ * signal (gate check-in, booth scan, presence ping), unless their phone reports leaving after it
+ * (POST /api/presence/exit).
+ */
+export const ASSUME_IN_AREA_HOURS = 5
+
+/** "Capai target" in the Aktivitas visitor funnel. */
+export const BOOTH_TARGET = 15
+
+/**
+ * Closing time, Jakarta (src/features/events/details.ts: 09.00 – 17.00 WIB). From then on the page
+ * warns that the headcount still includes people who left without their phone reporting it.
+ */
+export const EVENT_CLOSE_HOUR = 17
+
+const jakartaHour = (now: Date) =>
+  Number(new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Jakarta", hour: "2-digit", hour12: false }).format(now)) % 24
+
+export function isAfterClose(now: Date = new Date()): boolean {
+  return jakartaHour(now) >= EVENT_CLOSE_HOUR
+}
+
+/** Pre-aggregated 5-minute slots (admin_dday "gates") → one line per gate, like buildGateThroughput. */
+export function buildGateSeries(slots: DDayGateSlotDto[], rangeKey: RangeKey, now: Date = new Date()) {
+  const range = getRange(rangeKey)
+  const rows = slots.map((s) => ({ at: s.slot, count: s.count, gate: gateLabel(s.gate) }))
+  const { labels, series } = bucketizeBy(rows, (r) => r.gate, range, now)
+  return {
+    labels,
+    perGate: [
+      ...series.filter((s) => s.name !== SKIPPED_GATE_LABEL),
+      ...series.filter((s) => s.name === SKIPPED_GATE_LABEL),
+    ],
+  }
+}
+
+/** Booths with a position, valued by their scans in the chosen window. */
+export function buildBoothHeatLive(booths: DDayBoothDto[], rangeKey: RangeKey): HeatPoint[] {
+  return booths.flatMap((b) =>
+    b.lng === null || b.lat === null ? [] : [{ id: b.id, name: b.name, lng: b.lng, lat: b.lat, value: b.windows[rangeKey] }],
+  )
+}
+
+/** Bars for Keramaian Booth: scans and points today, busiest first, bar length relative to the top. */
+export function buildBoothBars(booths: DDayBoothDto[]) {
+  const bars = (pick: (b: DDayBoothDto) => number) => {
+    const sorted = [...booths].sort((a, b) => pick(b) - pick(a) || a.name.localeCompare(b.name))
+    const top = Math.max(0, ...sorted.map(pick))
+    return sorted.map((b) => ({
+      label: b.name,
+      value: formatNumberId(pick(b)),
+      percent: top > 0 ? Math.round((pick(b) / top) * 100) : 0,
+    }))
+  }
+  return { scan: bars((b) => b.scans), point: bars((b) => b.points) }
+}
+
+/** The Aktivitas visitor funnel; share and bar length are relative to today's visitors. */
+export function buildFunnel(funnel: DDayFunnelDto) {
+  const base = funnel.visitors
+  const stage = (label: string, value: number) => {
+    const share = base > 0 ? Math.round((value / base) * 100) : 0
+    return { label, value: formatNumberId(value), share: `${share}%`, percent: Math.min(100, share) }
+  }
+  return [
+    stage("Hadir (check-in / scan)", funnel.visitors),
+    stage("Scan minimal 1 booth", funnel.scanned_1),
+    stage("Scan minimal 5 booth", funnel.scanned_5),
+    stage(`Capai target ${BOOTH_TARGET} booth`, funnel.reached_target),
+    stage("Klaim hadiah", funnel.claimed),
+  ]
+}
+
+/** 840 → "14 menit"; 4000 → "1 jam 7 menit". */
+export function formatMinutes(seconds: number): string {
+  const minutes = Math.max(0, Math.round(seconds / 60))
+  if (minutes < 60) return `${minutes} menit`
+  const rest = minutes % 60
+  return rest === 0 ? `${Math.floor(minutes / 60)} jam` : `${Math.floor(minutes / 60)} jam ${rest} menit`
+}
+
+const ROLE_B_LABELS: Record<string, string> = {
+  human_resource: "Human Resource",
+  booth: "Booth",
+  field: "Field",
+  event: "Event",
+  gensec: "Gensec",
+  creative: "Creative",
+  fundraising: "Fundraising",
+  competition: "Competition",
+  marketing: "Marketing",
+  webdev: "Webdev",
+  media: "Media",
+  sponsorship: "Sponsorship",
+  partner: "Partner",
+}
+
+function staffRole(row: DDayStaffDto): string {
+  if (row.role_a === "admin") return "Admin"
+  const duty = row.kind === "gate" ? "Gate staff" : "Booth staff"
+  const division = row.role_b ? ROLE_B_LABELS[row.role_b] ?? row.role_b : null
+  return division && division !== "Booth" ? `${duty} · ${division}` : duty
+}
+
+/** Staff scan table: one group per gate / booth, its staff busiest first. */
+export function buildStaffGroups(
+  staff: DDayStaffDto[],
+  booths: Pick<DDayBoothDto, "id" | "name">[],
+  formatTime: (iso: string) => string,
+): StaffScanGroup[] {
+  const boothNames = new Map(booths.map((b) => [b.id, b.name]))
+  const groups = new Map<string, StaffScanGroup>()
+
+  for (const row of staff) {
+    const id = `${row.kind}:${row.location}`
+    let group = groups.get(id)
+    if (!group) {
+      const label = row.kind === "gate" ? gateLabel(row.location) : boothNames.get(row.location) ?? "Booth"
+      group = { id, label, kind: row.kind, totalScan: 0, totalPoints: 0, staff: [] }
+      groups.set(id, group)
+    }
+    group.totalScan += row.scans
+    group.totalPoints += row.points
+    group.staff.push({
+      id: `${id}:${row.user_id}`,
+      name: row.name,
+      role: staffRole(row),
+      totalScan: row.scans,
+      totalPoints: row.points,
+      lastScan: row.last_at ? formatTime(row.last_at) : null,
+    })
+  }
+
+  return [...groups.values()]
+    .map((group) => ({ ...group, staff: group.staff.sort((a, b) => b.totalScan - a.totalScan) }))
+    .sort((a, b) => (a.kind === b.kind ? b.totalScan - a.totalScan : a.kind === "gate" ? -1 : 1))
+}

@@ -22,45 +22,91 @@
   box-sizing: border-box;
 }
 
-/* ---- section chips (mobile) ---------------------------------------------- */
+/* ---- section dropdown (below 1100px), like the /dashboard one --------- */
 
-.mobileNav {
+.mobileNav,
+.mobileTrigger,
+.mobileBackdrop,
+.mobileCollapse {
   display: none;
 }
 
-.mobileNavList {
+.chevron {
+  transition: transform 0.25s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.mobileMenu {
+  min-height: 0;
+  overflow: hidden;
   display: flex;
-  gap: 8px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 20px;
+}
+
+.mobileCollapseOpen .mobileMenu {
+  max-height: calc(100dvh - var(--admin-menu-top, 95px) - 16px);
+  overflow-y: auto;
+  padding-top: 12px;
+  padding-bottom: 16px;
+}
+
+.mobileGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobileGroupTitle {
   margin: 0;
-  padding: 0 16px;
-  list-style: none;
-  overflow-x: auto;
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
-}
-
-.mobileNavList::-webkit-scrollbar {
-  display: none;
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  height: 36px;
-  padding: 0 14px;
-  border: 1px solid #517eda;
-  border-radius: 999px;
-  font-size: 15px;
+  padding: 0 20px;
+  font-size: 14px;
   line-height: 20px;
-  color: #dee8fb;
-  text-decoration: none;
-  white-space: nowrap;
+  color: #ccddff;
 }
 
-.chipActive {
-  background: #1b3b7d;
-  border-color: #acc7ff;
+.mobileItem {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 8px;
   color: #ffffff;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.mobileItem:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.mobileItemActive,
+.mobileItemActive:hover {
+  background-color: #1b3b7d;
+}
+
+.mobileIcon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+}
+
+.mobileLabel {
+  min-width: 0;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.mobileSoon {
+  margin-left: auto;
+  font-size: 12px;
+  color: #ccddff;
+  opacity: 0.8;
 }
 
 @media (max-width: 1099px) {
@@ -70,6 +116,94 @@
 
   .mobileNav {
     display: block;
-    padding-top: 16px;
+    position: relative;
+    z-index: 99;
+    --admin-menu-top: var(--admin-nav-h);
+  }
+
+  .mobileTrigger {
+    display: flex;
+    position: relative;
+    z-index: 100;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 16px 0;
+    padding: 8px 14px;
+    border: 1px solid #517eda;
+    border-radius: 8px;
+    background: rgba(9, 27, 63, 0.6);
+    color: #ffffff;
+    font-family: var(--font-primary), "Gabarito", sans-serif;
+    font-size: 18px;
+    line-height: 24px;
+    cursor: pointer;
+  }
+
+  .mobileBackdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 98;
+    padding: 0;
+    border: 0;
+    background: rgba(0, 0, 0, 0.45);
+    cursor: default;
+  }
+
+  /* Under the trigger, over the page. Height animates via grid rows (0fr -> 1fr). */
+  .mobileCollapse {
+    display: grid;
+    position: absolute;
+    top: 100%;
+    left: 16px;
+    right: 16px;
+    z-index: 99;
+    margin-top: 8px;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+    border-radius: 8px;
+    background: #091b3f;
+  }
+
+  .mobileCollapseOpen {
+    grid-template-rows: 1fr;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* Phones: the site navbar is a menu button, so the trigger goes in its middle, as on /dashboard,
+   and the panel drops down full width right under the navbar. */
+@media (max-width: 899px) {
+  /* No stacking context here: the fixed trigger has to rise above the site navbar (z-index 100). */
+  .mobileNav {
+    --admin-menu-top: 95px;
+    position: static;
+    z-index: auto;
+  }
+
+  .mobileTrigger {
+    position: fixed;
+    top: calc(var(--admin-menu-top) / 2);
+    left: 50%;
+    z-index: 101;
+    margin: 0;
+    padding: 8px 12px;
+    border: 0;
+    background: none;
+    font-size: 20px;
+    transform: translate(-50%, -50%);
+  }
+
+  .mobileBackdrop {
+    top: var(--admin-menu-top);
+  }
+
+  .mobileCollapse {
+    position: fixed;
+    top: var(--admin-menu-top);
+    left: 0;
+    right: 0;
+    margin-top: 0;
+    border-radius: 0;
   }
 }

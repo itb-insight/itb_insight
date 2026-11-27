@@ -22,6 +22,7 @@ type RateLimitScope =
   | 'reward-claim'
   | 'presence-ping'
   | 'presence-consent'
+  | 'presence-exit'
 
 type RateLimitOptions = {
   readonly scope: RateLimitScope

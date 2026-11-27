@@ -222,4 +222,43 @@ describe('admin adapters', () => {
     expect(await adapters.getLive()).toMatchObject({ web: null, web_configured: false })
     quiet.mockRestore()
   })
+
+  it('build the D-day page: 5-hour window, booth positions, after-close flag', async () => {
+    const raw = {
+      live: { accounts: 3, represented: 2, oldest_at: '2026-11-28T03:00:00+00:00', newest_at: '2026-11-28T09:00:00+00:00', left: 1, timed_out: 4, tracked_now: 1 },
+      summary: { check_ins: 5, skipped_gate: 1, booth_scans: 4, points_given: 35, booths_active: 3, booth_visits: 3 },
+      funnel: { visitors: 5, scanned_1: 2, scanned_5: 0, reached_target: 0, claimed: 1 },
+      medians: { checkin_to_first_scan_s: 3750, between_scans_s: null },
+      gates: [{ slot: '2026-11-28T02:00:00+00:00', gate: 'main_gate', count: 2 }],
+      booths: [
+        { id: 'b1', name: 'Real', lat: -6.89, lng: 107.61, x: 1, y: 2, scans: 3, points: 25, m30: 1, h1: 2, h2: 3, h5: 3, h12: 3 },
+        { id: 'b2', name: 'Swapped', lat: null, lng: null, x: -6.891, y: 107.611, scans: 1, points: 10, m30: 0, h1: 1, h2: 1, h5: 1, h12: 1 },
+        { id: 'b3', name: 'Nowhere', lat: null, lng: null, x: null, y: null, scans: 0, points: 0 },
+      ],
+      staff: [{ kind: 'booth', location: 'b1', user_id: 's1', name: 'Bo', role_a: 'staff', role_b: 'booth', scans: 3, points: 25, last_at: null }],
+    }
+    state.db = createFakeDb((call) => (call.table === 'rpc:admin_dday' ? { data: raw, error: null } : { data: null, error: null }))
+
+    const evening = await adapters.getDDay(new Date('2026-11-28T11:30:00Z')) // 18:30 WIB
+    const rpc = state.db.calls.find((call) => call.table === 'rpc:admin_dday')!
+    expect(rpc.payload).toEqual({ p_since: '2026-11-27T17:00:00.000Z', p_assume_seconds: 18000, p_booth_target: 15 })
+    expect(evening.after_close).toBe(true)
+    expect(evening.data!.live).toMatchObject({ in_area_now: 5, accounts: 3, represented: 2, left: 1, timed_out: 4 })
+    expect(evening.data!.medians).toEqual({ checkin_to_first_scan_s: 3750, between_scans_s: null })
+    expect(evening.data!.booths.map((b) => [b.name, b.lng, b.lat])).toEqual([
+      ['Real', 107.61, -6.89],
+      ['Swapped', 107.611, -6.891],
+      ['Nowhere', null, null],
+    ])
+    expect(evening.data!.booths[0].windows).toEqual({ '30m': 1, '1h': 2, '2h': 3, '5h': 3, '12h': 3 })
+
+    expect((await adapters.getDDay(new Date('2026-11-28T03:00:00Z'))).after_close).toBe(false) // 10:00 WIB
+  })
+
+  it('report the D-day page unavailable when its RPC fails', async () => {
+    state.db = createFakeDb(() => ({ data: null, error: { message: 'boom' } }))
+    const quiet = vi.spyOn(console, 'error').mockImplementation(() => {})
+    expect((await adapters.getDDay()).data).toBeNull()
+    quiet.mockRestore()
+  })
 })

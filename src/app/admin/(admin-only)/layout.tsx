@@ -4,8 +4,9 @@ import { getAdminAccess } from "@/lib/admin-access"
 import { createClient } from "@/lib/supabase/server"
 
 /**
- * Everything under /admin except the dashboard (/admin) and the Booth section is admin-only. The parent layout already let
- * in booth staff (src/app/admin/layout.tsx); they get a 404 here so the rest is not confirmed.
+ * Everything under /admin except the dashboard (/admin), D-Day and the Booth / Gate sections is
+ * admin-only. The parent layout already let in staff (src/app/admin/layout.tsx); they get a 404
+ * here so the rest is not confirmed.
  * The route group keeps the URLs unchanged.
  */
 export default async function AdminOnlyLayout({ children }: { children: React.ReactNode }) {

@@ -2,18 +2,18 @@
 
 import { useEffect, useState } from "react"
 
-import type { LiveDto } from "../../data/types"
+import type { DDayDto, LiveDto } from "../../data/types"
 
 const POLL_MS = 30_000
 
-type Envelope = { success: true; data: LiveDto } | { success: false }
+type Envelope<T> = { success: true; data: T } | { success: false }
 
 /**
- * Starts from the server-rendered figures, then polls /api/admin/live every 30 s while the tab is
- * visible (the server caches for 30 s too, so polling faster would gain nothing). A tab coming
- * back into view refreshes at once if its figures are older than that.
+ * Starts from the server-rendered figures, then polls `url` every 30 s while the tab is visible
+ * (the server caches for 30 s too, so polling faster would gain nothing). A tab coming back into
+ * view refreshes at once if its figures are older than that.
  */
-export function useLiveData(initial: LiveDto) {
+export function usePolledData<T>(url: string, initial: T) {
   const [data, setData] = useState(initial)
   const [failed, setFailed] = useState(false)
 
@@ -25,8 +25,8 @@ export function useLiveData(initial: LiveDto) {
       if (document.visibilityState === "hidden") return
       lastLoad = Date.now()
       try {
-        const res = await fetch("/api/admin/live", { cache: "no-store" })
-        const json = (await res.json()) as Envelope
+        const res = await fetch(url, { cache: "no-store" })
+        const json = (await res.json()) as Envelope<T>
         if (cancelled) return
         if (json.success) setData(json.data)
         setFailed(!json.success)
@@ -46,7 +46,13 @@ export function useLiveData(initial: LiveDto) {
       clearInterval(timer)
       document.removeEventListener("visibilitychange", onVisibility)
     }
-  }, [])
+  }, [url])
 
   return { data, failed }
 }
+
+/** /admin live panels: GET /api/admin/live. */
+export const useLiveData = (initial: LiveDto) => usePolledData("/api/admin/live", initial)
+
+/** /admin/d-day: GET /api/admin/d-day. */
+export const useDDayData = (initial: DDayDto) => usePolledData("/api/admin/d-day", initial)

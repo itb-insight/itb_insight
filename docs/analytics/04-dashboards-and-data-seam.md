@@ -17,6 +17,7 @@ admin-only (`src/app/admin/layout.tsx`).
 | Recent Events | `getRecentEvents` | PostHog: latest events, 30 s cache. |
 | **D-day live** (top of `/admin`) | `getLive` | Supabase `admin_live_onsite()` (0017) + PostHog live queries. See below. |
 | Booths today (`/admin/analytics`) | `getLive` | Same call, every booth. |
+| **D-Day** (`/admin/d-day`, every staff member) | `getDDay` | Supabase `admin_dday()` (0028): live headcount, check-ins per gate, booths, funnel, staff scans. 30 s cache, polled by `/api/admin/d-day`. Headcount rule: [06-dday-presence.md](06-dday-presence.md#live-headcount-admind-day). |
 
 ## Rules
 

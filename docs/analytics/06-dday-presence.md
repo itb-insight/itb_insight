@@ -15,11 +15,14 @@ A visit of **5 minutes or more** counts as visiting that booth; dwell = last see
 Service role only (RLS on, no client grants). Consent is `profiles.presence_consent_at`, written only
 by the API.
 
+`profiles.left_area_at` (0028): the last time the phone reported being outside the event zone.
+**Time only, no location.** It feeds the live headcount on `/admin/d-day` (see below).
+
 ## Zones
 
 | Zone | Configured by | Role |
 | --- | --- | --- |
-| Event zone (ITB Ganesha) | `VENUE_LAT`, `VENUE_LNG`, `VENUE_RADIUS_M` (300), `VENUE_MAX_ACCURACY_M` (100) | Nothing is sent or stored outside it. Unset = presence off. Shared with self check-in. |
+| Event zone (ITB Ganesha) | `VENUE_LAT`, `VENUE_LNG`, `VENUE_RADIUS_M` (300), `VENUE_MAX_ACCURACY_M` (100) | No location is sent or stored outside it (only the exit time). Unset = presence off. Shared with self check-in. |
 | Booth zone | `BOOTH_ZONE_LAT`, `BOOTH_ZONE_LNG`, `BOOTH_ZONE_RADIUS_M` | Where burst sampling runs. Optional. |
 | Booth | `booths.lat`, `booths.lng`, `booths.presence_radius_m` (15) | A fix whose centre is within the radius matches; nearest wins. |
 
@@ -46,7 +49,7 @@ only after the browser grants location. "Nanti saja" hides the card for the day.
 
 | Where | What happens |
 | --- | --- |
-| Outside the event zone | One local position check every 3 min (30 s in test mode). Nothing is sent. |
+| Outside the event zone | One local position check every 3 min (30 s in test mode). No location is sent. The first fix that is confidently outside (its whole accuracy circle outside the zone) sends one `POST /api/presence/exit` with no body; again only after the phone has been back inside. |
 | Event zone | One ping a minute (`POST /api/presence/ping`). |
 | Booth zone, `PRESENCE_BURST=true` | **Experimental**: 8 fixes 2 s apart per ping. The server drops outliers (> 2σ from the median), takes an accuracy-weighted mean, then matches. |
 | Leaving the zone | Sending stops at once; the geofence-exit feedback prompt may show. |
@@ -54,7 +57,17 @@ only after the browser grants location. "Nanti saja" hides the card for the day.
 
 The server re-checks everything on every ping: sign-in, rate limit (4/min per user), presence day,
 consent, event zone, accuracy. The chip shows "Booth X: ± N menit lagi" until the visit counts, and
-**Matikan** withdraws consent, which deletes the user's presence rows.
+**Matikan** withdraws consent, which deletes the user's presence rows and clears `left_area_at`.
+
+## Live headcount (`/admin/d-day`)
+
+"Di area sekarang" counts a visitor (plus the people they represent, 0027) as in the area for
+**5 hours** after their latest in-area signal: a gate check-in, a booth scan or a presence ping.
+An exit signal after that signal removes them at once; a later in-area signal brings them back.
+Most visitors never turn presence on, so for them the 5 hours simply run out. That is why, after
+closing time (17.00 WIB), the page warns that the figure still includes people who left without
+their phone reporting it. `admin_dday` (migration 0028) computes it; the window and closing hour
+are in `src/features/admin/data/dday.ts`.
 
 ## Field test and tuning
 
@@ -76,6 +89,7 @@ turns it off. After the event, run in the Supabase SQL editor (production):
 ```sql
 delete from public.booth_presence;
 update public.profiles set presence_consent_at = null where presence_consent_at is not null;
+update public.profiles set left_area_at = null where left_area_at is not null;
 ```
 
 Export the aggregates you want to keep first (e.g. the booth leaderboard from `/admin/analytics`).

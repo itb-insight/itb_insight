@@ -23,18 +23,18 @@ import RecentEventsPanel from "@/features/admin/components/RecentEventsPanel/Rec
 import SponsorPanel from "@/features/admin/components/SponsorPanel/SponsorPanel"
 import TrafficPanel from "@/features/admin/components/TrafficPanel/TrafficPanel"
 import { getAdminAccess } from "@/lib/admin-access"
-import { GATE_SECTION_PATH } from "@/lib/admin-nav"
+import { DDAY_PATH, GATE_SECTION_PATH } from "@/lib/admin-nav"
 import { createClient } from "@/lib/supabase/server"
 import styles from "./dashboard.module.css"
 
 export default async function AdminDashboardPage() {
-  // Gate staff have only the Gate section: the dashboard is for admins and booth staff. (The layout
-  // has already sent signed-out visitors to /login.)
+  // The dashboard is for admins and booth staff: gate staff go to their Gate section, other staff to
+  // D-Day. (The layout has already sent signed-out visitors to /login.)
   const {
     data: { user },
   } = await (await createClient()).auth.getUser()
   const access = user ? await getAdminAccess(user) : null
-  if (access && !access.isAdmin && !access.booth) redirect(GATE_SECTION_PATH)
+  if (access && !access.isAdmin && !access.booth) redirect(access.gate ? GATE_SECTION_PATH : DDAY_PATH)
 
   const range = defaultRange()
 

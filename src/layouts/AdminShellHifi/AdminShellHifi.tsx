@@ -6,26 +6,37 @@ import styles from "./AdminShellHifi.module.css"
 
 export { AdminPill } from "./AdminPageHeader"
 
-interface AdminShellHifiProps {
+interface AdminPageHifiProps {
   title: string
   subtitle?: string
   meta?: ReactNode
-  activeHref?: string
   children: ReactNode
 }
 
 /**
- * Whole-page shell for the /admin-hifi mocks, which live outside the /admin layout: the shared
- * AdminFrame plus a padded page with AdminPageHeader. /admin pages get AdminFrame from their layout
- * and only render PageHeader.
+ * A hi-fi page inside the frame: padding, AdminPageHeader and the content stack. /admin pages get
+ * AdminFrame from their layout and render this directly (e.g. /admin/d-day).
  */
-export default function AdminShellHifi({ title, subtitle, meta, activeHref, children }: AdminShellHifiProps) {
+export function AdminPageHifi({ title, subtitle, meta, children }: AdminPageHifiProps) {
+  return (
+    <div className={styles.page}>
+      <AdminPageHeader title={title} subtitle={subtitle} meta={meta} />
+      <div className={styles.content}>{children}</div>
+    </div>
+  )
+}
+
+/**
+ * Whole-page shell for the /admin-hifi mocks, which live outside the /admin layout: the shared
+ * AdminFrame plus AdminPageHifi.
+ */
+export default function AdminShellHifi({
+  activeHref,
+  ...page
+}: AdminPageHifiProps & { activeHref?: string }) {
   return (
     <AdminFrame activeHref={activeHref}>
-      <div className={styles.page}>
-        <AdminPageHeader title={title} subtitle={subtitle} meta={meta} />
-        <div className={styles.content}>{children}</div>
-      </div>
+      <AdminPageHifi {...page} />
     </AdminFrame>
   )
 }

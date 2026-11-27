@@ -7,15 +7,18 @@ import { getUserRole } from '@/lib/admin'
 import { adminLinkFor } from '@/lib/admin-nav'
 import { boothAccessFor, type BoothAccess } from '@/lib/booth-points'
 import { createServiceClient } from '@/lib/supabase/server'
-import { type ProfileRoleA, type ProfileRoleB } from '@/lib/types/database'
+import { type ProfileRoleA, type ProfileRoleB, type UserRole } from '@/lib/types/database'
 
 /*
   What a signed-in user may open under /admin:
     - isAdmin: everything (src/app/admin/(admin-only)/layout.tsx);
     - booth:   the dashboard (/admin) and the Booth section (src/app/admin/booth); booth rules in
                src/lib/booth-points.ts.
-    - gate:    the Gate section (src/app/admin/gate) only. Gate staff are role_a 'staff',
+    - gate:    the Gate section (src/app/admin/gate). Gate staff are role_a 'staff',
                role_b 'human_resource', role_c 'gate_staff' (0024), see gateAccessFor.
+    - staff:   the D-day page (src/app/admin/d-day). Every staff member: committee accounts
+               (role_a 'staff' / 'stakeholder'), admin_roles staff roles, booth and gate staff,
+               admins. See staffAccessFor.
   The profile role columns are not user-writable (0011), so they are safe to trust here.
 */
 
@@ -24,6 +27,8 @@ export type AdminAccess = {
   booth: BoothAccess | null
   /** Opens the Gate section: admins, and gate staff (gateAccessFor). */
   gate: boolean
+  /** Opens /admin itself and the D-day page: every staff member (staffAccessFor). */
+  staff: boolean
   roleA: ProfileRoleA | null
 }
 
@@ -36,6 +41,26 @@ export function gateAccessFor(params: {
 }): boolean {
   if (params.isAdmin) return true
   return params.roleA === 'staff' && params.roleB === 'human_resource' && params.roleC === 'gate_staff'
+}
+
+const STAFF_ROLE_A: readonly ProfileRoleA[] = ['staff', 'stakeholder']
+const STAFF_USER_ROLES: readonly UserRole[] = ['field_staff', 'gate_staff', 'booth_staff']
+
+/**
+ * Every staff member: admins, committee accounts (role_a 'staff' / 'stakeholder'), admin_roles
+ * staff roles (field / gate / booth), and anyone with the Booth or Gate section. Not exhibitors,
+ * sponsors or companies.
+ */
+export function staffAccessFor(params: {
+  isAdmin: boolean
+  role: UserRole | null | undefined
+  roleA: ProfileRoleA | null | undefined
+  booth: boolean
+  gate: boolean
+}): boolean {
+  if (params.isAdmin || params.booth || params.gate) return true
+  if (params.roleA && STAFF_ROLE_A.includes(params.roleA)) return true
+  return Boolean(params.role && STAFF_USER_ROLES.includes(params.role))
 }
 
 type AccessSubject = Pick<User, 'id' | 'email' | 'email_confirmed_at'>
@@ -65,10 +90,13 @@ const loadAdminAccess = cache(
     ])
     const isAdmin = role === 'admin'
     const roles = { isAdmin, roleA: profile?.role_a, roleB: profile?.role_b, roleC: profile?.role_c }
+    const booth = boothAccessFor(roles)
+    const gate = gateAccessFor(roles)
     return {
       isAdmin,
-      booth: boothAccessFor(roles),
-      gate: gateAccessFor(roles),
+      booth,
+      gate,
+      staff: staffAccessFor({ isAdmin, role, roleA: profile?.role_a, booth: booth !== null, gate }),
       roleA: profile?.role_a ?? null,
     }
   },
@@ -86,5 +114,6 @@ export async function getAdminLink(user: AccessSubject): Promise<string | null> 
     roleA: access.roleA,
     boothSection: Boolean(access.booth),
     gateSection: access.gate,
+    staff: access.staff,
   })
 }

@@ -171,3 +171,100 @@ export interface LiveDto {
   web: LiveWebDto | null
   web_configured: boolean
 }
+
+// ─── /admin/d-day (admin_dday, migration 0028) ───────────────────────────────
+
+export interface DDayLiveDto {
+  /** People assumed in the area now: accounts + the people they represent. */
+  in_area_now: number
+  /** Accounts whose latest in-area signal is under ASSUME_IN_AREA_HOURS old, with no exit after it. */
+  accounts: number
+  /** People those accounts represent (0027). */
+  represented: number
+  /** The oldest latest-signal among them (ISO): how stale the oldest assumption is. */
+  oldest_at: string | null
+  /** The newest one: everyone still assumed in has dropped out ASSUME_IN_AREA_HOURS after it. */
+  newest_at: string | null
+  /** Accounts whose phone reported leaving after their latest in-area signal. */
+  left: number
+  /** Accounts seen today whose window ran out with no exit reported. */
+  timed_out: number
+  /** Opted-in phones with a presence ping in the last 5 minutes. */
+  tracked_now: number
+}
+
+export interface DDaySummaryDto {
+  /** Gate check-in rows today, skipped-gate ones included. */
+  check_ins: number
+  skipped_gate: number
+  /** Booth scan rows today (first visits and bonuses). */
+  booth_scans: number
+  /** Points given at booths today (base + bonus). */
+  points_given: number
+  booths_active: number
+  /** Distinct (visitor, booth) pairs today. */
+  booth_visits: number
+}
+
+export interface DDayFunnelDto {
+  /** Distinct visitors today: checked in or scanned at a booth. */
+  visitors: number
+  scanned_1: number
+  scanned_5: number
+  reached_target: number
+  claimed: number
+}
+
+export interface DDayGateSlotDto {
+  /** Start of a 5-minute slot, ISO. */
+  slot: string
+  /** gate_check_ins.gate_name, raw (gateLabel() names it). */
+  gate: string
+  count: number
+}
+
+export interface DDayBoothDto {
+  id: string
+  name: string
+  /** Map position, null when the booth has none. */
+  lng: number | null
+  lat: number | null
+  /** Today. */
+  scans: number
+  points: number
+  /** Scans in the last 30 min / 1 / 2 / 5 / 12 hours, for the heat map tabs. */
+  windows: Record<"30m" | "1h" | "2h" | "5h" | "12h", number>
+}
+
+export interface DDayStaffDto {
+  kind: "gate" | "booth"
+  /** gate_name for gates, booth id for booths. */
+  location: string
+  user_id: string
+  name: string
+  role_a: string | null
+  role_b: string | null
+  scans: number
+  points: number
+  last_at: string | null
+}
+
+export interface DDayDataDto {
+  live: DDayLiveDto
+  summary: DDaySummaryDto
+  funnel: DDayFunnelDto
+  medians: { checkin_to_first_scan_s: number | null; between_scans_s: number | null }
+  gates: DDayGateSlotDto[]
+  booths: DDayBoothDto[]
+  staff: DDayStaffDto[]
+}
+
+export interface DDayDto {
+  generated_at: string
+  /** Start of today (Jakarta), ISO. */
+  since: string
+  /** Past closing time (Jakarta): the page warns that the headcount is an assumption. */
+  after_close: boolean
+  /** null = the query failed. */
+  data: DDayDataDto | null
+}

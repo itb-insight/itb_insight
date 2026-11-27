@@ -6,7 +6,7 @@ import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit'
 import { createServiceClient } from '@/lib/supabase/server'
 
 // Opt in to (POST) or out of (DELETE) booth presence. Opting out also deletes every presence
-// row of the user: withdrawing consent removes the data collected under it.
+// row of the user and their last exit time: withdrawing consent removes the data collected under it.
 
 export async function POST(request: NextRequest) {
   const auth = await getAuthenticatedUser(request)
@@ -36,7 +36,8 @@ export async function DELETE(request: NextRequest) {
 
   const supabase = createServiceClient()
   const [profile, visits] = await Promise.all([
-    supabase.from('profiles').update({ presence_consent_at: null }).eq('id', auth.user.id),
+    // left_area_at (0028) is collected under the same consent.
+    supabase.from('profiles').update({ presence_consent_at: null, left_area_at: null }).eq('id', auth.user.id),
     supabase.from('booth_presence').delete().eq('user_id', auth.user.id),
   ])
   if (profile.error || visits.error) {

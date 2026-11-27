@@ -38,3 +38,16 @@ export async function setRepresentedCount(userId: string, count: number): Promis
 
 /** The visitor's phone was detected inside the event zone. */
 export const markVisitedItb = (userId: string) => markFlag(userId, 'visited_itb')
+
+/**
+ * The visitor's phone reported being outside the event zone (POST /api/presence/exit):
+ * profiles.left_area_at (0028). Time only, no location. The /admin/d-day headcount stops counting
+ * them until their next in-area signal (gate check-in, booth scan, presence ping).
+ */
+export async function markLeftArea(userId: string): Promise<void> {
+  const { error } = await createServiceClient()
+    .from('profiles')
+    .update({ left_area_at: new Date().toISOString() })
+    .eq('id', userId)
+  if (error) throw new Error(error.message)
+}

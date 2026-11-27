@@ -23,6 +23,11 @@ import styles from "./OnSite.module.css"
     - inside it, one ping a minute; in the booth zone with burst on, 8 fixes 2 s apart
       (EXPERIMENTAL, see src/lib/presence-geo.ts)
     - leaving the zone stops sending at once and fires the geofence-exit feedback trigger
+    - a fix confidently outside the zone (its whole uncertainty circle outside) sends one
+      "left the area" signal, no coordinates (POST /api/presence/exit): once when the page first
+      finds the phone outside, and again each time it walks out. The /admin/d-day headcount
+      assumes a visitor stays in the area for 5 h after their last in-area signal unless this
+      arrives.
     - paused while the tab is hidden; browsers give no location then anyway
     - test mode (PRESENCE_TEST_MODE, admin/staff only): runs any day, checks every 30 s outside
       the zone, and shows how far the phone is from it
@@ -77,6 +82,11 @@ function currentFix(): Promise<Fix | null> {
 }
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+/** "Left the area", no body. Best effort: a lost signal only keeps the visitor in the headcount longer. */
+function reportExit() {
+  fetch("/api/presence/exit", { method: "POST", keepalive: true }).catch(() => {})
+}
 
 /** A function, not an inline check: the tab can be hidden during an await. */
 const pageHidden = () => document.visibilityState === "hidden"
@@ -138,6 +148,8 @@ export default function PresenceTracker({ onVenueExit }: { onVenueExit: () => vo
     let cancelled = false
     let timer: ReturnType<typeof setTimeout> | undefined
     let wasInside = false
+    // Sent once per stay outside: reset when a ping confirms the phone is back inside.
+    let exitReported = false
     const outsideCheckMs = config.tester ? TESTER_OUTSIDE_CHECK_MS : OUTSIDE_CHECK_MS
 
     const schedule = (ms: number) => {
@@ -165,6 +177,11 @@ export default function PresenceTracker({ onVenueExit }: { onVenueExit: () => vo
       const inEventZone = first.accuracyM <= config!.eventZone.maxAccuracyM && inZone(config!.eventZone, first)
       if (!inEventZone) {
         leave()
+        // An imprecise fix that still overlaps the zone proves nothing: only a confident one counts.
+        if (!exitReported && !inZone(config!.eventZone, first)) {
+          exitReported = true
+          reportExit()
+        }
         // Distances only, kept in this tab: nothing is sent while outside the zone.
         if (config!.debug) {
           setOutside({ distanceM: Math.round(distanceM(config!.eventZone, first)), accuracyM: Math.round(first.accuracyM) })
@@ -203,6 +220,7 @@ export default function PresenceTracker({ onVenueExit }: { onVenueExit: () => vo
           if (json.data.insideVenue) {
             if (!wasInside) setInside(true)
             wasInside = true
+            exitReported = false
           } else {
             leave()
           }
@@ -282,8 +300,8 @@ export default function PresenceTracker({ onVenueExit }: { onVenueExit: () => vo
         <p className={styles.cardText}>
           Selama kamu di area ITB Insight (Kampus ITB Ganesha) dan halaman ini terbuka, lokasi HP-mu
           dipakai untuk mencatat booth yang kamu kunjungi dan berapa lama. Kami hanya menyimpan nama
-          booth dan waktunya, bukan koordinatmu, dan tidak ada yang dicatat di luar area acara. Tidak
-          memengaruhi poin, dan bisa dimatikan kapan saja.{" "}
+          booth dan waktunya, bukan koordinatmu. Di luar area acara lokasimu tidak dikirim; yang dicatat
+          hanya waktu kamu keluar area. Tidak memengaruhi poin, dan bisa dimatikan kapan saja.{" "}
           <a href="/privacy" className={styles.link}>
             Kebijakan privasi
           </a>
