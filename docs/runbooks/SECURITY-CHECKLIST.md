@@ -7,6 +7,7 @@ schema_version: 2
 - Keep `SUPABASE_SERVICE_ROLE_KEY` server-only; do not expose it in browser code, `NEXT_PUBLIC_*`, docs, logs, or evidence.
 - `/dashboard*` and `/admin*` require a session (proxy). `/admin*` also requires the admin role (`src/app/admin/layout.tsx`); every admin API checks the role with `getScopedUser`.
 - Admin role: `admin_roles`, `profiles.role_a = 'admin'`, or a *confirmed* email in `ADMIN_EMAILS`.
+- Scoped staff roles: `admin_roles`, or a staff duty in `profiles.role_c` (`role_a = 'staff'`, 0024). Pre-assigned duties come from `profile_role_grants` and apply only to a *verified* email.
 - Guardrail tests (`tests/guardrails/`) enforce API auth, RLS, server-only secrets, filter escaping and secret scanning in CI.
 - QR ticket values must remain opaque; use `visitor_tickets`, not legacy `rsvp`.
 - The analytics endpoint is public, rate-limited per process, and volatile; it must not be used as an authoritative store.

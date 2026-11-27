@@ -29,6 +29,7 @@
 | `0021_sidequests_and_gamification.sql` | Sidequests, submissions, reward tiers/claims; negative manual adjustments. Was `0016` (duplicate number). |
 | `0022_booth_bonus_awards.sql` | `booth_scan_events.kind` (`visit`/`bonus`/`manual`), base points once per booth, capped repeat-visit bonus via `award_booth_bonus()`. |
 | `0023_security_hardening.sql` | Column-level `profiles` update grants and field length limits (was a duplicate `0007`; safe to re-run). |
+| `0024_profile_staff_duties.sql` | `role_b` `human_resource`; `role_c` holds a staff duty (`gate_staff`) that grants that scoped role (`has_role()`, `getUserRole`). Gate staff = `staff` / `human_resource` / `gate_staff`, pre-assigned via `profile_role_grants`. |
 
 `0002` drops the legacy `registrations` and `rsvp` tables. Use `visitor_tickets`, never `rsvp`, for current QR tickets.
 
@@ -49,7 +50,7 @@
 | `competitions` | Registration metadata/foreign keys | Yes; registration APIs keep/find rows for catalog. |
 | `competition_teams`, `competition_team_members` | Team UID, leader, and membership | Yes. |
 | `competition_registrations` | Individual/team submissions and status | Yes. |
-| `admin_roles` | Scoped RBAC authorization (`admin`, `gate_staff`, `booth_staff`, etc.) | Yes; `@/lib/admin`. |
+| `admin_roles` | Scoped RBAC authorization (`admin`, `gate_staff`, `booth_staff`, etc.). A staff duty in `profiles.role_c` (0024) also grants its role; an `admin_roles` row wins over it. | Yes; `@/lib/admin`. |
 | `payments`, `midtrans_transactions` | Midtrans Snap creation, webhook, and retry | Yes; `/api/payments/*`. |
 | `booth_presence` | Opt-in booth visits (booth + time, never coordinates), service role only | Yes; `/api/presence/ping`, `/api/admin/live`. |
 

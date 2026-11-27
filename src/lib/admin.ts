@@ -5,7 +5,7 @@ import { type NextRequest } from 'next/server'
 
 import { getAuthenticatedUser } from '@/lib/auth'
 import { createServiceClient } from '@/lib/supabase/server'
-import { type UserRole } from '@/lib/types/database'
+import { type ProfileStaffDuty, type UserRole } from '@/lib/types/database'
 
 export function isAdminEmail(email?: string | null) {
   return Boolean(
@@ -19,6 +19,19 @@ export function isAdminEmail(email?: string | null) {
 
 type RoleSubject = Pick<User, 'id' | 'email' | 'email_confirmed_at'>
 
+/** Duties a staff profile can hold in role_c (0024); each one grants the UserRole of that name. */
+const STAFF_DUTY_ROLES: readonly ProfileStaffDuty[] = ['gate_staff']
+
+function staffDutyRole(profile: { role_a?: string | null; role_c?: string | null } | null): ProfileStaffDuty | null {
+  if (profile?.role_a !== 'staff') return null
+  return STAFF_DUTY_ROLES.find((duty) => duty === profile.role_c) ?? null
+}
+
+/**
+ * The one role a user acts as. Precedence: admin (ADMIN_EMAILS, profiles.role_a, admin_roles),
+ * then the admin_roles row, then a staff duty in profiles.role_c (e.g. gate staff pre-assigned by
+ * email in profile_role_grants, 0019/0024).
+ */
 export async function getUserRole(user: RoleSubject): Promise<UserRole | null> {
   // The allowlist only counts a confirmed email: anyone holding the public anon key can call
   // auth.signUp() with an arbitrary address, and that address stays unconfirmed.
@@ -31,8 +44,8 @@ export async function getUserRole(user: RoleSubject): Promise<UserRole | null> {
       const supabase = createServiceClient()
       const [{ data, error }, { data: profile }] = await Promise.all([
         supabase.from('admin_roles').select('role').eq('user_id', user.id).maybeSingle(),
-        // profiles.role_a (0011) — not user-writable, so it is safe to trust here.
-        supabase.from('profiles').select('role_a').eq('id', user.id).maybeSingle(),
+        // profiles.role_a / role_c (0011, 0024) — not user-writable, so they are safe to trust here.
+        supabase.from('profiles').select('role_a, role_c').eq('id', user.id).maybeSingle(),
       ])
 
       if (profile?.role_a === 'admin') {
@@ -41,6 +54,11 @@ export async function getUserRole(user: RoleSubject): Promise<UserRole | null> {
 
       if (!error && data?.role) {
         return data.role as UserRole
+      }
+
+      const duty = staffDutyRole(profile)
+      if (duty) {
+        return duty
       }
     } catch {
       // Return fallback below

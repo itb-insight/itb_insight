@@ -9,15 +9,15 @@ export type Profile = {
   avatar_url?: string | null
   role_a?: ProfileRoleA | null
   role_b?: ProfileRoleB | null // only for staff / stakeholder
-  // sponsor_partner: the company (free text). staff: 'gate_staff' (0024), or the booth type for
-  // booth staff (role_b 'booth'; 'all' = every booth, 0025). Otherwise null.
-  role_c?: string | null
+  // staff: a ProfileStaffDuty such as 'gate_staff' (0024), or the booth type for booth staff
+  // (role_b 'booth'; 'all' = every booth, 0025); sponsor_partner: the company (free text); otherwise null
+  role_c?: ProfileStaffDuty | string | null
   created_at: string
   updated_at: string
 }
 
 export type ProfileRoleA = 'staff' | 'stakeholder' | 'sponsor_partner' | 'company' | 'admin'
-// Mirrors profiles_role_b_check (0018): committee bidang first, then legacy 0011 values.
+// Mirrors profiles_role_b_check (0018, 0024): committee bidang first, then legacy 0011 values.
 export type ProfileRoleB =
   | 'gensec'
   | 'creative'
@@ -26,11 +26,14 @@ export type ProfileRoleB =
   | 'competition'
   | 'field'
   | 'marketing'
+  | 'human_resource'
   | 'booth'
   | 'webdev'
   | 'media'
   | 'sponsorship'
   | 'partner'
+// Mirrors profiles_role_c_scope (0024): a staff duty in role_c grants the UserRole of the same name.
+export type ProfileStaffDuty = Extract<UserRole, 'gate_staff'>
 
 export type VisitorTicket = {
   id: string

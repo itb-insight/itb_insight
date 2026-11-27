@@ -8,6 +8,7 @@ const state = vi.hoisted(() => ({
   user: null as null | { id: string; email: string; email_confirmed_at?: string | null },
   adminRole: null as null | string,
   profileRole: null as null | string,
+  profileRoleC: null as null | string,
 }))
 
 vi.mock('@/lib/supabase/server', async () => {
@@ -33,9 +34,10 @@ beforeEach(() => {
   state.user = { id: 'user-1', email: 'someone@example.com' }
   state.adminRole = null
   state.profileRole = null
+  state.profileRoleC = null
   state.db = createFakeDb((call) => {
     if (call.table === 'admin_roles') return { data: state.adminRole ? { role: state.adminRole } : null, error: null }
-    if (call.table === 'profiles') return { data: { role_a: state.profileRole }, error: null }
+    if (call.table === 'profiles') return { data: { role_a: state.profileRole, role_c: state.profileRoleC }, error: null }
     return { data: null, error: null }
   })
 })
@@ -71,6 +73,32 @@ describe('getScopedUser (role checks for staff/admin routes)', () => {
   it('non-admin profile roles grant nothing', async () => {
     state.profileRole = 'staff'
     expect(await getScopedUser(request(), ['gate_staff', 'admin'])).toMatchObject({ ok: false, status: 403 })
+  })
+
+  it('a staff duty in profiles.role_c grants that scoped role only', async () => {
+    state.profileRole = 'staff'
+    state.profileRoleC = 'gate_staff'
+    expect(await getScopedUser(request(), ['gate_staff', 'admin'])).toMatchObject({ ok: true, role: 'gate_staff' })
+    expect(await getScopedUser(request(), ['booth_staff', 'exhibitor', 'admin'])).toMatchObject({ ok: false, status: 403 })
+    expect(await getScopedUser(request(), ['admin'])).toMatchObject({ ok: false, status: 403 })
+  })
+
+  it('role_c grants nothing outside staff or outside the duty list', async () => {
+    state.profileRole = 'sponsor_partner'
+    state.profileRoleC = 'gate_staff' // a company named "gate_staff" is still a company
+    expect(await getScopedUser(request(), ['gate_staff', 'admin'])).toMatchObject({ ok: false, status: 403 })
+    state.profileRole = 'staff'
+    state.profileRoleC = 'admin'
+    expect(await getScopedUser(request(), ['admin'])).toMatchObject({ ok: false, status: 403 })
+    state.profileRoleC = 'field_staff'
+    expect(await getScopedUser(request(), ['field_staff', 'admin'])).toMatchObject({ ok: false, status: 403 })
+  })
+
+  it('an admin_roles row takes precedence over a staff duty', async () => {
+    state.adminRole = 'booth_staff'
+    state.profileRole = 'staff'
+    state.profileRoleC = 'gate_staff'
+    expect(await getScopedUser(request(), ['booth_staff', 'admin'])).toMatchObject({ ok: true, role: 'booth_staff' })
   })
 
   it('fails closed when the role lookup cannot run', async () => {
