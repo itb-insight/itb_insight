@@ -9,11 +9,11 @@ import { eventDetailJsonLd, eventDetailMetadata } from "@/features/events/seo";
 
 /**
  * Halaman detail satu event: /event/tech-xhibition, /event/playtech-showtech,
- * /event/technology-seminar, /event/insight-on-stage, /event/inspirates.
+ * /event/technology-seminar, /event/insight-on-stage, /event/inspirates,
+ * /event/alumni-gathering.
  *
  * SSG + ISR: semua halaman dibangun saat build lalu disegarkan tiap 1 jam
- * (status jadwal sekolah Inspirates ikut berganti). Slug lain -> 404,
- * termasuk Alumni Gathering yang masih Coming Soon.
+ * (status jadwal sekolah Inspirates ikut berganti). Slug lain -> 404.
  *
  * Data: src/features/events/details.ts.
  */

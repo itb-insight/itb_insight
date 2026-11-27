@@ -1,7 +1,8 @@
 import Image from "next/image"
 
 import styles from "./MapPlaceCard.module.css"
-import { MAP_PLACEHOLDER_IMAGE, type MapLocation } from "./mapLocations"
+import type { MapLocation } from "./mapLocations"
+import PlaceName from "./PlaceName"
 
 interface MapPlaceCardProps {
   location: MapLocation
@@ -11,16 +12,21 @@ interface MapPlaceCardProps {
 export default function MapPlaceCard({ location, onSelect }: MapPlaceCardProps) {
   return (
     <button type="button" className={styles.card} onClick={() => onSelect?.(location)}>
-      <Image
-        src={location.image ?? MAP_PLACEHOLDER_IMAGE}
-        alt=""
-        width={120}
-        height={84}
-        className={styles.image}
-        loading="eager"
-      />
+      {location.image ? (
+        <Image
+          src={location.image}
+          alt=""
+          width={120}
+          height={84}
+          sizes="120px"
+          loading="eager"
+          className={styles.image}
+        />
+      ) : null}
       <span className={styles.content}>
-        <span className={styles.title}>{location.name}</span>
+        <span className={styles.title}>
+          <PlaceName location={location} />
+        </span>
         {location.description ? (
           <span className={styles.description}>{location.description}</span>
         ) : null}

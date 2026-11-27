@@ -41,7 +41,7 @@ export default function EventDetailPage({
       <div className={styles.body}>
         <EventsBackdrop />
         <div className={styles.container}>
-          <QuickFacts facts={detail.facts} />
+          <QuickFacts facts={detail.facts} done={detail.done} />
           <AboutBlock detail={detail} />
           <Highlights detail={detail} />
           {detail.schoolVisits ? <SchoolVisits visits={detail.schoolVisits} today={today} /> : null}

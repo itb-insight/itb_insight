@@ -76,7 +76,8 @@ export interface EventCopy {
   buttonLabel: string;
   /** Slug halaman detail /event/<slug>, kalau ada */
   detailSlug?: string;
-  status?: "coming-soon";
+  /** coming-soon = belum diumumkan; done = sudah dilaksanakan */
+  status?: "coming-soon" | "done";
 }
 
 /** Section /event yang siap dirender: slot + isi + posisi hasil hitung. */
@@ -141,7 +142,11 @@ export interface SchoolVisit {
   school: string;
   /** ISO, misal "2026-11-11" */
   date: string;
-  time: string;
+  time?: string;
+  /** Foto utama sekolah (foto bersama). Tanpa foto = kartu teks saja. */
+  photo?: EventImage;
+  /** Foto kegiatan lain di sekolah ini, tampil sebagai thumbnail di kartu */
+  photos?: EventImage[];
 }
 
 export interface SeminarSession {
@@ -161,22 +166,32 @@ export interface EventDetail {
   about: string[];
   /** Warna aksen event: titik timeline, nomor, garis daftar */
   accent: string;
+  /** true = event sudah dilaksanakan: info cepat menampilkan "Status" */
+  done?: boolean;
 
   /** Untuk JSON-LD (ISO, boleh dengan jam dan zona WIB) */
   startDate: string;
   endDate?: string;
 
+  /** Baris kosong (undefined) tidak tampil di info cepat. */
   facts: {
     date: string;
-    time: string;
+    time?: string;
     venue: string;
     audience: string;
-    ticket: string;
-    registration: string;
+    ticket?: string;
+    registration?: string;
     quota?: string;
   };
 
+  /** Foto hero; kalau ada heroVideo, foto ini jadi poster (dan LCP). */
   hero: EventImage;
+  /**
+   * Video latar hero, bisu dan berulang. Hanya diunduh setelah halaman
+   * selesai dimuat, dan tidak sama sekali dengan prefers-reduced-motion
+   * atau Save-Data. Masing-masing di bawah 1 MB (tests/guardrails/assets).
+   */
+  heroVideo?: { desktop: string; mobile: string };
   aboutImage: EventImage;
   /** Gambar OpenGraph JPG 1200x630 (WebP belum didukung semua aplikasi chat) */
   ogImage: string;

@@ -9,7 +9,7 @@ import styles from "@/features/events/detail/EventDetail.module.css";
 export default function DetailGallery({ images }: { images: EventImage[] }) {
   const five = images.length === 5;
   return (
-    <section aria-labelledby="galeri-title" className={styles.section}>
+    <section id="galeri" aria-labelledby="galeri-title" className={styles.section}>
       <h2 id="galeri-title" className={`${styles.sectionTitle} ${styles.iceText}`}>
         Gallery
       </h2>

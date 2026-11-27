@@ -3,8 +3,8 @@ import Link from "next/link"
 import styles from "./Footer.module.css"
 
 const socials = [
-  { href: "https://instagram.com/insightitb", label: "Instagram" },
-  { href: "https://twitter.com/insightitb", label: "Twitter" },
+  { href: "https://www.instagram.com/itbinsight", label: "Instagram" },
+  { href: "https://x.com/Itb_Insight", label: "X" },
   { href: "https://youtube.com/@insightitb", label: "Youtube" },
 ]
 

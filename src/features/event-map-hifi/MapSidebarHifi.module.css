@@ -58,8 +58,11 @@
   object-fit: contain;
 }
 
+/* Four tabs don't fit next to the logo, so they take their own full-width row. */
 .tabs {
+  flex: 1 1 100%;
   display: flex;
+  justify-content: space-between;
   gap: 0;
   max-width: 100%;
   overflow-x: auto;
@@ -105,7 +108,8 @@
   }
 
   .tab {
-    padding: 0 9px;
+    padding: 0 8px;
+    font-size: 15px;
   }
 }
 
@@ -260,4 +264,30 @@
   .list {
     margin-top: 20px;
   }
+}
+
+/* Our own clear button replaces the browser's (which renders inconsistently). */
+.searchInput::-webkit-search-cancel-button {
+  display: none;
+}
+
+.searchClear {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-right: -6px;
+  padding: 4px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: #acc7ff;
+  cursor: pointer;
+}
+
+.searchClear:hover,
+.searchClear:focus-visible {
+  background: rgb(172 199 255 / 0.15);
 }

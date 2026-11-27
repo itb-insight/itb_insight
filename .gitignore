@@ -55,3 +55,5 @@ next-env.d.ts
 /notes.md
 
 /temp
+# Event photo/video originals (300+ MB). Web versions live in public/events/.
+/design-sources/events/

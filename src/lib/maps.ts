@@ -22,3 +22,26 @@ export function isDisabledMapHref(href: string | null | undefined): boolean {
     const path = href.split(/[?#]/)[0]
     return path === MAP_PATH || path.startsWith(MAP_PATH + '/')
 }
+
+/*
+    Deep links into the map. `/event-map?place=<id>` opens that place and flies the map to it;
+    `/event-map?category=<id>` opens that sidebar section. Ids are the map's own (place ids from
+    src/features/event-map-hifi/mapLocations.ts, category ids from mapCategories.ts); unknown ids
+    just open the map. Kept here, not in the map feature, so linking doesn't pull the map data in.
+*/
+export function mapPlaceHref(placeId: string): string {
+    return `${MAP_PATH}?place=${encodeURIComponent(placeId)}`
+}
+
+export function mapCategoryHref(categoryId: string): string {
+    return `${MAP_PATH}?category=${encodeURIComponent(categoryId)}`
+}
+
+/** The footer's "Map" column (checked against the map data in mapLocations.test.ts). */
+export const MAP_FOOTER_LINKS: { label: string; href: string }[] = [
+    { label: 'Parkir', href: mapCategoryHref('parkir') },
+    { label: 'Booths', href: mapCategoryHref('booth') },
+    { label: 'Stage', href: mapPlaceHref('stage') },
+    { label: 'Exhibition', href: mapPlaceHref('exhibition') },
+    { label: 'Exits & Gates', href: mapCategoryHref('gate') },
+]

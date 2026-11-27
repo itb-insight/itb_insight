@@ -1,7 +1,9 @@
 import type { ComponentType } from "react"
+import { Trophy } from "lucide-react"
 
 import {
   BoothIcon,
+  ExitIcon,
   FastfoodIcon,
   MonumentIcon,
   MosqueIcon,
@@ -15,7 +17,10 @@ export interface MapCategory {
   icon: ComponentType<{ className?: string }>
   pinColor: string
   iconColor?: string
-  pin: string
+  /** Map pin. Categories without one (event zones) are labelled on the map instead. */
+  pin?: string
+  /** Extra words the search matches for this category. */
+  keywords?: string
 }
 
 export const MAP_PIN = {
@@ -29,6 +34,20 @@ export const MAP_PIN = {
 
 export const MAP_CATEGORIES: MapCategory[] = [
   {
+    id: "event",
+    label: "Event & Kompetisi",
+    icon: Trophy,
+    pinColor: "#7245F5",
+    keywords: "event acara kompetisi competition lomba exhibition pameran",
+  },
+  {
+    id: "gate",
+    label: "Exits & Gates",
+    icon: ExitIcon,
+    pinColor: "#15803D",
+    keywords: "exit gate gerbang pintu entrance entry", // "keluar"/"masuk" come from descriptions
+  },
+  {
     id: "megaprop",
     label: "Megaprop",
     icon: MonumentIcon,
@@ -36,17 +55,41 @@ export const MAP_CATEGORIES: MapCategory[] = [
     iconColor: "#FAFAFA",
     pin: "/map-pin/Pin Megaprop.svg",
   },
-  { id: "fnb", label: "FnB", icon: FastfoodIcon, pinColor: "#FF6767", pin: "/map-pin/FnB.svg" },
-  { id: "booth", label: "Booth", icon: BoothIcon, pinColor: "#A86BE1", pin: "/map-pin/Pin Booth.svg" },
-  { id: "toilet", label: "Toilet", icon: ToiletIcon, pinColor: "#33AAFF", pin: "/map-pin/Toilet.svg" },
-  { id: "mushola", label: "Mushola", icon: MosqueIcon, pinColor: "#4AB136", pin: "/map-pin/Mushola.svg" },
-  { id: "parkir", label: "Parkir", icon: ParkingIcon, pinColor: "#0095FF", pin: "/map-pin/Parkir.svg" },
+  {
+    id: "fnb",
+    label: "Food & Beverages",
+    icon: FastfoodIcon,
+    pinColor: "#FF6767",
+    pin: "/map-pin/FnB.svg",
+    keywords: "fnb makan minum makanan minuman jajan kuliner food drink",
+  },
+  { id: "booth", label: "Booth", icon: BoothIcon, pinColor: "#A86BE1", pin: "/map-pin/Pin Booth.svg", keywords: "stand" },
+  {
+    id: "toilet",
+    label: "Toilet",
+    icon: ToiletIcon,
+    pinColor: "#33AAFF",
+    pin: "/map-pin/Toilet.svg",
+    keywords: "wc kamar mandi restroom",
+  },
+  {
+    id: "mushola",
+    label: "Mushola",
+    icon: MosqueIcon,
+    pinColor: "#4AB136",
+    pin: "/map-pin/Mushola.svg",
+    keywords: "musholla masjid sholat shalat prayer",
+  },
+  {
+    id: "parkir",
+    label: "Parkir",
+    icon: ParkingIcon,
+    pinColor: "#0095FF",
+    pin: "/map-pin/Parkir.svg",
+    keywords: "parking", // vehicle words come from each spot's `vehicles`
+  },
 ]
 
-export const MAP_TABS = ["All", "Competition", "Exhibition"] as const
-
-export type MapTab = (typeof MAP_TABS)[number]
-
-export function pinForCategory(categoryId: string): string {
-  return MAP_CATEGORIES.find((c) => c.id === categoryId)?.pin ?? MAP_CATEGORIES[0].pin
+export function pinForCategory(categoryId: string): string | null {
+  return MAP_CATEGORIES.find((c) => c.id === categoryId)?.pin ?? null
 }

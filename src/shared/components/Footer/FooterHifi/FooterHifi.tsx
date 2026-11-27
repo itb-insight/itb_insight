@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
+import { MAP_FOOTER_LINKS, MAP_PATH, isDisabledMapHref, isMapsDisabled } from "@/lib/maps"
 import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
 import styles from "./FooterHifi.module.css"
 
@@ -8,8 +8,7 @@ type FooterLink = { label: string; href: string }
 
 /*
  * Tautan event, urut sesuai halaman /event. Event yang punya halaman
- * detail menaut ke /event/<slug>; yang belum (Insight Festival, Alumni
- * Gathering) menaut ke section-nya di /event (id section = slug di
+ * detail menaut ke /event/<slug>; yang belum (Insight Festival) menaut ke section-nya di /event (id section = slug di
  * src/features/events/data.ts). Ditulis di sini, bukan diimpor dari data
  * event, karena footer juga dipakai di komponen klien (ErrorLayout) dan
  * data event bersifat server-only.
@@ -21,7 +20,7 @@ const eventLinks: FooterLink[] = [
   { label: "Technology Seminar", href: "/event/technology-seminar" },
   { label: "Insight on Stage", href: "/event/insight-on-stage" },
   { label: "Inspirates", href: "/event/inspirates" },
-  { label: "Alumni Gathering", href: "/event#alumni-gathering" },
+  { label: "Alumni Gathering", href: "/event/alumni-gathering" },
 ]
 
 /*
@@ -35,16 +34,10 @@ const competitionLinks: FooterLink[] = [
 ]
 
 /*
- * Area di peta acara. Belum ada tautan per area, jadi semuanya menuju /event-map;
- * saat NEXT_PUBLIC_MAPS_DISABLED=true tampil redup dengan pill "Coming Soon!".
+ * Area di peta acara (src/lib/maps.ts). Tiap tautan langsung membuka tempat atau bagiannya di
+ * /event-map; saat NEXT_PUBLIC_MAPS_DISABLED=true tampil redup dengan pill "Coming Soon!".
  */
-const mapLinks: FooterLink[] = [
-  { label: "Parkir", href: MAP_PATH },
-  { label: "Booths", href: MAP_PATH },
-  { label: "Stage", href: MAP_PATH },
-  { label: "Plaza Widya", href: MAP_PATH },
-  { label: "Lapangan Cinta", href: MAP_PATH },
-]
+const mapLinks: FooterLink[] = MAP_FOOTER_LINKS
 
 /**
  * links kosong = kolom masih placeholder ("Page").
@@ -57,8 +50,8 @@ const columns: { header: string; href: string; links?: FooterLink[]; linkHeader?
 ]
 
 const socials = [
-  { href: "https://instagram.com/insightitb", label: "Instagram", icon: "/images/icons/InstagramLogo.svg" },
-  { href: "https://twitter.com/insightitb", label: "X", icon: "/images/icons/XLogo.svg" },
+  { href: "https://instagram.com/itbinsight", label: "Instagram", icon: "/images/icons/InstagramLogo.svg" },
+  { href: "https://x.com/itbinsight", label: "X", icon: "/images/icons/XLogo.svg" },
   //{ href: "https://youtube.com/@insightitb", label: "Youtube", icon: "/images/icons/YoutubeLogo.svg" },
   { href: "https://www.tiktok.com/@itb_insight", label: "TikTok", icon: "/images/icons/TiktokLogo.svg" },
 ]
@@ -99,7 +92,7 @@ export default function FooterHifi() {
               )}
               {links
                 ? links.map(({ label, href }) =>
-                    href === MAP_PATH && isMapsDisabled() ? (
+                    isDisabledMapHref(href) ? (
                       <ComingSoon key={label} className={styles.columnLink} placement="top">
                         {label}
                       </ComingSoon>

@@ -1,0 +1,20 @@
+/* Icons scale with the title they sit in (card 20px, detail 28px). */
+.vehicles {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  margin-left: 0.4em;
+  vertical-align: -0.12em;
+  color: #acc7ff;
+}
+
+.icon {
+  display: inline-flex;
+  width: 0.95em;
+  height: 0.95em;
+}
+
+.icon svg {
+  width: 100%;
+  height: 100%;
+}
