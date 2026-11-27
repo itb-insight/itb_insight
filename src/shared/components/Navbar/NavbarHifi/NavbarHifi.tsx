@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { isCountdownOnly } from "@/lib/countdown"
+import { ARCADE_PATH, isArcadeDisabled } from "@/lib/arcade-flag"
 import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
 import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
 import AdminNavLink from "./AdminNavLink"
@@ -42,7 +43,11 @@ export default function NavbarHifi({ isSolid = false, solidOnMobile = false }: N
           <div className={styles.navLinks}>
             <Link href="/event" className={styles.navLink}>Event</Link>
             <Link href="/competition" className={styles.navLink}>Competition</Link>
-            <Link href="/arcade" className={styles.navLink}>Arcade</Link>
+            {isArcadeDisabled() ? (
+              <ComingSoon className={styles.navLink} placement="bottom">Arcade</ComingSoon>
+            ) : (
+              <Link href={ARCADE_PATH} className={styles.navLink}>Arcade</Link>
+            )}
             {isMapsDisabled() ? (
               <ComingSoon className={styles.navLink} placement="bottom">Map</ComingSoon>
             ) : (

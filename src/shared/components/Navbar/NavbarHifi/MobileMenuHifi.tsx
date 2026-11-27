@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useEffect, useRef, useState, type ReactNode } from "react"
 
+import { ARCADE_PATH, isArcadeDisabled } from "@/lib/arcade-flag"
 import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
 import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
 import AdminNavLink from "./AdminNavLink"
@@ -25,7 +26,11 @@ const LINKS = [
   useHasSession() mengembalikan false sampai hidrasi selesai, jadi tautannya
   akan sempat menunjuk /login walau pengguna sudah masuk.
 */
-const MENU_LINKS = [...LINKS, { href: "/arcade", label: "Insight Arcade" }]
+const MENU_LINKS = [...LINKS, { href: ARCADE_PATH, label: "Insight Arcade" }]
+
+/** NEXT_PUBLIC_MAPS_DISABLED / NEXT_PUBLIC_ARCADE_DISABLED: greyed out with the pill. */
+const isDisabledLink = (href: string) =>
+  (href === MAP_PATH && isMapsDisabled()) || (href === ARCADE_PATH && isArcadeDisabled())
 
 export default function MobileMenuHifi({
   variant = "navbar",
@@ -108,7 +113,7 @@ export default function MobileMenuHifi({
           {countdownOnly ? null : (
             <>
               {MENU_LINKS.map((link) =>
-                link.href === MAP_PATH && isMapsDisabled() ? (
+                isDisabledLink(link.href) ? (
                   // Tap focuses it (tabIndex=0), which shows the pill on touch screens.
                   <ComingSoon key={link.href} className={styles.mobileMenuLink} placement="left">
                     {link.label}

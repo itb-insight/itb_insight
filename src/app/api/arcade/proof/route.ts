@@ -4,6 +4,7 @@ import { type NextRequest } from 'next/server'
 
 import { adminEmailList } from '@/lib/admin'
 import { apiError, apiSuccess, unauthorizedResponse } from '@/lib/api-response'
+import { isArcadeDisabled } from '@/lib/arcade-flag'
 import { getAuthenticatedUser } from '@/lib/auth'
 import { UUID_PATTERN } from '@/lib/input'
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit'
@@ -44,6 +45,9 @@ function imageType(bytes: Uint8Array): { ext: string; mime: string } | null {
 export async function POST(request: NextRequest) {
   const auth = await getAuthenticatedUser(request)
   if (!auth.ok) return unauthorizedResponse()
+
+  // NEXT_PUBLIC_ARCADE_DISABLED=true closes /arcade in the proxy; the upload closes with it.
+  if (isArcadeDisabled()) return apiError('ARCADE_DISABLED', 'Insight Arcade belum dibuka.', 503)
 
   const rate = checkRateLimit(request, {
     scope: 'sidequest-submit',

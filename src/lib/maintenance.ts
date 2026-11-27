@@ -4,6 +4,7 @@
     Until Fathir gets the Vercel project back from Farhan :(
 ============================================= */
 
+import { ARCADE_PATH, isArcadeDisabled } from './arcade-flag'
 import { MAP_PATH, isMapsDisabled } from './maps'
 
 export type MaintenanceState = {
@@ -20,7 +21,9 @@ export function getMaintenanceState(): MaintenanceState {
             .map((p) => p.trim())
             .filter(Boolean)
             // NEXT_PUBLIC_MAPS_DISABLED=true: the map goes to the maintenance page too
-            .concat(isMapsDisabled() ? [MAP_PATH] : []),
+            .concat(isMapsDisabled() ? [MAP_PATH] : [])
+            // NEXT_PUBLIC_ARCADE_DISABLED=true: /arcade/* too
+            .concat(isArcadeDisabled() ? [ARCADE_PATH] : []),
     }
 }
 

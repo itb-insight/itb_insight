@@ -10,6 +10,7 @@ const state = vi.hoisted(() => ({
   db: undefined as unknown as FakeDb,
   user: null as null | { id: string; email: string },
   role: null as null | string,
+  staff: false,
 }))
 
 vi.mock('next/cache', () => ({ unstable_cache: (fn: () => unknown) => fn }))
@@ -26,6 +27,7 @@ vi.mock('@/lib/auth', () => ({
     state.user ? { ok: true, user: state.user } : { ok: false, code: 'UNAUTHORIZED', message: 'no', status: 401 },
 }))
 vi.mock('@/lib/admin', () => ({ getUserRole: async () => state.role }))
+vi.mock('@/lib/admin-access', () => ({ getAdminAccess: async () => ({ staff: state.staff }) }))
 
 const ping = await import('./ping/route')
 const consent = await import('./consent/route')
@@ -65,6 +67,7 @@ beforeEach(() => {
   vi.stubEnv('PRESENCE_BURST', '')
   state.user = { id: `user-${Math.random()}`, email: 'Visitor@Example.com' }
   state.role = null
+  state.staff = false
   useDb(consented)
 })
 
@@ -235,6 +238,18 @@ describe('GET /api/presence/config', () => {
 
     useDb({ ...consented, gate_check_ins: () => ({ data: null, error: null, count: 1 }) })
     expect((await (await config.GET(request('/api/presence/config'))).json()).data).toMatchObject({ consented: true, promptEligible: true })
+  })
+
+  it('offers the opt-in card to staff during the event, without a gate check-in or a Bandung IP', async () => {
+    useDb({ ...consented, profiles: () => ({ data: { presence_consent_at: null }, error: null }) })
+    const get = async () => (await (await config.GET(request('/api/presence/config'))).json()).data
+
+    state.staff = true
+    expect(await get()).toMatchObject({ open: true, consented: false, promptEligible: true, tester: false })
+
+    // Not on a closed day: the card would only lead to a tracker that never starts.
+    vi.stubEnv('PRESENCE_DATES', '2000-01-01')
+    expect(await get()).toMatchObject({ open: false, promptEligible: false })
   })
 
   it('test mode opens presence for admin and staff any day, with the card and the readout', async () => {

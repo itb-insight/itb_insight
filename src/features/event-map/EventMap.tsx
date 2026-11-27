@@ -167,7 +167,7 @@ export default function EventMap() {
               </div>
               <input 
                 type="text" 
-                placeholder="Where do you want to go?" 
+                placeholder="Mau ke mana?" 
                 style={{ 
                   boxSizing: 'border-box',
                   width: '100%', padding: '12px 16px 12px 36px', border: '1px solid #d4d4d4', 

@@ -96,6 +96,14 @@ describe('proxy: maintenance mode', () => {
     expect((await proxy(request('/event-map'))).status).toBe(503)
   })
 
+  it('closes /arcade and its subpages when NEXT_PUBLIC_ARCADE_DISABLED=true', async () => {
+    vi.stubEnv('NEXT_PUBLIC_ARCADE_DISABLED', 'true')
+    for (const path of ['/arcade', '/arcade/qr', '/arcade/leaderboard']) {
+      expect((await proxy(request(path))).status).toBe(503)
+    }
+    expect((await proxy(request('/arcade-like'))).status).not.toBe(503)
+  })
+
   it('bypass link sets an httpOnly cookie and strips the secret from the URL', async () => {
     const res = await proxy(request('/competition?bypass=let-me-in'))
     expect(res.status).toBe(307)

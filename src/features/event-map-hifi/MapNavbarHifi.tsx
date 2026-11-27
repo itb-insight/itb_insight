@@ -36,7 +36,7 @@ export default function MapNavbarHifi({ activeTab, onTabChange, query, onQueryCh
           <input
             type="search"
             className={styles.searchInput}
-            placeholder="Ingin ke mana?"
+            placeholder="Mau ke mana?"
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
             aria-label="Cari lokasi"
