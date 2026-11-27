@@ -16,6 +16,8 @@ import { type ProfileRoleA } from '@/lib/types/database'
 
 export const ADMIN_HOME_PATH = '/admin'
 export const BOOTH_SECTION_PATH = '/admin/booth'
+/** Booth stakeholders and admins: who can scan at which booth (canManageBoothAccess). */
+export const BOOTH_ACCESS_PATH = '/admin/booth-access'
 export const GATE_SECTION_PATH = '/admin/gate'
 export const DDAY_PATH = '/admin/d-day'
 

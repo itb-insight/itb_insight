@@ -44,6 +44,9 @@ vi.mock('next/server', async (importOriginal) => {
 const { POST } = await import('./route')
 
 const QR = 'itbi:v1:abcdefghijklmnopqrstuv'
+const BOOTH = '11111111-1111-4111-8111-111111111111'
+const OTHER_BOOTH = '22222222-2222-4222-8222-222222222222'
+const BOOTH_ROW = { id: BOOTH, slug: 'tech-xhibition-13-formulatrix', name: 'Formulatrix', category: 'tech-xhibition', points: 10, max_bonus_points: 5 }
 
 function post(body: unknown) {
   return POST(
@@ -60,6 +63,10 @@ beforeEach(() => {
   state.booth = { scope: 'all' }
   state.audits = []
   state.db = createFakeDb((call) => {
+    if (call.table === 'booths') {
+      const id = call.filters.find((f) => f.method === 'eq' && f.args[0] === 'id')?.args[1]
+      return { data: id === BOOTH ? BOOTH_ROW : null, error: null }
+    }
     if (call.table === 'visitor_tickets') {
       return {
         data: { user_id: 'visitor-1', profiles: { full_name: 'Alya', institution: 'ITB', role_a: null } },
@@ -73,15 +80,15 @@ beforeEach(() => {
 describe('POST /api/booth-points/scan', () => {
   it('rejects signed-out callers and accounts without booth access', async () => {
     state.user = null
-    expect((await post({ qrCode: QR, boothId: 'mock-booth-1a' })).status).toBe(401)
+    expect((await post({ qrCode: QR, boothId: BOOTH })).status).toBe(401)
 
     state.user = { id: 'visitor-2', email: 'v@example.com' }
     state.booth = null
-    expect((await post({ qrCode: QR, boothId: 'mock-booth-1a' })).status).toBe(403)
+    expect((await post({ qrCode: QR, boothId: BOOTH })).status).toBe(403)
   })
 
   it('looks up the visitor behind the QR without awarding', async () => {
-    const res = await post({ qrCode: QR, boothId: 'mock-booth-1a' })
+    const res = await post({ qrCode: QR, boothId: BOOTH })
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(body.data.visitor).toEqual({ key: 'visitor-1', fullName: 'Alya', institution: 'ITB' })
@@ -90,26 +97,31 @@ describe('POST /api/booth-points/scan', () => {
   })
 
   it('confirms an award, writes no points, and leaves an audit trail', async () => {
-    const res = await post({ qrCode: QR, boothId: 'mock-booth-1a', option: 'bonus', given: { contribution: false, bonus: false } })
+    const res = await post({ qrCode: QR, boothId: BOOTH, option: 'bonus', given: { contribution: false, bonus: false } })
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(body.data.practice).toBe(true)
-    expect(body.data.plan.option).toBe('bonus')
-    expect(body.data.plan.contribution).toBeGreaterThan(0)
+    // The booth's own amounts: Formulatrix gives 10 + 5.
+    expect(body.data.plan).toEqual({ option: 'bonus', contribution: 10, bonus: 5, total: 15 })
+    expect(body.data.booth.name).toBe('Formulatrix')
     expect(typeof body.data.reference).toBe('string')
     expect(state.db.calls.filter((c) => c.op !== 'select')).toEqual([])
     expect(state.audits[0]).toMatchObject({ action: 'BOOTH_POINTS_PRACTICE', userId: 'staff-1' })
   })
 
   it('refuses an option already given, a booth outside the scope, and a non-visitor QR', async () => {
-    const again = await post({ qrCode: QR, boothId: 'mock-booth-1a', option: 'contribution', given: { contribution: true, bonus: false } })
+    const again = await post({ qrCode: QR, boothId: BOOTH, option: 'contribution', given: { contribution: true, bonus: false } })
     expect(again.status).toBe(409)
 
-    state.booth = { scope: ['photobooth'] }
-    expect((await post({ qrCode: QR, boothId: 'mock-booth-1a' })).status).toBe(403)
+    state.booth = { scope: [OTHER_BOOTH] }
+    expect((await post({ qrCode: QR, boothId: BOOTH })).status).toBe(403)
 
     state.booth = { scope: 'all' }
-    expect((await post({ qrCode: 'https://example.com', boothId: 'mock-booth-1a' })).status).toBe(400)
-    expect((await post({ qrCode: QR, boothId: 'mock-booth-1a', option: 'jackpot' })).status).toBe(400)
+    expect((await post({ qrCode: QR, boothId: OTHER_BOOTH })).status).toBe(403) // not an active booth
+    expect((await post({ qrCode: QR, boothId: 'mock-booth-1a' })).status).toBe(403) // not a booth id
+
+    state.booth = { scope: 'all' }
+    expect((await post({ qrCode: 'https://example.com', boothId: BOOTH })).status).toBe(400)
+    expect((await post({ qrCode: QR, boothId: BOOTH, option: 'jackpot' })).status).toBe(400)
   })
 })

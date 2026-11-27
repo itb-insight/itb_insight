@@ -79,7 +79,7 @@ export default function MapSidebarHifi({
         <input
           type="search"
           className={styles.searchInput}
-          placeholder="Ingin ke mana?"
+          placeholder="Mau ke mana?"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           aria-label="Cari lokasi"

@@ -14,7 +14,10 @@ export const metadata: Metadata = {
  * Who gets into /admin (src/lib/admin-access.ts):
  *   - admins: everything;
  *   - every staff member (staffAccessFor): the D-day page (/admin/d-day);
- *   - booth staff (role_b 'booth'): also the dashboard (/admin) and the Booth section;
+ *   - booth staff (role_b 'booth', or booths assigned to their email): also the dashboard (/admin)
+ *     and the Booth section;
+ *   - booth stakeholders (stakeholder + role_b 'booth') and admins: also the booth access page
+ *     (/admin/booth-access), which checks it itself;
  *   - gate staff (staff + human_resource + gate_staff): also the Gate section.
  * Every other page sits in the (admin-only) route group, whose layout 404s for non-admins. /admin
  * itself sends staff without the dashboard to the Gate section or D-Day.
@@ -34,7 +37,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!access.staff) notFound()
 
   return (
-    <AdminFrame isAdmin={access.isAdmin} booth={Boolean(access.booth)} gate={access.gate} staff={access.staff}>
+    <AdminFrame
+      isAdmin={access.isAdmin}
+      booth={Boolean(access.booth)}
+      boothManager={access.boothManager}
+      gate={access.gate}
+      staff={access.staff}
+    >
       {children}
     </AdminFrame>
   )

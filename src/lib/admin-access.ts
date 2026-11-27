@@ -5,7 +5,8 @@ import { cache } from 'react'
 
 import { getUserRole } from '@/lib/admin'
 import { adminLinkFor } from '@/lib/admin-nav'
-import { boothAccessFor, type BoothAccess } from '@/lib/booth-points'
+import { boothAccessFor, canManageBoothAccess, type BoothAccess } from '@/lib/booth-points'
+import { loadAssignedBoothIds } from '@/lib/booth-roster'
 import { createServiceClient } from '@/lib/supabase/server'
 import { type ProfileRoleA, type ProfileRoleB, type UserRole } from '@/lib/types/database'
 
@@ -13,7 +14,10 @@ import { type ProfileRoleA, type ProfileRoleB, type UserRole } from '@/lib/types
   What a signed-in user may open under /admin:
     - isAdmin: everything (src/app/admin/(admin-only)/layout.tsx);
     - booth:   the dashboard (/admin) and the Booth section (src/app/admin/booth); booth rules in
-               src/lib/booth-points.ts.
+               src/lib/booth-points.ts. The scope includes the booths assigned to the verified email
+               (booth_staff_assignments, 0029).
+    - boothManager: the booth access page (src/app/admin/booth-access): admins and stakeholders with
+               role_b 'booth' (canManageBoothAccess).
     - gate:    the Gate section (src/app/admin/gate). Gate staff are role_a 'staff',
                role_b 'human_resource', role_c 'gate_staff' (0024), see gateAccessFor.
     - staff:   the D-day page (src/app/admin/d-day). Every staff member: committee accounts
@@ -25,6 +29,8 @@ import { type ProfileRoleA, type ProfileRoleB, type UserRole } from '@/lib/types
 export type AdminAccess = {
   isAdmin: boolean
   booth: BoothAccess | null
+  /** Opens the booth access page: adds / removes booth assignments (canManageBoothAccess). */
+  boothManager: boolean
   /** Opens the Gate section: admins, and gate staff (gateAccessFor). */
   gate: boolean
   /** Opens /admin itself and the D-day page: every staff member (staffAccessFor). */
@@ -84,17 +90,19 @@ async function readProfileRoles(userId: string): Promise<ProfileRoles | null> {
 // Cached per request: the /admin layout, the nested layout and the page all ask.
 const loadAdminAccess = cache(
   async (id: string, email: string | undefined, emailConfirmedAt: string | undefined): Promise<AdminAccess> => {
-    const [role, profile] = await Promise.all([
+    const [role, profile, assignedBoothIds] = await Promise.all([
       getUserRole({ id, email, email_confirmed_at: emailConfirmedAt }),
       readProfileRoles(id),
+      loadAssignedBoothIds({ email, email_confirmed_at: emailConfirmedAt }),
     ])
     const isAdmin = role === 'admin'
     const roles = { isAdmin, roleA: profile?.role_a, roleB: profile?.role_b, roleC: profile?.role_c }
-    const booth = boothAccessFor(roles)
+    const booth = boothAccessFor({ ...roles, assignedBoothIds })
     const gate = gateAccessFor(roles)
     return {
       isAdmin,
       booth,
+      boothManager: canManageBoothAccess(roles),
       gate,
       staff: staffAccessFor({ isAdmin, role, roleA: profile?.role_a, booth: booth !== null, gate }),
       roleA: profile?.role_a ?? null,

@@ -81,6 +81,18 @@ export type Booth = {
   updated_at: string
 }
 
+/** Which booths an email may award at (0029). Revoked rows stay as history. */
+export type BoothStaffAssignment = {
+  id: string
+  email: string
+  booth_id: string
+  /** null = SQL editor (grant file). */
+  assigned_by: string | null
+  assigned_at: string
+  revoked_by: string | null
+  revoked_at: string | null
+}
+
 export type BoothScanEvent = {
   id: string
   user_id: string

@@ -2,7 +2,8 @@ import 'server-only'
 
 import { randomUUID } from 'node:crypto'
 
-import { type BoothAccess, boothsInScope, planBoothAward, type AwardPlan, type BoothPointOption, type GivenOptions, type PracticeBooth } from '@/lib/booth-points'
+import { type BoothAccess, planBoothAward, type AwardPlan, type BoothPointOption, type GivenOptions, type PointsBooth } from '@/lib/booth-points'
+import { findBoothInScope } from '@/lib/booth-roster'
 import { parseVisitorQr } from '@/lib/qr'
 import { createServiceClient } from '@/lib/supabase/server'
 import { type ProfileRoleA } from '@/lib/types/database'
@@ -25,7 +26,7 @@ export type ScanNote = 'committee_account' | 'own_account'
 
 export type ScanLookup = {
   practice: true
-  booth: PracticeBooth
+  booth: PointsBooth
   visitor: ScanVisitor
   notes: ScanNote[]
 }
@@ -61,7 +62,13 @@ export async function runPracticeScan(params: ScanParams): Promise<({ ok: true }
     return { ok: false, code: 'INVALID_QR', message: 'QR ini bukan QR profil pengunjung ITB Insight.', status: 400 }
   }
 
-  const booth = boothsInScope(params.access.scope).find((b) => b.id === params.boothId)
+  let booth: PointsBooth | null
+  try {
+    booth = await findBoothInScope(params.access.scope, params.boothId)
+  } catch (err) {
+    console.error('[booth-practice] booth lookup failed', err)
+    return { ok: false, code: 'DATABASE_ERROR', message: 'Gagal membaca data booth.', status: 500 }
+  }
   if (!booth) {
     return { ok: false, code: 'BOOTH_NOT_ALLOWED', message: 'Anda tidak punya akses ke booth ini.', status: 403 }
   }
@@ -108,7 +115,7 @@ export async function runPracticeScan(params: ScanParams): Promise<({ ok: true }
 
   if (!params.option) return { ok: true, ...lookup }
 
-  const plan = planBoothAward(params.given, params.option)
+  const plan = planBoothAward(params.given, params.option, booth)
   if (!plan) {
     return {
       ok: false,

@@ -6,13 +6,14 @@ import { useState } from "react"
 import { postWithAuth } from "@/features/dashboard/apiClient"
 import PanelHifi from "@/features/admin-hifi/PanelHifi"
 import {
+  groupBoothsByCategory,
   markGiven,
   NOTHING_GIVEN,
   planBoothAward,
   type AwardPlan,
   type BoothPointOption,
   type GivenOptions,
-  type PracticeBooth,
+  type PointsBooth,
 } from "@/lib/booth-points"
 import QrCameraScanner from "@/shared/components/QrCameraScanner/QrCameraScanner"
 
@@ -21,8 +22,8 @@ import styles from "./BoothPointsScanner.module.css"
 /*
   Booth points scanner (/admin/booth). Rules: src/lib/booth-points.ts.
     1. Scan the visitor's profile QR (dashboard -> profil).
-    2. Below it, pick the booth (only when the account has more than one).
-    3. Contribution or Bonus, each once per visitor per booth.
+    2. Below it, pick the booth (only when the account has more than one), grouped by event.
+    3. Contribution or Bonus, each once per visitor per booth; the amounts are the booth's own.
   POST /api/booth-points/scan checks the role and the booth, resolves the visitor and confirms it
   received the award. PRACTICE: no points are added; what was given is remembered in this tab
   (sessionStorage) so the once-per-option rule can still be shown.
@@ -31,7 +32,7 @@ import styles from "./BoothPointsScanner.module.css"
 type Visitor = { key: string; fullName: string; institution: string | null }
 type ScanNote = "committee_account" | "own_account"
 
-type Lookup = { booth: PracticeBooth; visitor: Visitor; notes: ScanNote[] }
+type Lookup = { booth: PointsBooth; visitor: Visitor; notes: ScanNote[] }
 type Award = Lookup & { plan: AwardPlan; receivedAt: string; reference: string }
 
 type Scanned = { qrCode: string; visitor: Visitor; notes: ScanNote[] }
@@ -80,18 +81,9 @@ function formatPlan(plan: AwardPlan): string {
   return plan.contribution > 0 ? `+${plan.bonus} Bonus + ${plan.contribution} Contribution` : `+${plan.bonus} Bonus`
 }
 
-export default function BoothPointsScanner({
-  booths,
-  practice,
-  contributionPoints,
-  bonusPoints,
-}: {
-  booths: PracticeBooth[]
-  practice: boolean
-  contributionPoints: number
-  bonusPoints: number
-}) {
-  const [boothId, setBoothId] = useState(booths[0]?.id ?? "")
+export default function BoothPointsScanner({ booths, practice }: { booths: PointsBooth[]; practice: boolean }) {
+  const boothGroups = groupBoothsByCategory(booths)
+  const [boothId, setBoothId] = useState(boothGroups[0]?.booths[0]?.id ?? "")
   const [phase, setPhase] = useState<Phase>({ kind: "idle" })
   const [scanned, setScanned] = useState<Scanned | null>(null)
   const [lastAward, setLastAward] = useState<Award | null>(null)
@@ -106,7 +98,8 @@ export default function BoothPointsScanner({
     return (
       <PanelHifi title="Belum ada booth" subtitle="Akunmu punya akses Booth, tapi belum ditugaskan ke booth mana pun.">
         <p className={styles.muted}>
-          Minta admin mengisi booth untukmu (profiles.role_c, misalnya <code>all</code> untuk semua booth).
+          Minta stakeholder booth menambahkan booth untuk emailmu di halaman Akses Booth. Setelah ditambahkan, muat
+          ulang halaman ini.
         </p>
       </PanelHifi>
     )
@@ -156,6 +149,8 @@ export default function BoothPointsScanner({
     setPhase({ kind: "scanning" })
   }
 
+  const contributionPoints = booth?.contribution ?? 0
+  const bonusPoints = booth?.bonus ?? 0
   const options: Array<{ option: BoothPointOption; title: string; detail: string; icon: typeof Gift }> = [
     {
       option: "contribution",
@@ -221,10 +216,14 @@ export default function BoothPointsScanner({
                 onChange={(e) => setBoothId(e.target.value)}
                 disabled={busy}
               >
-                {booths.map((b) => (
-                  <option key={b.id} value={b.id}>
-                    {b.name}
-                  </option>
+                {boothGroups.map((group) => (
+                  <optgroup key={group.category} label={group.label}>
+                    {group.booths.map((b) => (
+                      <option key={b.id} value={b.id}>
+                        {b.name}
+                      </option>
+                    ))}
+                  </optgroup>
                 ))}
               </select>
             ) : (
@@ -243,7 +242,7 @@ export default function BoothPointsScanner({
         >
           <div className={styles.options}>
             {options.map(({ option, title, detail, icon: Icon }) => {
-              const plan = planBoothAward(given, option)
+              const plan = booth ? planBoothAward(given, option, booth) : null
               const used = Boolean(scanned) && !plan
               return (
                 <button

@@ -37,9 +37,13 @@ Shared test helpers: `tests/support/fake-supabase.ts` (chainable Supabase fake f
   `admin_roles` / `profiles.role_a`, amounts from `src/lib/competitions.ts`. Never from the body.
 - A feature that is closed in the UI must be closed in its API too. Registration APIs check
   `isRegistrationSwitchOn(slug)` (the same `REGISTER_OPEN_<code>` switch as the button).
-- `/admin` (`src/lib/admin-access.ts`): `src/app/admin/layout.tsx` lets in admins and booth staff
-  (`role_b = 'booth'`); every page except `/admin` and `/admin/booth` sits in the `(admin-only)` route group,
-  whose layout 404s for non-admins. New admin pages go in that group. The proxy redirects
+- `/admin` (`src/lib/admin-access.ts`): `src/app/admin/layout.tsx` lets in admins and staff. The
+  staff-facing pages (`/admin`, `/admin/booth`, `/admin/booth-access`, `/admin/gate`, `/admin/d-day`)
+  check their own access; every other page sits in the `(admin-only)` route group, whose layout 404s
+  for non-admins. New admin pages go in that group unless non-admins need them.
+- Booth access (`src/lib/booth-points.ts`): admins and stakeholders with `role_b = 'booth'` reach every
+  booth and manage the rest at `/admin/booth-access`; everyone else gets the booths assigned to their
+  verified email in `booth_staff_assignments` (0029). Assignment rows are revoked, never deleted. The proxy redirects
   signed-out visitors from `/dashboard` and `/admin` (`isProtectedPath` in `src/lib/supabase/middleware.ts`).
 - Database writes go through API routes with the service role. New tables get
   `enable row level security` in the same migration; user-editable columns use column-level grants.

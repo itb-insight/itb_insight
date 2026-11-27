@@ -10,8 +10,9 @@ interface AdminFrameProps {
   children: ReactNode
   /** False for booth staff: the menus show only what they can open. */
   isAdmin?: boolean
-  /** Non-admins: has the Booth section / the Gate section / the staff pages (D-Day). */
+  /** Non-admins: has the Booth section / the booth access page / the Gate section / the staff pages (D-Day). */
   booth?: boolean
+  boothManager?: boolean
   gate?: boolean
   staff?: boolean
   /** Highlight this menu item instead of the one matching the URL. */
@@ -27,11 +28,12 @@ export default function AdminFrame({
   children,
   isAdmin = true,
   booth = false,
+  boothManager = false,
   gate = false,
   staff = false,
   activeHref,
 }: AdminFrameProps) {
-  const sections = { isAdmin, booth, gate, staff }
+  const sections = { isAdmin, booth, boothManager, gate, staff }
   return (
     <>
       <NavbarHifi solidOnMobile />
