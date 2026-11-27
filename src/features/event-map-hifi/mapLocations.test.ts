@@ -22,8 +22,11 @@ describe("map locations", () => {
   })
 
   it("gives parking, toilets and food pins, and stars only guest parking", () => {
-    expect(byCategory("parkir")).toHaveLength(8)
-    expect(byCategory("parkir").filter((l) => l.starred)).toHaveLength(6)
+    expect(byCategory("parkir")).toHaveLength(14)
+    expect(byCategory("parkir").filter((l) => l.starred)).toHaveLength(7)
+    // Public parking first, then special-guest parking.
+    const starred = byCategory("parkir").map((l) => !!l.starred)
+    expect(starred).toEqual([...starred].sort((x, y) => Number(x) - Number(y)))
     expect(byCategory("toilet")).toHaveLength(2)
     expect(byCategory("fnb").map((l) => l.name)).toEqual(["Food and Beverages"])
     for (const id of ["parkir", "toilet", "fnb"]) expect(pinForCategory(id)).toMatch(/^\/map-pin\//)
@@ -49,7 +52,18 @@ describe("map locations", () => {
     expect(publicParking.map((l) => [l.name, l.vehicles])).toEqual([
       ["Parkir Sipil", ["motorcycle"]],
       ["Parkir Seni Rupa", ["motorcycle", "car"]],
+      ["Parkir Taman Festival", ["motorcycle"]],
+      ["Parkir Sarana Olahraga Ganesha", ["motorcycle", "car"]],
+      ["Parkir Sarana Budaya Ganesha", ["motorcycle", "car"]],
+      ["Parkir Kebun Binatang", ["motorcycle", "car"]],
+      ["Parkir Ganyang", ["motorcycle", "car"]],
     ])
+  })
+
+  it("shows competition logos instead of a photo, both for Olympiad + BPC", () => {
+    const logosOf = (id: string) => MAP_LOCATIONS.find((l) => l.id === id)?.logos
+    expect(logosOf("drone-soccer")).toEqual(["/images/mor.webp"])
+    expect(logosOf("olympiad-bpc")).toEqual(["/images/oe.webp", "/images/icon-bpc-2026.webp"])
   })
 
   it("leaves sterile zones (backstage, FOH) out of the place list", () => {

@@ -30,6 +30,8 @@ export interface MapLocation {
   description?: string
   image?: string
   detailImage?: string
+  /** Competition logos, shown instead of a photo (side by side when there are several). */
+  logos?: string[]
   /** Short summary for the detail view. */
   about?: string
   /** Buttons in the detail view (event / competition pages). */
@@ -47,6 +49,7 @@ interface ZoneContent {
   about: string
   links?: MapLink[]
   image?: string
+  logos?: string[]
 }
 
 const ZONE_CONTENT: Record<string, ZoneContent> = {
@@ -91,6 +94,7 @@ const ZONE_CONTENT: Record<string, ZoneContent> = {
     about:
       "Kompetisi drone nasional bagi remaja dan dewasa. Hari pertama babak penyisihan, hari kedua babak eliminasi hingga terpilih juara 1, 2, dan 3.",
     links: [{ label: "Drone Soccer Competition", href: "/competition/microdrone-obstacle-race" }],
+    logos: ["/images/mor.webp"],
   },
   "olympiad-bpc": {
     category: "event",
@@ -101,11 +105,22 @@ const ZONE_CONTENT: Record<string, ZoneContent> = {
       { label: "Olimpiade Engineering", href: "/competition/olimpiade-engineering" },
       { label: "Business Plan Competition", href: "/competition/business-plan-competition" },
     ],
+    logos: ["/images/oe.webp", "/images/icon-bpc-2026.webp"],
   },
   "food-and-beverages": {
     category: "fnb",
     description: "Area makanan & minuman",
     about: "Pusat jajanan dan minuman untuk pengunjung ITB INSIGHT 2026.",
+  },
+  "masjid-brin": {
+    category: "salat",
+    description: "Tempat salat",
+    about: "Masjid di sisi barat area acara, dekat Exit barat laut.",
+  },
+  "masjid-salman": {
+    category: "salat",
+    description: "Tempat salat",
+    about: "Masjid Salman ITB, di seberang Main Gate.",
   },
 }
 
@@ -196,7 +211,13 @@ function buildLocations(): MapLocation[] {
   const toiletCount = anchors.filter((a) => a.kind === "toilet").length
   const exitCount = anchors.filter((a) => a.kind === "exit").length
 
-  for (const anchor of anchors) {
+  // Public parking is listed before special-guest parking.
+  const ordered = [
+    ...anchors.filter((a) => a.kind !== "parking-guest"),
+    ...anchors.filter((a) => a.kind === "parking-guest"),
+  ]
+
+  for (const anchor of ordered) {
     const base = { id: anchor.id, lat: anchor.lat, lng: anchor.lng }
 
     if (anchor.kind === "zone") {
@@ -211,6 +232,7 @@ function buildLocations(): MapLocation[] {
         links: content.links,
         image: content.image,
         detailImage: content.image,
+        logos: content.logos,
       })
     } else if (anchor.kind === "parking-guest") {
       guestNo += 1

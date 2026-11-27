@@ -94,3 +94,7 @@
 .links {
   margin: 32px var(--gutter-right) 0 var(--gutter-left);
 }
+
+.logoBanner {
+  margin-top: 38px;
+}

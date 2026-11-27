@@ -22,8 +22,9 @@ once it has an entry in `ZONE_CONTENT`; its id is the slugged zone name (e.g. "P
 
 - Tabs (`src/features/event-map-hifi/mapFilters.ts`): Competition = Drone Soccer, Olympiad + BPC;
   Exhibition = Stage, Drone Soccer, Play Tech, Seminar + Showtech, Exhibition (+ Booth/Megaprop
-  categories); Amenities = parking, toilets, Food & Beverages, Mushola. Paths, exits, landmarks,
-  Main Gate and sterile areas show on every tab. New event zones need an entry in `ZONE_TABS`.
+  categories); Amenities = parking, toilets, Food & Beverages, Salat (Masjid BRIN, Masjid Salman).
+  Paths, exits, landmarks, Main Gate and sterile areas show on every tab. New event zones need an
+  entry in `ZONE_TABS`.
 - Search (`mapSearch.ts`) matches every typed word against name, description, category (plus its
   `keywords` in `mapCategories.ts`) and linked page names, within the active tab.
 - The map only moves on **Navigate**. Opening a place highlights its pin without moving the map.

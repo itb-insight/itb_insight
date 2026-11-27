@@ -19,6 +19,8 @@ const ZONE_TABS: Record<string, FilterTab[]> = {
   "seminar-showtech": ["Exhibition"],
   exhibition: ["Exhibition"],
   "food-and-beverages": ["Amenities"],
+  "masjid-brin": ["Amenities"],
+  "masjid-salman": ["Amenities"],
 }
 
 /** Sidebar categories. Event zones inside "event" are filtered further by ZONE_TABS. */
@@ -29,7 +31,7 @@ const CATEGORY_TABS: Record<string, FilterTab[]> = {
   booth: ["Exhibition"],
   fnb: ["Amenities"],
   toilet: ["Amenities"],
-  mushola: ["Amenities"],
+  salat: ["Amenities"],
   parkir: ["Amenities"],
 }
 

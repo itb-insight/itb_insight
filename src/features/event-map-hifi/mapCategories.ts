@@ -73,12 +73,12 @@ export const MAP_CATEGORIES: MapCategory[] = [
     keywords: "wc kamar mandi restroom",
   },
   {
-    id: "mushola",
-    label: "Mushola",
+    id: "salat",
+    label: "Salat",
     icon: MosqueIcon,
     pinColor: "#4AB136",
     pin: "/map-pin/Mushola.svg",
-    keywords: "musholla masjid sholat shalat prayer",
+    keywords: "mushola musholla masjid sholat shalat ibadah prayer mosque",
   },
   {
     id: "parkir",

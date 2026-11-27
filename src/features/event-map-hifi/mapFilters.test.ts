@@ -28,10 +28,16 @@ describe("map filter tabs", () => {
     expect(eventsOn("Exhibition")).toEqual(["drone-soccer", "exhibition", "play-tech", "seminar-showtech", "stage"])
   })
 
-  it("Amenities: parking, toilets, food and beverages (and mushola later)", () => {
-    expect(new Set(placesOn("Amenities").map((l) => l.category))).toEqual(new Set(["parkir", "toilet", "fnb", "gate"]))
+  it("Amenities: parking, toilets, food and beverages, salat", () => {
+    expect(new Set(placesOn("Amenities").map((l) => l.category))).toEqual(
+      new Set(["parkir", "toilet", "fnb", "salat", "gate"]),
+    )
+    expect(placesOn("Amenities").filter((l) => l.category === "salat").map((l) => l.name)).toEqual([
+      "Masjid BRIN",
+      "Masjid Salman",
+    ])
     expect(placesOn("Amenities")).toHaveLength(MAP_LOCATIONS.filter((l) => l.category !== "event").length)
-    expect(isCategoryVisible("Amenities", "mushola")).toBe(true)
+    expect(isCategoryVisible("Amenities", "salat")).toBe(true)
     expect(isCategoryVisible("Amenities", "event")).toBe(false)
   })
 

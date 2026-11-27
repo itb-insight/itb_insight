@@ -1,0 +1,30 @@
+.logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(222, 232, 251, 0.08);
+}
+
+.card {
+  flex: none;
+  width: 120px;
+  height: 84px;
+  gap: 4px;
+  padding: 8px;
+}
+
+.detail {
+  width: 100%;
+  aspect-ratio: 454 / 259;
+  gap: 24px;
+  padding: 32px;
+}
+
+.logo {
+  flex: 1 1 0;
+  min-width: 0;
+  max-height: 100%;
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+}

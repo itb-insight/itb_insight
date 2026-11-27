@@ -75,7 +75,7 @@ export function ToiletIcon({ className }: IconProps) {
   )
 }
 
-/** ic:sharp-mosque — Mushola */
+/** ic:sharp-mosque — Salat */
 export function MosqueIcon({ className }: IconProps) {
   return (
     <Box className={className}>

@@ -4,7 +4,7 @@ import raw from "./venue-layout.json"
 
 /*
   Venue layout drawn in geojson.io (source: venue-layout.json; the original export is
-  public/map/mapv2.geojson). To update it: open venue-layout.json in geojson.io, edit, save
+  public/map/mapv3.geojson). To update it: open venue-layout.json in geojson.io, edit, save
   over this file. Shapes are classified by their `name` property:
 
     "event area"                  hidden boundary, used for the live "still inside" count

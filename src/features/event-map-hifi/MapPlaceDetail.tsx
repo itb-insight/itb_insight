@@ -4,6 +4,7 @@ import styles from "./MapPlaceDetail.module.css"
 import { ArrowLeftIcon } from "./CategoryIcons"
 import MapPlaceLinks from "./MapPlaceLinks"
 import type { MapLocation } from "./mapLocations"
+import PlaceLogos from "./PlaceLogos"
 import PlaceName from "./PlaceName"
 
 interface MapPlaceDetailProps {
@@ -40,6 +41,8 @@ export default function MapPlaceDetail({ location, onBack, onNavigate }: MapPlac
           loading="eager"
           className={styles.image}
         />
+      ) : location.logos?.length ? (
+        <PlaceLogos logos={location.logos} variant="detail" className={styles.logoBanner} />
       ) : null}
 
       {location.about ? <p className={styles.about}>{location.about}</p> : null}

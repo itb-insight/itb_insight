@@ -14,10 +14,15 @@ describe("venue layout (venue-layout.json)", () => {
   })
 
   it("splits parking into public and special-guest spots, and finds both toilets", () => {
-    expect(anchors.filter((a) => a.kind === "parking-guest")).toHaveLength(6)
+    expect(anchors.filter((a) => a.kind === "parking-guest")).toHaveLength(7)
     expect(anchors.filter((a) => a.kind === "parking-public").map((a) => a.name)).toEqual([
       "Parkir Sipil - Motorcycles only",
       "Parkir Seni Rupa (motorcycles and car)",
+      "Parkir Taman Festival - Motor",
+      "Parkir Sarana Olahraga Ganesha - car and motorcycles",
+      "Parkir Sarana Budaya Ganesha - motorcycles and car",
+      "Parkir Kebun Binatang - motorcycles and car",
+      "Parkir Ganyang - motorcycles and car",
     ])
     expect(anchors.filter((a) => a.kind === "toilet")).toHaveLength(2)
     // Parking and toilets get pins, not text labels.
@@ -34,6 +39,8 @@ describe("venue layout (venue-layout.json)", () => {
         "FOH Area",
         "Food and Beverages",
         "Main Gate",
+        "Masjid BRIN",
+        "Masjid Salman",
         "Olympiad + BPC",
         "Play Tech",
         "Seminar + Showtech",
@@ -51,7 +58,7 @@ describe("venue layout (venue-layout.json)", () => {
     const tags = labels.features
       .filter((f) => f.properties.kind === "path-tag" || f.properties.kind === "sterile-tag")
       .map((f) => f.properties.label)
-    expect(tags.sort()).toEqual(["Enter Exhibition", "Exit Exhibition", "Exit Play Tech", "Sterile", "Sterile"])
+    expect(tags.sort()).toEqual(["Enter Exhibition", "Enter Play Tech", "Exit Exhibition", "Exit Play Tech", "Sterile", "Sterile"])
     expect(lines.features.filter((f) => f.properties.kind === "sterile")).toHaveLength(2)
   })
 

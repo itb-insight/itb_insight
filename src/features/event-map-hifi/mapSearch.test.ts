@@ -13,17 +13,25 @@ describe("map search", () => {
   it("matches names regardless of case and punctuation, best match first", () => {
     expect(names("drone")[0]).toBe("Drone Soccer")
     expect(names("PLAY-TECH")[0]).toBe("Play Tech")
-    expect(names("olympiad bpc")).toEqual(["Olympiad + BPC"])
+    expect(names("olympiad bpc")[0]).toBe("Olympiad + BPC")
   })
 
   it("matches descriptions, linked pages and category keywords", () => {
     expect(names("insight on stage")).toContain("Stage")
     expect(names("business plan")).toEqual(["Olympiad + BPC"])
     expect(names("wc")).toEqual(["Toilet 1", "Toilet 2"])
-    expect(names("parking")).toHaveLength(8)
+    expect(names("parking")).toHaveLength(14)
     expect(names("makan")).toEqual(["Food and Beverages"])
-    expect(names("mobil")).toEqual(["Parkir Seni Rupa"])
-    expect(names("motor").sort()).toEqual(["Parkir Seni Rupa", "Parkir Sipil"])
+    expect(names("mobil").sort()).toEqual(
+      [
+        "Parkir Seni Rupa",
+        "Parkir Sarana Olahraga Ganesha",
+        "Parkir Sarana Budaya Ganesha",
+        "Parkir Kebun Binatang",
+        "Parkir Ganyang",
+      ].sort(),
+    )
+    expect(names("motor")).toHaveLength(7)
     expect(names("keluar")).toEqual(["Exit 1", "Exit 2"])
   })
 

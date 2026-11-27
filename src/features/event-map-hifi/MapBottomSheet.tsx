@@ -8,6 +8,7 @@ import styles from "./MapBottomSheet.module.css"
 import { ArrowLeftIcon } from "./CategoryIcons"
 import CategoryRow from "./CategoryRow"
 import MapPlaceCard from "./MapPlaceCard"
+import PlaceLogos from "./PlaceLogos"
 import MapPlaceLinks from "./MapPlaceLinks"
 import type { MapLocation } from "./mapLocations"
 import PlaceName from "./PlaceName"
@@ -205,6 +206,8 @@ export default function MapBottomSheet({
                 loading="eager"
                 className={styles.image}
               />
+            ) : openPlace.logos?.length ? (
+              <PlaceLogos logos={openPlace.logos} variant="detail" className={styles.logoBanner} />
             ) : null}
           </>
         ) : searching ? (
