@@ -64,6 +64,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
       { label: "Akses Booth", href: BOOTH_ACCESS_PATH, icon: KeyRound, access: "boothManager" },
       { label: "Review Arcade", href: "/admin/arcade-review", icon: ImageIcon, access: "reviewer" },
       { label: "Meja Hadiah", href: "/admin/prizes", icon: Gift, access: "prizeDesk" },
+      { label: "Hasil Arcade", href: "/admin/arcade-results", icon: TrophyIcon },
       ...(isProduction
         ? []
         : [

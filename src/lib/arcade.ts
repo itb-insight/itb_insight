@@ -203,3 +203,44 @@ export async function getDroneTeams(): Promise<Array<{ id: string; name: string 
     .order('team_name')
   return ((data ?? []) as Array<{ id: string; team_name: string }>).map((t) => ({ id: t.id, name: t.team_name }))
 }
+
+// ---- results (wave 3) ---------------------------------------------------------------------------
+
+export type ResultWinner = { rank: number; userId: string; name: string; points: number; prize: 'Mug' | 'Keychain'; claimed: boolean }
+
+/** Rank 1-10 of the latest published version (arcade_results, 0033) and whether each prize was handed over. */
+export async function getResultWinners(): Promise<{ version: number | null; winners: ResultWinner[] }> {
+  const supabase = createServiceClient()
+  const { data: latest } = await supabase
+    .from('arcade_results')
+    .select('version')
+    .order('version', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  if (!latest) return { version: null, winners: [] }
+
+  const [{ data: rows }, { data: claims }] = await Promise.all([
+    supabase
+      .from('arcade_results')
+      .select('rank, user_id, points, profiles!arcade_results_user_id_fkey(full_name)')
+      .eq('version', latest.version)
+      .lte('rank', 10)
+      .order('rank'),
+    supabase.from('reward_claims').select('user_id, reward_tiers!inner(tier_number)').in('reward_tiers.tier_number', [102, 103]),
+  ])
+  const claimed = new Set(((claims ?? []) as Array<{ user_id: string }>).map((c) => c.user_id))
+  const winners = ((rows ?? []) as unknown as Array<{
+    rank: number
+    user_id: string
+    points: number
+    profiles: { full_name: string | null } | null
+  }>).map((r) => ({
+    rank: r.rank,
+    userId: r.user_id,
+    name: r.profiles?.full_name?.trim() || 'Pengunjung',
+    points: r.points,
+    prize: r.rank <= 5 ? ('Mug' as const) : ('Keychain' as const),
+    claimed: claimed.has(r.user_id),
+  }))
+  return { version: latest.version as number, winners }
+}

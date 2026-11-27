@@ -14,7 +14,9 @@ export type PrizeTier = { tier: string; name: string; stock: number | null; clai
 
 type Lookup = { visitor: { name: string }; claimed: string[]; handed: string | null }
 
-export default function PrizeDesk({ tiers }: { tiers: PrizeTier[] }) {
+export type DeskWinner = { rank: number; name: string; prize: string; claimed: boolean }
+
+export default function PrizeDesk({ tiers, winners }: { tiers: PrizeTier[]; winners: DeskWinner[] }) {
   const router = useRouter()
   const [, startRefresh] = useTransition()
   const [scanning, setScanning] = useState(false)
@@ -87,6 +89,20 @@ export default function PrizeDesk({ tiers }: { tiers: PrizeTier[] }) {
                 <span className={styles.logName}>{t.name}</span>
                 <span className={styles.logTag}>
                   {t.claimed} diambil{t.stock !== null ? ` · sisa ${Math.max(0, t.stock - t.claimed)}` : ""}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </PanelHifi>
+        <PanelHifi title="Pemenang Mug & Keychain" subtitle={winners.length ? "Dari hasil akhir yang diumumkan." : "Hasil akhir belum diumumkan."}>
+          <ul className={styles.log}>
+            {winners.map((w) => (
+              <li key={w.rank} className={styles.logRow}>
+                <span className={styles.logName}>
+                  #{w.rank} {w.name}
+                </span>
+                <span className={w.claimed ? styles.logAdded : styles.logTag}>
+                  {w.prize} · {w.claimed ? "sudah diambil" : "belum diambil"}
                 </span>
               </li>
             ))}

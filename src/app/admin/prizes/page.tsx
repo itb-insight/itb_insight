@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation"
 import PageHeader from "@/features/admin/components/PageHeader/PageHeader"
 import PrizeDesk, { type PrizeTier } from "@/features/arcade-ops/PrizeDesk"
 import { getAdminAccess } from "@/lib/admin-access"
+import { getResultWinners } from "@/lib/arcade"
 import { createClient, createServiceClient } from "@/lib/supabase/server"
 
 import styles from "../booth-access/page.module.css"
@@ -21,9 +22,10 @@ export default async function PrizesPage() {
   if (!access.prizeDesk) notFound()
 
   const service = createServiceClient()
-  const [{ data: tierRows }, { data: claimRows }] = await Promise.all([
+  const [{ data: tierRows }, { data: claimRows }, results] = await Promise.all([
     service.from("reward_tiers").select("id, tier_number, reward_name, total_stock").gte("tier_number", 101).order("tier_number"),
     service.from("reward_claims").select("tier_id"),
+    getResultWinners(),
   ])
   const counts = new Map<string, number>()
   for (const c of (claimRows ?? []) as Array<{ tier_id: string }>) counts.set(c.tier_id, (counts.get(c.tier_id) ?? 0) + 1)
@@ -35,7 +37,10 @@ export default async function PrizesPage() {
     <>
       <PageHeader title="Meja Hadiah" subtitle="Scan QR pengunjung lalu serahkan hadiahnya. Satu hadiah per jenis per orang." />
       <div className={styles.body}>
-        <PrizeDesk tiers={tiers} />
+        <PrizeDesk
+          tiers={tiers}
+          winners={results.winners.map((w) => ({ rank: w.rank, name: w.name, prize: w.prize, claimed: w.claimed }))}
+        />
       </div>
     </>
   )
