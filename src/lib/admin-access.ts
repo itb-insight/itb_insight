@@ -12,7 +12,8 @@ import { type ProfileRoleA, type ProfileRoleB } from '@/lib/types/database'
 /*
   What a signed-in user may open under /admin:
     - isAdmin: everything (src/app/admin/(admin-only)/layout.tsx);
-    - booth:   the Booth section only (src/app/admin/booth), rules in src/lib/booth-points.ts.
+    - booth:   the dashboard (/admin) and the Booth section (src/app/admin/booth); booth rules in
+               src/lib/booth-points.ts.
   The profile role columns are not user-writable (0011), so they are safe to trust here.
 */
 

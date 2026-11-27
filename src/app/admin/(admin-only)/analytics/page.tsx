@@ -15,7 +15,7 @@ import PageHeader from "@/features/admin/components/PageHeader/PageHeader"
 import PanelUnavailable from "@/features/admin/components/Panel/PanelUnavailable"
 import SponsorPanel from "@/features/admin/components/SponsorPanel/SponsorPanel"
 import TrafficPanel from "@/features/admin/components/TrafficPanel/TrafficPanel"
-import styles from "../dashboard.module.css"
+import styles from "../../dashboard.module.css"
 
 /**
  * The three dashboards named in the spec, on one page: Sponsor, Funnel, and
