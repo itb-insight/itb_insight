@@ -3,6 +3,7 @@ import { Gabarito, Orbitron, Roboto_Mono } from "next/font/google"
 import Script from "next/script"
 import AnalyticsRoot from "@/lib/analytics/components/AnalyticsRoot"
 import OnSiteRoot from "@/features/onsite/OnSiteRoot"
+import LocationPermissionPrompt from "@/features/onsite/LocationPermissionPrompt"
 import "./globals.css"
 import "@/styles/admin-tokens.css"
 
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <AnalyticsRoot />
         <OnSiteRoot />
+        <LocationPermissionPrompt />
       </body>
     </html>
   )

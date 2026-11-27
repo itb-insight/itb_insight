@@ -108,7 +108,7 @@ export default function ProfileCard({ initial, qrToken }: { initial: Initial; qr
               </div>
             </form>
 
-            <section className={styles.qrColumn}>
+            <section id="qr" className={styles.qrColumn} style={{ scrollMarginTop: 110 }}>
               <h2 className={styles.qrTitle}>Personal QR</h2>
               <div className={styles.qrCard}>
                 {/* Caption always renders (hidden on failure) so the card keeps its exact height */}

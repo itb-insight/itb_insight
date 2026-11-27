@@ -1,6 +1,7 @@
 import ActivityCard from "./ActivityCard"
 import CalendarCard from "./CalendarCard"
 import CountdownCard from "./CountdownCard"
+import DDayQrJump from "./DDayQrJump"
 import HomeBackground from "./HomeBackground"
 import styles from "./HomePage.module.css"
 import PointsCard, { type PointsSummary } from "./PointsCard"
@@ -32,6 +33,7 @@ export default function HomePage({
 }: HomePageProps) {
   return (
     <div className={styles.page}>
+      <DDayQrJump />
       <HomeBackground />
 
       <main className={styles.main}>
