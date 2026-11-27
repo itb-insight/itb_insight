@@ -61,15 +61,16 @@ export function wibClock(iso: string): string {
 
 
 export type BoardEntry = { rank: number; userId: string; name: string; institution: string | null; points: number; lastAt: string }
-export type ArcadeBoard = { players: number; entries: BoardEntry[] }
+/** `staff`: committee accounts' own totals (0036). They play to test but are never ranked; server only. */
+export type ArcadeBoard = { players: number; entries: BoardEntry[]; staff: Array<{ userId: string; points: number }> }
 
 /** Every ranked player (public.arcade_leaderboard, 0031). Cached 15 s per instance. */
 export const getArcadeBoard = unstable_cache(
   async (): Promise<ArcadeBoard> => {
     const { data, error } = await createServiceClient().rpc('arcade_leaderboard', { p_admin_emails: adminEmailList() })
     if (error) throw new Error(`arcade_leaderboard: ${error.message}`)
-    const board = (data ?? {}) as { players?: number; entries?: BoardEntry[] }
-    return { players: board.players ?? 0, entries: board.entries ?? [] }
+    const board = (data ?? {}) as { players?: number; entries?: BoardEntry[]; staff?: ArcadeBoard['staff'] }
+    return { players: board.players ?? 0, entries: board.entries ?? [], staff: board.staff ?? [] }
   },
   ['arcade-board'],
   { revalidate: 15, tags: ['arcade-board'] },
@@ -95,12 +96,13 @@ export type ArcadeSideQuest = {
 }
 
 /** Whether the player may upload (or re-upload once after a void) a photo proof for this quest. */
-export function canUploadProof(quest: ArcadeSideQuest, committee: boolean): boolean {
-  if (quest.verify !== 'proof' || committee) return false
+export function canUploadProof(quest: ArcadeSideQuest): boolean {
+  if (quest.verify !== 'proof') return false
   return quest.status === 'todo' || (quest.status === 'rejected' && quest.attempts < 2)
 }
 export type ArcadeCollection = { slug: string; title: string; description: string | null; bonus: number; progress: number; total: number }
 export type ArcadePlayer = {
+  /** Committee / staff: may play to test, earn points, but are never ranked and cannot win (0036). */
   committee: boolean
   points: number
   rank: number | null
@@ -211,9 +213,11 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
   })
 
   const me = board.entries.find((e) => e.userId === userId)
+  // Committee accounts are not ranked; their total comes from board.staff (0036).
+  const staffPoints = board.staff.find((e) => e.userId === userId)?.points
   return {
     committee: committee.data === true,
-    points: me?.points ?? 0,
+    points: me?.points ?? staffPoints ?? 0,
     rank: me?.rank ?? null,
     players: board.players,
     top10Points: board.entries[9]?.points ?? null,
@@ -223,18 +227,12 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
   }
 }
 
-/** Drone soccer teams a watcher can vote for (submitted / verified teams of the competition). */
+/** Drone soccer teams a watcher can vote for: the official roster in drone_soccer_teams (0037). */
 export async function getDroneTeams(): Promise<Array<{ id: string; name: string }>> {
   const supabase = createServiceClient()
-  const { data: comp } = await supabase.from('competitions').select('id').eq('slug', 'microdrone-obstacle-race').maybeSingle()
-  if (!comp) return []
-  const { data } = await supabase
-    .from('competition_teams')
-    .select('id, team_name')
-    .eq('competition_id', comp.id)
-    .in('status', ['submitted', 'verified'])
-    .order('team_name')
-  return ((data ?? []) as Array<{ id: string; team_name: string }>).map((t) => ({ id: t.id, name: t.team_name }))
+  const { data, error } = await supabase.from('drone_soccer_teams').select('id, name').order('name')
+  if (error) console.error('[arcade] drone teams lookup failed', error)
+  return (data ?? []) as Array<{ id: string; name: string }>
 }
 
 // ---- results (wave 3) ---------------------------------------------------------------------------

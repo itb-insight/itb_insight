@@ -47,7 +47,11 @@ export default async function LeaderboardPage() {
   const nearby = mine && mine.rank > 10 ? board.entries.slice(Math.max(10, mine.rank - 3), mine.rank + 2).map(row) : undefined
 
   return (
-    <QuestPageShell activeTab="board" points={mine?.points} rank={mine?.rank}>
+    <QuestPageShell
+      activeTab="board"
+      points={mine?.points ?? (user ? board.staff.find((e) => e.userId === user.id)?.points : undefined)}
+      rank={mine?.rank}
+    >
       <LeaderboardMobile
         countdown=""
         freezeLabel={settings ? `DIBEKUKAN ${wibClock(settings.freezesAt)} WIB` : undefined}

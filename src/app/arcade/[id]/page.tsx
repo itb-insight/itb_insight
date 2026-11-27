@@ -22,12 +22,12 @@ export default async function SideQuestPage({ params }: { params: Promise<{ id: 
   const quest = player.sideQuests.find((q) => q.slug === id)
   if (!quest) notFound()
 
-  const canUpload = canUploadProof(quest, player.committee)
+  const canUpload = canUploadProof(quest)
   const teams = canUpload && quest.needsVote ? await getDroneTeams() : undefined
 
   return (
     <QuestPageShell points={player.points} rank={player.rank}>
-      <SideQuestView sideQuest={quest} canUpload={canUpload} committee={player.committee} teams={teams} />
+      <SideQuestView sideQuest={quest} canUpload={canUpload} teams={teams} />
     </QuestPageShell>
   )
 }

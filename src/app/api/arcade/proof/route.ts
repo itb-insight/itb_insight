@@ -17,7 +17,7 @@ import { createServiceClient } from '@/lib/supabase/server'
 //   link  -> link (story / post link on Instagram / TikTok / X, checked by src/lib/proof-link.ts)
 //   photo -> file (jpeg / png / webp, <= 4 MB; follow quests also send `handle`), re-encoded (src/lib/proof-image.ts: <= 1600 px WebP,
 //            metadata stripped) into the private bucket arcade-proofs at <user>/<quest>.webp
-// plus handle? and voteTeam? (competition_teams id). public.arcade_submit_proof decides: points at
+// plus handle? and voteTeam? (drone_soccer_teams id). public.arcade_submit_proof decides: points at
 // once on the first proof, review first after a void, two attempts.
 // 4 MB stays under Vercel's 4.5 MB request body limit; the browser normally sends far less.
 const MAX_BYTES = 4 * 1024 * 1024

@@ -10,8 +10,8 @@ import { createServiceClient } from '@/lib/supabase/server'
 /*
   Live booth award (Insight Arcade, rules: src/lib/booth-points.ts). The database decides:
   public.arcade_award_booth (migration 0030) gives Contribution once and Bonus once per visitor per
-  booth under a lock, inside the game window, never to committee accounts or to the scanner
-  themself, and writes a replayed client_ref only once. This module resolves the visitor behind the
+  booth under a lock, inside the game window, never to the scanner themself (committee accounts may
+  play since 0036; the leaderboard leaves them out), and writes a replayed client_ref only once. This module resolves the visitor behind the
   QR, checks the booth is in the scanner's scope, and translates the result for the scanner.
 */
 
@@ -152,16 +152,9 @@ export async function runBoothScan(params: ScanParams): Promise<({ ok: true } & 
   const visitorId = ticket.user_id as string
   if (visitorId === params.staffUserId) return fail('SELF_AWARD')
 
+  // Committee / staff accounts may play (to test the game); they earn points but the leaderboard
+  // leaves them out, so they never rank or win (migration 0036).
   const adminEmails = adminEmailList()
-  const { data: committee, error: committeeError } = await supabase.rpc('arcade_is_committee', {
-    p_user: visitorId,
-    p_admin_emails: adminEmails,
-  })
-  if (committeeError) {
-    console.error('[booth-award] committee check failed', committeeError)
-    return fail('DATABASE_ERROR')
-  }
-  if (committee === true) return fail('COMMITTEE_ACCOUNT')
 
   const profile = (Array.isArray(ticket.profiles) ? ticket.profiles[0] : ticket.profiles) as {
     full_name?: string | null

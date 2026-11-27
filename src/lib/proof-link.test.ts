@@ -63,3 +63,22 @@ describe('social accounts agree with the quest catalog', () => {
     expect(migration).toMatch(/'arcade-follow-tiktok-x'[\s\S]*?'photo'\)/)
   })
 })
+
+describe('0038 proof kinds', () => {
+  const sql = readFileSync('supabase/migrations/0038_arcade_proof_kinds.sql', 'utf8')
+  const block = (kind: string) =>
+    [...sql.matchAll(new RegExp(`proof_kind = '${kind}'[\\s\\S]*?;`, 'g'))].map((m) => m[0]).join('\n')
+
+  it('follow quests are screenshots, merch and drone soccer are photos', () => {
+    for (const slug of ['arcade-follow-ig', 'arcade-follow-tiktok-x', 'arcade-beli-merch', 'arcade-nonton-drone-soccer']) {
+      expect(block('photo')).toContain(`'${slug}'`)
+    }
+    expect(sql).toMatch(/unggah screenshot profil @itbinsight/)
+  })
+
+  it('share poster, Kyubi and every Add Yours quest take a link', () => {
+    const link = block('link')
+    for (const slug of ['arcade-share-poster-story', 'arcade-foto-kyubi']) expect(link).toContain(`'${slug}'`)
+    expect(link).toContain("slug like 'arcade-add-yours-%'")
+  })
+})

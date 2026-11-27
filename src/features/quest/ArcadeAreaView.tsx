@@ -13,12 +13,10 @@ export type AreaSideQuest = { quest: ArcadeSideQuest; canUpload: boolean }
 export default function ArcadeAreaView({
   area,
   sideQuests = [],
-  committee,
   teams,
 }: {
   area: ArcadeArea
   sideQuests?: AreaSideQuest[]
-  committee?: boolean
   teams?: Array<{ id: string; name: string }>
 }) {
   return (
@@ -67,7 +65,7 @@ export default function ArcadeAreaView({
                 </div>
                 <SideQuestStatus status={q.status} />
                 {q.description ? <p className={styles.sideCardText}>{q.description}</p> : null}
-                <SideQuestActions sideQuest={q} canUpload={canUpload} committee={committee} teams={q.needsVote ? teams : undefined} />
+                <SideQuestActions sideQuest={q} canUpload={canUpload} teams={q.needsVote ? teams : undefined} />
               </article>
             ))}
           </section>

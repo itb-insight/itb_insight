@@ -62,7 +62,11 @@ export default function ArcadeHub({ player, signedIn }: { player: ArcadePlayer |
     lifetime: player?.points ?? 0,
     rank: player?.rank ?? 0,
     totalRanked: player?.players ?? 0,
-    tierName: player?.rank && player.rank <= 10 ? "Kamu di Top 10!" : "Menuju Top 10 (Mug & Keychain)",
+    tierName: player?.committee
+      ? "Akun panitia · tidak masuk peringkat"
+      : player?.rank && player.rank <= 10
+        ? "Kamu di Top 10!"
+        : "Menuju Top 10 (Mug & Keychain)",
     tierTarget: target,
     tierSegments: { filled: Math.min(10, Math.round(((player?.points ?? 0) / target) * 10)), total: 10 },
   }
@@ -88,11 +92,19 @@ export default function ArcadeHub({ player, signedIn }: { player: ArcadePlayer |
               Login
             </Link>
           </section>
-        ) : player?.committee ? (
-          <p className={styles.intro}>Akun panitia tidak ikut Insight Arcade.</p>
         ) : null}
 
         {player ? <PointsCard stats={stats} /> : null}
+
+        {player?.committee ? (
+          <section className={styles.notice}>
+            <h2 className={styles.noticeTitle}>Mode uji coba panitia</h2>
+            <p className={styles.noticeText}>
+              Kamu login dengan akun panitia. Kamu bisa mencoba semua quest dan poinmu tetap dihitung, tapi kamu tidak
+              masuk leaderboard dan tidak bisa mendapat hadiah.
+            </p>
+          </section>
+        ) : null}
 
         <section className={styles.notice}>
           <h2 className={styles.noticeTitle}>Aturan main</h2>

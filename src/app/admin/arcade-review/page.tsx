@@ -27,7 +27,7 @@ export default async function ArcadeReviewPage() {
     service
       .from("sidequest_submissions")
       .select(
-        "id, user_id, status, points_awarded, handle, proof_path, proof_url, proof_sha256, submitted_at, sidequests(title, points, needs_handle), competition_teams(team_name), profiles!sidequest_submissions_user_id_fkey(full_name)",
+        "id, user_id, status, points_awarded, handle, proof_path, proof_url, proof_sha256, submitted_at, sidequests(title, points, needs_handle), drone_soccer_teams(name), profiles!sidequest_submissions_user_id_fkey(full_name)",
       )
       .eq("source", "proof")
       .eq("review_state", "unreviewed")
@@ -47,7 +47,7 @@ export default async function ArcadeReviewPage() {
     proof_sha256: string | null
     submitted_at: string
     sidequests: { title: string; points: number; needs_handle: string | null } | null
-    competition_teams: { team_name: string } | null
+    drone_soccer_teams: { name: string } | null
     profiles: { full_name: string | null } | null
   }
   const all = (data ?? []) as unknown as Row[]
@@ -81,7 +81,7 @@ export default async function ArcadeReviewPage() {
       pending: r.status === "pending",
       handle: r.handle,
       platform: r.sidequests?.needs_handle ?? null,
-      vote: r.competition_teams?.team_name ?? null,
+      vote: r.drone_soccer_teams?.name ?? null,
       imageUrl: r.proof_path ? (signed.get(r.proof_path) ?? null) : null,
       linkUrl: r.proof_url?.startsWith("https://") ? r.proof_url : null,
       duplicate: (dupCount.get(r.proof_sha256 ?? "") ?? 0) > 1,

@@ -9,12 +9,10 @@ import quest from "./quest.module.css"
 export default function SideQuestView({
   sideQuest,
   canUpload,
-  committee,
   teams,
 }: {
   sideQuest: ArcadeSideQuest
   canUpload: boolean
-  committee?: boolean
   teams?: Array<{ id: string; name: string }>
 }) {
   return (
@@ -28,7 +26,7 @@ export default function SideQuestView({
         <h2 className={styles.detailTitle}>{sideQuest.title}</h2>
         <SideQuestStatus status={sideQuest.status} />
         {sideQuest.description ? <p className={styles.description}>{sideQuest.description}</p> : null}
-        <SideQuestActions sideQuest={sideQuest} canUpload={canUpload} committee={committee} teams={teams} />
+        <SideQuestActions sideQuest={sideQuest} canUpload={canUpload} teams={teams} />
       </div>
     </QuestScreen>
   )

@@ -24,12 +24,12 @@ export default async function ArcadeAreaPage({ params }: { params: Promise<{ cat
 
   const sideQuests = player.sideQuests
     .filter((q) => q.area === area.category && q.verify === "proof")
-    .map((q) => ({ quest: q, canUpload: canUploadProof(q, player.committee) }))
+    .map((q) => ({ quest: q, canUpload: canUploadProof(q) }))
   const teams = sideQuests.some((s) => s.canUpload && s.quest.needsVote) ? await getDroneTeams() : undefined
 
   return (
     <QuestPageShell activeTab="quests" points={player.points} rank={player.rank}>
-      <ArcadeAreaView area={area} sideQuests={sideQuests} committee={player.committee} teams={teams} />
+      <ArcadeAreaView area={area} sideQuests={sideQuests} teams={teams} />
     </QuestPageShell>
   )
 }

@@ -119,18 +119,20 @@ describe('POST /api/booth-points/scan', () => {
     expect(awardCalls()).toEqual([])
   })
 
-  it('refuses the scanner\'s own account and committee accounts before anything is written', async () => {
+  it('refuses the scanner\'s own account before anything is written, but lets committee accounts play', async () => {
     state.ticketUser = 'staff-1'
     const self = await post({ qrCode: QR, boothId: BOOTH, option: 'contribution' })
     expect(self.status).toBe(403)
     expect((await self.json()).error.code).toBe('SELF_AWARD')
 
+    expect(awardCalls()).toEqual([])
+
+    // Staff test the game: no committee check here any more; the leaderboard leaves them out.
     state.ticketUser = 'visitor-1'
     state.committee = true
     const committee = await post({ qrCode: QR, boothId: BOOTH, option: 'contribution' })
-    expect(committee.status).toBe(403)
-    expect((await committee.json()).error.code).toBe('COMMITTEE_ACCOUNT')
-    expect(awardCalls()).toEqual([])
+    expect(committee.status).toBe(200)
+    expect(awardCalls()).toHaveLength(1)
   })
 
   it('awards through arcade_award_booth with the scanner as awarder and the clientRef', async () => {

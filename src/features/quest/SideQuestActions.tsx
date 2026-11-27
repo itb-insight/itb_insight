@@ -46,13 +46,10 @@ function questLinks(q: ArcadeSideQuest): Array<{ href: string; label: string }> 
 export default function SideQuestActions({
   sideQuest,
   canUpload,
-  committee = false,
   teams,
 }: {
   sideQuest: ArcadeSideQuest
   canUpload: boolean
-  /** Committee / staff accounts never earn points, so they get a note instead of the form. */
-  committee?: boolean
   teams?: Array<{ id: string; name: string }>
 }) {
   const links = questLinks(sideQuest)
@@ -77,15 +74,7 @@ export default function SideQuestActions({
         </div>
       ) : null}
       {canUpload ? <ProofUploadForm quest={sideQuest.slug} kind={sideQuest.proofKind} needsHandle={sideQuest.needsHandle} teams={teams} /> : null}
-      {committee && sideQuest.verify === "proof" ? (
-        <div className={styles.notice}>
-          <p className={styles.noticeText}>
-            Kamu login dengan akun panitia, jadi formulir bukti tidak ditampilkan. Pakai akun pengunjung untuk mencoba
-            quest ini.
-          </p>
-        </div>
-      ) : null}
-      {sideQuest.status === "rejected" && !canUpload && !committee ? (
+      {sideQuest.status === "rejected" && !canUpload ? (
         <div className={styles.notice}>
           <p className={styles.noticeText}>Kesempatan kirim ulang sudah habis.</p>
         </div>
