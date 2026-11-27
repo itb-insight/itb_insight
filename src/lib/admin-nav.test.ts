@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { ADMIN_HOME_PATH, BOOTH_ADMIN_PATH, BOOTH_SECTION_PATH, adminLinkFor } from '@/lib/admin-nav'
+import { ADMIN_HOME_PATH, BOOTH_ADMIN_PATH, adminLinkFor } from '@/lib/admin-nav'
 
 describe('adminLinkFor', () => {
   afterEach(() => {
@@ -12,10 +12,10 @@ describe('adminLinkFor', () => {
     expect(adminLinkFor({ isAdmin: false, roleA: 'admin', boothSection: false })).toBe(ADMIN_HOME_PATH)
   })
 
-  it('sends booth staff to the Booth section, in production too', () => {
+  it('sends booth staff to /admin, in production too', () => {
     vi.stubEnv('NODE_ENV', 'production')
-    expect(adminLinkFor({ isAdmin: false, roleA: 'staff', boothSection: true })).toBe(BOOTH_SECTION_PATH)
-    expect(adminLinkFor({ isAdmin: false, roleA: 'stakeholder', boothSection: true })).toBe(BOOTH_SECTION_PATH)
+    expect(adminLinkFor({ isAdmin: false, roleA: 'staff', boothSection: true })).toBe(ADMIN_HOME_PATH)
+    expect(adminLinkFor({ isAdmin: false, roleA: 'stakeholder', boothSection: true })).toBe(ADMIN_HOME_PATH)
   })
 
   it('sends other staff and stakeholders to the hi-fi booth mock, outside production only', () => {

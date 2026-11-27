@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 /**
  * Who gets into /admin (src/lib/admin-access.ts):
  *   - admins: everything;
- *   - booth staff (role_b 'booth'): the Booth section only. Every other page sits in the
- *     (admin-only) route group, whose layout 404s for non-admins.
+ *   - booth staff (role_b 'booth'): the dashboard (/admin) and the Booth section. Every other
+ *     page sits in the (admin-only) route group, whose layout 404s for non-admins.
  * Signed-out visitors go to /login (the proxy redirects them too); everyone else gets a 404 so the
  * area's existence is not confirmed. Reading the session makes every admin page dynamic.
  * The admin API routes check the role themselves (tests/guardrails/api-auth.test.ts).

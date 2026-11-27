@@ -45,7 +45,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
   {
     title: "Data",
     items: [
-      { label: "Dashboard", href: "/admin", icon: HomeIcon },
+      { label: "Dashboard", href: "/admin", icon: HomeIcon, access: "booth" },
       { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
     ],
   },

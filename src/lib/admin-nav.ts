@@ -4,7 +4,8 @@ import { type ProfileRoleA } from '@/lib/types/database'
   Where the header's "Admin" link goes (NavbarHifi desktop + MobileMenuHifi).
 
   - Admins (ADMIN_EMAILS, profiles.role_a 'admin', admin_roles 'admin') -> /admin.
-  - Booth staff (role_b 'booth', see src/lib/booth-points.ts) -> /admin/booth.
+  - Booth staff (role_b 'booth', see src/lib/booth-points.ts) -> /admin too: they see the
+    dashboard and the Booth section there.
   - Other committee accounts, profiles.role_a 'staff' or 'stakeholder' -> the booth page of the
     hi-fi admin mock. That page 404s in production, so there the link is not shown until it goes
     live. Flip isBoothAdminLive() together with the notFound() in that page.
@@ -30,7 +31,7 @@ export function adminLinkFor(params: {
   boothSection: boolean
 }): string | null {
   if (params.isAdmin || params.roleA === 'admin') return ADMIN_HOME_PATH
-  if (params.boothSection) return BOOTH_SECTION_PATH
+  if (params.boothSection) return ADMIN_HOME_PATH
   if (params.roleA && COMMITTEE_ROLES.includes(params.roleA)) {
     return isBoothAdminLive() ? BOOTH_ADMIN_PATH : null
   }
