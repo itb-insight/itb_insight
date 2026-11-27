@@ -12,6 +12,10 @@ export type Profile = {
   // staff: a ProfileStaffDuty such as 'gate_staff' (0024), or the booth type for booth staff
   // (role_b 'booth'; 'all' = every booth, 0025); sponsor_partner: the company (free text); otherwise null
   role_c?: ProfileStaffDuty | string | null
+  /** Scanned at the gate by gate staff (0026). Never reset. */
+  entered_gate?: boolean
+  /** Phone seen inside the event zone (0026). Never reset. */
+  visited_itb?: boolean
   created_at: string
   updated_at: string
 }

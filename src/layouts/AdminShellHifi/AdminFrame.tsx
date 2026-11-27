@@ -10,6 +10,9 @@ interface AdminFrameProps {
   children: ReactNode
   /** False for booth staff: the menus show only what they can open. */
   isAdmin?: boolean
+  /** Non-admins: has the Booth section / the Gate section. */
+  booth?: boolean
+  gate?: boolean
   /** Highlight this menu item instead of the one matching the URL. */
   activeHref?: string
 }
@@ -19,18 +22,19 @@ interface AdminFrameProps {
  * mocks (AdminShellHifi): site navbar on top, admin sidebar on the left (desktop), section chips
  * (mobile), content on the right. Pages bring their own header (PageHeader / AdminPageHeader).
  */
-export default function AdminFrame({ children, isAdmin = true, activeHref }: AdminFrameProps) {
+export default function AdminFrame({ children, isAdmin = true, booth = false, gate = false, activeHref }: AdminFrameProps) {
+  const sections = { isAdmin, booth, gate }
   return (
     <>
       <NavbarHifi solidOnMobile />
 
       <div className={styles.shell}>
         <div className={styles.sidebarSlot}>
-          <AdminSidebarHifi activeHref={activeHref} isAdmin={isAdmin} />
+          <AdminSidebarHifi activeHref={activeHref} sections={sections} />
         </div>
 
         <main className={styles.main}>
-          <AdminMobileNav activeHref={activeHref} isAdmin={isAdmin} />
+          <AdminMobileNav activeHref={activeHref} sections={sections} />
           {children}
         </main>
       </div>

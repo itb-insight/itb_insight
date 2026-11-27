@@ -5,6 +5,7 @@ import { type GateCheckIn, type VisitorTicket } from '@/lib/types/database'
 import { recordAuditLog } from '@/lib/audit'
 import { ilikeAnyFilter, stripFilterSyntax } from '@/lib/postgrest'
 import { parseVisitorQr } from '@/lib/qr'
+import { markEnteredGate, markVisitedItb } from '@/lib/visit-flags'
 
 export type CheckInResult =
   | {
@@ -13,6 +14,11 @@ export type CheckInResult =
       profile: { full_name: string; email: string; institution?: string | null }
       alreadyCheckedIn: boolean
       checkInTime: string
+      /**
+       * True when this check-in set the visitor's profile flag (0026) for the first time:
+       * entered_gate for a staff scan / manual lookup, visited_itb for a geofenced self check-in.
+       */
+      firstVisitFlag: boolean
     }
   | {
       ok: false
@@ -22,7 +28,31 @@ export type CheckInResult =
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
-export async function processGateCheckIn(params: {
+type CheckInParams = Parameters<typeof checkInTicket>[0]
+
+/**
+ * Gate check-in: marks the ticket checked in (once) and sets the visitor's profile flag (0026),
+ * which stays true even if the ticket was already checked in some other way:
+ *   staff_scan / manual_lookup -> entered_gate;  self_scan (inside the geofence) -> visited_itb.
+ */
+export async function processGateCheckIn(params: CheckInParams): Promise<CheckInResult> {
+  const result = await checkInTicket(params)
+  if (!result.ok) return result
+
+  const type = params.checkInType ?? 'staff_scan'
+  const mark = type === 'self_scan' ? markVisitedItb : type === 'staff_scan' || type === 'manual_lookup' ? markEnteredGate : null
+  const firstVisitFlag = mark
+    ? await mark(result.ticket.user_id).catch((error) => {
+        console.error('[Check-In] visit flag failed:', error instanceof Error ? error.message : 'unknown')
+        return false
+      })
+    : false
+  return { ...result, firstVisitFlag }
+}
+
+type TicketCheckIn = Exclude<CheckInResult, { ok: true }> | (Omit<Extract<CheckInResult, { ok: true }>, 'firstVisitFlag'>)
+
+async function checkInTicket(params: {
   /** The visitor's QR payload (scans). Exactly one of qrCode / ticketId. */
   qrCode?: string
   /** visitor_tickets.id, for manual desk check-in after a name/email search. */
@@ -30,7 +60,7 @@ export async function processGateCheckIn(params: {
   staffUserId?: string
   gateName?: string
   checkInType?: GateCheckIn['check_in_type']
-}): Promise<CheckInResult> {
+}): Promise<TicketCheckIn> {
   const { qrCode, ticketId, staffUserId, gateName = 'main_gate', checkInType = 'staff_scan' } = params
 
   const lookup = ticketId !== undefined ? (UUID.test(ticketId) ? { column: 'id', value: ticketId } : null) : null

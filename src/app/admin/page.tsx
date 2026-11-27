@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import { Suspense } from "react"
 import {
   dataSource,
@@ -21,9 +22,20 @@ import PanelUnavailable from "@/features/admin/components/Panel/PanelUnavailable
 import RecentEventsPanel from "@/features/admin/components/RecentEventsPanel/RecentEventsPanel"
 import SponsorPanel from "@/features/admin/components/SponsorPanel/SponsorPanel"
 import TrafficPanel from "@/features/admin/components/TrafficPanel/TrafficPanel"
+import { getAdminAccess } from "@/lib/admin-access"
+import { GATE_SECTION_PATH } from "@/lib/admin-nav"
+import { createClient } from "@/lib/supabase/server"
 import styles from "./dashboard.module.css"
 
 export default async function AdminDashboardPage() {
+  // Gate staff have only the Gate section: the dashboard is for admins and booth staff. (The layout
+  // has already sent signed-out visitors to /login.)
+  const {
+    data: { user },
+  } = await (await createClient()).auth.getUser()
+  const access = user ? await getAdminAccess(user) : null
+  if (access && !access.isAdmin && !access.booth) redirect(GATE_SECTION_PATH)
+
   const range = defaultRange()
 
   // All through the adapter seam: PostHog + Supabase when the PostHog query key is set, mock

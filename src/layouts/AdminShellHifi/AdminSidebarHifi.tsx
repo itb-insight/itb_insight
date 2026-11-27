@@ -4,15 +4,15 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import styles from "./AdminSidebarHifi.module.css"
-import { adminNavFor, isNavItemActive } from "./adminNav"
+import { adminNavFor, ALL_SECTIONS, isNavItemActive, type NavSections } from "./adminNav"
 
 interface AdminSidebarHifiProps {
   activeHref?: string
-  /** False for booth staff: only the items they can open. */
-  isAdmin?: boolean
+  /** What this user can open; the menu shows only that. Default: everything (admin). */
+  sections?: NavSections
 }
 
-export default function AdminSidebarHifi({ activeHref, isAdmin = true }: AdminSidebarHifiProps) {
+export default function AdminSidebarHifi({ activeHref, sections = ALL_SECTIONS }: AdminSidebarHifiProps) {
   const pathname = usePathname()
   const current = activeHref ?? pathname
 
@@ -21,7 +21,7 @@ export default function AdminSidebarHifi({ activeHref, isAdmin = true }: AdminSi
       <p className={styles.brand}>Admin</p>
 
       <nav className={styles.groups} aria-label="Navigasi admin">
-        {adminNavFor(isAdmin).map((group) => (
+        {adminNavFor(sections).map((group) => (
           <div key={group.title} className={styles.group}>
             <p className={styles.groupTitle}>{group.title}</p>
 

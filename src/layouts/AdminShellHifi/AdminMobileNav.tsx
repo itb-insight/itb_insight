@@ -4,15 +4,21 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import styles from "./AdminFrame.module.css"
-import { adminNavFor, isNavItemActive } from "./adminNav"
+import { adminNavFor, ALL_SECTIONS, isNavItemActive, type NavSections } from "./adminNav"
 
 /** Below 1100px the sidebar is hidden: the same menu as a row of chips that scrolls sideways. */
-export default function AdminMobileNav({ activeHref, isAdmin = true }: { activeHref?: string; isAdmin?: boolean }) {
+export default function AdminMobileNav({
+  activeHref,
+  sections = ALL_SECTIONS,
+}: {
+  activeHref?: string
+  sections?: NavSections
+}) {
   const pathname = usePathname()
   const current = activeHref ?? pathname
-  const items = adminNavFor(isAdmin).flatMap((section) => section.items)
+  const items = adminNavFor(sections).flatMap((section) => section.items)
 
-  // One section (booth staff): nothing to switch to.
+  // One section (e.g. gate staff): nothing to switch to.
   if (items.length < 2) return null
 
   return (

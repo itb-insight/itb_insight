@@ -1,4 +1,4 @@
-import { type NextRequest } from 'next/server'
+import { after, type NextRequest } from 'next/server'
 
 import { apiError, apiSuccess, unauthorizedResponse } from '@/lib/api-response'
 import { getAuthenticatedUser } from '@/lib/auth'
@@ -7,6 +7,7 @@ import { getPresenceBooths, getPresenceConsent, getPresenceSettings, isPresenceO
 import { BURST_FIXES, combineFixes, nearestBooth, VISIT_MIN_SECONDS } from '@/lib/presence-geo'
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit'
 import { createServiceClient } from '@/lib/supabase/server'
+import { markVisitedItb } from '@/lib/visit-flags'
 
 // One presence ping from the browser tracker. Body: { fixes: [{ lat, lng, accuracy }, ...] },
 // 1 fix, or up to 8 when burst sampling (EXPERIMENTAL, PRESENCE_BURST=true) is on.
@@ -46,6 +47,14 @@ export async function POST(request: NextRequest) {
     if (!venueFix || !checkWithinVenue(settings.eventZone, venueFix.fix).ok) {
       return apiSuccess({ insideVenue: false, booth: null, dwellSeconds: 0, visitMinSeconds: VISIT_MIN_SECONDS, fixes: null })
     }
+
+    // Inside the event zone: profiles.visited_itb (0026), set once and never reset.
+    const userId = auth.user.id
+    after(() =>
+      markVisitedItb(userId).catch((error) =>
+        console.error('[API Presence Ping] visited_itb failed:', error instanceof Error ? error.message : 'unknown'),
+      ),
+    )
 
     // Booth matching only with precise fixes.
     const boothFix = combineFixes(fixes, settings.boothMaxAccuracyM)

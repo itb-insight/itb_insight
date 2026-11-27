@@ -30,6 +30,7 @@
 | `0022_booth_bonus_awards.sql` | `booth_scan_events.kind` (`visit`/`bonus`/`manual`), base points once per booth, capped repeat-visit bonus via `award_booth_bonus()`. |
 | `0023_security_hardening.sql` | Column-level `profiles` update grants and field length limits (was a duplicate `0007`; safe to re-run). |
 | `0024_profile_staff_duties.sql` | `role_b` `human_resource`; `role_c` holds a staff duty (`gate_staff`) that grants that scoped role (`has_role()`, `getUserRole`). Gate staff = `staff` / `human_resource` / `gate_staff`, pre-assigned via `profile_role_grants`. |
+| `0026_profile_visit_flags.sql` | `profiles.entered_gate` (scanned at the gate, `/admin/gate`) and `profiles.visited_itb` (phone seen inside the event zone: presence ping or self check-in). Both default false, only ever set to true, server-written only. |
 
 `0002` drops the legacy `registrations` and `rsvp` tables. Use `visitor_tickets`, never `rsvp`, for current QR tickets.
 

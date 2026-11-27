@@ -13,6 +13,10 @@ const state = vi.hoisted(() => ({
 }))
 
 vi.mock('next/cache', () => ({ unstable_cache: (fn: () => unknown) => fn }))
+vi.mock('next/server', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('next/server')>()
+  return { ...actual, after: (fn: () => unknown) => fn() }
+})
 vi.mock('@/lib/supabase/server', async () => {
   const { createFakeClient } = await import('../../../../tests/support/fake-supabase')
   return { createServiceClient: () => createFakeClient(state.db), createClient: async () => createFakeClient(state.db) }
@@ -110,6 +114,19 @@ describe('POST /api/presence/ping', () => {
     const res = await ping.POST(request('/api/presence/ping', 'POST', { fixes: [fixAt(0.01)] })) // ~1.1 km
     expect((await res.json()).data).toMatchObject({ insideVenue: false, booth: null })
     expect(state.db.calls.some((call) => call.table.startsWith('rpc:'))).toBe(false)
+    expect(writesTo(state.db, 'profiles')).toEqual([])
+  })
+
+  it('sets profiles.visited_itb inside the event zone (only while it is still false)', async () => {
+    await ping.POST(request('/api/presence/ping', 'POST', { fixes: [fixAt(0.0005, 60)] }))
+    const [write] = writesTo(state.db, 'profiles')
+    expect(write.payload).toEqual({ visited_itb: true })
+    expect(write.filters).toEqual(
+      expect.arrayContaining([
+        { method: 'eq', args: ['id', state.user!.id] },
+        { method: 'eq', args: ['visited_itb', false] },
+      ]),
+    )
   })
 
   it('records the matched booth by id only, never coordinates', async () => {

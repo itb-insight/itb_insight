@@ -1,7 +1,7 @@
 import type { ComponentType } from "react"
-import { BarChart3, FileText, Gamepad2, Handshake, ScanLine, Settings, Users } from "lucide-react"
+import { BarChart3, DoorOpen, FileText, Gamepad2, Handshake, ScanLine, Settings, Users } from "lucide-react"
 
-import { BOOTH_SECTION_PATH } from "@/lib/admin-nav"
+import { BOOTH_SECTION_PATH, GATE_SECTION_PATH } from "@/lib/admin-nav"
 
 import {
   CalendarIcon,
@@ -17,8 +17,8 @@ export interface AdminNavItem {
   label: string
   href: string
   icon: ComponentType<{ className?: string }>
-  /** Who sees it. "booth": booth staff too (role_b 'booth'); default: admins only. */
-  access?: "booth"
+  /** Who sees it besides admins: "booth" = booth staff (role_b 'booth'), "gate" = gate staff. */
+  access?: "booth" | "gate"
   /** Placeholder page (NotInMvp): marked "soon". */
   soon?: boolean
 }
@@ -52,6 +52,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
   {
     title: "Scanner",
     items: [
+      { label: "Gate", href: GATE_SECTION_PATH, icon: DoorOpen, access: "gate" },
       { label: "Booth", href: BOOTH_SECTION_PATH, icon: ShopAltIcon, access: "booth" },
       { label: "QR Points (test)", href: "/admin/qr-points", icon: ScanLine },
       ...(isProduction ? [] : [{ label: "Quest Ops", href: "/admin/quest-ops", icon: Gamepad2 }]),
@@ -84,12 +85,16 @@ export const ADMIN_NAV: AdminNavSection[] = [
       ]),
 ]
 
-/** The menu this user sees: everything for admins, only the "booth" items for booth staff. */
-export function adminNavFor(isAdmin: boolean): AdminNavSection[] {
-  if (isAdmin) return ADMIN_NAV
+/** What a user can open under /admin (from getAdminAccess). */
+export type NavSections = { isAdmin: boolean; booth: boolean; gate: boolean }
+export const ALL_SECTIONS: NavSections = { isAdmin: true, booth: true, gate: true }
+
+/** The menu this user sees: everything for admins, otherwise only the booth / gate items they have. */
+export function adminNavFor(sections: NavSections): AdminNavSection[] {
+  if (sections.isAdmin) return ADMIN_NAV
   return ADMIN_NAV.map((section) => ({
     ...section,
-    items: section.items.filter((item) => item.access === "booth"),
+    items: section.items.filter((item) => (item.access === "booth" && sections.booth) || (item.access === "gate" && sections.gate)),
   })).filter((section) => section.items.length > 0)
 }
 
