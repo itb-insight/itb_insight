@@ -1,0 +1,305 @@
+/* Booth points scanner (BoothPointsScanner.tsx). Hi-fi admin palette: src/styles/admin-tokens.css. */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--admin-gap);
+  align-items: start;
+  color: var(--admin-text);
+  font-family: var(--font-primary), "Gabarito", sans-serif;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--admin-gap);
+  min-width: 0;
+}
+
+.muted {
+  margin: 0;
+  color: var(--admin-text-muted);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.practice {
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px dashed #acc7ff;
+  border-radius: var(--admin-radius-sm);
+  background: rgba(9, 27, 63, 0.45);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+/* ---- buttons ----------------------------------------------------------- */
+
+.primaryBtn,
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 56px;
+  padding: 0 20px;
+  border-radius: var(--admin-radius-sm);
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.primaryBtn {
+  border: none;
+  background: var(--admin-ice);
+  color: var(--admin-text-on-ice);
+  font-weight: 700;
+}
+
+.secondaryBtn {
+  border: 1px solid #acc7ff;
+  background: transparent;
+  color: var(--admin-text);
+  min-height: 48px;
+  font-size: 16px;
+}
+
+.primaryBtn:disabled,
+.secondaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- scanned visitor --------------------------------------------------- */
+
+.visitor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.visitorLabel {
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--admin-text-muted);
+}
+
+.visitorName {
+  margin: 0;
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 700;
+  color: var(--admin-text-strong);
+  overflow-wrap: anywhere;
+}
+
+.note {
+  margin: 0;
+  padding: 10px 12px;
+  border-left: 3px solid #fad500;
+  border-radius: 4px;
+  background: rgba(250, 213, 0, 0.12);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* ---- booth picker ------------------------------------------------------ */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fieldLabel {
+  font-size: 16px;
+  color: var(--admin-text-muted);
+}
+
+.select,
+.boothFixed {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 1px solid #acc7ff;
+  border-radius: var(--admin-radius-sm);
+  background: #091b3f;
+  color: var(--admin-text-strong);
+  font: inherit;
+  font-size: 18px;
+}
+
+.boothFixed {
+  display: flex;
+  align-items: center;
+}
+
+/* ---- options ----------------------------------------------------------- */
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.optionBtn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 96px;
+  padding: 16px 18px;
+  border: 2px solid #acc7ff;
+  border-radius: var(--admin-radius-panel);
+  background: #1b3b7d;
+  color: var(--admin-text-strong);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.optionBonus {
+  border-color: #fad500;
+  background: linear-gradient(135deg, #1b3b7d 0%, #5b4a0c 100%);
+}
+
+.optionBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.optionBtn:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+.optionIcon {
+  flex: none;
+}
+
+.optionText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.optionTitle {
+  font-size: 22px;
+  line-height: 26px;
+  font-weight: 700;
+}
+
+.optionDetail {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--admin-text-muted);
+}
+
+.optionTotal {
+  flex: none;
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- status / result --------------------------------------------------- */
+
+.status {
+  margin: 0;
+  color: var(--admin-text-muted);
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: var(--admin-radius-sm);
+}
+
+.result p {
+  margin: 0;
+}
+
+.resultOk {
+  border: 2px solid var(--admin-success);
+  background: rgba(108, 203, 89, 0.15);
+}
+
+.resultError {
+  border: 2px solid #ff8a8a;
+  background: rgba(255, 90, 90, 0.15);
+}
+
+.resultTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--admin-text-strong);
+}
+
+/* ---- history ----------------------------------------------------------- */
+
+.log {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.logRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(172, 199, 255, 0.3);
+}
+
+.logRow .muted {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.logName {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.logOutcome {
+  font-variant-numeric: tabular-nums;
+  color: #8aceff;
+  text-align: right;
+}
+
+/* ---- small screens: booth staff on phones ------------------------------- */
+
+@media (max-width: 1099px) {
+  .layout {
+    grid-template-columns: 1fr;
+    /* PanelHifi reads these tokens: tighter cards on phones. */
+    --admin-gap: 20px;
+    --admin-panel-gap: 16px;
+    --admin-panel-pad-y: 18px;
+    --admin-panel-pad-x: 16px;
+    --admin-border-w: 2px;
+    --admin-title-size: 22px;
+    --admin-title-line: 28px;
+    --admin-subtitle-size: 15px;
+    --admin-subtitle-line: 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .options {
+    grid-template-columns: 1fr;
+  }
+}

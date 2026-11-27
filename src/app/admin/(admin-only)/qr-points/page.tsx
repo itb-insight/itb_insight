@@ -12,7 +12,7 @@ export const metadata = {
 }
 
 // TEMPORARY: manual test bench for the booth points flow (scan personal QR -> confirm -> award).
-// Gated here because /admin itself has no auth yet; the API re-checks the role on every call.
+// Admin-only ((admin-only)/layout.tsx); the check below stays as a second gate. The API re-checks the role.
 export default async function QrPointsPage() {
   const supabase = await createClient()
   const {

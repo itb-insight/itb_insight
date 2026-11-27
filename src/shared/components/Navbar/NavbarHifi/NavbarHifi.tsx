@@ -4,6 +4,7 @@ import Link from "next/link"
 import { isCountdownOnly } from "@/lib/countdown"
 import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
 import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
+import AdminNavLink from "./AdminNavLink"
 import styles from "./NavbarHifi.module.css"
 import NavAuthActionsHifi from "./NavAuthActionsHifi"
 import MobileMenuHifi from "./MobileMenuHifi"
@@ -46,6 +47,7 @@ export default function NavbarHifi({ isSolid = false, solidOnMobile = false }: N
             ) : (
               <Link href={MAP_PATH} className={styles.navLink}>Map</Link>
             )}
+            <AdminNavLink className={styles.navLink} />
           </div>
         )}
       </div>

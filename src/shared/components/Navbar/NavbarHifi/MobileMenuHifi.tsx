@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react"
 
 import { MAP_PATH, isMapsDisabled } from "@/lib/maps"
 import ComingSoon from "@/shared/components/ComingSoon/ComingSoon"
+import AdminNavLink from "./AdminNavLink"
 import NavAuthActionsHifi from "./NavAuthActionsHifi"
 import styles from "./NavbarHifi.module.css"
 
@@ -126,6 +127,7 @@ export default function MobileMenuHifi({
                 </Link>
                 ),
               )}
+              <AdminNavLink className={styles.mobileMenuLink} onClick={close} />
 
               <div className={styles.mobileMenuDivider} />
             </>

@@ -106,6 +106,17 @@
   white-space: nowrap;
 }
 
+.soon {
+  flex: none;
+  margin-left: auto;
+  padding: 2px 8px;
+  border: 1px solid #517eda;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #acc7ff;
+}
+
 @media (max-height: 807px) {
   .sidebar {
     --sb-pad-top: 24px;

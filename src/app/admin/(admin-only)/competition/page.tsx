@@ -25,7 +25,7 @@ function requestTime() {
   return Date.now()
 }
 
-// Admin-only (src/app/admin/layout.tsx). Test bench for imported teams and shadow members:
+// Admin-only (src/app/admin/(admin-only)/layout.tsx). Test bench for imported teams and shadow members:
 // seed a test team, claim/release slots, preview any team's dashboard card, reset.
 export default async function AdminCompetitionPage({
   searchParams,

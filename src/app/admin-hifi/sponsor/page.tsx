@@ -31,6 +31,8 @@ const FEEDBACK = [
   { rating: 3, comment: "Bingung signage gatenya", time: "15.49" },
 ]
 
+// Halaman booth: tujuan link "Admin" di header untuk panitia (src/lib/admin-nav.ts).
+// Saat dibuka di production, ubah juga isBoothAdminLive() di sana.
 export default function AdminSponsorPage() {
   if (process.env.NODE_ENV === "production") notFound()
 

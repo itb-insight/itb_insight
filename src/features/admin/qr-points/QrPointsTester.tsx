@@ -5,7 +5,7 @@ import { useState } from "react"
 
 import { postWithAuth } from "@/features/dashboard/apiClient"
 
-import QrCameraScanner from "./QrCameraScanner"
+import QrCameraScanner from "@/shared/components/QrCameraScanner/QrCameraScanner"
 import styles from "./QrPointsTester.module.css"
 
 type BoothOption = { id: string; name: string }
