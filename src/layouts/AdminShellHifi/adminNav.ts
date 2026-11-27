@@ -1,5 +1,5 @@
 import type { ComponentType } from "react"
-import { BarChart3, DoorOpen, FileText, Gamepad2, Handshake, KeyRound, ScanLine, Settings, Users } from "lucide-react"
+import { BarChart3, DoorOpen, FileText, Gamepad2, Gift, Handshake, ImageIcon, KeyRound, ScanLine, Settings, Users } from "lucide-react"
 
 import { BOOTH_ACCESS_PATH, BOOTH_SECTION_PATH, DDAY_PATH, GATE_SECTION_PATH } from "@/lib/admin-nav"
 
@@ -22,7 +22,7 @@ export interface AdminNavItem {
    * "boothManager" = booth stakeholders (canManageBoothAccess), "gate" = gate staff,
    * "staff" = every staff member (staffAccessFor in src/lib/admin-access.ts).
    */
-  access?: "booth" | "boothManager" | "gate" | "staff"
+  access?: "booth" | "boothManager" | "gate" | "staff" | "reviewer" | "prizeDesk"
   /** Placeholder page (NotInMvp): marked "soon". */
   soon?: boolean
 }
@@ -62,6 +62,8 @@ export const ADMIN_NAV: AdminNavSection[] = [
       { label: "Gate", href: GATE_SECTION_PATH, icon: DoorOpen, access: "gate" },
       { label: "Booth", href: BOOTH_SECTION_PATH, icon: ShopAltIcon, access: "booth" },
       { label: "Akses Booth", href: BOOTH_ACCESS_PATH, icon: KeyRound, access: "boothManager" },
+      { label: "Review Arcade", href: "/admin/arcade-review", icon: ImageIcon, access: "reviewer" },
+      { label: "Meja Hadiah", href: "/admin/prizes", icon: Gift, access: "prizeDesk" },
       ...(isProduction
         ? []
         : [
@@ -97,8 +99,16 @@ export const ADMIN_NAV: AdminNavSection[] = [
 ]
 
 /** What a user can open under /admin (from getAdminAccess). */
-export type NavSections = { isAdmin: boolean; booth: boolean; boothManager: boolean; gate: boolean; staff: boolean }
-export const ALL_SECTIONS: NavSections = { isAdmin: true, booth: true, boothManager: true, gate: true, staff: true }
+export type NavSections = {
+  isAdmin: boolean
+  booth: boolean
+  boothManager: boolean
+  gate: boolean
+  staff: boolean
+  reviewer?: boolean
+  prizeDesk?: boolean
+}
+export const ALL_SECTIONS: NavSections = { isAdmin: true, booth: true, boothManager: true, gate: true, staff: true, reviewer: true, prizeDesk: true }
 
 /** The menu this user sees: everything for admins, otherwise only the staff / booth / gate items they have. */
 export function adminNavFor(sections: NavSections): AdminNavSection[] {
@@ -109,6 +119,8 @@ export function adminNavFor(sections: NavSections): AdminNavSection[] {
       (item) =>
         (item.access === "booth" && sections.booth) ||
         (item.access === "boothManager" && sections.boothManager) ||
+        (item.access === "reviewer" && sections.reviewer) ||
+        (item.access === "prizeDesk" && sections.prizeDesk) ||
         (item.access === "gate" && sections.gate) ||
         (item.access === "staff" && sections.staff),
     ),

@@ -84,6 +84,9 @@ export type ArcadeSideQuest = {
   points: number
   verify: string
   shortcutUrl: string | null
+  needsHandle: string | null
+  needsVote: boolean
+  attempts: number
   status: 'todo' | 'review' | 'done' | 'rejected'
 }
 export type ArcadeCollection = { slug: string; title: string; description: string | null; bonus: number; progress: number; total: number }
@@ -107,11 +110,11 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
     supabase.from('booth_scan_events').select('booth_id').eq('user_id', userId).eq('kind', 'visit'),
     supabase
       .from('sidequests')
-      .select('id, slug, title, description, points, verify, shortcut_url')
+      .select('id, slug, title, description, points, verify, shortcut_url, needs_handle, needs_vote')
       .eq('is_active', true)
       .like('slug', 'arcade-%')
       .order('order_index'),
-    supabase.from('sidequest_submissions').select('quest_id, status').eq('user_id', userId),
+    supabase.from('sidequest_submissions').select('quest_id, status, attempts').eq('user_id', userId),
     supabase.from('arcade_collections').select('slug, title, description, rule, categories, min_total, min_per_category, bonus').eq('is_active', true).order('order_index'),
   ])
 
@@ -124,7 +127,9 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
     return { category: c.id, label: c.label, visited: list.filter((b) => b.visited).length, total: list.length, booths: list }
   }).filter((a) => a.total > 0)
 
-  const statusByQuest = new Map(((subs.data ?? []) as Array<{ quest_id: string; status: string }>).map((s) => [s.quest_id, s.status]))
+  const subByQuest = new Map(
+    ((subs.data ?? []) as Array<{ quest_id: string; status: string; attempts: number }>).map((s) => [s.quest_id, s]),
+  )
   const sideQuests: ArcadeSideQuest[] = ((quests.data ?? []) as Array<{
     id: string
     slug: string
@@ -133,8 +138,11 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
     points: number
     verify: string
     shortcut_url: string | null
+    needs_handle: string | null
+    needs_vote: boolean
   }>).map((q) => {
-    const s = statusByQuest.get(q.id)
+    const sub = subByQuest.get(q.id)
+    const s = sub?.status
     return {
       slug: q.slug,
       title: q.title,
@@ -142,6 +150,9 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
       points: q.points,
       verify: q.verify,
       shortcutUrl: q.shortcut_url,
+      needsHandle: q.needs_handle,
+      needsVote: q.needs_vote,
+      attempts: sub?.attempts ?? 0,
       status: s === 'approved' ? 'done' : s === 'pending' ? 'review' : s === 'rejected' ? 'rejected' : 'todo',
     }
   })
@@ -177,4 +188,18 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
     sideQuests,
     collections,
   }
+}
+
+/** Drone soccer teams a watcher can vote for (submitted / verified teams of the competition). */
+export async function getDroneTeams(): Promise<Array<{ id: string; name: string }>> {
+  const supabase = createServiceClient()
+  const { data: comp } = await supabase.from('competitions').select('id').eq('slug', 'microdrone-obstacle-race').maybeSingle()
+  if (!comp) return []
+  const { data } = await supabase
+    .from('competition_teams')
+    .select('id, team_name')
+    .eq('competition_id', comp.id)
+    .in('status', ['submitted', 'verified'])
+    .order('team_name')
+  return ((data ?? []) as Array<{ id: string; team_name: string }>).map((t) => ({ id: t.id, name: t.team_name }))
 }

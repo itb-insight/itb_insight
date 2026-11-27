@@ -1,10 +1,11 @@
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
+import ProofUploadForm from "@/features/quest/ProofUploadForm"
 import QuestPageShell from "@/features/quest/QuestPageShell"
 import { QuestScreen } from "@/features/quest/QuestShell"
 import styles from "@/features/quest/quest.module.css"
-import { getArcadePlayer } from "@/lib/arcade"
+import { getArcadePlayer, getDroneTeams } from "@/lib/arcade"
 import { createClient } from "@/lib/supabase/server"
 
 export const dynamic = "force-dynamic"
@@ -32,6 +33,9 @@ export default async function SideQuestPage({ params }: { params: Promise<{ id: 
   if (!quest) notFound()
 
   const external = quest.shortcutUrl?.startsWith("http")
+  const canUpload =
+    quest.verify === "proof" && !player.committee && (quest.status === "todo" || (quest.status === "rejected" && quest.attempts < 2))
+  const teams = canUpload && quest.needsVote ? await getDroneTeams() : undefined
 
   return (
     <QuestPageShell points={player.points} rank={player.rank}>
@@ -53,8 +57,9 @@ export default async function SideQuestPage({ params }: { params: Promise<{ id: 
               <span className={styles.cardTitle}>Buka tautan quest</span>
             </Link>
           ) : null}
-          {quest.verify === "proof" && quest.status !== "done" ? (
-            <p className={styles.cardMeta}>Upload bukti foto segera dibuka di halaman ini.</p>
+          {canUpload ? <ProofUploadForm quest={quest.slug} needsHandle={quest.needsHandle} teams={teams} /> : null}
+          {quest.status === "rejected" && !canUpload ? (
+            <p className={styles.cardMeta}>Kesempatan kirim ulang sudah habis.</p>
           ) : null}
         </div>
       </QuestScreen>

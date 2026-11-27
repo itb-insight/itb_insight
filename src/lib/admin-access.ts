@@ -31,6 +31,9 @@ export type AdminAccess = {
   booth: BoothAccess | null
   /** Opens the booth access page: adds / removes booth assignments (canManageBoothAccess). */
   boothManager: boolean
+  /** Insight Arcade duties (arcade_duties, 0032; admins always): review proofs / hand out prizes. */
+  reviewer: boolean
+  prizeDesk: boolean
   /** Opens the Gate section: admins, and gate staff (gateAccessFor). */
   gate: boolean
   /** Opens /admin itself and the D-day page: every staff member (staffAccessFor). */
@@ -87,13 +90,30 @@ async function readProfileRoles(userId: string): Promise<ProfileRoles | null> {
   }
 }
 
+/** Active Insight Arcade duties for a verified email. Fails closed. */
+async function readArcadeDuties(email: string | undefined, emailConfirmedAt: string | undefined): Promise<string[]> {
+  if (!email || !emailConfirmedAt) return []
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) return []
+  try {
+    const { data } = await createServiceClient()
+      .from('arcade_duties')
+      .select('duty')
+      .eq('email', email.trim().toLowerCase())
+      .is('revoked_at', null)
+    return ((data ?? []) as Array<{ duty: string }>).map((row) => row.duty)
+  } catch {
+    return []
+  }
+}
+
 // Cached per request: the /admin layout, the nested layout and the page all ask.
 const loadAdminAccess = cache(
   async (id: string, email: string | undefined, emailConfirmedAt: string | undefined): Promise<AdminAccess> => {
-    const [role, profile, assignedBoothIds] = await Promise.all([
+    const [role, profile, assignedBoothIds, duties] = await Promise.all([
       getUserRole({ id, email, email_confirmed_at: emailConfirmedAt }),
       readProfileRoles(id),
       loadAssignedBoothIds({ email, email_confirmed_at: emailConfirmedAt }),
+      readArcadeDuties(email, emailConfirmedAt),
     ])
     const isAdmin = role === 'admin'
     const roles = { isAdmin, roleA: profile?.role_a, roleB: profile?.role_b, roleC: profile?.role_c }
@@ -103,8 +123,11 @@ const loadAdminAccess = cache(
       isAdmin,
       booth,
       boothManager: canManageBoothAccess(roles),
+      reviewer: isAdmin || duties.includes('reviewer'),
+      prizeDesk: isAdmin || duties.includes('prize_desk'),
       gate,
-      staff: staffAccessFor({ isAdmin, role, roleA: profile?.role_a, booth: booth !== null, gate }),
+      staff:
+        staffAccessFor({ isAdmin, role, roleA: profile?.role_a, booth: booth !== null, gate }) || duties.length > 0,
       roleA: profile?.role_a ?? null,
     }
   },

@@ -1,11 +1,15 @@
 import 'server-only'
 
+import { adminEmailList } from '@/lib/admin'
 import { createServiceClient } from '@/lib/supabase/server'
 
 import { resolveAccountIdentity, type SubmitterAccount } from './account'
 import { getFormWindowState, type FeedbackForm } from './forms'
 import { MIN_FILL_MS, submissionSchema, validateAnswers, validateIdentity } from './schema'
 import { verifyTurnstile } from './turnstile'
+
+/** The D-day feedback form that pays the Insight Arcade quest (0032). */
+const ARCADE_FEEDBACK_FORM = 'kesan-pesan-2026'
 
 export type SubmitOutcome =
   | { ok: true; id: string | null }
@@ -98,6 +102,17 @@ export async function processSubmission({ form, body, account, remoteIp, now = n
     }
     console.error('[feedback] Insert failed', error)
     return fail(500, 'SERVER_ERROR', 'Gagal menyimpan feedback. Coba lagi sebentar lagi.')
+  }
+
+  if (form.slug === ARCADE_FEEDBACK_FORM && account?.id) {
+    // Insight Arcade: "Isi Kesan Pesan" (+10) for a signed-in submission (0031/0032). Idempotent;
+    // refused by the database outside the game window and for committee accounts.
+    const { error: awardError } = await supabase.rpc('arcade_award_auto', {
+      p_user: account.id,
+      p_slug: 'arcade-kesan-pesan',
+      p_admin_emails: adminEmailList(),
+    })
+    if (awardError) console.error('[feedback] arcade award failed', awardError.message)
   }
 
   return { ok: true, id: data.id as string }

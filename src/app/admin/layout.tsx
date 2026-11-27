@@ -41,6 +41,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       isAdmin={access.isAdmin}
       booth={Boolean(access.booth)}
       boothManager={access.boothManager}
+      reviewer={access.reviewer}
+      prizeDesk={access.prizeDesk}
       gate={access.gate}
       staff={access.staff}
     >
