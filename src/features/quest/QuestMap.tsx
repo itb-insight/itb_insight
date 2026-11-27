@@ -70,7 +70,7 @@ export default function QuestMap({
   nearby = "15 open nearby",
   filters = ["All", "Booths", "Landmarks", "Events"],
   spot = { initials: "LM", name: "Kolam Intel", meta: "Landmark | ~120 m  |  QR + photo", points: "+80" },
-  backHref = "/quest",
+  backHref = "/arcade",
 }: QuestMapProps) {
   const uid = useId().replace(/:/g, "")
   const [filter, setFilter] = useState(filters[0])

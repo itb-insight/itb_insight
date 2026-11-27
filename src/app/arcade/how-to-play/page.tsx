@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation"
+import { redirect } from "next/navigation"
 
 import QuestHowToPlay from "@/features/quest/QuestHowToPlay"
 import QuestPageShell from "@/features/quest/QuestPageShell"
@@ -19,7 +19,6 @@ export default async function QuestHowToPlayPage() {
     dan syarat NODE_ENV di MobileMenuHifi yang menyembunyikan menu Quest —
     begitu quest siap tayang.
   */
-  if (process.env.NODE_ENV === "production") notFound()
 
   /*
     Pintu masuk quest dari menu situs selalu menunjuk ke sini, termasuk untuk
@@ -33,7 +32,7 @@ export default async function QuestHowToPlayPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect("/login?next=/quest/how-to-play")
+  if (!user) redirect("/login?next=/arcade/how-to-play")
 
   return (
     <QuestPageShell>

@@ -94,7 +94,7 @@ export default function RewardsPage() {
           note: "Show QR to merch-desk staff. Points are taken once they confirm.",
           action: "Show QR",
         }}
-        historyHref="/quest/history"
+        historyHref="/arcade/history"
         tiers={TIERS}
         rewards={REWARDS}
         youAre={{

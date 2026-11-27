@@ -36,6 +36,7 @@ interface QuestHeaderProps {
 const LINKS = [
   { href: "/event", label: "Event" },
   { href: "/competition", label: "Competition" },
+  { href: "/arcade", label: "Arcade" },
   { href: MAP_PATH, label: "Map" },
 ]
 
@@ -45,9 +46,9 @@ export default function QuestHeader({
   rank = "#37",
   flashLabel = "FLASH · 2× · 14:59",
   uid = "quest-header",
-  startHref = "/quest/how-to-play",
+  startHref = "/arcade/how-to-play",
   signInHref = "/login",
-  questHref = "/quest",
+  questHref = "/arcade",
   profileHref = "/dashboard/profile",
 }: QuestHeaderProps) {
   return (

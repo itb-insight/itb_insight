@@ -27,7 +27,7 @@ interface QuestMobileHeaderProps {
 
 export default function QuestMobileHeader({
   points = "1,240",
-  questHref = "/quest",
+  questHref = "/arcade",
   uid = "quest-mobile-header",
 }: QuestMobileHeaderProps) {
   return (

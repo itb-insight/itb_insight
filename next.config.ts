@@ -57,6 +57,13 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return posthogRewrites();
   },
+  // The quest pages became Insight Arcade (/arcade); old links and printed QRs keep working.
+  async redirects() {
+    return [
+      { source: "/quest", destination: "/arcade", permanent: true },
+      { source: "/quest/:path*", destination: "/arcade/:path*", permanent: true },
+    ];
+  },
   experimental: {
     authInterrupts: true, // unauthorized() in src/app/test-unauthorized (dev only)
   },

@@ -145,7 +145,7 @@ function BarisPeringkat({ entry }: { entry: LeaderboardEntry }) {
     <li className={styles.baris}>
       <span className={styles.peringkat}>{entry.rank}</span>
       <span className={styles.nama}>{entry.name}</span>
-      <span className={styles.quests}>{entry.quests} quests</span>
+      {entry.quests > 0 ? <span className={styles.quests}>{entry.quests} quests</span> : null}
       <span className={styles.poin}>{entry.points}</span>
     </li>
   )

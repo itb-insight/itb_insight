@@ -32,20 +32,27 @@ export default function QuestPageShell({
   children,
   activeTab,
   questsHref,
+  points,
+  rank,
 }: {
   children: ReactNode
   /** Tab yang menyala. Tanpa ini navigasi bawahnya tidak digambar. */
   activeTab?: QuestTab
-  /** Tujuan tab Quests, kalau bukan /quest. */
+  /** Tujuan tab Quests, kalau bukan /arcade. */
   questsHref?: string
+  /** Poin dan peringkat pemain (Insight Arcade); tanpa ini header menampilkan 0. */
+  points?: number
+  rank?: number | null
 }) {
+  const pointsLabel = new Intl.NumberFormat("en-US").format(points ?? 0)
+  const rankLabel = rank ? `#${rank}` : "-"
   return (
     <div className={styles.shell}>
       <div className={styles.headerMobile}>
-        <QuestMobileHeader />
+        <QuestMobileHeader points={pointsLabel} />
       </div>
       <div className={styles.headerDesktop}>
-        <QuestDesktopHeader />
+        <QuestDesktopHeader points={pointsLabel} rank={rankLabel} />
       </div>
       {children}
       {activeTab ? (

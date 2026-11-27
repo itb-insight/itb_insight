@@ -42,6 +42,7 @@ export default function NavbarHifi({ isSolid = false, solidOnMobile = false }: N
           <div className={styles.navLinks}>
             <Link href="/event" className={styles.navLink}>Event</Link>
             <Link href="/competition" className={styles.navLink}>Competition</Link>
+            <Link href="/arcade" className={styles.navLink}>Arcade</Link>
             {isMapsDisabled() ? (
               <ComingSoon className={styles.navLink} placement="bottom">Map</ComingSoon>
             ) : (

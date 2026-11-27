@@ -14,8 +14,8 @@ import QuestHeader from "./QuestHeader"
  * jadi keadaan signedOut yang tergambar lebih dulu — sama seperti tombol
  * Log In / Dashboard di navbar situs.
  */
-export default function QuestDesktopHeader() {
+export default function QuestDesktopHeader({ points, rank }: { points?: string; rank?: string }) {
   const signedIn = useHasSession()
 
-  return <QuestHeader state={signedIn ? "signedIn" : "signedOut"} uid="quest-page-header" />
+  return <QuestHeader state={signedIn ? "signedIn" : "signedOut"} uid="quest-page-header" points={points} rank={rank} />
 }

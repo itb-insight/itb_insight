@@ -32,25 +32,25 @@ interface QuestHowToPlayProps {
 /* Teks dari Figma, typo-nya sudah dibetulkan ("set your rank", "Leaderboard"). */
 const DEFAULT_RULES: QuestRule[] = [
   {
-    lead: "Do Quest ",
-    body: "at sponsors booth, landmarks, and events. Scan the code booth staff give you after a chat or demo.",
+    lead: "Main di booth. ",
+    body: "Tunjukkan QR profilmu ke panitia di booth Tech-Xhibition, Play-Tech, Show-Tech, Seminar, dan Drone Soccer untuk dapat poin. Selesaikan side quest untuk poin tambahan.",
   },
   {
-    lead: "Two Balances. ",
-    body: "Wallet points are spent on rewards. Lifetime points set your rank, and spending never lowers it.",
+    lead: "Hadiah. ",
+    body: "Sticker untuk yang sudah menyelesaikan quest (selama stok ada). Peringkat 1–5 dapat Mug, 6–10 Keychain. Ambil di Booth Entre sampai 18:30.",
   },
   {
-    lead: "Leaderboard freezes at [FREEZE TIME]. ",
-    body: "Only quests synced before then count towards the doorprize.",
+    lead: "Papan dibekukan 14:50 WIB. ",
+    body: "Insight Arcade buka 06:00–14:50. Poin setelah itu tidak dihitung. Kecurangan bisa membatalkan poin.",
   },
 ]
 
 export default function QuestHowToPlay({
   rules = DEFAULT_RULES,
-  closeHref = "/quest",
+  closeHref = "/arcade",
   privacyHref = "/privacy",
   rulesHref = "/terms",
-  enterHref = "/quest",
+  enterHref = "/arcade",
 }: QuestHowToPlayProps) {
   const uid = useId().replace(/:/g, "")
   const router = useRouter()

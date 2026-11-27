@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { adminEmailList } from '@/lib/admin'
 import { createServiceClient } from '@/lib/supabase/server'
 import { type GateCheckIn, type VisitorTicket } from '@/lib/types/database'
 import { recordAuditLog } from '@/lib/audit'
@@ -47,6 +48,16 @@ export async function processGateCheckIn(params: CheckInParams): Promise<CheckIn
         return false
       })
     : false
+  if (type === 'staff_scan' || type === 'manual_lookup') {
+    // Insight Arcade: "Registrasi D-Day" (+20) on a staff gate check-in. Idempotent; refused by the
+    // database outside the game window, while paused, and for committee accounts (0031).
+    const { error } = await createServiceClient().rpc('arcade_award_auto', {
+      p_user: result.ticket.user_id,
+      p_slug: 'arcade-registrasi-dday',
+      p_admin_emails: adminEmailList(),
+    })
+    if (error) console.error('[Check-In] arcade gate award failed:', error.message)
+  }
   return { ...result, firstVisitFlag }
 }
 

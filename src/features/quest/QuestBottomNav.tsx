@@ -23,11 +23,11 @@ interface QuestBottomNavProps {
 }
 
 const DEFAULT_HREFS: Record<QuestTab | "scan", string> = {
-  quests: "/quest",
-  map: "/quest/map",
-  scan: "/quest/scan",
-  board: "/quest/leaderboard",
-  rewards: "/quest/rewards",
+  quests: "/arcade",
+  map: "/event-map",
+  scan: "/arcade/qr",
+  board: "/arcade/leaderboard",
+  rewards: "/arcade/rewards",
 }
 
 const TABS = [

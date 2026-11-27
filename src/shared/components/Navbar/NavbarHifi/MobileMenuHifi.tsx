@@ -25,10 +25,7 @@ const LINKS = [
   useHasSession() mengembalikan false sampai hidrasi selesai, jadi tautannya
   akan sempat menunjuk /login walau pengguna sudah masuk.
 */
-const MENU_LINKS =
-  process.env.NODE_ENV === "production"
-    ? LINKS
-    : [...LINKS, { href: "/quest/how-to-play", label: "Quest" }]
+const MENU_LINKS = [...LINKS, { href: "/arcade", label: "Insight Arcade" }]
 
 export default function MobileMenuHifi({
   variant = "navbar",
