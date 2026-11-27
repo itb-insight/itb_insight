@@ -118,7 +118,7 @@ describe('Sidequest & Admin Verification API Routes', () => {
     expect(json.data.quests).toHaveLength(1)
   })
 
-  it('POST /api/sidequests requires authentication and creates pending submission', async () => {
+  it('POST /api/sidequests requires authentication and is closed since Insight Arcade went live', async () => {
     state.user = null
     expect(
       (
@@ -138,9 +138,8 @@ describe('Sidequest & Admin Verification API Routes', () => {
         body: JSON.stringify({ questSlug: 'follow-ig-itb-insight', proofUrl: 'https://instagram.com/p/1' }),
       }),
     )
-    expect(res.status).toBe(201)
-    const json = await res.json()
-    expect(json.data.submission.status).toBe('pending')
+    expect(res.status).toBe(410)
+    expect((await res.json()).error.code).toBe('GONE')
   })
 
   it('POST /api/admin/sidequests is admin-only and verifies a submission', async () => {

@@ -1,13 +1,12 @@
 "use client"
 
 import { Camera, CheckCircle2, Gift, ScanLine, Sparkles, X } from "lucide-react"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 import { postWithAuth } from "@/features/dashboard/apiClient"
 import PanelHifi from "@/features/admin-hifi/PanelHifi"
 import {
   groupBoothsByCategory,
-  markGiven,
   NOTHING_GIVEN,
   planBoothAward,
   type AwardPlan,
@@ -20,22 +19,22 @@ import QrCameraScanner from "@/shared/components/QrCameraScanner/QrCameraScanner
 import styles from "./BoothPointsScanner.module.css"
 
 /*
-  Booth points scanner (/admin/booth). Rules: src/lib/booth-points.ts.
+  Booth points scanner (/admin/booth), Insight Arcade. Rules: src/lib/booth-points.ts.
     1. Scan the visitor's profile QR (dashboard -> profil).
     2. Below it, pick the booth (only when the account has more than one), grouped by event.
     3. Contribution or Bonus, each once per visitor per booth; the amounts are the booth's own.
-  POST /api/booth-points/scan checks the role and the booth, resolves the visitor and confirms it
-  received the award. PRACTICE: no points are added; what was given is remembered in this tab
-  (sessionStorage) so the once-per-option rule can still be shown.
+  POST /api/booth-points/scan checks the role and the booth, resolves the visitor, and writes the
+  award through public.arcade_award_booth. What the visitor already has at the booth comes from the
+  server. Each award attempt carries a clientRef that is reused when the same award is retried
+  after a network error, so a retry never counts twice.
 */
 
 type Visitor = { key: string; fullName: string; institution: string | null }
-type ScanNote = "committee_account" | "own_account"
 
-type Lookup = { booth: PointsBooth; visitor: Visitor; notes: ScanNote[] }
-type Award = Lookup & { plan: AwardPlan; receivedAt: string; reference: string }
+type Lookup = { booth: PointsBooth; visitor: Visitor; given: GivenOptions }
+type Award = Lookup & { plan: AwardPlan; receivedAt: string; reference: string; duplicate: boolean }
 
-type Scanned = { qrCode: string; visitor: Visitor; notes: ScanNote[] }
+type Scanned = { qrCode: string; visitor: Visitor; given: GivenOptions; boothId: string }
 
 type Phase =
   | { kind: "idle" }
@@ -43,35 +42,16 @@ type Phase =
   | { kind: "busy"; label: string }
   | { kind: "error"; message: string }
 
-type HistoryEntry = Award & { practice: boolean }
-
-const LEDGER_KEY = "itbi:booth-points:practice-ledger"
-
-type Ledger = Record<string, GivenOptions>
-
-function readLedger(): Ledger {
-  if (typeof window === "undefined") return {}
-  try {
-    const raw = window.sessionStorage.getItem(LEDGER_KEY)
-    return raw ? (JSON.parse(raw) as Ledger) : {}
-  } catch {
-    return {}
+class ScanRequestError extends Error {
+  constructor(
+    message: string,
+    readonly code: string | null,
+    readonly given: GivenOptions | null,
+    /** True when the request may not have reached the server (retry with the same clientRef). */
+    readonly network: boolean,
+  ) {
+    super(message)
   }
-}
-
-function writeLedger(ledger: Ledger) {
-  try {
-    window.sessionStorage.setItem(LEDGER_KEY, JSON.stringify(ledger))
-  } catch {
-    // Private mode / storage blocked: the rule still holds until the page reloads.
-  }
-}
-
-const ledgerKey = (boothId: string, visitorKey: string) => `${boothId}:${visitorKey}`
-
-const NOTE_TEXT: Record<ScanNote, string> = {
-  committee_account: "Ini akun panitia. Saat live, akun panitia tidak bisa menerima poin. Untuk latihan tetap boleh.",
-  own_account: "Ini akunmu sendiri. Saat live, kamu tidak bisa memberi poin ke akun sendiri.",
 }
 
 const timeFormat = new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
@@ -81,17 +61,29 @@ function formatPlan(plan: AwardPlan): string {
   return plan.contribution > 0 ? `+${plan.bonus} Bonus + ${plan.contribution} Contribution` : `+${plan.bonus} Bonus`
 }
 
+function newClientRef(): string {
+  const webCrypto = globalThis.crypto
+  if (typeof webCrypto.randomUUID === "function") return webCrypto.randomUUID()
+  // Fallback for old browsers: RFC 4122 v4 from getRandomValues.
+  const bytes = webCrypto.getRandomValues(new Uint8Array(16))
+  bytes[6] = (bytes[6] & 0x0f) | 0x40
+  bytes[8] = (bytes[8] & 0x3f) | 0x80
+  const hex = [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("")
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
+}
+
 export default function BoothPointsScanner({ booths, practice }: { booths: PointsBooth[]; practice: boolean }) {
   const boothGroups = groupBoothsByCategory(booths)
   const [boothId, setBoothId] = useState(boothGroups[0]?.booths[0]?.id ?? "")
   const [phase, setPhase] = useState<Phase>({ kind: "idle" })
   const [scanned, setScanned] = useState<Scanned | null>(null)
   const [lastAward, setLastAward] = useState<Award | null>(null)
-  const [ledger, setLedger] = useState<Ledger>(readLedger)
-  const [history, setHistory] = useState<HistoryEntry[]>([])
+  const [history, setHistory] = useState<Award[]>([])
+  // Award attempts not yet confirmed, keyed by visitor:booth:option -> clientRef.
+  const pendingRefs = useRef(new Map<string, string>())
 
   const booth = booths.find((b) => b.id === boothId) ?? null
-  const given = scanned && booth ? (ledger[ledgerKey(booth.id, scanned.visitor.key)] ?? NOTHING_GIVEN) : NOTHING_GIVEN
+  const given = scanned && scanned.boothId === boothId ? scanned.given : NOTHING_GIVEN
   const busy = phase.kind === "busy"
 
   if (booths.length === 0) {
@@ -106,18 +98,26 @@ export default function BoothPointsScanner({ booths, practice }: { booths: Point
   }
 
   async function call<T>(body: Record<string, unknown>): Promise<T> {
-    const res = await postWithAuth<T>("/api/booth-points/scan", body)
-    if (res.needsAuth) throw new Error("Sesi berakhir. Silakan login ulang.")
-    if (!res.payload.success) throw new Error(res.payload.error.message)
+    let res: Awaited<ReturnType<typeof postWithAuth<T>>>
+    try {
+      res = await postWithAuth<T>("/api/booth-points/scan", body)
+    } catch {
+      throw new ScanRequestError("Sinyal terputus. Coba lagi: poin tidak akan terhitung dua kali.", null, null, true)
+    }
+    if (res.needsAuth) throw new ScanRequestError("Sesi berakhir. Silakan login ulang.", null, null, false)
+    if (!res.payload.success) {
+      const data = res.payload.data as { given?: GivenOptions } | null
+      throw new ScanRequestError(res.payload.error.message, res.payload.error.code, data?.given ?? null, false)
+    }
     return res.payload.data
   }
 
-  async function handleScanned(qrCode: string) {
+  async function lookup(qrCode: string, forBoothId: string) {
     setPhase({ kind: "busy", label: "Mencari pengunjung…" })
     setLastAward(null)
     try {
-      const lookup = await call<Lookup>({ qrCode, boothId })
-      setScanned({ qrCode, visitor: lookup.visitor, notes: lookup.notes })
+      const result = await call<Lookup>({ qrCode, boothId: forBoothId })
+      setScanned({ qrCode, visitor: result.visitor, given: result.given, boothId: forBoothId })
       setPhase({ kind: "idle" })
     } catch (err) {
       setScanned(null)
@@ -125,20 +125,33 @@ export default function BoothPointsScanner({ booths, practice }: { booths: Point
     }
   }
 
+  function handleBoothChange(nextBoothId: string) {
+    setBoothId(nextBoothId)
+    // What the visitor has differs per booth: ask the server again for the new booth.
+    if (scanned) void lookup(scanned.qrCode, nextBoothId)
+  }
+
   async function handleGive(option: BoothPointOption) {
     if (!scanned || !booth) return
+    const key = `${scanned.visitor.key}:${booth.id}:${option}`
+    const clientRef = pendingRefs.current.get(key) ?? newClientRef()
+    pendingRefs.current.set(key, clientRef)
+
     setPhase({ kind: "busy", label: "Mengirim ke server…" })
     try {
-      const award = await call<Award>({ qrCode: scanned.qrCode, boothId: booth.id, option, given })
-      const key = ledgerKey(booth.id, scanned.visitor.key)
-      const next = { ...ledger, [key]: markGiven(given, option) }
-      setLedger(next)
-      writeLedger(next)
+      const award = await call<Award>({ qrCode: scanned.qrCode, boothId: booth.id, option, clientRef })
+      pendingRefs.current.delete(key)
+      setScanned({ ...scanned, given: award.given, boothId: booth.id })
       setLastAward(award)
-      setHistory((prev) => [{ ...award, practice }, ...prev].slice(0, 30))
+      if (!award.duplicate) setHistory((prev) => [award, ...prev].slice(0, 30))
       setPhase({ kind: "idle" })
       navigator.vibrate?.(60)
     } catch (err) {
+      if (err instanceof ScanRequestError) {
+        // A definite answer from the server ends this attempt; a network error keeps the ref for the retry.
+        if (!err.network) pendingRefs.current.delete(key)
+        if (err.given) setScanned({ ...scanned, given: err.given, boothId: booth.id })
+      }
       setPhase({ kind: "error", message: err instanceof Error ? err.message : "Gagal mengirim poin." })
     }
   }
@@ -158,7 +171,9 @@ export default function BoothPointsScanner({ booths, practice }: { booths: Point
       detail: `+${contributionPoints} poin, untuk pengunjung yang aktif di booth`,
       icon: Sparkles,
     },
-    {
+  ]
+  if (bonusPoints > 0) {
+    options.push({
       option: "bonus",
       title: "Bonus",
       detail:
@@ -166,8 +181,8 @@ export default function BoothPointsScanner({ booths, practice }: { booths: Point
           ? `+${bonusPoints} poin tambahan`
           : `+${bonusPoints} poin tambahan, sekaligus Contribution (+${contributionPoints})`,
       icon: Gift,
-    },
-  ]
+    })
+  }
 
   return (
     <div className={styles.layout}>
@@ -182,7 +197,10 @@ export default function BoothPointsScanner({ booths, practice }: { booths: Point
         <PanelHifi title="1. Scan QR pengunjung" subtitle="QR ada di halaman profil pengunjung (Dashboard → Profil).">
           {phase.kind === "scanning" ? (
             <>
-              <QrCameraScanner onResult={handleScanned} onError={(message) => setPhase({ kind: "error", message })} />
+              <QrCameraScanner
+                onResult={(qrCode) => void lookup(qrCode, boothId)}
+                onError={(message) => setPhase({ kind: "error", message })}
+              />
               <button type="button" className={styles.secondaryBtn} onClick={() => setPhase({ kind: "idle" })}>
                 <X size={18} aria-hidden="true" /> Tutup kamera
               </button>
@@ -192,11 +210,6 @@ export default function BoothPointsScanner({ booths, practice }: { booths: Point
               <p className={styles.visitorLabel}>Pengunjung</p>
               <p className={styles.visitorName}>{scanned.visitor.fullName}</p>
               {scanned.visitor.institution ? <p className={styles.muted}>{scanned.visitor.institution}</p> : null}
-              {scanned.notes.map((note) => (
-                <p key={note} className={styles.note}>
-                  {NOTE_TEXT[note]}
-                </p>
-              ))}
               <button type="button" className={styles.secondaryBtn} onClick={startScan} disabled={busy}>
                 <ScanLine size={18} aria-hidden="true" /> Scan pengunjung lain
               </button>
@@ -213,7 +226,7 @@ export default function BoothPointsScanner({ booths, practice }: { booths: Point
               <select
                 className={styles.select}
                 value={boothId}
-                onChange={(e) => setBoothId(e.target.value)}
+                onChange={(e) => handleBoothChange(e.target.value)}
                 disabled={busy}
               >
                 {boothGroups.map((group) => (
@@ -279,14 +292,16 @@ export default function BoothPointsScanner({ booths, practice }: { booths: Point
             {lastAward && phase.kind === "idle" ? (
               <div className={`${styles.result} ${styles.resultOk}`}>
                 <p className={styles.resultTitle}>
-                  <CheckCircle2 size={22} aria-hidden="true" /> Sinyal diterima server
+                  <CheckCircle2 size={22} aria-hidden="true" />{" "}
+                  {lastAward.duplicate ? "Sudah tercatat sebelumnya" : "Poin tercatat"}
                 </p>
                 <p>
-                  {formatPlan(lastAward.plan)} untuk {lastAward.visitor.fullName} · {lastAward.booth.name}
+                  {lastAward.duplicate ? "Tidak ada poin tambahan" : formatPlan(lastAward.plan)} untuk{" "}
+                  {lastAward.visitor.fullName} · {lastAward.booth.name}
                 </p>
                 <p className={styles.muted}>
-                  Diterima {timeFormat.format(new Date(lastAward.receivedAt))} · ref {lastAward.reference}
-                  {practice ? " · latihan, poin tidak ditambahkan" : ""}
+                  Diterima {timeFormat.format(new Date(lastAward.receivedAt))}
+                  {lastAward.reference ? ` · ref ${lastAward.reference}` : ""}
                 </p>
                 <button type="button" className={styles.primaryBtn} onClick={startScan}>
                   <ScanLine size={20} aria-hidden="true" /> Scan pengunjung berikutnya
@@ -298,17 +313,18 @@ export default function BoothPointsScanner({ booths, practice }: { booths: Point
       </div>
 
       <div className={styles.column}>
-        <PanelHifi title="Riwayat sesi ini" subtitle="Pengiriman yang sudah dikonfirmasi server, terbaru di atas.">
+        <PanelHifi title="Riwayat sesi ini" subtitle="Poin yang sudah tercatat di server, terbaru di atas.">
           {history.length === 0 ? (
             <p className={styles.muted}>Belum ada.</p>
           ) : (
             <ul className={styles.log}>
               {history.map((entry) => (
-                <li key={entry.reference} className={styles.logRow}>
+                <li key={`${entry.reference}-${entry.receivedAt}`} className={styles.logRow}>
                   <span className={styles.logName}>{entry.visitor.fullName}</span>
                   <span className={styles.logOutcome}>{formatPlan(entry.plan)}</span>
                   <span className={styles.muted}>
-                    {entry.booth.name} · {timeFormat.format(new Date(entry.receivedAt))} · ref {entry.reference}
+                    {entry.booth.name} · {timeFormat.format(new Date(entry.receivedAt))}
+                    {entry.reference ? ` · ref ${entry.reference}` : ""}
                   </span>
                 </li>
               ))}

@@ -7,6 +7,14 @@ import { getAuthenticatedUser } from '@/lib/auth'
 import { createServiceClient } from '@/lib/supabase/server'
 import { type ProfileStaffDuty, type UserRole } from '@/lib/types/database'
 
+/** ADMIN_EMAILS, lowercased (Insight Arcade: admins never earn points, migration 0030). */
+export function adminEmailList(): string[] {
+  return (process.env.ADMIN_EMAILS || '')
+    .split(',')
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean)
+}
+
 export function isAdminEmail(email?: string | null) {
   return Boolean(
     email &&

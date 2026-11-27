@@ -22,12 +22,14 @@ import { type ProfileRoleA, type ProfileRoleB } from '@/lib/types/database'
     - Bonus:        the booth's bonus on top, and the Contribution too if it was not given yet.
   After a Bonus nothing is left at that booth; after a Contribution only the Bonus is.
 
-  PRACTICE: nothing is written yet. The API confirms the scan reached the server but adds no
-  points, and the scanner remembers what was given in this browser only. Going live = reading and
-  writing booth_scan_events instead of the client's `given`, then set BOOTH_POINTS_PRACTICE to false.
+  LIVE (Insight Arcade, migration 0030): awards are written by public.arcade_award_booth, which
+  enforces the rules above in the database, plus the game window (arcade_settings), the kill
+  switch, committee accounts and self-award. What a visitor already has comes from the server
+  (src/lib/booth-award.ts), never from the scanner.
 */
 
-export const BOOTH_POINTS_PRACTICE = true
+/** False since Insight Arcade went live: scans write real points. */
+export const BOOTH_POINTS_PRACTICE = false
 
 /**
  * Example amounts for the gate demo (src/features/gate/GateScanner.tsx), which shows visitors what
@@ -80,6 +82,9 @@ export const BOOTH_CATEGORIES = [
   { id: 'tech-xhibition', label: 'Tech-Xhibition' },
   { id: 'play-tech', label: 'Play-Tech' },
   { id: 'show-tech', label: 'Show-Tech' },
+  // 0030: the other staff-scanned quests (no bonus).
+  { id: 'seminar', label: 'Seminar Technology' },
+  { id: 'drone-soccer', label: 'Drone Soccer' },
 ] as const
 
 export function boothCategoryLabel(category: string): string {

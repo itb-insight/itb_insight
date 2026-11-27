@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 
 import PageHeader from "@/features/admin/components/PageHeader/PageHeader"
 import QrPointsTester from "@/features/admin/qr-points/QrPointsTester"
@@ -11,9 +11,12 @@ export const metadata = {
   robots: { index: false, follow: false },
 }
 
-// TEMPORARY: manual test bench for the booth points flow (scan personal QR -> confirm -> award).
+// TEMPORARY: manual test bench for the old booth points flow (scan personal QR -> confirm -> award).
 // Admin-only ((admin-only)/layout.tsx); the check below stays as a second gate. The API re-checks the role.
+// Off in production since Insight Arcade went live: it wrote real points (and its API now answers 410).
 export default async function QrPointsPage() {
+  if (process.env.NODE_ENV === "production") notFound()
+
   const supabase = await createClient()
   const {
     data: { user },

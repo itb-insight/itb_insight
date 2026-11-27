@@ -43,6 +43,8 @@ const isProduction = process.env.NODE_ENV === "production"
   Development only:
   - Quest Ops: its page notFound()s in production (mock data, src/features/quest-ops/mockData.ts).
     Remove the condition together with that gate.
+  - QR Points (test): wrote real points through the old award flow; off in production since
+    Insight Arcade went live (migration 0030).
   - "Desain hi-fi": the /admin-hifi/* mock pages, which also 404 in production.
 */
 export const ADMIN_NAV: AdminNavSection[] = [
@@ -60,8 +62,12 @@ export const ADMIN_NAV: AdminNavSection[] = [
       { label: "Gate", href: GATE_SECTION_PATH, icon: DoorOpen, access: "gate" },
       { label: "Booth", href: BOOTH_SECTION_PATH, icon: ShopAltIcon, access: "booth" },
       { label: "Akses Booth", href: BOOTH_ACCESS_PATH, icon: KeyRound, access: "boothManager" },
-      { label: "QR Points (test)", href: "/admin/qr-points", icon: ScanLine },
-      ...(isProduction ? [] : [{ label: "Quest Ops", href: "/admin/quest-ops", icon: Gamepad2 }]),
+      ...(isProduction
+        ? []
+        : [
+            { label: "QR Points (test)", href: "/admin/qr-points", icon: ScanLine },
+            { label: "Quest Ops", href: "/admin/quest-ops", icon: Gamepad2 },
+          ]),
     ],
   },
   {

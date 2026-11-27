@@ -60,7 +60,7 @@ export default function PointsCard({ points, isCommittee, canScan }: PointsCardP
       )}
 
       {canScan ? (
-        <Link href="/dashboard/booth-scan" className={styles.scanLink}>
+        <Link href="/admin/booth" className={styles.scanLink}>
           Buka scanner booth
         </Link>
       ) : null}

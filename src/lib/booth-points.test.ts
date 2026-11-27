@@ -116,14 +116,14 @@ describe('groupBoothsByCategory', () => {
   it('follows the event order, keeps booth order, and puts unknown categories last', () => {
     const booths = [
       { id: 'p1', category: 'play-tech' },
-      { id: 'x', category: 'seminar' },
+      { id: 'x', category: 'mystery' },
       { id: 't1', category: 'tech-xhibition' },
       { id: 'p2', category: 'play-tech' },
     ]
     expect(groupBoothsByCategory(booths).map((g) => [g.label, g.booths.map((b) => b.id)])).toEqual([
       ['Tech-Xhibition', ['t1']],
       ['Play-Tech', ['p1', 'p2']],
-      ['seminar', ['x']],
+      ['mystery', ['x']],
     ])
   })
 })
