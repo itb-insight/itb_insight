@@ -10,6 +10,10 @@
   - never: /api, /ingest, /auth, RSC requests, non-GET, other origins (Supabase, PostHog...)
 
   Bump VERSION when these rules or OFFLINE_PAGES change: old caches are deleted on activate.
+
+  No navigation preload: it sends every navigation to the server before this worker decides, and a
+  navigation the worker leaves alone (/auth/callback) is then sent a second time. The second
+  request reused Google's one-time sign-in code and failed ("Tautan masuk tidak valid").
 */
 
 const VERSION = "v1"
@@ -43,7 +47,8 @@ self.addEventListener("activate", (event) => {
     (async () => {
       const names = await caches.keys()
       await Promise.all(names.filter((n) => n.startsWith("itbi-") && !KEEP.includes(n)).map((n) => caches.delete(n)))
-      if (self.registration.navigationPreload) await self.registration.navigationPreload.enable().catch(() => undefined)
+      // v1 of this worker turned preload on; it stays on until turned off.
+      if (self.registration.navigationPreload) await self.registration.navigationPreload.disable().catch(() => undefined)
       await self.clients.claim()
     })(),
   )
@@ -82,8 +87,7 @@ function isCacheablePage(response) {
 async function navigation(event, url) {
   const key = pageKey(url)
   const network = (async () => {
-    const preloaded = await event.preloadResponse
-    const response = preloaded || (await fetch(event.request))
+    const response = await fetch(event.request)
     if (key && isCacheablePage(response)) {
       const copy = response.clone()
       event.waitUntil(caches.open(PAGES).then((cache) => cache.put(key, copy)))

@@ -23,7 +23,7 @@ src/
   app/                      # Next.js App Router. Thin route files only.
     <route>/page.tsx        # imports and renders a feature component
     api/<resource>/route.ts # route handlers (backend)
-    auth/callback/route.ts  # OAuth / magic-link landing
+    auth/callback/route.ts  # OAuth (Google) landing
   features/                 # Feature modules — the bulk of the UI lives here
     <feature>/Component.tsx + Component.module.css
   shared/                   # Cross-cutting UI (Navbar, Footer) + hooks/utils

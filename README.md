@@ -6,7 +6,7 @@ originally-separate repos (see [docs/MVP-STATUS.md](./docs/MVP-STATUS.md)).
 
 ## What works
 
-- **Auth** — email magic link + Google OAuth (Supabase Auth).
+- **Auth** — Google OAuth only (Supabase Auth).
 - **Team & individual competition registration** — create a team, share its UID, teammates join,
   leader submits — all persisted to Supabase.
 - **Participant dashboard** — registrations, status, and the submit action.

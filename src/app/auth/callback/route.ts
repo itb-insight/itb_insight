@@ -30,6 +30,12 @@ export async function GET(request: Request) {
 
       return NextResponse.redirect(new URL(next, origin))
     }
+
+    // The code is single-use. If this request is a repeat (a browser or proxy sent the callback
+    // twice) the first one already signed the user in: carry on instead of showing an error.
+    const { data } = await supabase.auth.getUser()
+    if (data.user) return NextResponse.redirect(new URL(next, origin))
+    console.warn('[auth/callback] code exchange failed:', error.code ?? error.message)
   }
 
   return NextResponse.redirect(new URL('/login?error=auth-code', origin))

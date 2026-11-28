@@ -36,9 +36,6 @@ export default function PrivacyPage() {
           Google data.
         </li>
         <li>
-          <strong>When you sign in with an email link:</strong> your email address.
-        </li>
-        <li>
           <strong>Profile details you add:</strong> full name, phone number and institution
           (school or university).
         </li>
