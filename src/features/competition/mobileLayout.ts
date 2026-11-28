@@ -83,7 +83,7 @@ export function mobileLayout(c: Competition): MobileLayout {
   const hasButtons = c.syllabusUrl !== null || c.guidebookUrl !== null;
   const heroEnd = hasButtons ? DESIGN.heroEndWithButtons : DESIGN.heroEndNoButtons;
 
-  const collabY = c.collaboration ? heroEnd + GAP.heroToCollab : null;
+  const collabY = c.collaboration?.length ? heroEnd + GAP.heroToCollab : null;
   const aboveCountdown = collabY === null ? heroEnd : collabY + COLLAB_HEIGHT;
 
   const countdownTitleY = aboveCountdown + GAP.heroToCountdown;

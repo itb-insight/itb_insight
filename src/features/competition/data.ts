@@ -152,7 +152,7 @@ const DATA: Competition[] = [
       { id: "final", title: "Final", dateLabel: "28 November 2026", date: "2026-11-28" },
     ],
     // Logo sama dengan bagian sponsor di landing (SponsorsSectionHifi).
-    collaboration: { name: "JETE", logoSrc: "/sponsors/JETE%20(XL).png", href: "https://jete.id" },
+    collaboration: [{ name: "JETE", logoSrc: "/sponsors/JETE%20(XL).png", href: "https://jete.id" }],
     info: {
       facts: [
         { label: "Format", value: "Individu" },
@@ -247,7 +247,14 @@ const DATA: Competition[] = [
       { id: "pitching", title: "Pitching & Awarding", dateLabel: "26 November 2026", date: "2026-11-26" },
     ],
     // Logo sama dengan bagian sponsor di landing (SponsorsSectionHifi).
-    collaboration: { name: "KAI", logoSrc: "/sponsors/KAI%20(XL).png", href: "https://www.kai.id" },
+    collaboration: [
+      { name: "KAI", logoSrc: "/sponsors/KAI%20(XL).png", href: "https://www.kai.id" },
+      {
+        name: "Access by KAI",
+        logoSrc: "/sponsors/Access%20by%20KAI.webp",
+        href: "https://www.kai.id/layanan/access-by-kai",
+      },
+    ],
     info: {
       // Finalis Pitching & Awarding, dari panitia BPC.
       finalists: [

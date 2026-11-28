@@ -115,16 +115,11 @@ export interface Competition {
    */
   registerUrl: string | null;
   /**
-   * Mitra penyelenggara, tampil sebagai "In collaboration with" di bawah hero
-   * (Collaboration.tsx). Kosong = bagiannya tidak tampil.
+   * Mitra penyelenggara, tampil berjajar sebagai "In collaboration with" di
+   * bawah hero (Collaboration.tsx). Kosong = bagiannya tidak tampil.
+   * Maksimal 2: kanvas mobile 393px hanya muat dua kartu sebaris.
    */
-  collaboration?: {
-    name: string;
-    /** Logo di public/, URL ter-encode (nama berkas sponsor berisi spasi). */
-    logoSrc: string;
-    /** Situs mitra. null = kartu tidak bisa diklik. */
-    href: string | null;
-  };
+  collaboration?: CollaborationPartner[];
   /** Detail lomba dari Form Informasi Competition. Lihat CompetitionInfo.tsx. */
   info: CompetitionInfoData;
   timeline: TimelineItem[];
@@ -135,4 +130,12 @@ export interface Competition {
     ogImage: string;
     keywords: string[];
   };
+}
+
+export interface CollaborationPartner {
+  name: string;
+  /** Logo di public/, URL ter-encode (nama berkas sponsor berisi spasi). */
+  logoSrc: string;
+  /** Situs mitra. null = kartu tidak bisa diklik. */
+  href: string | null;
 }

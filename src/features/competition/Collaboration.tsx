@@ -13,6 +13,8 @@ import styles from "@/features/competition/Collaboration.module.css";
  * mobile   diposisikan absolut di kanvas 393px pada Y dari mobileLayout()
  * desktop  alur biasa, baris terakhir kolom hero (setelah tombol)
  *
+ * Beberapa mitra tampil berjajar dalam satu baris.
+ *
  * Tidak dirender kalau lomba tidak punya collaboration.
  */
 export default function Collaboration({
@@ -25,41 +27,49 @@ export default function Collaboration({
   /** Mobile: posisi Y di kanvas. */
   y?: number;
 }) {
-  const collab = competition.collaboration;
-  if (!collab) return null;
-
-  const logo = (
-    <Image
-      src={collab.logoSrc}
-      alt={collab.name}
-      fill
-      sizes={variant === "mobile" ? "200px" : "360px"}
-      className={styles.logo}
-    />
-  );
+  const partners = competition.collaboration ?? [];
+  if (partners.length === 0) return null;
 
   const style: CSSProperties | undefined = variant === "mobile" ? { top: y } : undefined;
+  const names = partners.map((p) => p.name).join(" & ");
 
   return (
     <section
-      aria-label={`In collaboration with ${collab.name}`}
+      aria-label={`In collaboration with ${names}`}
       className={`${styles.collab} ${variant === "mobile" ? styles.mobile : styles.desktop}`}
       style={style}
     >
       <p className={styles.label}>In collaboration with</p>
-      {collab.href ? (
-        <a
-          href={collab.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`${styles.card} ${styles.clickable}`}
-          aria-label={`${collab.name} (opens website in a new tab)`}
-        >
-          {logo}
-        </a>
-      ) : (
-        <div className={styles.card}>{logo}</div>
-      )}
+      <ul className={`${styles.cards} ${partners.length > 1 ? styles.multi : ""}`}>
+        {partners.map((p) => {
+          const logo = (
+            <Image
+              src={p.logoSrc}
+              alt={p.name}
+              fill
+              sizes={variant === "mobile" ? "200px" : "360px"}
+              className={styles.logo}
+            />
+          );
+          return (
+            <li key={p.name}>
+              {p.href ? (
+                <a
+                  href={p.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.card} ${styles.clickable}`}
+                  aria-label={`${p.name} (opens website in a new tab)`}
+                >
+                  {logo}
+                </a>
+              ) : (
+                <div className={styles.card}>{logo}</div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }

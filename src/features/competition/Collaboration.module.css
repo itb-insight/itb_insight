@@ -51,6 +51,19 @@
   line-height: 28px;
 }
 
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.desktop .cards {
+  gap: 24px;
+}
+
 .card {
   position: relative;
   display: block;
@@ -68,12 +81,22 @@
   border-radius: 24px;
 }
 
+/* Dua kartu sebaris harus muat di kanvas mobile 393px (2 x 168 + 12). */
+.mobile .multi .card {
+  width: 168px;
+}
+
 .logo {
   object-fit: contain;
   padding: 14px 22px;
 }
 
-.desktop .logo {
+.desktop /* Dua kartu sebaris harus muat di kanvas mobile 393px (2 x 168 + 12). */
+.mobile .multi .card {
+  width: 168px;
+}
+
+.logo {
   padding: 26px 40px;
 }
 

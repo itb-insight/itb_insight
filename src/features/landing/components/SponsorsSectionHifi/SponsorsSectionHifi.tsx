@@ -13,6 +13,7 @@ const sponsors: Sponsor[] = [
   { file: "LPDP (L).png", alt: "LPDP", href: "https://lpdp.kemenkeu.go.id" },
   { file: "Kementrian Kebudayaan (L).webp", alt: "Kementerian Kebudayaan Republik Indonesia", href: "https://kemenbud.go.id" },
   { file: "KAI (XL).png", alt: "KAI", href: "https://www.kai.id" },
+  { file: "Access by KAI.webp", alt: "Access by KAI", href: "https://www.kai.id/layanan/access-by-kai" },
   { file: "JETE (XL).png", alt: "JETE", href: "https://jete.id" },
   { file: "Mitsubshi (M).png", alt: "Mitsubishi Electric Indonesia", href: "https://www.mitsubishielectric.co.id" },
   { file: "FORMULATRIX (S).png", alt: "Formulatrix", href: "https://formulatrix.com" },
