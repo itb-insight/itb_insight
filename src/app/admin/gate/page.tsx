@@ -41,6 +41,7 @@ export default async function GateSectionPage() {
           contributionPoints={CONTRIBUTION_POINTS}
           bonusPoints={BONUS_POINTS}
           maxRepresented={MAX_REPRESENTED}
+          staffUserId={user.id}
         />
       </div>
     </>

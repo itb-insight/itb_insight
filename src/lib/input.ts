@@ -30,3 +30,23 @@ export const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0
 
 /** Limits shared with the profiles_field_lengths constraint (migration 0023_security_hardening). */
 export const PROFILE_LIMITS = { name: 120, phoneNumber: 32, institution: 200 } as const
+
+/** How far back an offline-queued capture time may go (a whole event day). */
+export const MAX_CAPTURE_AGE_MS = 12 * 60 * 60 * 1000
+
+/**
+ * The time a staff phone captured a scan while offline (ISO 8601 from the body), for routes that
+ * accept queued scans. Undefined when absent. A time in the future is clamped to `now` (phone
+ * clocks drift); one older than MAX_CAPTURE_AGE_MS, or unparseable, is invalid. The database
+ * still decides whether the time is inside the game window.
+ */
+export function parseCapturedAt(
+  raw: string | undefined,
+  now = Date.now(),
+): { ok: true; value: string | undefined } | { ok: false } {
+  if (raw === undefined) return { ok: true, value: undefined }
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,6})?)?(Z|[+-]\d{2}:\d{2})$/.test(raw)) return { ok: false }
+  const time = Date.parse(raw)
+  if (!Number.isFinite(time) || now - time > MAX_CAPTURE_AGE_MS) return { ok: false }
+  return { ok: true, value: new Date(Math.min(time, now)).toISOString() }
+}

@@ -51,10 +51,12 @@ export async function processGateCheckIn(params: CheckInParams): Promise<CheckIn
   if (type === 'staff_scan' || type === 'manual_lookup') {
     // Insight Arcade: "Registrasi D-Day" (+20) on a staff gate check-in. Idempotent; refused by the
     // database outside the game window, while paused, and for committee accounts (0031).
+    // An offline-queued gate scan counts at its capture time (0040: before freeze + grace).
     const { error } = await createServiceClient().rpc('arcade_award_auto', {
       p_user: result.ticket.user_id,
       p_slug: 'arcade-registrasi-dday',
       p_admin_emails: adminEmailList(),
+      ...(params.capturedAt ? { p_at: params.capturedAt } : {}),
     })
     if (error) console.error('[Check-In] arcade gate award failed:', error.message)
   }
@@ -71,8 +73,10 @@ async function checkInTicket(params: {
   staffUserId?: string
   gateName?: string
   checkInType?: GateCheckIn['check_in_type']
+  /** When a staff phone captured the scan, for a check-in sent later from its offline queue (validated ISO). */
+  capturedAt?: string
 }): Promise<TicketCheckIn> {
-  const { qrCode, ticketId, staffUserId, gateName = 'main_gate', checkInType = 'staff_scan' } = params
+  const { qrCode, ticketId, staffUserId, gateName = 'main_gate', checkInType = 'staff_scan', capturedAt } = params
 
   const lookup = ticketId !== undefined ? (UUID.test(ticketId) ? { column: 'id', value: ticketId } : null) : null
   const token = lookup ? null : parseVisitorQr(qrCode)
@@ -121,7 +125,7 @@ async function checkInTicket(params: {
     }
   }
 
-  const now = new Date().toISOString()
+  const now = capturedAt ?? new Date().toISOString()
 
   // 3. Atomically update ticket. Only the request whose update flips the row counts as the
   // check-in; a concurrent scan that loses the race reports "already checked in".

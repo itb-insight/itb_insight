@@ -136,6 +136,8 @@ export const config = {
      * Feel free to modify this pattern to include more paths.
      */
     // Static files never need the session. Keep this list in sync with what public/ serves.
-    '/((?!_next/static|_next/image|ingest(?:/|$)|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|ttf|otf|woff|woff2|mp4|webm|glb|gltf|json|lottie|txt|xml|webmanifest)$).*)',
+    // sw.js / offline.html: the PWA service worker and its offline page (docs/OFFLINE.md) must never
+    // be replaced by the countdown or maintenance page.
+    '/((?!_next/static|_next/image|ingest(?:/|$)|sw\\.js$|offline\\.html$|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|ttf|otf|woff|woff2|mp4|webm|glb|gltf|json|lottie|txt|xml|webmanifest)$).*)',
   ],
 }

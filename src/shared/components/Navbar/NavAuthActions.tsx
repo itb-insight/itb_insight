@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import { createClient } from "@/lib/supabase/client"
+import { prepareSignOut } from "@/shared/components/Pwa/signOut"
 import styles from "./Navbar.module.css"
 
 // Client-side auth affordance for the navbar: shows Log In / Sign up when signed out,
@@ -32,6 +33,7 @@ export default function NavAuthActions() {
   }, [])
 
   const handleSignOut = async () => {
+    if (!(await prepareSignOut())) return
     const supabase = createClient()
     await supabase.auth.signOut()
     setSignedIn(false)

@@ -112,7 +112,7 @@ Tests: `src/lib/feedback/*.test.ts`, `src/lib/rate-limit.test.ts` (`npm test`). 
 | Trigger | Status |
 |---|---|
 | QR scan | **Ready**: print one QR per event for `/feedback/<slug>`. |
-| Set time / pop-up | **In-app**: `src/features/onsite/FeedbackPrompts.tsx` asks signed-in attendees (gate check-in, not yet submitted, from `GET /api/feedback/pending`) when an `event`/`booth` form opens (`opens_at`), while a page is open. Push notifications wait for the PWA. |
+| Set time / pop-up | **In-app**: `src/features/onsite/FeedbackPrompts.tsx` asks signed-in attendees (gate check-in, not yet submitted, from `GET /api/feedback/pending`) when an `event`/`booth` form opens (`opens_at`), while a page is open. The site is now an installable PWA (`docs/OFFLINE.md`), but push notifications are not built yet. |
 | Geofence exit | **Best effort**: the booth-presence tracker (`src/features/onsite/PresenceTracker.tsx`, opt-in) fires the same prompt when it sees the visitor leave the event zone. Needs the page open: browsers give no background location (iOS PWAs included), so the QR and time trigger stay the reliable paths. |
 | Follow-up email | Suggested fallback for the time trigger; not built. |
 

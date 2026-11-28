@@ -3,6 +3,7 @@ import type { ReactNode } from "react"
 import QuestBottomNav, { type QuestTab } from "./QuestBottomNav"
 import QuestDesktopHeader from "./QuestDesktopHeader"
 import QuestMobileHeader from "./QuestMobileHeader"
+import OfflineBanner from "./OfflineBanner"
 import styles from "./quest-shared.module.css"
 
 /**
@@ -48,6 +49,8 @@ export default function QuestPageShell({
   const rankLabel = rank ? `#${rank}` : "-"
   return (
     <div className={styles.shell}>
+      {/* Offline: the service worker served the last copy of this page (docs/OFFLINE.md). */}
+      <OfflineBanner renderedAt={new Date().toISOString()} />
       <div className={styles.headerMobile}>
         <QuestMobileHeader points={pointsLabel} />
       </div>

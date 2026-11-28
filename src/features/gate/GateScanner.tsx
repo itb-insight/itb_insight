@@ -1,11 +1,15 @@
 "use client"
 
-import { Camera, CheckCircle2, ChevronDown, ChevronUp, DoorOpen, Gift, ScanLine, Sparkles, Users, X } from "lucide-react"
-import { useState } from "react"
+import { Camera, CheckCircle2, ChevronDown, ChevronUp, CloudOff, DoorOpen, Gift, ScanLine, Sparkles, Users, X } from "lucide-react"
+import { useCallback, useEffect, useState } from "react"
 
 import PanelHifi from "@/features/admin-hifi/PanelHifi"
 import boothStyles from "@/features/booth-points/BoothPointsScanner.module.css"
-import { postWithAuth } from "@/features/dashboard/apiClient"
+import { dedupeKey, qrTail, type QueueEntry } from "@/features/offline-queue/queue"
+import QueueStatus from "@/features/offline-queue/QueueStatus"
+import { sendScan } from "@/features/offline-queue/send"
+import { useOfflineQueue } from "@/features/offline-queue/useOfflineQueue"
+import { warmPages } from "@/shared/components/Pwa/swClient"
 import QrCameraScanner from "@/shared/components/QrCameraScanner/QrCameraScanner"
 
 import styles from "./GateScanner.module.css"
@@ -20,6 +24,9 @@ import styles from "./GateScanner.module.css"
     2. Show the visitor what a booth scan looks like: the same screen booth staff use
        (BoothPointsScanner), as a demo. Tapping an option here only shows the result locally:
        no request is sent and no points are given. Points come from booth staff only.
+  No signal (docs/OFFLINE.md): the scan is stored on the phone with its capture time
+  (src/features/offline-queue) and sent automatically when the signal is back. A ticket checks in
+  once, so sending it twice is harmless.
 */
 
 type Visitor = { fullName: string; institution: string | null }
@@ -39,7 +46,7 @@ type Phase =
   | { kind: "busy" }
   | { kind: "error"; message: string }
 
-type HistoryEntry = GateScan & { key: string }
+type HistoryEntry = GateScan & { key: string; fromQueue?: boolean }
 
 const timeFormat = new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
 
@@ -47,10 +54,12 @@ export default function GateScanner({
   contributionPoints,
   bonusPoints,
   maxRepresented,
+  staffUserId,
 }: {
   contributionPoints: number
   bonusPoints: number
   maxRepresented: number
+  staffUserId: string
 }) {
   const [representing, setRepresenting] = useState(false)
   // Text, so the field can be cleared while typing; read with representedCount().
@@ -59,7 +68,19 @@ export default function GateScanner({
   const [scan, setScan] = useState<GateScan | null>(null)
   const [demo, setDemo] = useState<DemoOption | null>(null)
   const [history, setHistory] = useState<HistoryEntry[]>([])
+  const [queuedLabel, setQueuedLabel] = useState<string | null>(null)
   const busy = phase.kind === "busy"
+
+  // A queued check-in that reached the server joins the session history.
+  const onSent = useCallback((entry: QueueEntry, data: unknown) => {
+    if (entry.kind !== "gate" || !data) return
+    const result = data as GateScan
+    setHistory((prev) => [{ ...result, key: `${entry.id}`, fromQueue: true }, ...prev].slice(0, 50))
+  }, [])
+  const queue = useOfflineQueue(staffUserId, { onSent })
+
+  // Keep this scanner (and the map) usable offline: cache the page and its scripts.
+  useEffect(() => warmPages(["/admin/gate", "/event-map"]), [])
 
   const clampCount = (value: number) => Math.min(maxRepresented, Math.max(1, Math.round(value)))
   const representedCount = () => {
@@ -70,29 +91,43 @@ export default function GateScanner({
 
   async function handleScanned(qrCode: string) {
     setPhase({ kind: "busy" })
-    try {
-      const res = await postWithAuth<GateScan>("/api/gate/scan", {
-        qrCode,
-        ...(representing ? { represents: representedCount() } : {}),
-      })
-      if (res.needsAuth) throw new Error("Sesi berakhir. Silakan login ulang.")
-      if (!res.payload.success) throw new Error(res.payload.error.message)
-      const result = res.payload.data
-      setScan(result)
+    setQueuedLabel(null)
+    const body = { qrCode, ...(representing ? { represents: representedCount() } : {}) }
+    const sent = await sendScan<GateScan>("gate", body)
+    const result = sent.result
+    if (result.type === "network" || result.type === "auth" || (result.type === "response" && result.status >= 500)) {
+      // No signal (or the server failed): keep it on the phone and send it later.
+      const label = `QR …${qrTail(qrCode)}${"represents" in body ? ` · +${body.represents} diwakili` : ""}`
+      await queue.enqueue({ kind: "gate", dedupeKey: dedupeKey("gate", qrCode), label, body })
+      setScan(null)
       setRepresenting(false)
       setCountText("1")
-      setHistory((prev) => [{ ...result, key: `${result.checkedInAt}-${prev.length}` }, ...prev].slice(0, 50))
+      setQueuedLabel(label)
       setPhase({ kind: "idle" })
-      navigator.vibrate?.(60)
-    } catch (err) {
-      setScan(null)
-      setPhase({ kind: "error", message: err instanceof Error ? err.message : "Gagal membaca QR." })
+      navigator.vibrate?.([40, 60, 40])
+      return
     }
+    if (!sent.payload || !sent.payload.success) {
+      setScan(null)
+      setPhase({
+        kind: "error",
+        message: sent.payload && !sent.payload.success ? sent.payload.error.message : "Sesi berakhir. Silakan login ulang.",
+      })
+      return
+    }
+    const scanResult = sent.payload.data
+    setScan(scanResult)
+    setRepresenting(false)
+    setCountText("1")
+    setHistory((prev) => [{ ...scanResult, key: `${scanResult.checkedInAt}-${prev.length}` }, ...prev].slice(0, 50))
+    setPhase({ kind: "idle" })
+    navigator.vibrate?.(60)
   }
 
   function startScan() {
     setScan(null)
     setDemo(null)
+    setQueuedLabel(null)
     setPhase({ kind: "scanning" })
   }
 
@@ -202,6 +237,19 @@ export default function GateScanner({
               </div>
             ) : null}
 
+            {queuedLabel && phase.kind === "idle" ? (
+              <div className={`${boothStyles.result} ${boothStyles.resultQueued}`}>
+                <p className={boothStyles.resultTitle}>
+                  <CloudOff size={22} aria-hidden="true" /> Tersimpan di HP
+                </p>
+                <p>{queuedLabel}</p>
+                <p className={boothStyles.muted}>
+                  Tanpa sinyal: masuk gate dicatat otomatis dengan jam scan ini begitu sinyal kembali. Pengunjung boleh
+                  masuk.
+                </p>
+              </div>
+            ) : null}
+
             {scan && phase.kind === "idle" ? (
               <div className={`${boothStyles.result} ${boothStyles.resultOk}`}>
                 <p className={boothStyles.resultTitle}>
@@ -281,6 +329,8 @@ export default function GateScanner({
       </div>
 
       <div className={boothStyles.column}>
+        <QueueStatus queue={queue} />
+
         <PanelHifi title="Riwayat sesi ini" subtitle="Scan gate yang sudah tercatat di server, terbaru di atas.">
           {history.length === 0 ? (
             <p className={boothStyles.muted}>Belum ada.</p>
@@ -293,7 +343,10 @@ export default function GateScanner({
                     {entry.firstEntry ? "Masuk" : "Sudah masuk"}
                     {entry.represents ? ` · +${entry.represents} diwakili` : ""}
                   </span>
-                  <span className={boothStyles.muted}>{timeFormat.format(new Date(entry.checkedInAt))}</span>
+                  <span className={boothStyles.muted}>
+                    {timeFormat.format(new Date(entry.checkedInAt))}
+                    {entry.fromQueue ? " · dari antrean" : ""}
+                  </span>
                 </li>
               ))}
             </ul>

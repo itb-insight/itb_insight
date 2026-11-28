@@ -62,7 +62,7 @@ export default async function BoothSectionPage() {
             />
           </div>
         ) : null}
-        <BoothPointsScanner booths={booths} practice={BOOTH_POINTS_PRACTICE} />
+        <BoothPointsScanner booths={booths} practice={BOOTH_POINTS_PRACTICE} staffUserId={user.id} />
       </div>
     </>
   )

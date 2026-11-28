@@ -47,6 +47,22 @@ export function posthogRewrites(region = process.env.NEXT_PUBLIC_POSTHOG_REGION)
   ];
 }
 
+/**
+ * The service worker (public/sw.js, docs/OFFLINE.md). Never cached by the browser or a CDN, so a
+ * fix reaches phones on their next visit. Its own CSP: scripts from this origin only, and fetches
+ * to this origin plus the Carto basemap it caches for the offline map (a worker's fetches follow
+ * the CSP of its script).
+ */
+export const serviceWorkerHeaders = [
+  { key: "Content-Type", value: "application/javascript; charset=utf-8" },
+  { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
+  {
+    key: "Content-Security-Policy",
+    value:
+      "default-src 'self'; script-src 'self'; connect-src 'self' https://basemaps.cartocdn.com https://tiles.basemaps.cartocdn.com",
+  },
+];
+
 const ONE_YEAR_IMMUTABLE = "public, max-age=31536000, immutable";
 const ONE_DAY_SWR = "public, max-age=86400, stale-while-revalidate=604800";
 
@@ -70,6 +86,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
+      { source: "/sw.js", headers: serviceWorkerHeaders },
       // Versioned files: change the name (e.g. scrub-16x9-v3.mp4) when the content changes.
       { source: "/itb-model/:path*", headers: [{ key: "Cache-Control", value: ONE_YEAR_IMMUTABLE }] },
       { source: "/fonts/:path*", headers: [{ key: "Cache-Control", value: ONE_YEAR_IMMUTABLE }] },

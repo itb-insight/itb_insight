@@ -76,11 +76,25 @@ Shared test helpers: `tests/support/fake-supabase.ts` (chainable Supabase fake f
 - Route handlers: run independent Supabase queries with `Promise.all`; use `after()` from
   `next/server` for fire-and-forget work so it isn't dropped when the function freezes.
 
-# Feedback triggers when building PWA / geofencing
+# PWA and offline (docs/OFFLINE.md)
 
-The PWA (push notifications, service worker) is deliberately not implemented yet. Opt-in booth
+The site is an installable PWA: `src/app/manifest.ts`, a hand-written service worker `public/sw.js`
+(registered by `src/shared/components/Pwa/ServiceWorkerRegistrar.tsx`, kill switch
+`NEXT_PUBLIC_PWA_DISABLED=1`), and an offline scan queue for staff (`src/features/offline-queue/`).
+- The service worker never touches `/api`, `/ingest`, `/auth`, RSC requests or other origins
+  except the Carto basemap. Only pages in its `OFFLINE_PAGES` are kept for offline use. Bump its
+  `VERSION` when you change what it caches.
+- Signed-in pages are cached per browser. Sign-out goes through `prepareSignOut()`
+  (`src/shared/components/Pwa/signOut.ts`), which clears them and warns about unsent scans.
+- A scan route that takes queued scans must stay idempotent (a `client_ref` or a natural unique key)
+  and take the capture time through `parseCapturedAt()` (`src/lib/input.ts`). The database decides
+  whether that time is inside the game window (migration 0040).
+
+# Feedback triggers when building push / geofencing
+
+Push notifications are deliberately not implemented yet. Opt-in booth
 presence (geofencing while the page is open) is, in `src/features/onsite/`, and already wires the
-in-app triggers below. When you build the PWA, add the push versions, as described in
+in-app triggers below. When you build push, add the push versions, as described in
 `docs/FEEDBACK.md` ("Triggers — status"):
 - Time trigger: notify / pop up `/feedback/<slug>` when a form opens (`feedback_forms.opens_at`)
   for users who attended and have not submitted.

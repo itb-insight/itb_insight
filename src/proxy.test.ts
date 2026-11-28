@@ -199,4 +199,12 @@ describe('proxy matcher', () => {
     expect(matcher.test('/ingestion-guide')).toBe(true)
     expect(matcher.test('/dashboard')).toBe(true)
   })
+
+  it('skips the service worker and its offline page (never rewritten to countdown/maintenance)', () => {
+    expect(matcher.test('/sw.js')).toBe(false)
+    expect(matcher.test('/offline.html')).toBe(false)
+    expect(matcher.test('/manifest.webmanifest')).toBe(false)
+    expect(matcher.test('/sw.jsx')).toBe(true)
+    expect(matcher.test('/arcade')).toBe(true)
+  })
 })

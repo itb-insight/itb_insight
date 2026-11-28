@@ -6,6 +6,7 @@ import { useState } from "react"
 
 import { clearSessionCookies, notifySessionChanged, useHasSession } from "@/shared/hooks/useHasSession"
 import LogOutModal from "@/shared/components/modals/LogOutModal"
+import { prepareSignOut } from "@/shared/components/Pwa/signOut"
 import styles from "./NavbarHifi.module.css"
 
 // Client-side auth affordance for the navbar: shows Log In / Sign up when signed out,
@@ -37,6 +38,13 @@ export default function NavAuthActionsHifi({
   const handleSignOutConfirmed = async () => {
     if (signingOut) return // a second click would fire two navigations
     setSigningOut(true)
+
+    // Unsent offline scans, cached signed-in pages (docs/OFFLINE.md).
+    if (!(await prepareSignOut())) {
+      setSigningOut(false)
+      setConfirmOpen(false)
+      return
+    }
 
     try {
       const { createClient } = await import("@/lib/supabase/client")

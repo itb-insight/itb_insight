@@ -9,8 +9,9 @@ import { createServiceClient } from '@/lib/supabase/server'
 
 /*
   Live booth award (Insight Arcade, rules: src/lib/booth-points.ts). The database decides:
-  public.arcade_award_booth (migration 0030) gives Contribution once and Bonus once per visitor per
-  booth under a lock, inside the game window, never to the scanner themself (committee accounts may
+  public.arcade_award_booth (migrations 0030, 0036, 0040) gives Contribution once and Bonus once per
+  visitor per booth under a lock, inside the game window (an offline-queued award counts at its
+  capture time), never to the scanner themself (committee accounts may
   play since 0036; the leaderboard leaves them out), and writes a replayed client_ref only once. This module resolves the visitor behind the
   QR, checks the booth is in the scanner's scope, and translates the result for the scanner.
 */
@@ -61,6 +62,8 @@ export type ScanParams = {
   option?: BoothPointOption
   /** Idempotency key from the scanner (one per award attempt, reused on retry). */
   clientRef?: string
+  /** When the scan was captured, for an award sent later from the offline queue (validated ISO). */
+  capturedAt?: string
 }
 
 const MESSAGES: Record<Exclude<ScanErrorCode, 'NOT_OPEN' | 'CLOSED'>, string> = {
@@ -72,7 +75,7 @@ const MESSAGES: Record<Exclude<ScanErrorCode, 'NOT_OPEN' | 'CLOSED'>, string> = 
   ALREADY_GIVEN: 'Pilihan ini sudah diberikan ke pengunjung ini di booth ini.',
   NO_BONUS: 'Booth ini tidak punya Bonus.',
   PAUSED: 'Insight Arcade sedang dijeda panitia. Catat di log kertas dan coba lagi nanti.',
-  TOO_OLD: 'Scan ini terlalu lama tertunda (lebih dari 15 menit) dan tidak bisa dikirim lagi.',
+  TOO_OLD: 'Scan ini terlalu lama tertunda dan tidak bisa dikirim lagi.',
   INVALID_INPUT: 'Data scan tidak valid.',
   DATABASE_ERROR: 'Gagal menyimpan poin. Coba lagi.',
 }
@@ -181,7 +184,7 @@ export async function runBoothScan(params: ScanParams): Promise<({ ok: true } & 
     p_option: params.option,
     p_awarded_by: params.staffUserId,
     p_client_ref: params.clientRef ?? null,
-    p_captured_at: null,
+    p_captured_at: params.capturedAt ?? null,
     p_admin_emails: adminEmails,
   })
   if (awardError) {

@@ -6,13 +6,15 @@ import { recordAuditLog } from '@/lib/audit'
 import { getAuthenticatedUser } from '@/lib/auth'
 import { runBoothScan } from '@/lib/booth-award'
 import { BOOTH_POINT_OPTIONS, type BoothPointOption } from '@/lib/booth-points'
-import { parseTextFields } from '@/lib/input'
+import { parseCapturedAt, parseTextFields } from '@/lib/input'
 
 // Booth staff scan a visitor's profile QR and award Insight Arcade points (rules:
 // src/lib/booth-points.ts, enforced by public.arcade_award_booth, migration 0030).
-// Body: { qrCode, boothId, option?: 'contribution' | 'bonus', clientRef?: uuid }
-//   no option -> who the QR belongs to and what they already have at this booth;
-//   option    -> award it. clientRef makes a retried award count once.
+// Body: { qrCode, boothId, option?: 'contribution' | 'bonus', clientRef?: uuid, capturedAt?: ISO }
+//   no option  -> who the QR belongs to and what they already have at this booth;
+//   option     -> award it. clientRef makes a retried award count once.
+//   capturedAt -> the award comes from the scanner's offline queue (src/features/offline-queue):
+//                 it counts at that time if inside the game window (the database decides).
 // Access: admins, and staff / stakeholders for the booths their role or assignments allow. The
 // role comes from profiles (getAdminAccess), never from the body.
 export async function POST(request: NextRequest) {
@@ -27,7 +29,7 @@ export async function POST(request: NextRequest) {
   }
 
   const body: unknown = await request.json().catch(() => null)
-  const fields = parseTextFields(body, { qrCode: 300, boothId: 80, option: 20, clientRef: 36 })
+  const fields = parseTextFields(body, { qrCode: 300, boothId: 80, option: 20, clientRef: 36, capturedAt: 40 })
   if (!fields.ok || !fields.values.qrCode || !fields.values.boothId) {
     return apiError('INVALID_INPUT', 'QR dan booth wajib diisi.', 400)
   }
@@ -35,6 +37,10 @@ export async function POST(request: NextRequest) {
   const { qrCode, boothId, option, clientRef } = fields.values
   if (option && !BOOTH_POINT_OPTIONS.includes(option as BoothPointOption)) {
     return apiError('INVALID_INPUT', 'Pilihan poin tidak dikenal.', 400)
+  }
+  const capturedAt = parseCapturedAt(fields.values.capturedAt)
+  if (!capturedAt.ok) {
+    return apiError('INVALID_INPUT', 'Waktu scan tidak valid.', 400)
   }
 
   const result = await runBoothScan({
@@ -44,6 +50,7 @@ export async function POST(request: NextRequest) {
     boothId,
     option: option as BoothPointOption | undefined,
     clientRef,
+    capturedAt: capturedAt.value,
   })
 
   if (!result.ok) {
@@ -71,6 +78,7 @@ export async function POST(request: NextRequest) {
           option: result.plan.option,
           contribution: result.plan.contribution,
           bonus: result.plan.bonus,
+          ...(capturedAt.value ? { capturedAt: capturedAt.value } : {}),
         },
       }),
     )

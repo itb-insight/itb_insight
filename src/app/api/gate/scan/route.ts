@@ -4,11 +4,14 @@ import { getScopedUser } from '@/lib/admin'
 import { getAdminAccess } from '@/lib/admin-access'
 import { apiError, apiSuccess } from '@/lib/api-response'
 import { processGateCheckIn } from '@/lib/check-in'
-import { parseTextFields } from '@/lib/input'
+import { parseCapturedAt, parseTextFields } from '@/lib/input'
 import { MAX_REPRESENTED, setRepresentedCount } from '@/lib/visit-flags'
 
-// Gate scan (/admin/gate). Body: { qrCode, represents? }
+// Gate scan (/admin/gate). Body: { qrCode, represents?, capturedAt? }
 //   qrCode      the visitor's profile QR.
+//   capturedAt  optional ISO time: the scan comes from the scanner's offline queue
+//               (src/features/offline-queue) and is checked in at that time. A ticket checks in
+//               once, so a resend is harmless.
 //   represents  optional, 1..MAX_REPRESENTED: the visitor stands for this many other people
 //               (parent for kids, teacher for students). Sets profiles.represented_count (0027),
 //               replacing an earlier value; omitted = left as it is.
@@ -23,8 +26,10 @@ export async function POST(request: NextRequest) {
   if (!access.gate) return apiError('FORBIDDEN', 'Akses ditolak: akun ini bukan staf gate.', 403)
 
   const body: unknown = await request.json().catch(() => null)
-  const fields = parseTextFields(body, { qrCode: 300 })
+  const fields = parseTextFields(body, { qrCode: 300, capturedAt: 40 })
   if (!fields.ok || !fields.values.qrCode) return apiError('INVALID_INPUT', 'Kode QR wajib diisi.', 400)
+  const capturedAt = parseCapturedAt(fields.values.capturedAt)
+  if (!capturedAt.ok) return apiError('INVALID_INPUT', 'Waktu scan tidak valid.', 400)
 
   const represents = (body as { represents?: unknown } | null)?.represents
   if (
@@ -41,6 +46,7 @@ export async function POST(request: NextRequest) {
       staffUserId: auth.user.id,
       gateName: 'main_gate',
       checkInType: 'staff_scan',
+      capturedAt: capturedAt.value,
     })
     if (!result.ok) return apiError(result.code, result.message, result.code === 'DATABASE_ERROR' ? 500 : 400)
 

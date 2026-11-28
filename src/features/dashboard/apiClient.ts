@@ -6,10 +6,13 @@ export type ApiEnvelope<T> =
 
 // Calls an authenticated API route with the current user's access token.
 // Returns { needsAuth: true } when there is no session so the caller can redirect to /login.
+// `serverDate` is the response's Date header (ms), used by the offline queue to correct the
+// phone's clock. `signal` aborts the request (timeouts).
 export async function postWithAuth<T>(
   path: string,
   body: Record<string, unknown>,
-): Promise<{ needsAuth: true } | { needsAuth: false; ok: boolean; payload: ApiEnvelope<T> }> {
+  options: { signal?: AbortSignal } = {},
+): Promise<{ needsAuth: true } | { needsAuth: false; ok: boolean; status: number; serverDate: number | null; payload: ApiEnvelope<T> }> {
   const supabase = createClient()
   const { data: sessionData } = await supabase.auth.getSession()
   const accessToken = sessionData.session?.access_token
@@ -25,10 +28,12 @@ export async function postWithAuth<T>(
       Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(body),
+    signal: options.signal,
   })
 
   const payload = (await response.json()) as ApiEnvelope<T>
-  return { needsAuth: false, ok: response.ok, payload }
+  const date = Date.parse(response.headers.get("date") ?? "")
+  return { needsAuth: false, ok: response.ok, status: response.status, serverDate: Number.isFinite(date) ? date : null, payload }
 }
 
 // Same contract as postWithAuth, for GET routes.

@@ -303,3 +303,8 @@
     grid-template-columns: 1fr;
   }
 }
+
+.resultQueued {
+  border: 2px solid #ffc857;
+  background: rgba(255, 200, 87, 0.15);
+}

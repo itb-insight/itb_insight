@@ -26,6 +26,16 @@ describe('next.config headers', () => {
     expect(video?.headers[0].value).toContain('immutable')
   })
 
+  it('serves the service worker uncached, with a CSP that allows only this origin and the Carto basemap', async () => {
+    const rules = await nextConfig.headers!()
+    const sw = rules.find((rule) => rule.source === '/sw.js')
+    const headers = Object.fromEntries((sw?.headers ?? []).map(({ key, value }) => [key.toLowerCase(), value]))
+    expect(headers['cache-control']).toContain('no-store')
+    expect(headers['content-type']).toContain('javascript')
+    expect(headers['content-security-policy']).toContain("script-src 'self'")
+    expect(headers['content-security-policy']).toContain('https://tiles.basemaps.cartocdn.com')
+  })
+
   it('does not advertise the framework', () => {
     expect(nextConfig.poweredByHeader).toBe(false)
   })

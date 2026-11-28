@@ -1,9 +1,10 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Gabarito, Orbitron, Roboto_Mono } from "next/font/google"
 import Script from "next/script"
 import AnalyticsRoot from "@/lib/analytics/components/AnalyticsRoot"
 import OnSiteRoot from "@/features/onsite/OnSiteRoot"
 import LocationPermissionPrompt from "@/features/onsite/LocationPermissionPrompt"
+import ServiceWorkerRegistrar from "@/shared/components/Pwa/ServiceWorkerRegistrar"
 import "./globals.css"
 import "@/styles/admin-tokens.css"
 
@@ -58,6 +59,12 @@ export const metadata: Metadata = {
     description,
     images: ["/images/logoinsight-hifi.png"],
   },
+  // Installed PWA (src/app/manifest.ts, docs/OFFLINE.md).
+  appleWebApp: { capable: true, title: "ITB Insight", statusBarStyle: "black-translucent" },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#091b3f",
 }
 
 const pageScaleScript = `(function () {
@@ -86,6 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AnalyticsRoot />
         <OnSiteRoot />
         <LocationPermissionPrompt />
+        <ServiceWorkerRegistrar />
       </body>
     </html>
   )
