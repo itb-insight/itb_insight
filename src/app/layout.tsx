@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     images: ["/images/logoinsight-hifi.png"],
   },
   // Installed PWA (src/app/manifest.ts, docs/OFFLINE.md).
-  appleWebApp: { capable: true, title: "ITB Insight", statusBarStyle: "black-translucent" },
+  appleWebApp: { capable: true, title: "ITB Insight", statusBarStyle: "black" },
 }
 
 export const viewport: Viewport = {

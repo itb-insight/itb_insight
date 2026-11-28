@@ -37,6 +37,7 @@ function questLinks(q: ArcadeSideQuest): Array<{ href: string; label: string }> 
     ]
   }
   if (!q.shortcutUrl) return []
+  if (q.proofKind === "answer" && q.shortcutUrl === "/") return [{ href: "/", label: "Buka itbinsight.com" }]
   const instagram = q.shortcutUrl.includes("instagram.com/")
   return [{ href: q.shortcutUrl, label: instagram ? `Buka Instagram @${SOCIAL.instagram.handle}` : "Buka tautan quest" }]
 }

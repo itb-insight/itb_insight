@@ -144,9 +144,13 @@ async function staleWhileRevalidate(event, cacheName) {
   return (await network) || Response.error()
 }
 
+const lastTrim = {}
+
+/** Keeps a cache under its LIMITS entry. Listing keys is slow, so at most every 30 s per cache. */
 async function trim(cacheName) {
   const limit = LIMITS[cacheName]
-  if (!limit) return
+  if (!limit || Date.now() - (lastTrim[cacheName] || 0) < 30000) return
+  lastTrim[cacheName] = Date.now()
   const cache = await caches.open(cacheName)
   const keys = await cache.keys()
   // Oldest first (insertion order).

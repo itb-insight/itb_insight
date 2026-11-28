@@ -191,75 +191,80 @@ export default function MapCanvasHifi({
                 "circle-stroke-width": 1.5,
               }}
             />
-            {/* Text needs the style's glyphs: none in the offline fallback style. */}
+            {/* Text needs the style's glyphs: none in the offline fallback style. Each Layer must stay a
+                direct child of <Source>, which passes it the source id (a Fragment would swallow it). */}
             {fallback ? null : (
-              <>
-                <Layer
-                  id="landmark-labels"
-                  type="symbol"
-                  filter={["==", ["get", "kind"], "landmark"]}
-                  layout={{
-                    "text-field": ["get", "label"],
-                    "text-font": FONT_ITALIC,
-                    "text-size": ["interpolate", ["linear"], ["zoom"], 16, 9, 18, 12, 19, 14],
-                    "text-max-width": 7,
-                  }}
-                  paint={{ "text-color": "#4B5563", "text-halo-color": "#FFFFFF", "text-halo-width": 1.5 }}
-                />
-                <Layer
-                  id="exit-labels"
-                  type="symbol"
-                  filter={["==", ["get", "kind"], "exit"]}
-                  layout={{
-                    "text-field": "EXIT",
-                    "text-font": FONT_BOLD,
-                    "text-size": ["interpolate", ["linear"], ["zoom"], 15, 9, 18, 12],
-                    "text-offset": [0, -1.1],
-                    "text-allow-overlap": true,
-                  }}
-                  paint={{ "text-color": EXIT_COLOR, "text-halo-color": "#FFFFFF", "text-halo-width": 1.5 }}
-                />
-                <Layer
-                  id="line-tags"
-                  type="symbol"
-                  filter={["in", ["get", "kind"], ["literal", ["path-tag", "sterile-tag"]]]}
-                  layout={{
-                    "text-field": ["get", "label"],
-                    "text-font": FONT_ITALIC,
-                    "text-size": ["interpolate", ["linear"], ["zoom"], 16, 9, 18, 11, 19, 13],
-                    "text-offset": [0, -1],
-                  }}
-                  paint={{
-                    "text-color": ["match", ["get", "kind"], "sterile-tag", STERILE_COLOR, "#713F12"],
-                    "text-halo-color": "#FFFFFF",
-                    "text-halo-width": 1.5,
-                  }}
-                />
-                <Layer
-                  id="zone-labels"
-                  type="symbol"
-                  filter={["==", ["get", "kind"], "zone"]}
-                  layout={{
-                    "text-field": [
-                      "format",
-                      ["get", "label"],
-                      {},
-                      ["case", ["==", ["get", "sublabel"], ""], "", "\n"],
-                      {},
-                      ["get", "sublabel"],
-                      { "font-scale": 0.75, "text-color": STERILE_COLOR },
-                    ],
-                    "text-font": FONT_BOLD,
-                    "text-size": ["interpolate", ["linear"], ["zoom"], 15, 10, 17, 13, 19, 18],
-                    "text-max-width": 8,
-                    // Hang the name just below the anchor so a pin on the same point (FnB, a focused
-                    // event) stands above it instead of covering it.
-                    "text-anchor": "top",
-                    "text-offset": [0, 0.3],
-                  }}
-                  paint={{ "text-color": "#111827", "text-halo-color": "#FFFFFF", "text-halo-width": 1.5 }}
-                />
-              </>
+              <Layer
+                id="landmark-labels"
+                type="symbol"
+                filter={["==", ["get", "kind"], "landmark"]}
+                layout={{
+                  "text-field": ["get", "label"],
+                  "text-font": FONT_ITALIC,
+                  "text-size": ["interpolate", ["linear"], ["zoom"], 16, 9, 18, 12, 19, 14],
+                  "text-max-width": 7,
+                }}
+                paint={{ "text-color": "#4B5563", "text-halo-color": "#FFFFFF", "text-halo-width": 1.5 }}
+              />
+            )}
+            {fallback ? null : (
+              <Layer
+                id="exit-labels"
+                type="symbol"
+                filter={["==", ["get", "kind"], "exit"]}
+                layout={{
+                  "text-field": "EXIT",
+                  "text-font": FONT_BOLD,
+                  "text-size": ["interpolate", ["linear"], ["zoom"], 15, 9, 18, 12],
+                  "text-offset": [0, -1.1],
+                  "text-allow-overlap": true,
+                }}
+                paint={{ "text-color": EXIT_COLOR, "text-halo-color": "#FFFFFF", "text-halo-width": 1.5 }}
+              />
+            )}
+            {fallback ? null : (
+              <Layer
+                id="line-tags"
+                type="symbol"
+                filter={["in", ["get", "kind"], ["literal", ["path-tag", "sterile-tag"]]]}
+                layout={{
+                  "text-field": ["get", "label"],
+                  "text-font": FONT_ITALIC,
+                  "text-size": ["interpolate", ["linear"], ["zoom"], 16, 9, 18, 11, 19, 13],
+                  "text-offset": [0, -1],
+                }}
+                paint={{
+                  "text-color": ["match", ["get", "kind"], "sterile-tag", STERILE_COLOR, "#713F12"],
+                  "text-halo-color": "#FFFFFF",
+                  "text-halo-width": 1.5,
+                }}
+              />
+            )}
+            {fallback ? null : (
+              <Layer
+                id="zone-labels"
+                type="symbol"
+                filter={["==", ["get", "kind"], "zone"]}
+                layout={{
+                  "text-field": [
+                    "format",
+                    ["get", "label"],
+                    {},
+                    ["case", ["==", ["get", "sublabel"], ""], "", "\n"],
+                    {},
+                    ["get", "sublabel"],
+                    { "font-scale": 0.75, "text-color": STERILE_COLOR },
+                  ],
+                  "text-font": FONT_BOLD,
+                  "text-size": ["interpolate", ["linear"], ["zoom"], 15, 10, 17, 13, 19, 18],
+                  "text-max-width": 8,
+                  // Hang the name just below the anchor so a pin on the same point (FnB, a focused
+                  // event) stands above it instead of covering it.
+                  "text-anchor": "top",
+                  "text-offset": [0, 0.3],
+                }}
+                paint={{ "text-color": "#111827", "text-halo-color": "#FFFFFF", "text-halo-width": 1.5 }}
+              />
             )}
           </Source>
 

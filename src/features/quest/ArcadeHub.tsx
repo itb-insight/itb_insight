@@ -27,6 +27,7 @@ function sideMeta(verify: string, status: string, proofKind: string): string {
   if (verify === "auto_gate") return "Otomatis saat QR-mu di-scan di gate"
   if (verify === "auto_feedback") return "Otomatis setelah isi formulir (login)"
   if (verify === "auto_referral") return "Segera dibuka"
+  if (proofKind === "answer") return "Jawab pertanyaan"
   return proofKind === "link" ? "Kirim link bukti" : "Upload foto bukti"
 }
 

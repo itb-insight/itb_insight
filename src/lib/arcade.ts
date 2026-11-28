@@ -84,8 +84,8 @@ export type ArcadeSideQuest = {
   description: string | null
   points: number
   verify: string
-  /** For verify = 'proof': 'link' (social quests: send a link) or 'photo' (upload a photo). */
-  proofKind: 'photo' | 'link'
+  /** For verify = 'proof': 'link' (social quests: send a link), 'photo' (upload a photo) or 'answer' (type an answer, 0041). */
+  proofKind: 'photo' | 'link' | 'answer'
   shortcutUrl: string | null
   needsHandle: string | null
   needsVote: boolean
@@ -182,7 +182,7 @@ export async function getArcadePlayer(userId: string): Promise<ArcadePlayer> {
       description: q.description,
       points: q.points,
       verify: q.verify,
-      proofKind: q.proof_kind === 'link' ? 'link' : 'photo',
+      proofKind: q.proof_kind === 'link' || q.proof_kind === 'answer' ? q.proof_kind : 'photo',
       shortcutUrl: q.shortcut_url,
       needsHandle: q.needs_handle,
       needsVote: q.needs_vote,

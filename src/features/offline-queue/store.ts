@@ -32,8 +32,6 @@ function openDb(): Promise<IDBDatabase | null> {
       resolve(null)
     }
   })
-  // Ask the browser not to evict the queue under storage pressure (best effort).
-  void navigator.storage?.persist?.().catch(() => false)
   return dbPromise
 }
 
@@ -59,8 +57,16 @@ export async function listEntries(): Promise<QueueEntry[]> {
   }
 }
 
+let persistAsked = false
+
 export async function putEntry(entry: QueueEntry): Promise<void> {
   memory.set(entry.id, entry)
+  // Ask the browser not to evict the queue under storage pressure (best effort). Only once
+  // something is queued: Firefox may show a permission prompt for it.
+  if (!persistAsked) {
+    persistAsked = true
+    void navigator.storage?.persist?.().catch(() => false)
+  }
   try {
     await run("readwrite", (store) => store.put(entry))
   } catch {
@@ -79,6 +85,15 @@ export async function deleteEntry(id: string): Promise<void> {
 
 /** Pending scans in this browser for any account (the sign-out warning). */
 export async function countPending(): Promise<number> {
+  // Don't create the database just to find it empty (every visitor signing out comes here).
+  try {
+    if (typeof indexedDB.databases === "function") {
+      const names = (await indexedDB.databases()).map((db) => db.name)
+      if (!names.includes(DB_NAME) && memory.size === 0) return 0
+    }
+  } catch {
+    // Fall through to a normal read.
+  }
   const entries = await listEntries()
   return entries.filter((entry) => entry.status === "pending").length
 }

@@ -8,12 +8,13 @@ site keep working without one:
 | Booth scanner `/admin/booth` | Awards are stored on the phone and sent automatically when the signal returns. |
 | Gate scanner `/admin/gate` | Check-ins are stored the same way. The visitor can walk in. |
 | Visitor QR `/arcade/qr` | The last copy is shown. The token never changes, so it still scans. |
-| Arcade hub `/arcade` | Last-known points and quests, with an "Offline · data terakhir hh:mm" banner. |
+| Arcade hub `/arcade` | Last-known points and quests, with an "Offline · data terakhir hh:mm" banner. The banner also shows online when the page is a copy more than 5 minutes old (the worker serves the cached copy when the network takes over 4 s). |
 | Event map `/event-map` | The basemap around the venue, zones, paths and pins come from the cache. With nothing cached, it shows a plain map: zones, paths and pins, no labels. |
 
 A page must be opened online once on that phone before it works offline. The scanners and the map
 also cache themselves in the background. Signed-in visitors get `/arcade` and `/arcade/qr`
-cached on any page.
+cached on any page. Each warm-up renders the page on the server, so a browser refreshes each page
+at most every 15 minutes, and never with Save-Data on.
 
 ## Staff checklist (D-day)
 

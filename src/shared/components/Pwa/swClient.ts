@@ -35,10 +35,35 @@ function loadedStaticAssets(): string[] {
   }
 }
 
+const WARM_KEY = "itbi-warmed"
+const WARM_EVERY_MS = 15 * 60 * 1000
+
+/**
+ * The pages not refreshed in the cache for 15 minutes, and marks them as refreshed now. A warm-up
+ * renders the page on the server (Supabase queries), so it must not run on every page view.
+ */
+function due(urls: string[]): string[] {
+  try {
+    const warmed = JSON.parse(localStorage.getItem(WARM_KEY) ?? "{}") as Record<string, number>
+    const now = Date.now()
+    const list = urls.filter((url) => !(now - (warmed[url] ?? 0) < WARM_EVERY_MS))
+    for (const url of list) warmed[url] = now
+    localStorage.setItem(WARM_KEY, JSON.stringify(warmed))
+    return list
+  } catch {
+    return urls
+  }
+}
+
 /** Caches pages (and their scripts) for offline use, once the browser is idle. */
 export function warmPages(urls: string[]): void {
-  const run = () => void postToServiceWorker({ type: "WARM", urls, assets: loadedStaticAssets() })
   if (typeof window === "undefined") return
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
+  if (connection?.saveData) return
+  const run = () => {
+    const list = due(urls)
+    if (list.length) void postToServiceWorker({ type: "WARM", urls: list, assets: loadedStaticAssets() })
+  }
   if ("requestIdleCallback" in window) window.requestIdleCallback(run, { timeout: 5000 })
   else setTimeout(run, 2000)
 }
@@ -46,6 +71,11 @@ export function warmPages(urls: string[]): void {
 /** Sign-out: drop cached signed-in pages (QR, arcade, admin) from this browser. */
 export async function clearUserCaches(): Promise<void> {
   await postToServiceWorker({ type: "CLEAR_USER" })
+  try {
+    localStorage.removeItem(WARM_KEY)
+  } catch {
+    // Storage unavailable.
+  }
   try {
     if (typeof caches !== "undefined") {
       const names = await caches.keys()

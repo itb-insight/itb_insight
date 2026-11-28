@@ -12,8 +12,10 @@ import { optimizeProofImage } from '@/lib/proof-image'
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit'
 import { createServiceClient } from '@/lib/supabase/server'
 
-// Insight Arcade side-quest proof (migrations 0032, 0035). multipart/form-data: quest (arcade-* slug),
+// Insight Arcade side-quest proof (migrations 0032, 0035, 0041). multipart/form-data: quest (arcade-* slug),
 // then by the quest's proof_kind:
+//   answer -> answer (short text, <= 60 chars), checked by public.arcade_submit_answer: right = points
+//            at once, wrong = nothing stored, try again
 //   link  -> link (story / post link on Instagram / TikTok / X, checked by src/lib/proof-link.ts)
 //   photo -> file (jpeg / png / webp, <= 4 MB; follow quests also send `handle`), re-encoded (src/lib/proof-image.ts: <= 1600 px WebP,
 //            metadata stripped) into the private bucket arcade-proofs at <user>/<quest>.webp
@@ -35,7 +37,10 @@ const MESSAGES: Record<string, [number, string]> = {
   HANDLE_USED: [409, 'Akun ini sudah dipakai untuk quest ini.'],
   PROOF_REQUIRED: [400, 'Kirim bukti sesuai quest ini (link atau foto).'],
   VOTE_REQUIRED: [400, 'Pilih tim yang kamu dukung.'],
+  WRONG_ANSWER: [400, 'Jawabanmu belum tepat. Coba cek lagi.'],
 }
+
+const MAX_ANSWER = 60
 
 function imageType(bytes: Uint8Array): { ext: string; mime: string } | null {
   if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return { ext: 'jpg', mime: 'image/jpeg' }
@@ -93,6 +98,19 @@ export async function POST(request: NextRequest) {
   }
   if (!found.data) return apiError('QUEST_NOT_FOUND', MESSAGES.QUEST_NOT_FOUND[1], 404)
   const kind = (found.data as unknown as { proof_kind?: string }).proof_kind ?? 'photo'
+
+  // Answer quests: no upload, the database checks the answer against the private answer key.
+  if (kind === 'answer') {
+    const answer = form.get('answer')
+    if (typeof answer !== 'string' || !answer.trim()) return apiError('INVALID_INPUT', 'Tulis jawabanmu dulu.', 400)
+    if (answer.length > MAX_ANSWER) return apiError('INVALID_INPUT', 'Jawaban terlalu panjang.', 400)
+    const { data, error } = await supabase.rpc('arcade_submit_answer', { p_user: auth.user.id, p_slug: quest, p_answer: answer })
+    if (error) {
+      console.error('[arcade-proof] answer failed', error)
+      return apiError('SERVER_ERROR', 'Gagal menyimpan jawaban. Coba lagi.', 500)
+    }
+    return rpcResult(data)
+  }
 
   // The proof itself: a link (social quests) or a photo (drone soccer, merch).
   let proof: { p_path: string | null; p_url: string | null; p_sha256: string; p_handle: string | null }
@@ -152,6 +170,10 @@ export async function POST(request: NextRequest) {
     return apiError(paused ? 'PAUSED' : 'SERVER_ERROR', paused ? MESSAGES.PAUSED[1] : 'Gagal menyimpan bukti. Coba lagi.', paused ? 423 : 500)
   }
 
+  return rpcResult(data)
+}
+
+function rpcResult(data: unknown) {
   const result = (data ?? {}) as { ok?: boolean; code?: string; points?: number }
   if (!result.ok) {
     const [status, message] = MESSAGES[result.code ?? ''] ?? [500, 'Gagal menyimpan bukti.']
