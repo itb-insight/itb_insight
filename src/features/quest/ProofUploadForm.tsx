@@ -14,13 +14,16 @@ import questStyles from "./quest.module.css"
   Proof for an Insight Arcade side quest (POST /api/arcade/proof), by the quest's proof kind:
   - link: story / Add Yours quests. A link to the story or post, checked here with the same parser
     the API uses (src/lib/proof-link.ts).
+  - answer: type the answer to a question (0041). Checked at once by the database: right = points,
+    wrong = try again (nothing stored).
   - photo: follow quests (screenshot + username), drone soccer, merch. The photo is shrunk in the browser first (longest side 1600 px, WebP or JPEG) so uploads stay small on venue mobile data;
   the server re-encodes it again before storing (src/lib/proof-image.ts).
 */
 
 const MAX_SIDE = 1600
-/** The API's limit (src/app/api/arcade/proof/route.ts). */
+/** The API's limits (src/app/api/arcade/proof/route.ts). */
 const MAX_UPLOAD_BYTES = 4 * 1024 * 1024
+const MAX_ANSWER = 60
 
 function encode(canvas: HTMLCanvasElement, type: string, quality: number): Promise<Blob | null> {
   return new Promise((resolve) => canvas.toBlob(resolve, type, quality))
@@ -58,8 +61,8 @@ export default function ProofUploadForm({
   teams,
 }: {
   quest: string
-  /** sidequests.proof_kind: 'link' = send a link, 'photo' = upload a photo. */
-  kind: "photo" | "link"
+  /** sidequests.proof_kind: 'link' = send a link, 'photo' = upload a photo, 'answer' = type an answer. */
+  kind: "photo" | "link" | "answer"
   needsHandle: string | null
   /** Drone soccer: the teams to vote for; undefined = no vote. */
   teams?: Array<{ id: string; name: string }>
@@ -67,6 +70,7 @@ export default function ProofUploadForm({
   const router = useRouter()
   const [file, setFile] = useState<File | null>(null)
   const [link, setLink] = useState("")
+  const [answer, setAnswer] = useState("")
   const [handle, setHandle] = useState("")
   const [team, setTeam] = useState("")
   const [busy, setBusy] = useState(false)
@@ -75,6 +79,7 @@ export default function ProofUploadForm({
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (kind === "photo" && !file) return setMessage({ ok: false, text: "Pilih foto bukti dulu." })
+    if (kind === "answer" && !answer.trim()) return setMessage({ ok: false, text: "Tulis jawabanmu dulu." })
     if (kind === "link") {
       const checked = parseProofLink(link)
       if (!checked.ok) return setMessage({ ok: false, text: checked.message })
@@ -92,6 +97,8 @@ export default function ProofUploadForm({
       body.set("quest", quest)
       if (kind === "link") {
         body.set("link", link.trim())
+      } else if (kind === "answer") {
+        body.set("answer", answer.trim())
       } else if (file) {
         const photo = await shrink(file)
         if (photo.blob.size > MAX_UPLOAD_BYTES) {
@@ -115,9 +122,11 @@ export default function ProofUploadForm({
       setMessage({
         ok: true,
         text:
-          payload.data.code === "PENDING"
-            ? "Terkirim. Poin masuk setelah diverifikasi panitia."
-            : `Terkirim! +${payload.data.points} poin. Panitia akan memeriksa buktinya.`,
+          kind === "answer"
+            ? `Benar! +${payload.data.points} poin.`
+            : payload.data.code === "PENDING"
+              ? "Terkirim. Poin masuk setelah diverifikasi panitia."
+              : `Terkirim! +${payload.data.points} poin. Panitia akan memeriksa buktinya.`,
       })
       router.refresh()
     } catch {
@@ -129,14 +138,29 @@ export default function ProofUploadForm({
 
   return (
     <form onSubmit={submit} className={styles.form}>
-      <h2 className={styles.formTitle}>Kirim bukti</h2>
+      <h2 className={styles.formTitle}>{kind === "answer" ? "Kirim jawaban" : "Kirim bukti"}</h2>
       {kind === "link" || needsHandle ? (
         <p className={styles.publicNote}>
           <strong>Pastikan akunmu publik</strong> sampai poin diverifikasi, supaya panitia bisa memeriksa
           {kind === "link" ? " linkmu" : " akunmu"}. Akun privat bisa membuat poinmu dicabut.
         </p>
       ) : null}
-      {kind === "link" ? (
+      {kind === "answer" ? (
+        <label className={styles.field}>
+          Jawabanmu
+          <input
+            type="text"
+            className={questStyles.input}
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+            autoComplete="off"
+            maxLength={MAX_ANSWER}
+            required
+            disabled={busy}
+          />
+          <span className={styles.fieldHint}>Huruf besar/kecil tidak berpengaruh.</span>
+        </label>
+      ) : kind === "link" ? (
         <>
           <label className={styles.field}>
             Link story atau postingan kamu
@@ -205,7 +229,7 @@ export default function ProofUploadForm({
         </label>
       ) : null}
       <button type="submit" className={clsx(questStyles.lightButton, styles.submit)} disabled={busy}>
-        {busy ? "Mengirim…" : "Kirim bukti"}
+        {busy ? "Mengirim…" : kind === "answer" ? "Kirim jawaban" : "Kirim bukti"}
       </button>
       {message ? (
         <p className={clsx(styles.message, message.ok ? styles.messageOk : styles.messageError)} role="status">
