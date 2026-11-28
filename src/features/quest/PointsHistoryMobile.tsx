@@ -1,57 +1,54 @@
 import Link from "next/link"
-import { House } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
+
+import type { HistoryState } from "@/lib/arcade"
 
 import styles from "./PointsHistoryMobile.module.css"
 
 /**
- * Status satu catatan poin.
- *
- * Nama layer di dump masih sisa komponen lain ("Mengundurkan diri",
- * "Terdaftar", "Kadaluwarsa", "Menunggu pembayaran") — yang dipakai di sini
- * tulisan yang benar-benar tampil: Pending, Redeemed, Verified, Under Review,
- * Voided, Manual Grant.
+ * Status satu catatan poin (arcade_player_history, migration 0039). Insight
+ * Arcade tidak punya dompet, jadi tidak ada "Redeemed": poin cuma naik atau turun.
  */
-export type HistoryStatus =
-  | "pending"
-  | "redeemed"
-  | "verified"
-  | "review"
-  | "voided"
-  | "manual"
+export type HistoryStatus = HistoryState
 
 const LENCANA: Record<HistoryStatus, { label: string; kelas: string }> = {
-  pending: { label: "Pending", kelas: "lencanaPending" },
-  redeemed: { label: "Redeemed", kelas: "lencanaRedeemed" },
-  verified: { label: "Verified", kelas: "lencanaVerified" },
-  review: { label: "Under Review", kelas: "lencanaReview" },
-  voided: { label: "Voided", kelas: "lencanaVoided" },
-  manual: { label: "Manual Grant", kelas: "lencanaManual" },
+  earned: { label: "Masuk", kelas: "lencanaVerified" },
+  review: { label: "Dicek panitia", kelas: "lencanaReview" },
+  pending: { label: "Menunggu", kelas: "lencanaPending" },
+  voided: { label: "Dibatalkan", kelas: "lencanaVoided" },
+  manual: { label: "Koreksi", kelas: "lencanaManual" },
 }
 
 export interface HistoryEntry {
-  /** Jam saja, mis. "13:42". */
+  /** Jam saja (WIB), mis. "13:42". */
   time: string
   name: string
-  /** Baris kedua: tempat penukaran dan keterangan. */
+  /** Baris kedua: asal dan keterangan. */
   detail: string
   status: HistoryStatus
   /** Sudah berformat lengkap dengan tandanya: "+80", "-100", "0". */
   amount: string
-  /** Asal poin: "W+L", "Wallet", atau "-" kalau tidak ada. */
+  /** Asal poin: "Booth", "Quest", "Koleksi", "Panitia". */
   source: string
 }
 
 export interface HistoryFilter {
   label: string
+  href: string
   active?: boolean
 }
 
 interface PointsHistoryMobileProps {
   filters: HistoryFilter[]
   entries: HistoryEntry[]
-  /** Kode rujukan untuk dibawa ke help desk. */
+  /** Tulisan saat daftar (setelah disaring) kosong. */
+  empty: string
+  /** Kode rujukan untuk dibawa ke panitia. */
   reference: string
   referenceNote: string
+  /** Tombol di kartu bantuan, mis. ke lokasi meja hadiah di peta. */
+  help?: { label: string; href: string }
+  backHref: string
 }
 
 /**
@@ -63,72 +60,80 @@ interface PointsHistoryMobileProps {
 export default function PointsHistoryMobile({
   filters,
   entries,
+  empty,
   reference,
   referenceNote,
+  help,
+  backHref,
 }: PointsHistoryMobileProps) {
   return (
     <div className={styles.page}>
       <div className={styles.isi}>
         <header className={styles.header}>
-          <Link href="/" className={styles.headerIcon} aria-label="Ke beranda">
-            <House size={24} strokeWidth={1.5} aria-hidden />
+          <Link href={backHref} className={styles.headerIcon} aria-label="Kembali ke Rewards">
+            <ArrowLeft size={24} strokeWidth={1.5} aria-hidden />
           </Link>
-          <h1 className={styles.judul}>POINTS HISTORY</h1>
+          <h1 className={styles.judul}>RIWAYAT POIN</h1>
           <span className={styles.headerSpacer} aria-hidden />
         </header>
 
-        <div className={styles.saringan} role="group" aria-label="Saring riwayat">
+        <nav className={styles.saringan} aria-label="Saring riwayat">
           {filters.map((f) => (
-            <button
+            <Link
               key={f.label}
-              type="button"
+              href={f.href}
+              replace
+              scroll={false}
               className={`${styles.chip} ${f.active ? styles.chipAktif : ""}`}
-              aria-pressed={Boolean(f.active)}
+              aria-current={f.active ? "page" : undefined}
             >
               {f.label}
-            </button>
+            </Link>
           ))}
-        </div>
+        </nav>
 
-        <ol className={styles.daftar}>
-          {entries.map((e, i) => {
-            const lencana = LENCANA[e.status]
-            return (
-              /* Jam + nama bisa berulang persis, jadi kuncinya indeks. */
-              <li key={i} className={styles.kartu}>
-                <p className={styles.jam}>{e.time}</p>
+        {entries.length === 0 ? (
+          <p className={styles.kosong}>{empty}</p>
+        ) : (
+          <ol className={styles.daftar}>
+            {entries.map((e, i) => {
+              const lencana = LENCANA[e.status]
+              return (
+                /* Jam + nama bisa berulang persis, jadi kuncinya indeks. */
+                <li key={i} className={styles.kartu}>
+                  <p className={styles.jam}>{e.time}</p>
 
-                <div className={styles.kartuTeks}>
-                  <p className={styles.kartuNama}>{e.name}</p>
-                  <p className={styles.kartuDetail}>{e.detail}</p>
-                  <span className={`${styles.lencana} ${styles[lencana.kelas]}`}>
-                    {lencana.label}
-                  </span>
-                </div>
+                  <div className={styles.kartuTeks}>
+                    <p className={styles.kartuNama}>{e.name}</p>
+                    <p className={styles.kartuDetail}>{e.detail}</p>
+                    <span className={`${styles.lencana} ${styles[lencana.kelas]}`}>{lencana.label}</span>
+                  </div>
 
-                <div className={styles.kartuJumlah}>
-                  <p className={styles.jumlah}>{e.amount}</p>
-                  <p className={styles.sumber}>{e.source}</p>
-                </div>
-              </li>
-            )
-          })}
-        </ol>
+                  <div className={styles.kartuJumlah}>
+                    <p className={styles.jumlah}>{e.amount}</p>
+                    <p className={styles.sumber}>{e.source}</p>
+                  </div>
+                </li>
+              )
+            })}
+          </ol>
+        )}
 
         <section className={styles.bantuan} aria-label="Poin tidak masuk">
-          <h2 className={styles.bantuanJudul}>Points Missing?</h2>
+          <h2 className={styles.bantuanJudul}>Poin belum masuk?</h2>
           <p className={styles.bantuanNote}>{referenceNote}</p>
           <div className={styles.refBaris}>
             <div className={styles.refKotak}>
               <p className={styles.ref}>{reference}</p>
             </div>
-            <button type="button" className={styles.lapor}>
-              Report
-            </button>
+            {help ? (
+              <Link href={help.href} className={styles.lapor}>
+                {help.label}
+              </Link>
+            ) : null}
           </div>
         </section>
       </div>
-
     </div>
   )
 }

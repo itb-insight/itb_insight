@@ -3,6 +3,7 @@ import Link from "next/link"
 import type { ReactNode } from "react"
 
 import type { ArcadePlayer } from "@/lib/arcade"
+import { isMapsDisabled, PRIZE_DESK_MAP_HREF } from "@/lib/maps"
 
 import PointsCard from "./PointsCard"
 import QuestCard from "./QuestCard"
@@ -117,7 +118,15 @@ export default function ArcadeHub({ player, signedIn }: { player: ArcadePlayer |
               Top 1–5 dapat <strong>Mug</strong>, Top 6–10 dapat <strong>Keychain</strong>.
             </li>
             <li>
-              Ambil hadiah di <strong>Booth Entre</strong> dengan menunjukkan QR profilmu.
+              Ambil hadiah di{" "}
+              {isMapsDisabled() ? (
+                <strong>Booth Entrepreneur (di Food & Beverages)</strong>
+              ) : (
+                <Link href={PRIZE_DESK_MAP_HREF} className={styles.noticeLink}>
+                  <strong>Booth Entrepreneur (di Food & Beverages)</strong>
+                </Link>
+              )}{" "}
+              dengan menunjukkan QR profilmu. Sticker kapan saja, Mug &amp; Keychain setelah hasil diumumkan.
             </li>
           </ul>
         </section>

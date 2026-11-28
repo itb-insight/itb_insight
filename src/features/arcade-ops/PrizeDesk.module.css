@@ -1,0 +1,151 @@
+/* Prize desk (/admin/prizes): the prize picker and the stock rows. The rest reuses
+   BoothPointsScanner.module.css so the two scanning desks look alike. */
+
+/* ---- prize picker ------------------------------------------------------ */
+
+.prizes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.prize {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 96px;
+  padding: 14px 16px;
+  border: 2px solid #acc7ff;
+  border-radius: var(--admin-radius-panel);
+  background: #1b3b7d;
+  color: var(--admin-text-strong);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.prizeOn {
+  border-color: #fad500;
+  background: linear-gradient(135deg, #1b3b7d 0%, #5b4a0c 100%);
+  box-shadow: 0 0 0 2px rgba(250, 213, 0, 0.35);
+}
+
+.prize:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.prizeName {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 22px;
+  overflow-wrap: anywhere;
+}
+
+.prizeLeft {
+  font-size: 14px;
+  color: var(--admin-text-muted);
+}
+
+/* ---- stock ------------------------------------------------------------- */
+
+.stockList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(172, 199, 255, 0.25);
+}
+
+.stock:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.stockHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.stockName {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--admin-text-strong);
+}
+
+.stockCount {
+  font-size: 15px;
+  color: var(--admin-text-muted);
+}
+
+.stockCount strong {
+  font-size: 22px;
+  color: var(--admin-text-strong);
+}
+
+.stockSteps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.stockSet {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.stepBtn,
+.stockInput {
+  box-sizing: border-box;
+  min-height: 44px;
+  border: 1px solid #acc7ff;
+  border-radius: var(--admin-radius-sm);
+  font: inherit;
+  font-size: 16px;
+}
+
+.stepBtn {
+  padding: 0 14px;
+  background: transparent;
+  color: var(--admin-text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.stepBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.stockInput {
+  width: 100%;
+  min-width: 0;
+  padding: 0 12px;
+  background: #091b3f;
+  color: var(--admin-text-strong);
+}
+
+.ok,
+.error {
+  margin: 0;
+  font-size: 14px;
+}
+
+.ok {
+  color: #8be9a8;
+}
+
+.error {
+  color: #ffb4b4;
+}

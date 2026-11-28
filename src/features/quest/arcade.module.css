@@ -13,7 +13,8 @@
 }
 
 .intro a,
-.noticeText a {
+.noticeText a,
+.noticeLink {
   color: #fff;
   font-weight: 700;
   text-decoration: underline;

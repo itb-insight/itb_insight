@@ -1,66 +1,19 @@
 "use client"
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import styles from "./HeroSectionHifi.module.css"
 import { useIsMobile } from "@/features/landing/hooks/useIsMobile"
 import { useIsSignedIn } from "@/features/landing/hooks/useIsSignedIn"
-import { COUNTDOWN_TARGET } from "@/features/home/homeConfig"
 
 /** "Scroll ke bawah" jumps to this fraction (0–1) of the page's total scroll distance. Tune freely. */
 const SCROLL_HINT_TARGET = 0.2
 
-interface TimeLeft {
-  days: number
-  hours: number
-  minutes: number
-  seconds: number
-}
-
-// One shared 1 s clock. Only <Countdown> subscribes, so the rest of the hero (scroll-driven
-// transforms, images) does not re-render every second.
-function subscribeToSeconds(onTick: () => void) {
-  const timer = setInterval(onTick, 1000)
-  return () => clearInterval(timer)
-}
-const currentSecond = () => Math.floor(Date.now() / 1000)
-const noSecondOnServer = () => null
-
-function timeLeftUntil(targetDate: string, nowSeconds: number): TimeLeft {
-  const diff = new Date(targetDate).getTime() - nowSeconds * 1000
-  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
-  return {
-    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((diff / (1000 * 60)) % 60),
-    seconds: Math.floor((diff / 1000) % 60),
-  }
-}
-
-function pad(n: number): string {
-  return String(n).padStart(2, "0")
-}
-
+// The event has started: the hero shows "D-DAY!" in place of the countdown.
 function Countdown() {
-  // null on the server and during hydration: render "00" until the client clock is known.
-  const nowSeconds = useSyncExternalStore(subscribeToSeconds, currentSecond, noSecondOnServer)
-  const { days, hours, minutes, seconds } = nowSeconds === null
-    ? { days: 0, hours: 0, minutes: 0, seconds: 0 }
-    : timeLeftUntil(COUNTDOWN_TARGET, nowSeconds)
-
   return (
     <div className={styles.countdown}>
-      {[
-        { value: days, label: "d" },
-        { value: hours, label: "h" },
-        { value: minutes, label: "m" },
-        { value: seconds, label: "s" },
-      ].map(({ value, label }) => (
-        <div key={label} className={styles.countdownUnit}>
-          <span className={styles.countdownNumber}>{pad(value)}</span>
-          <span className={styles.countdownLabel}>{label}</span>
-        </div>
-      ))}
+      <span className={styles.countdownNumber}>D-DAY!</span>
     </div>
   )
 }

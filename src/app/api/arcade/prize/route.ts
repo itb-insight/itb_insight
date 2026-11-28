@@ -12,11 +12,13 @@ import { createServiceClient } from '@/lib/supabase/server'
 // Insight Arcade prize desk (migration 0032). Body: { qrCode, tier?: '101' | '102' | '103' }.
 //   no tier -> the visitor and what they already received; tier -> hand it over
 //   (arcade_claim_prize: eligibility, stock and one per person, under a lock).
+// The desk picks a prize first and sends the tier with every scan (src/features/arcade-ops/PrizeDesk.tsx),
+// so a refusal names the visitor: the staff member is already looking at the next person.
 // Access: admins and arcade_duties prize_desk.
 const MESSAGES: Record<string, [number, string]> = {
-  ALREADY_CLAIMED: [409, 'Hadiah ini sudah diambil pengunjung ini.'],
+  ALREADY_CLAIMED: [409, 'sudah pernah menerima hadiah ini.'],
   OUT_OF_STOCK: [409, 'Stok habis.'],
-  NOT_ELIGIBLE: [403, 'Pengunjung belum memenuhi syarat hadiah ini.'],
+  NOT_ELIGIBLE: [403, 'belum memenuhi syarat hadiah ini.'],
   NOT_PUBLISHED: [403, 'Hasil akhir belum diumumkan.'],
   COMMITTEE_ACCOUNT: [403, 'Akun panitia tidak bisa menerima hadiah.'],
   SELF_CLAIM: [403, 'Tidak bisa memberi hadiah ke akun sendiri.'],
@@ -46,7 +48,9 @@ export async function POST(request: NextRequest) {
   if (!ticket) return apiError('TICKET_NOT_FOUND', 'Pengunjung tidak ditemukan.', 404)
   const userId = ticket.user_id as string
   const profile = (Array.isArray(ticket.profiles) ? ticket.profiles[0] : ticket.profiles) as { full_name?: string } | null
+  const name = profile?.full_name?.trim() || 'Pengunjung'
 
+  let left: number | null = null
   if (tier) {
     const { data, error } = await supabase.rpc('arcade_claim_prize', {
       p_user: userId,
@@ -58,11 +62,13 @@ export async function POST(request: NextRequest) {
       console.error('[arcade-prize] claim failed', error)
       return apiError('SERVER_ERROR', 'Gagal mencatat hadiah.', 500)
     }
-    const result = (data ?? {}) as { ok?: boolean; code?: string }
+    const result = (data ?? {}) as { ok?: boolean; code?: string; remaining?: number | null }
     if (!result.ok) {
       const [status, message] = MESSAGES[result.code ?? ''] ?? [500, 'Gagal mencatat hadiah.']
-      return apiError((result.code ?? 'SERVER_ERROR') as Uppercase<string>, message, status)
+      const named = result.code === 'ALREADY_CLAIMED' || result.code === 'NOT_ELIGIBLE' ? `${name} ${message}` : message
+      return apiError((result.code ?? 'SERVER_ERROR') as Uppercase<string>, named, status)
     }
+    left = result.remaining ?? null
     after(() =>
       recordAuditLog({ userId: auth.user.id, action: 'ARCADE_PRIZE_HANDED', metadata: { visitorId: userId, tier } }),
     )
@@ -76,5 +82,5 @@ export async function POST(request: NextRequest) {
     String((Array.isArray(c.reward_tiers) ? c.reward_tiers[0] : c.reward_tiers)?.tier_number),
   )
 
-  return apiSuccess({ visitor: { name: profile?.full_name?.trim() || 'Pengunjung' }, claimed, handed: tier ?? null })
+  return apiSuccess({ visitor: { name }, claimed, handed: tier ?? null, left })
 }

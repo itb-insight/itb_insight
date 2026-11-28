@@ -117,6 +117,7 @@
   font-weight: 400;
   line-height: 20px;
   white-space: nowrap;
+  text-decoration: none;
   cursor: pointer;
 }
 
@@ -250,11 +251,6 @@
   color: #7fa9f6;
 }
 
-.lencanaRedeemed {
-  background: #404040;
-  color: #d3d3d3;
-}
-
 .lencanaVerified {
   background: #224b1c;
   color: #caf0c2;
@@ -295,6 +291,15 @@
   font-size: 12px;
   line-height: 14px;
   color: #acc7ff;
+}
+
+/* Daftar kosong (belum ada poin, atau saringan tanpa hasil). */
+.kosong {
+  margin: 24px 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: #ccddff;
+  text-align: center;
 }
 
 /* ---- kartu bantuan --------------------------------------------------------- */
@@ -388,5 +393,6 @@
   font-family: inherit;
   font-size: 12px;
   line-height: 14px;
+  text-decoration: none;
   cursor: pointer;
 }

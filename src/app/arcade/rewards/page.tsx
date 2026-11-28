@@ -1,107 +1,68 @@
-import { notFound } from "next/navigation"
-
-import RewardsMobile from "@/features/quest/RewardsMobile"
 import QuestPageShell from "@/features/quest/QuestPageShell"
-import type { RewardEntry, TierEntry } from "@/features/quest/RewardsMobile"
+import RewardsMobile from "@/features/quest/RewardsMobile"
+import { buildRewardsView } from "@/features/quest/rewardsView"
+import { getArcadeBoard, getArcadeSettings, getPlayerPrizes, wibClock, type PlayerPrizes } from "@/lib/arcade"
+import { isMapsDisabled, PRIZE_DESK_MAP_HREF } from "@/lib/maps"
+import { createClient } from "@/lib/supabase/server"
 
+export const dynamic = "force-dynamic"
 export const metadata = {
-  title: "Rewards | ITB Insight",
-  description: "Tukar poin quest ITB Insight.",
+  title: "Rewards | Insight Arcade",
+  description: "Hadiah Insight Arcade ITB Insight.",
   robots: { index: false, follow: false },
 }
 
-/* Isi contoh, disalin apa adanya dari dump Figma 2114:21381. */
-const TIERS: TierEntry[] = [
-  {
-    state: "unlocked",
-    status: "Unlocked",
-    name: "BRONZE",
-    points: "500 points",
-    perk: "[PERK DETAIL\nbisa 2 baris]",
-  },
-  {
-    state: "next",
-    status: "252 to unlock",
-    name: "SILVER",
-    points: "1.500 points",
-    perk: "[PERK DETAIL\nbs 2 baris]",
-  },
-  {
-    state: "locked",
-    status: "1.752 to unlock",
-    name: "GOLD",
-    points: "3.000 points",
-    perk: "[PERK DETAIL\nbs 2 baris]",
-  },
-]
+const fmt = new Intl.NumberFormat("id-ID")
 
-const REWARDS: RewardEntry[] = [
-  {
-    badge: "MERCH",
-    name: "20% off ITB Insight Tshirt",
-    sub: "Merch desk . 34 left",
-    state: "beli",
-    action: "300 pts",
-  },
-  {
-    badge: "MERCH",
-    name: "Sticker Pack",
-    sub: "Merch desk . 120 left",
-    state: "beli",
-    action: "100 pts",
-  },
-  {
-    badge: "SPON",
-    sponsor: true,
-    name: "[SPONSOR A] prize",
-    sub: "Booth [A3] . 12 left",
-    state: "beli",
-    action: "400 pts",
-  },
-  {
-    badge: "SPON",
-    sponsor: true,
-    name: "[SPONSOR B] prize",
-    sub: "Booth [B3] . Out of stock",
-    state: "habis",
-    action: "Sold Out",
-  },
-  {
-    badge: "SPON",
-    sponsor: true,
-    name: "[SPONSOR D] prize",
-    sub: "Booth [C1] . 5 left",
-    state: "kurang",
-    action: "Need 260",
-  },
-]
+// Insight Arcade prizes (src/features/quest/rewardsView.ts): no wallet, points only rank players.
+// Sticker any time after a quest; Mug / Keychain after the final results, at Booth Entrepreneur.
+export default async function RewardsPage() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-export default function RewardsPage() {
-  /*
-    Masih memakai data contoh, jadi tetap digerbang walau route-nya sudah
-    route sungguhan: isi palsu tidak boleh ikut ke produksi. Hapus baris ini
-    begitu halamannya membaca data asli.
-  */
-  if (process.env.NODE_ENV === "production") notFound()
+  const empty: PlayerPrizes = { committee: false, published: false, resultRank: null, prizes: [] }
+  const [board, settings, prizes] = await Promise.all([
+    getArcadeBoard().catch((err) => {
+      console.error("[arcade-rewards] board failed", err)
+      return { players: 0, entries: [], staff: [] }
+    }),
+    getArcadeSettings(),
+    getPlayerPrizes(user?.id ?? null).catch((err) => {
+      console.error("[arcade-rewards] prizes failed", err)
+      return empty
+    }),
+  ])
+
+  const mine = user ? board.entries.find((e) => e.userId === user.id) : undefined
+  const points = mine?.points ?? (user ? board.staff.find((e) => e.userId === user.id)?.points : undefined) ?? 0
+  const view = buildRewardsView({
+    signedIn: Boolean(user),
+    committee: prizes.committee,
+    published: prizes.published,
+    resultRank: prizes.resultRank,
+    rank: mine?.rank ?? null,
+    points,
+    top10Points: board.entries[9]?.points ?? null,
+    freezeClock: settings ? wibClock(settings.freezesAt) : null,
+    prizes: prizes.prizes,
+    clock: wibClock,
+  })
 
   return (
-    <QuestPageShell activeTab="rewards">
+    <QuestPageShell activeTab="rewards" points={points} rank={mine?.rank}>
       <RewardsMobile
-        wallet={{ spend: "648", lifetime: "1,248" }}
-        claim={{
-          status: "READY TO CLAIM . VALID 04:52",
-          name: "ITB Insight Sticker Pack",
-          note: "Show QR to merch-desk staff. Points are taken once they confirm.",
-          action: "Show QR",
-        }}
-        historyHref="/arcade/history"
-        tiers={TIERS}
-        rewards={REWARDS}
-        youAre={{
-          rank: "#37",
-          title: "Door prize for Top 3 on the leaderboard",
-          note: "Winner announced at 18:00 on the mainstage. Bring your student card or ID for verification.",
-        }}
+        summary={{ points: fmt.format(points), rank: mine ? `#${mine.rank}` : "-" }}
+        claim={view.claim}
+        rewards={view.rewards}
+        youAre={view.youAre}
+        where={
+          isMapsDisabled()
+            ? { label: "Ambil hadiah di Booth Entrepreneur (area Food & Beverages).", href: null }
+            : { label: "Ambil hadiah di Booth Entrepreneur (area Food & Beverages). Lihat di peta", href: PRIZE_DESK_MAP_HREF }
+        }
+        historyHref={user ? "/arcade/history" : undefined}
       />
     </QuestPageShell>
   )

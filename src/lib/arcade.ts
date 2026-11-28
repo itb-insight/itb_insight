@@ -275,3 +275,53 @@ export async function getResultWinners(): Promise<{ version: number | null; winn
   }))
   return { version: latest.version as number, winners }
 }
+
+// ---- rewards and points history (migration 0039) ----------------------------------------------
+
+/** Prize tier numbers (reward_tiers, 0032): Sticker, Mug (rank 1-5), Keychain (rank 6-10). */
+export const PRIZE_TIERS = { sticker: 101, mug: 102, keychain: 103 } as const
+
+export type PlayerPrize = {
+  tier: number
+  name: string
+  note: string | null
+  /** Stock left; null = no limit. */
+  left: number | null
+  claimedAt: string | null
+  /** May collect it now (Mug / Keychain only once the results are published). */
+  eligible: boolean
+}
+export type PlayerPrizes = { committee: boolean; published: boolean; resultRank: number | null; prizes: PlayerPrize[] }
+
+/**
+ * The player's prizes and the stock left (public.arcade_player_prizes, 0039). Signed out (null):
+ * the prizes and their stock only, nothing eligible or claimed.
+ */
+export async function getPlayerPrizes(userId: string | null): Promise<PlayerPrizes> {
+  const { data, error } = await createServiceClient().rpc('arcade_player_prizes', {
+    p_user: userId,
+    p_admin_emails: adminEmailList(),
+  })
+  if (error) throw new Error(`arcade_player_prizes: ${error.message}`)
+  const v = (data ?? {}) as Partial<PlayerPrizes>
+  return { committee: v.committee === true, published: v.published === true, resultRank: v.resultRank ?? null, prizes: v.prizes ?? [] }
+}
+
+export type HistoryKind = 'visit' | 'bonus' | 'manual' | 'quest' | 'collection'
+export type HistoryState = 'earned' | 'review' | 'pending' | 'voided' | 'manual'
+export type PointsEvent = {
+  at: string
+  kind: HistoryKind
+  title: string
+  /** Booth category (BOOTH_CATEGORIES id) for booth rows. */
+  category: string | null
+  points: number
+  status: HistoryState
+}
+
+/** Every change to the player's points, newest first (public.arcade_player_history, 0039). */
+export async function getPointsHistory(userId: string): Promise<PointsEvent[]> {
+  const { data, error } = await createServiceClient().rpc('arcade_player_history', { p_user: userId })
+  if (error) throw new Error(`arcade_player_history: ${error.message}`)
+  return (data ?? []) as PointsEvent[]
+}

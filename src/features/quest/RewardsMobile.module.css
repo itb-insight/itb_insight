@@ -6,8 +6,8 @@
     header      356 x 24  di (26, 31)
     dompet      370 x 95  di (16, 89)
     klaim       370 x 88  di (16, 193)
-    tier        370 x 169 di (16, 305)
-    belanja     370 x 386 di (16, 493)
+    tier        370 x 169 di (16, 305)  (tidak dipakai: Insight Arcade tidak punya tier poin)
+    belanja     370 x 386 di (16, 493)  (daftar hadiah)
     You Are     370 x 96  di (16, 903)
     navigasi    latar di y 1026, kanvas berakhir 1120
 
@@ -196,159 +196,6 @@
   color: #ffffff;
 }
 
-/* ---- tier ------------------------------------------------------------------ */
-
-.tier {
-  margin-top: 24px;
-}
-
-/*
-  Lingkaran status menumpang di GARIS ATAS kartu (lingkaran 329..361, kartu
-  mulai 345), jadi blok ini relatif dan lingkarannya ditumpuk di atas.
-*/
-.tierBlok {
-  position: relative;
-  padding-top: 16px;
-}
-
-.tierKartu,
-.tierBulatan {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 11px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.tierBulatan {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  justify-items: center;
-  pointer-events: none;
-}
-
-.bulat {
-  box-sizing: border-box;
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 100px;
-  /* Garis tepi 4px di sini pakai border sungguhan: isinya cuma ikon, tidak
-     ada teks yang bisa tergeser. */
-  border: 4px solid transparent;
-  background:
-    linear-gradient(0deg, #acc7ff 0%, #517eda 99%) padding-box,
-    linear-gradient(0deg, #517eda 1%, #acc7ff 100%) border-box;
-  color: #1b3b7d;
-}
-
-.bulatBuka {
-  background:
-    linear-gradient(0deg, #d0ffc7 0%, #76df62 100%) padding-box,
-    linear-gradient(180deg, #d0ffc7 0%, #76df62 100%) border-box;
-  color: #224b1c;
-}
-
-.kartuTier {
-  position: relative;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  height: 129px;
-  /*
-    Samping 19, bukan 20: "1.752 to unlock" di kartu GOLD butuh 75,7px dan
-    20/20 cuma menyisakan 76 — terlalu mepet, teksnya terbungkus dan isi
-    kartunya meluber. Dump memang memakai 20 kiri / 19 kanan di kartu itu.
-    Isinya ditengahkan, jadi 19/19 tidak menggeser apa pun yang kelihatan.
-  */
-  padding: 23px 19px 22px;
-  border-radius: 12px;
-  background: linear-gradient(0deg, rgba(172, 199, 255, 0.5) 0%, rgba(27, 59, 125, 0.5) 100%);
-  text-align: center;
-}
-
-/* Tier yang sudah terbuka: terang penuh, teksnya jadi gelap. */
-.kartuTierBuka {
-  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
-}
-
-/* Tier berikutnya: satu-satunya yang punya garis tepi. */
-.kartuTierBerikut::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 1.5px;
-  border-radius: inherit;
-  background: linear-gradient(0deg, #dee8fb 0%, #acc7ff 100%);
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-.tierGrup {
-  display: flex;
-  flex-direction: column;
-}
-
-.tierStatus {
-  margin: 0;
-  font-size: 12px;
-  line-height: 14px;
-  color: #7fa9f6;
-}
-
-.tierNama {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 20px;
-  color: #ccddff;
-}
-
-.tierPoin {
-  margin: 0;
-  font-size: 12px;
-  line-height: 14px;
-  color: #7fa9f6;
-}
-
-.tierPerk {
-  margin: 0;
-  /* Dua baris 14px — dipaku supaya tingginya tidak menggeser kartu. */
-  height: 28px;
-  overflow: hidden;
-  font-size: 12px;
-  line-height: 14px;
-  white-space: pre-line;
-  color: #7fa9f6;
-}
-
-.kartuTierBuka .tierStatus {
-  color: #1b3b7d;
-}
-
-.kartuTierBuka .tierNama {
-  color: #020816;
-}
-
-.kartuTierBuka .tierPoin,
-.kartuTierBuka .tierPerk {
-  color: #3d65b8;
-}
-
 /* ---- belanja poin ---------------------------------------------------------- */
 
 .belanja {
@@ -437,15 +284,6 @@
   pointer-events: none;
 }
 
-.thumbSponsor {
-  background: linear-gradient(0deg, #d0ffc7 0%, #76df62 100%);
-  color: #224b1c;
-}
-
-.thumbSponsor::before {
-  background: linear-gradient(180deg, #d0ffc7 0%, #76df62 100%);
-}
-
 /* Thumb pada baris yang habis ikut dipudarkan. */
 .itemHabis .thumb {
   background: linear-gradient(0deg, rgba(208, 255, 199, 0.5) 0%, rgba(118, 223, 98, 0.5) 100%);
@@ -495,7 +333,15 @@
   font-size: 12px;
   line-height: 14px;
   white-space: nowrap;
+  text-decoration: none;
   cursor: pointer;
+}
+
+/* Sudah diambil: hijau seperti lingkaran tier yang terbuka, bukan tombol. */
+.tombolSelesai {
+  background: linear-gradient(180deg, #d0ffc7 0%, #76df62 100%);
+  color: #224b1c;
+  cursor: default;
 }
 
 /* Stok habis: tanpa latar, tanpa garis, tidak bisa diklik. */
@@ -511,6 +357,29 @@
   background: none;
   color: #fafafa;
   cursor: not-allowed;
+}
+
+.tombolHabis,
+.tombolKurang {
+  cursor: default;
+}
+
+/* ---- tempat ambil hadiah --------------------------------------------------- */
+
+.lokasi {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  color: #dee8fb;
+  font-size: 14px;
+  line-height: 18px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+p.lokasi {
+  text-decoration: none;
 }
 
 /* ---- kartu "You Are" ------------------------------------------------------- */

@@ -23,19 +23,22 @@ export default async function PrizesPage() {
 
   const service = createServiceClient()
   const [{ data: tierRows }, { data: claimRows }, results] = await Promise.all([
-    service.from("reward_tiers").select("id, tier_number, reward_name, total_stock").gte("tier_number", 101).order("tier_number"),
+    service.from("reward_tiers").select("id, tier_number, reward_name, total_stock").gte("tier_number", 101).lte("tier_number", 103).eq("is_active", true).order("tier_number"),
     service.from("reward_claims").select("tier_id"),
     getResultWinners(),
   ])
   const counts = new Map<string, number>()
   for (const c of (claimRows ?? []) as Array<{ tier_id: string }>) counts.set(c.tier_id, (counts.get(c.tier_id) ?? 0) + 1)
   const tiers: PrizeTier[] = ((tierRows ?? []) as Array<{ id: string; tier_number: number; reward_name: string; total_stock: number | null }>).map(
-    (t) => ({ tier: String(t.tier_number), name: t.reward_name, stock: t.total_stock, claimed: counts.get(t.id) ?? 0 }),
+    (t) => {
+      const claimed = counts.get(t.id) ?? 0
+      return { tier: t.tier_number, name: t.reward_name, claimed, left: t.total_stock === null ? null : Math.max(0, t.total_stock - claimed) }
+    },
   )
 
   return (
     <>
-      <PageHeader title="Meja Hadiah" subtitle="Scan QR pengunjung lalu serahkan hadiahnya. Satu hadiah per jenis per orang." />
+      <PageHeader title="Meja Hadiah" subtitle="Pilih hadiah, lalu scan QR pengunjung. Satu hadiah per jenis per orang; stok berkurang sendiri." />
       <div className={styles.body}>
         <PrizeDesk
           tiers={tiers}

@@ -37,6 +37,9 @@ export function mapCategoryHref(categoryId: string): string {
     return `${MAP_PATH}?category=${encodeURIComponent(categoryId)}`
 }
 
+/** Insight Arcade prize desk: Booth Entrepreneur, in the Food & Beverages area (checked in mapLocations.test.ts). */
+export const PRIZE_DESK_MAP_HREF = mapPlaceHref('food-and-beverages')
+
 /** The footer's "Map" column (checked against the map data in mapLocations.test.ts). */
 export const MAP_FOOTER_LINKS: { label: string; href: string }[] = [
     { label: 'Parkir', href: mapCategoryHref('parkir') },

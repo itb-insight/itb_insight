@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import { MAP_CATEGORIES, pinForCategory } from "./mapCategories"
-import { MAP_FOOTER_LINKS } from "@/lib/maps"
+import { MAP_FOOTER_LINKS, PRIZE_DESK_MAP_HREF } from "@/lib/maps"
 
 import { resolveMapDeepLink } from "./mapDeepLink"
 import { MAP_LOCATIONS, parseParkingName } from "./mapLocations"
@@ -83,8 +83,8 @@ describe("map locations", () => {
 })
 
 describe("map deep links", () => {
-  it("every footer Map link opens a real place or section", () => {
-    for (const { label, href } of MAP_FOOTER_LINKS) {
+  it("every footer Map link (and the prize desk link) opens a real place or section", () => {
+    for (const { label, href } of [...MAP_FOOTER_LINKS, { label: "Insight Arcade prize desk", href: PRIZE_DESK_MAP_HREF }]) {
       const [path, query] = href.split("?")
       expect(path, label).toBe("/event-map")
       expect(resolveMapDeepLink(query), label).not.toBeNull()
